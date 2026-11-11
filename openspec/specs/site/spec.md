@@ -42,7 +42,8 @@ and the plugin documentation.
 
 ### Requirement: Using a hub entry
 A hub entry's page SHALL display the entry, and SHALL offer copying the raw
-file to the clipboard and downloading it as `HARNESS.md`. The hub index SHALL
+file to the clipboard, downloading it as `HARNESS.md`, and viewing it on
+GitHub. The hub index SHALL
 offer full-text search and filtering by tag, and SHALL keep the chosen tag in
 its address. Each tag on an entry's page SHALL link to the hub index filtered
 by that tag.
@@ -58,6 +59,53 @@ by that tag.
 #### Scenario: Address names a tag no entry carries
 - **WHEN** the hub index is opened with a tag in its address that no entry carries
 - **THEN** every entry is listed and no tag is marked as selected
+
+### Requirement: Markdown version of every page
+Every page SHALL have a Markdown version generated at build time: the page
+`/x/y/` at `/x/y.md`, the home page at `/index.md`, and a hub entry at its raw
+`HARNESS.md`. The specification's Markdown version SHALL be byte-identical to
+the repository file. Each page SHALL link to its Markdown version in its head
+and SHALL offer, in one menu, copying it and opening it in a new tab.
+
+#### Scenario: Agent fetches a page
+- **WHEN** an agent requests `/spec.md`
+- **THEN** it receives the specification as Markdown, byte-identical to `spec/spec.md`
+
+#### Scenario: Links inside a generated Markdown page
+- **WHEN** an agent reads `/index.md` or `/hub.md`
+- **THEN** every link to another page of the site is an absolute URL of that page's Markdown version
+
+#### Scenario: Copying a page
+- **WHEN** a reader chooses the copy action on any page
+- **THEN** the clipboard holds exactly the text of that page's Markdown version, and the control confirms the copy
+
+### Requirement: Grouped actions and language menu
+Actions on a page SHALL be grouped in menus whose items carry an icon and a
+label, operable by keyboard and at phone width. The language switch SHALL be a
+menu listing every language by its own name, built from one list of languages,
+that leads to the same page, query included, in the chosen language.
+
+#### Scenario: Menu from the keyboard
+- **WHEN** a reader focuses a menu button and presses Enter, moves with the arrow keys, and presses Escape
+- **THEN** the menu opens, focus moves between its items, and the menu closes with focus back on the button
+
+#### Scenario: A third language is added
+- **WHEN** a language is added to the list of languages with its strings
+- **THEN** it appears in the language menu on every page with no change to the menu
+
+### Requirement: Prompt for an agent on a hub entry
+A hub entry's page SHALL offer a prompt, in the page's language, that tells a
+coding agent to read the entry's Markdown file at its published URL and build
+from it after showing a plan, ending with a place for the reader's own
+requirements. Copying SHALL include what the reader typed there.
+
+#### Scenario: Reader describes the project first
+- **WHEN** a reader types a description of their project under the prompt and chooses copy
+- **THEN** the clipboard holds the prompt followed by that description
+
+#### Scenario: Nothing typed
+- **WHEN** a reader chooses copy without typing anything
+- **THEN** the clipboard holds the prompt ending at the line that opens the reader's part, so they can continue after pasting
 
 ### Requirement: Self-contained and accessible
 The site SHALL make no request to another origin at runtime, SHALL work under

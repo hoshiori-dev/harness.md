@@ -151,6 +151,7 @@ openspec/specs/<domain>/…      long-lived specs: format, cli, skill, agent, hu
 openspec/changes/              changes in flight and the archive
 scripts/  scripts/lib/         management code (TypeScript) and its tests
 site/                          the website (Astro, Pagefind); its own package
+DESIGN.md                      the website's visual design: tokens and guidance (DESIGN.md format)
 .agents/knowledge/             knowledge files the entrypoint routes to
 .agents/skills/                project skills; .claude/skills/ holds a symlink to each
 .github/                       workflows, issue forms, pull request template, labels
@@ -159,6 +160,9 @@ justfile                       every documented command
 ```
 
 `site/` reads `spec/` and `hub/` at build time and holds no copy of either.
+`DESIGN.md` plays for the website's look the role this file plays for the
+harness: intent is read from it, and the values in force from the site's
+stylesheet.
 `skills/harness-md/references/specification.md` is a byte-identical copy of
 `spec/spec.md`, because a skill may not link outside its own directory.
 
@@ -215,7 +219,7 @@ situation in which to read it:
 | `shared-blocks.md` | editing a `<!-- shared:… -->` block in a skill |
 | `format-changes.md` | changing the format, the prose specification, a validator, or a fixture |
 | `hub.md` | adding or reviewing a hub entry |
-| `site.md` | editing `site/` or its workflow |
+| `site.md` | editing `site/` or its workflow; it sends visual changes to `DESIGN.md` first |
 | `client-matrix.md`, `compatibility-watch.md` | a client does not load something; a client or OpenSpec was upgraded |
 | `spec-workflow.md` | proposing, implementing, or archiving an OpenSpec change |
 | `git-workflow.md`, `github-workflow.md`, `github/checks.md` | branching, committing, pushing; taking an issue, opening or finishing a pull request; a red check |
@@ -408,7 +412,8 @@ what must change with it: `plugin.json` or an agent file and the generated
 files; a skill and its spec and both README tables; a shared block and
 every skill using it; `spec/spec.md` and its mirror, the skill's copy, and
 the format specs; a recipe or CI job and the validation table and the
-checks knowledge file; a client's loading behaviour and the client matrix.
+checks knowledge file; a client's loading behaviour and the client matrix;
+the site's colours, type, spacing, or components and `DESIGN.md`.
 
 An agent that finds the harness contradicting the repository in the middle
 of a task fixes it in the same change when the fix is small, and otherwise

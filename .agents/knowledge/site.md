@@ -15,6 +15,20 @@ is `openspec/specs/site/spec.md`.
 - The specification pages render `spec/spec.md` and `spec/spec.zh.md`, and
   the hub pages render every `hub/<name>/HARNESS.md`, at build time. The
   site holds no copy of either: to change that text, edit the source.
+- `DESIGN.md` at the repository root is the site's visual design
+  (DESIGN.md format: tokens in the frontmatter, guidance in prose). Read it
+  before changing a colour, a type size, spacing, a corner, or a component,
+  and before adding a component. Intent comes from `DESIGN.md`; the values
+  in force are the custom properties in `site/src/styles/global.css`. A
+  visual change updates both in the same change. No new colour, shadow, or
+  card without changing `DESIGN.md` first.
+- Every page has a Markdown version generated at build time (`/x/y/` at
+  `/x/y.md`, the home page at `/index.md`, a hub entry at its raw
+  `HARNESS.md`), reached from the page-actions menu and from a
+  `rel="alternate"` link. A new page type needs its `.md` endpoint and the
+  menu.
+- Languages are listed once in `site/src/lib/languages.ts`; the header's
+  language menu and the routes are built from that list.
 - English is served at the root and Chinese under `/zh/`; every page exists
   in both and the language switch leads to the same page. Hub entries are
   English and shown unchanged in both.

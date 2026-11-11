@@ -46,7 +46,7 @@ com.anthropic.claude-code/     <- Claude Code's hand-written agent files
 .claude-plugin/  .agents/plugins/  <- generated client manifests
 openspec/specs/<domain>/       <- long-lived specs: format, cli, skill, agent, hub, site
 scripts/  scripts/lib/         <- management code (TypeScript on Node) and tests
-site/                          <- the website (Astro, Pagefind); own pnpm package
+site/  DESIGN.md               <- the website (Astro, Pagefind; own pnpm package) and its visual design
 .agents/knowledge/  .agents/skills/  <- knowledge files; project skills (.claude/skills links)
 ```
 
@@ -59,7 +59,7 @@ site/                          <- the website (Astro, Pagefind); own pnpm packag
 | Editing a `<!-- shared:… -->` block in a skill | `.agents/knowledge/shared-blocks.md` |
 | Changing the format, the prose specification, a validator, or a fixture | `.agents/knowledge/format-changes.md` |
 | Adding or reviewing a hub entry | `.agents/knowledge/hub.md` |
-| Editing `site/` or its workflow | `.agents/knowledge/site.md` |
+| Editing `site/` or its workflow | `.agents/knowledge/site.md`; `DESIGN.md` before anything visual |
 | A client does not load something; touching a wiring or generated file | `.agents/knowledge/client-matrix.md` |
 | A client or OpenSpec was upgraded; removing a workaround | `.agents/knowledge/compatibility-watch.md` |
 | Proposing, implementing, or archiving an OpenSpec change | `.agents/knowledge/spec-workflow.md`, then the `openspec-*` skills |
@@ -113,5 +113,6 @@ maintainer squash-merges → version bump and `v*` tag release.
 | A validator rule | the other validator, `spec/fixtures/`, `openspec/specs/cli/lint/spec.md` |
 | A `justfile` recipe or CI job | the Validation table above, `.agents/knowledge/github/checks.md` |
 | `README.md`, `hub/README.md` | their `.zh.md` mirrors, same change |
+| The site's colours, type, spacing, or components | `DESIGN.md`, same change |
 | A client's loading behaviour | `.agents/knowledge/client-matrix.md` and the watch list |
 | Harness intent (a rule here, a check, a permission) | `HARNESS.md` first, same pull request |
