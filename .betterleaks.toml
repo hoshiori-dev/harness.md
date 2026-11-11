@@ -1,0 +1,15 @@
+# Secret-scan configuration: the default rules, minus generated output that
+# git ignores. The Astro build writes a fresh random key into site/.astro/ on
+# every build, which the working-tree scan (`just secrets`) would report.
+# Commits are scanned by `just secrets-commits` and never contain these paths.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "build output and dependencies, ignored by git"
+paths = [
+  '''^site/\.astro/''',
+  '''^site/dist/''',
+  '''(^|/)node_modules/''',
+  '''^dist/''',
+]

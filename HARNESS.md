@@ -187,8 +187,8 @@ credential exists in the container: the website is deployed by a GitHub
 Actions workflow, never from a session.
 
 The control plane is `.claude/settings.json`, `.codex/config.toml`,
-`.pre-commit-config.yaml`, `.github/workflows/`, the `justfile`, and
-`scripts/check_*.ts`. An agent edits these only when the task is to change
+`.pre-commit-config.yaml`, `.betterleaks.toml`, `.github/workflows/`, the
+`justfile`, and `scripts/check_*.ts`. An agent edits these only when the task is to change
 them, never to get another change through; the files are not write-protected
 by the environment, so this is kept by rule and by review.
 
@@ -299,7 +299,9 @@ What the gates enforce, by concern:
   mirrors (`just harness-check`);
 - specs are valid in strict mode (`just spec-check`);
 - the site builds (`just site-check`, `just site-build`);
-- no secret is committed (`just secrets`).
+- no secret is committed (`just secrets` for the working tree, with
+  git-ignored build output excluded in `.betterleaks.toml`; the commits
+  themselves are scanned in CI).
 
 Deliberately not gated: prose quality, the substance of a hub entry, visual
 design, and skill behaviour in a client. They are judged in review.
