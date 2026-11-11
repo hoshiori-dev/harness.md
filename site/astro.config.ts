@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { DEFAULT_LANG, LANGS } from "./src/lib/languages";
 
 // Deployed to GitHub Pages as a project site, so every internal URL carries
 // the `/harness.md` base. Build internal links with `href()` from
@@ -12,8 +13,8 @@ export default defineConfig({
   server: { host: true, port: 4321 },
   build: { format: "directory" },
   i18n: {
-    defaultLocale: "en",
-    locales: ["en", "zh"],
+    defaultLocale: DEFAULT_LANG,
+    locales: [...LANGS],
     routing: { prefixDefaultLocale: false },
   },
   markdown: {

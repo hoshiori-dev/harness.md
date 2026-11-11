@@ -1,0 +1,88 @@
+---
+// The language menu in the header: every language in `LANGUAGES`, each by its
+// own name, each linking to this page in that language.
+import { ui } from "../i18n/ui";
+import { href, htmlLang, LANGUAGES, type Lang } from "../lib/paths";
+import Icon from "./Icon.astro";
+
+interface Props {
+  lang: Lang;
+  /** Path without base or language prefix. */
+  path: string;
+}
+
+const { lang, path } = Astro.props;
+const t = ui(lang);
+const current = LANGUAGES.find((language) => language.code === lang);
+const menuId = "language-menu";
+---
+
+<div class="lang-menu">
+  <button
+    type="button"
+    class="lang-button"
+    popovertarget={menuId}
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-controls={menuId}
+    aria-label={`${t.languageMenu}: ${current?.name ?? lang}`}
+  >
+    <Icon name="globe" />
+    <span>{current?.name ?? lang}</span>
+    <Icon name="chevron-down" size={14} />
+  </button>
+  <div class="menu" id={menuId} popover role="menu" aria-label={t.languageMenu} data-language-menu>
+    {
+      LANGUAGES.map((language) => (
+        <a
+          role="menuitem"
+          href={href(path, language.code)}
+          data-href={href(path, language.code)}
+          lang={htmlLang(language.code)}
+          hreflang={htmlLang(language.code)}
+          aria-current={language.code === lang ? "true" : undefined}
+        >
+          <Icon name="check" class="current-mark" />
+          <span>{language.name}</span>
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  // Keep the query and the fragment when switching language, so a filtered
+  // hub list or a section of the specification stays where the reader was.
+  for (const menu of document.querySelectorAll<HTMLElement>("[data-language-menu]")) {
+    menu.addEventListener("toggle", () => {
+      for (const link of menu.querySelectorAll<HTMLAnchorElement>("a[data-href]")) {
+        link.href = `${link.dataset.href}${window.location.search}${window.location.hash}`;
+      }
+    });
+  }
+</script>
+
+<style>
+  .lang-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font: inherit;
+    color: var(--ink);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+  }
+
+  .lang-button:hover,
+  .lang-button[aria-expanded="true"] {
+    background: var(--wash);
+    border-color: var(--muted);
+  }
+
+  a:not([aria-current]) .current-mark {
+    visibility: hidden;
+  }
+</style>

@@ -2,10 +2,13 @@
 import { getEntry } from "astro:content";
 import type { MarkdownHeading } from "astro";
 import AsideNav from "../../components/AsideNav.astro";
+import PageActions from "../../components/PageActions.astro";
 import { ui } from "../../i18n/ui";
 import Base from "../../layouts/Base.astro";
 import { prepare } from "../../lib/markdown";
-import { href, type Lang, langPaths, REPO_URL } from "../../lib/paths";
+import { specFile } from "../../lib/pagemd";
+import { href, LANGS, type Lang, langPaths, markdownPath, REPO_URL } from "../../lib/paths";
+import { specBytes } from "../../lib/spec";
 
 export const getStaticPaths = langPaths;
 
@@ -17,19 +20,17 @@ const { lang } = Astro.props;
 const t = ui(lang);
 const entry = await getEntry("spec", lang);
 if (!entry?.rendered) {
-  throw new Error(`spec/${lang === "en" ? "spec.md" : `spec.${lang}.md`} is missing; the site renders it at build time`);
+  throw new Error(`${specFile(lang)} is missing; the site renders it at build time`);
 }
 
-// The two files link to each other by file name; on the site that is the
-// same page in the other language.
-const html = prepare(entry.rendered.html, "spec", {
-  "spec.md": href("/spec/", "en"),
-  "spec.zh.md": href("/spec/", "zh"),
-});
+// The specification files link to each other by file name; on the site that
+// is the same page in the other language.
+const translations = Object.fromEntries(LANGS.map((code) => [specFile(code).replace("spec/", ""), href("/spec/", code)]));
+const html = prepare(entry.rendered.html, "spec", translations);
+const source = new TextDecoder().decode(await specBytes(lang));
 const headings = ((entry.rendered.metadata?.headings ?? []) as MarkdownHeading[]).filter(
   (heading) => heading.depth === 2 || heading.depth === 3,
 );
-const sourceFile = lang === "en" ? "spec/spec.md" : `spec/spec.${lang}.md`;
 ---
 
 <Base lang={lang} path="/spec/" title={t.spec.title} description={t.spec.description} section="spec">
@@ -40,18 +41,15 @@ const sourceFile = lang === "en" ? "spec/spec.md" : `spec/spec.${lang}.md`;
       items={headings.map((heading) => ({ href: `#${heading.slug}`, label: heading.text, depth: heading.depth }))}
     />
     <div>
+      <div class="page-tools">
+        <PageActions
+          lang={lang}
+          markdown={source}
+          markdownHref={href(markdownPath("/spec/"), lang)}
+          github={{ href: `${REPO_URL}/blob/main/${specFile(lang)}`, kind: "source" }}
+        />
+      </div>
       <article class="prose" data-pagefind-body data-pagefind-filter="type:spec" set:html={html} />
-      <p class="source">
-        {t.spec.source}: <a href={`${REPO_URL}/blob/main/${sourceFile}`}><code>{sourceFile}</code></a>
-      </p>
     </div>
   </div>
 </Base>
-
-<style>
-  .source {
-    margin-top: 3rem;
-    color: var(--muted);
-    font-size: 0.9375rem;
-  }
-</style>

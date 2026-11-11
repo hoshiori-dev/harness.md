@@ -6,8 +6,9 @@ import "@fontsource/ibm-plex-sans/latin-600.css";
 import "@fontsource/ibm-plex-mono/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-500.css";
 import "../styles/global.css";
+import LangMenu from "../components/LangMenu.astro";
 import { ui } from "../i18n/ui";
-import { asset, href, type Lang, otherLang, REPO_URL } from "../lib/paths";
+import { absolute, asset, DEFAULT_LANG, href, htmlLang, LANGS, type Lang, markdownPath, REPO_URL } from "../lib/paths";
 
 interface Props {
   lang: Lang;
@@ -18,14 +19,17 @@ interface Props {
   path: string;
   /** Which main navigation item is current. */
   section?: "spec" | "hub" | "plugin";
+  /**
+   * Site URL of the page's Markdown version. Defaults to the one the URL rule
+   * gives (`markdownPath()`); `false` for a page that has none.
+   */
+  markdown?: string | false;
 }
 
-const { lang, title, description, path, section } = Astro.props;
+const { lang, title, description, path, section, markdown } = Astro.props;
 const t = ui(lang);
-const other = otherLang(lang);
 const fullTitle = title ? `${title} | HARNESS.md` : "HARNESS.md";
-const site = Astro.site ?? new URL("https://hoshiori-dev.github.io");
-const absolute = (l: Lang) => new URL(href(path, l), site).href;
+const markdownHref = markdown ?? href(markdownPath(path), lang);
 const nav = [
   { id: "spec", path: "/spec/", label: t.nav.spec },
   { id: "hub", path: "/hub/", label: t.nav.hub },
@@ -34,17 +38,17 @@ const nav = [
 ---
 
 <!doctype html>
-<html lang={lang === "zh" ? "zh-CN" : "en"}>
+<html lang={htmlLang(lang)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description ?? t.siteDescription} />
     <link rel="icon" type="image/svg+xml" href={asset("/favicon.svg")} />
-    <link rel="canonical" href={absolute(lang)} />
-    <link rel="alternate" hreflang="en" href={absolute("en")} />
-    <link rel="alternate" hreflang="zh-CN" href={absolute("zh")} />
-    <link rel="alternate" hreflang="x-default" href={absolute("en")} />
+    <link rel="canonical" href={absolute(href(path, lang))} />
+    {LANGS.map((code) => <link rel="alternate" hreflang={htmlLang(code)} href={absolute(href(path, code))} />)}
+    <link rel="alternate" hreflang="x-default" href={absolute(href(path, DEFAULT_LANG))} />
+    {markdownHref && <link rel="alternate" type="text/markdown" href={absolute(markdownHref)} />}
   </head>
   <body>
     <a class="skip" href="#content">{t.skip}</a>
@@ -59,13 +63,7 @@ const nav = [
               </a>
             ))
           }
-          <a
-            class="lang-switch"
-            href={href(path, other)}
-            lang={other === "zh" ? "zh-CN" : "en"}
-            hreflang={other === "zh" ? "zh-CN" : "en"}
-            aria-label={t.switchLabel}>{t.switchTo}</a
-          >
+          <LangMenu lang={lang} path={path} />
         </nav>
       </div>
     </header>
@@ -78,5 +76,8 @@ const nav = [
         <a href={`${REPO_URL}/blob/main/LICENSE`}>{t.footer.license}</a>
       </div>
     </footer>
+    <script>
+      import "../scripts/menu";
+    </script>
   </body>
 </html>

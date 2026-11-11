@@ -1,9 +1,11 @@
 ---
 import HubSearch from "../../components/HubSearch.astro";
+import PageActions from "../../components/PageActions.astro";
 import { SECTIONS, ui } from "../../i18n/ui";
 import Base from "../../layouts/Base.astro";
 import { hubEntries } from "../../lib/hub";
-import { href, type Lang, langPaths } from "../../lib/paths";
+import { homeMarkdown } from "../../lib/pagemd";
+import { href, type Lang, langPaths, markdownPath } from "../../lib/paths";
 
 export const getStaticPaths = langPaths;
 
@@ -19,6 +21,9 @@ const entries = await hubEntries();
 <Base lang={lang} path="/">
   <div class="wrap">
     <section class="finder">
+      <div class="page-tools">
+        <PageActions lang={lang} markdown={homeMarkdown(lang, entries)} markdownHref={href(markdownPath("/"), lang)} />
+      </div>
       <h1>{t.home.heading}</h1>
       <HubSearch lang={lang} entries={entries} size="large" limit={5} />
       {
@@ -75,7 +80,12 @@ const entries = await hubEntries();
 <style>
   .finder {
     max-width: 46rem;
-    padding-block: clamp(3rem, 9vh, 6rem) 1rem;
+    padding-block: clamp(2rem, 6vh, 4rem) 1rem;
+  }
+
+  .finder .page-tools {
+    max-width: none;
+    margin-bottom: clamp(1rem, 3vh, 2rem);
   }
 
   .finder h1 {
