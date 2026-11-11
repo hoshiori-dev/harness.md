@@ -1,0 +1,112 @@
+{
+  "invalid/both-missing.md": [
+    "key-missing",
+    "key-missing"
+  ],
+  "invalid/description-empty.md": [
+    "key-missing"
+  ],
+  "invalid/frontmatter-bad-yaml.md": [
+    "frontmatter-invalid"
+  ],
+  "invalid/frontmatter-empty.md": [
+    "frontmatter-invalid"
+  ],
+  "invalid/frontmatter-list.md": [
+    "frontmatter-invalid"
+  ],
+  "invalid/frontmatter-missing.md": [
+    "frontmatter-missing"
+  ],
+  "invalid/frontmatter-not-first-line.md": [
+    "frontmatter-missing"
+  ],
+  "invalid/frontmatter-unclosed.md": [
+    "frontmatter-invalid",
+    "section-missing",
+    "section-missing",
+    "section-missing",
+    "section-missing",
+    "section-missing",
+    "section-missing",
+    "section-missing"
+  ],
+  "invalid/heading-lowercase.md": [
+    "section-missing"
+  ],
+  "invalid/heading-only-in-fence.md": [
+    "section-missing"
+  ],
+  "invalid/heading-translated.md": [
+    "section-missing"
+  ],
+  "invalid/heading-wrong-level.md": [
+    "section-missing"
+  ],
+  "invalid/key-duplicate.md": [
+    "key-duplicate"
+  ],
+  "invalid/key-unknown.md": [
+    "key-unknown",
+    "key-unknown"
+  ],
+  "invalid/license-not-string.md": [
+    "key-type"
+  ],
+  "invalid/name-missing.md": [
+    "key-missing"
+  ],
+  "invalid/name-not-string.md": [
+    "key-type"
+  ],
+  "invalid/name-null.md": [
+    "key-missing"
+  ],
+  "invalid/section-duplicate.md": [
+    "section-duplicate"
+  ],
+  "invalid/section-missing.md": [
+    "section-missing"
+  ],
+  "invalid/several.md": [
+    "key-missing",
+    "key-unknown",
+    "name-format",
+    "section-duplicate",
+    "section-missing",
+    "section-order"
+  ],
+  "invalid/version-not-string.md": [
+    "key-type"
+  ],
+  "valid/all-keys-all-sections.md": [],
+  "valid/body-in-another-language.md": [],
+  "valid/bom.md": [],
+  "valid/closing-hashes.md": [],
+  "valid/extra-sections.md": [],
+  "valid/heading-inside-fence.md": [],
+  "valid/metadata-any-structure.md": [],
+  "valid/minimal.md": [],
+  "valid/no-first-level-heading.md": [],
+  "warnings/description-length.md": [
+    "description-length"
+  ],
+  "warnings/name-double-hyphen.md": [
+    "name-format"
+  ],
+  "warnings/name-format.md": [
+    "name-format"
+  ],
+  "warnings/name-length.md": [
+    "name-length"
+  ],
+  "warnings/section-order-optional.md": [
+    "section-order"
+  ],
+  "warnings/section-order.md": [
+    "section-order"
+  ],
+  "warnings/version-unknown.md": [
+    "version-unknown"
+  ]
+}
