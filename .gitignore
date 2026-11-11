@@ -1,3 +1,4 @@
+### Node.js ###
 # Logs
 logs
 *.log
@@ -147,3 +148,22 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+### Devcontainer ###
+devcontainer-lock.json
+
+### Skills Lock ###
+skills-lock.json
+
+### Claude Code ###
+.claude/settings.local.json
+
+### Python ###
+.venv/
+__pycache__/
+*.py[co]
+.ruff_cache/
+.pytest_cache/
+
+### Release archive ###
+dist/
