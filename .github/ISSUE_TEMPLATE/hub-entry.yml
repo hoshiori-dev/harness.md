@@ -1,0 +1,33 @@
+name: Hub entry
+description: Propose a new ready-to-use HARNESS.md for the hub, or a change to an existing entry.
+labels: ["type:feature", "area:hub"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Entry name
+      description: The directory under hub/ and the `name` in the file's frontmatter (lowercase letters, digits, hyphens).
+      placeholder: solo-open-source-library
+    validations:
+      required: true
+  - type: textarea
+    id: project
+    attributes:
+      label: The kind of project it is for
+      description: The given conditions the design fits (cost of a wrong change, how long the project lives, team, how unattended agents are, platform, clients). This becomes the entry's Context.
+    validations:
+      required: true
+  - type: textarea
+    id: difference
+    attributes:
+      label: What existing entries do not cover
+      description: Name the closest existing entry and what a project of this kind would have to change in it.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: What the design is based on
+      description: A project where this harness is in use, or the published material it draws on (these become `metadata.based-on` and References). Do not paste private repository content.
+    validations:
+      required: true

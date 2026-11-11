@@ -1,0 +1,59 @@
+name: Set up tools
+description: Installs the toolchain the justfile recipes need (node, pnpm, uv, just, pre-commit, openspec, betterleaks). Versions are pinned here; the dev container pins its own through features. The optional parts are skipped by workflows whose recipes do not need them.
+inputs:
+  node-deps:
+    description: Which Node dependencies to install from the lockfile ("all", "root" for the management scripts without the website, or "none").
+    default: "all"
+  pre-commit:
+    description: Install pre-commit ("true" or "false").
+    default: "true"
+  openspec:
+    description: Install openspec ("true" or "false").
+    default: "true"
+  betterleaks:
+    description: Install betterleaks ("true" or "false").
+    default: "true"
+runs:
+  using: composite
+  steps:
+    # pnpm's version comes from package.json#packageManager.
+    - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: "26"
+        cache: ${{ inputs.node-deps != 'none' && 'pnpm' || '' }}
+    - name: Install Node dependencies
+      if: inputs.node-deps == 'all'
+      shell: bash
+      run: pnpm install --frozen-lockfile
+    - name: Install Node dependencies (management scripts only)
+      if: inputs.node-deps == 'root'
+      shell: bash
+      run: pnpm install --frozen-lockfile --filter .
+    - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+    - name: Install just
+      shell: bash
+      run: uv tool install rust-just==1.59.0
+    - name: Install pre-commit
+      if: inputs.pre-commit == 'true'
+      shell: bash
+      run: uv tool install pre-commit==4.7.0
+    - name: Install openspec
+      if: inputs.openspec == 'true'
+      shell: bash
+      run: npm install --global @fission-ai/openspec@1.17.0
+    - name: Install betterleaks
+      if: inputs.betterleaks == 'true'
+      shell: bash
+      env:
+        VERSION: "1.9.0"
+        # From checksums.txt of the release; bump both together.
+        SHA256: "f8b185a39ffcece2a1ca82bf3a4e7435cd81963ffd16b7a9128daf75f35f6de7"
+      run: |
+        set -euo pipefail
+        url="https://github.com/betterleaks/betterleaks/releases/download/v${VERSION}/betterleaks_${VERSION}_linux_x64.tar.gz"
+        curl -sSfL "$url" -o /tmp/betterleaks.tar.gz
+        echo "${SHA256}  /tmp/betterleaks.tar.gz" | sha256sum -c -
+        mkdir -p "$HOME/.local/bin"
+        tar -xzf /tmp/betterleaks.tar.gz -C "$HOME/.local/bin" betterleaks
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"

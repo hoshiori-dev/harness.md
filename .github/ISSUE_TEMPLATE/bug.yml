@@ -1,0 +1,45 @@
+name: Bug
+description: Something shipped does not behave as its specification says.
+labels: ["type:bug"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - "Format (specification, validator)"
+        - "Plugin (a skill or the verifier agent)"
+        - "Hub entry"
+        - "Website"
+        - "Repository tooling"
+    validations:
+      required: true
+  - type: dropdown
+    id: client
+    attributes:
+      label: Client
+      description: The coding-agent client you saw it in, when the bug is in the plugin.
+      options: ["Not applicable", "Claude Code", "Codex", "Antigravity", "Other Agent Plugins client"]
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: Quote the sentence of spec/spec.md, or the requirement or scenario under openspec/specs/, that is violated.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What happened, with the version (client, plugin, or validator) and the command, prompt, or file used. A minimal HARNESS.md that reproduces a validator bug helps most.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How a reviewer confirms the fix without reading the code.
+    validations:
+      required: true

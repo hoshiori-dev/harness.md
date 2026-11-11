@@ -1,0 +1,40 @@
+# Applies .github/labels.json to this repository when a push to main changes it
+# (scripts/sync_labels.ts --apply, which creates and updates labels and never
+# deletes one), or on dispatch. The job holds `issues: write`, so this workflow
+# never runs on a pull-request event: that token stays out of reach of code
+# nobody reviewed yet. The checkout names main, so a rerun or a dispatch from
+# any branch applies what main holds now, never an older declaration. The
+# script imports no package, so no dependency is installed.
+name: labels
+
+on:
+  push:
+    branches: [main]
+    paths: [".github/labels.json"]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: labels / sync
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "26"
+      - name: Apply the label declaration
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/sync_labels.ts --apply

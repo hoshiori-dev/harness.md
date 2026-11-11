@@ -1,0 +1,65 @@
+# Publishes the website (Astro, English and Chinese) to GitHub Pages on every
+# push to main that touches what the site renders: its own source, the
+# specification, the hub, or the build. Pull requests do not run this
+# workflow; `checks / site` in checks.yml builds the site on each of them.
+# Pages must be set to "GitHub Actions" as its source in the repository
+# settings before the first deploy; that is a human step.
+name: site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "spec/**"
+      - "hub/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "justfile"
+      - ".github/workflows/site.yml"
+      - ".github/actions/setup-tools/action.yml"
+  workflow_dispatch:
+
+permissions: {}
+
+# One deployment at a time; a running deployment finishes instead of being
+# cancelled, so Pages is never left half published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: site / build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-tools
+        with:
+          pre-commit: "false"
+          openspec: "false"
+          betterleaks: "false"
+      - run: just site-build
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site/dist
+
+  deploy:
+    name: site / deploy
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
