@@ -1,0 +1,57 @@
+---
+import { getEntry } from "astro:content";
+import type { MarkdownHeading } from "astro";
+import AsideNav from "../../components/AsideNav.astro";
+import { ui } from "../../i18n/ui";
+import Base from "../../layouts/Base.astro";
+import { prepare } from "../../lib/markdown";
+import { href, type Lang, langPaths, REPO_URL } from "../../lib/paths";
+
+export const getStaticPaths = langPaths;
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui(lang);
+const entry = await getEntry("spec", lang);
+if (!entry?.rendered) {
+  throw new Error(`spec/${lang === "en" ? "spec.md" : `spec.${lang}.md`} is missing; the site renders it at build time`);
+}
+
+// The two files link to each other by file name; on the site that is the
+// same page in the other language.
+const html = prepare(entry.rendered.html, "spec", {
+  "spec.md": href("/spec/", "en"),
+  "spec.zh.md": href("/spec/", "zh"),
+});
+const headings = ((entry.rendered.metadata?.headings ?? []) as MarkdownHeading[]).filter(
+  (heading) => heading.depth === 2 || heading.depth === 3,
+);
+const sourceFile = lang === "en" ? "spec/spec.md" : `spec/spec.${lang}.md`;
+---
+
+<Base lang={lang} path="/spec/" title={t.spec.title} description={t.spec.description} section="spec">
+  <div class="wrap with-aside">
+    <AsideNav
+      title={t.spec.toc}
+      label={t.spec.toc}
+      items={headings.map((heading) => ({ href: `#${heading.slug}`, label: heading.text, depth: heading.depth }))}
+    />
+    <div>
+      <article class="prose" data-pagefind-body data-pagefind-filter="type:spec" set:html={html} />
+      <p class="source">
+        {t.spec.source}: <a href={`${REPO_URL}/blob/main/${sourceFile}`}><code>{sourceFile}</code></a>
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .source {
+    margin-top: 3rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+</style>

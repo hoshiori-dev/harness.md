@@ -1,0 +1,82 @@
+---
+import "@fontsource/ibm-plex-sans/latin-400.css";
+import "@fontsource/ibm-plex-sans/latin-400-italic.css";
+import "@fontsource/ibm-plex-sans/latin-500.css";
+import "@fontsource/ibm-plex-sans/latin-600.css";
+import "@fontsource/ibm-plex-mono/latin-400.css";
+import "@fontsource/ibm-plex-mono/latin-500.css";
+import "../styles/global.css";
+import { ui } from "../i18n/ui";
+import { asset, href, type Lang, otherLang, REPO_URL } from "../lib/paths";
+
+interface Props {
+  lang: Lang;
+  /** Page title; the site name is appended. */
+  title?: string;
+  description?: string;
+  /** Path without base or language prefix, starting and ending with `/`. */
+  path: string;
+  /** Which main navigation item is current. */
+  section?: "spec" | "hub" | "plugin";
+}
+
+const { lang, title, description, path, section } = Astro.props;
+const t = ui(lang);
+const other = otherLang(lang);
+const fullTitle = title ? `${title} | HARNESS.md` : "HARNESS.md";
+const site = Astro.site ?? new URL("https://hoshiori-dev.github.io");
+const absolute = (l: Lang) => new URL(href(path, l), site).href;
+const nav = [
+  { id: "spec", path: "/spec/", label: t.nav.spec },
+  { id: "hub", path: "/hub/", label: t.nav.hub },
+  { id: "plugin", path: "/plugin/", label: t.nav.plugin },
+] as const;
+---
+
+<!doctype html>
+<html lang={lang === "zh" ? "zh-CN" : "en"}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description ?? t.siteDescription} />
+    <link rel="icon" type="image/svg+xml" href={asset("/favicon.svg")} />
+    <link rel="canonical" href={absolute(lang)} />
+    <link rel="alternate" hreflang="en" href={absolute("en")} />
+    <link rel="alternate" hreflang="zh-CN" href={absolute("zh")} />
+    <link rel="alternate" hreflang="x-default" href={absolute("en")} />
+  </head>
+  <body>
+    <a class="skip" href="#content">{t.skip}</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="wordmark" href={href("/", lang)}>HARNESS.md</a>
+        <nav class="site-nav" aria-label={t.navLabel}>
+          {
+            nav.map((item) => (
+              <a href={href(item.path, lang)} aria-current={section === item.id ? "true" : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+          <a
+            class="lang-switch"
+            href={href(path, other)}
+            lang={other === "zh" ? "zh-CN" : "en"}
+            hreflang={other === "zh" ? "zh-CN" : "en"}
+            aria-label={t.switchLabel}>{t.switchTo}</a
+          >
+        </nav>
+      </div>
+    </header>
+    <main id="content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <a href={REPO_URL}>{t.footer.source}</a>
+        <a href={`${REPO_URL}/blob/main/LICENSE`}>{t.footer.license}</a>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,395 @@
+---
+// Search over the hub. Every entry is rendered in the page, so the list works
+// with scripting off and in `astro dev`. With scripting on, typing filters by
+// name, description, and tags at once, then adds full-text matches from the
+// Pagefind index built after `astro build`.
+import { ui } from "../i18n/ui";
+import type { HubEntry } from "../lib/hub";
+import { allTags } from "../lib/hub";
+import { asset, href, type Lang } from "../lib/paths";
+
+interface Props {
+  lang: Lang;
+  entries: HubEntry[];
+  /** Show the tag filter (the hub index does; the home page does not). */
+  showTags?: boolean;
+  /** The home page uses the large field and shortens each description. */
+  size?: "large" | "regular";
+  /** With an empty query, show at most this many entries (the home page). */
+  limit?: number;
+}
+
+const { lang, entries, showTags = false, size = "regular", limit } = Astro.props;
+const t = ui(lang).search;
+const tags = showTags ? allTags(entries) : [];
+const inputId = "hub-search-input";
+---
+
+<div
+  class:list={["hub-search", size]}
+  data-hub-search
+  data-pagefind={asset("/pagefind/pagefind.js")}
+  data-count-one={t.count(1)}
+  data-count-many={t.count(0).replace("0", "{n}")}
+  data-in-text={t.inText}
+  data-limit={limit}
+  data-pagefind-ignore
+>
+  <label class="visually-hidden" for={inputId}>{t.label}</label>
+  <input
+    id={inputId}
+    type="search"
+    placeholder={t.placeholder}
+    autocomplete="off"
+    spellcheck="false"
+    enterkeyhint="go"
+    aria-describedby={`${inputId}-hint`}
+    disabled={entries.length === 0}
+  />
+  <p class="visually-hidden" id={`${inputId}-hint`}>{t.hint}</p>
+
+  {
+    tags.length > 0 && (
+      <fieldset class="tag-filter">
+        <legend class="visually-hidden">{t.tagsLabel}</legend>
+        <button type="button" class="tag-button" data-tag="" aria-pressed="true">
+          {t.allTags}
+        </button>
+        {tags.map((tag) => (
+          <button type="button" class="tag-button" data-tag={tag} aria-pressed="false">
+            {tag}
+          </button>
+        ))}
+      </fieldset>
+    )
+  }
+
+  {
+    entries.length === 0 ? (
+      <p class="empty">{t.empty}</p>
+    ) : (
+      <>
+        <p class="status" role="status" aria-live="polite" data-status>
+          {limit === undefined || entries.length <= limit ? t.count(entries.length) : ""}
+        </p>
+        <ul class="entry-list" data-list>
+          {entries.map((entry, index) => (
+            <li
+              hidden={limit !== undefined && index >= limit}
+              data-id={entry.id}
+              data-tags={entry.tags.join("|")}
+              data-text={[entry.id, entry.name, entry.description, ...entry.tags].join(" ").toLowerCase()}
+            >
+              <a class="entry-name" href={href(`/hub/${entry.id}/`, lang)}>
+                {entry.name}
+              </a>
+              <p class="entry-description" lang="en">
+                {entry.description}
+              </p>
+              <p class="entry-excerpt" lang="en" data-excerpt hidden />
+              {entry.tags.length > 0 && (
+                <ul class="tags">
+                  {entry.tags.map((tag) => (
+                    <li class="tag">{tag}</li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+        <p class="no-results" data-none hidden>
+          {t.none}
+        </p>
+      </>
+    )
+  }
+</div>
+
+<script>
+  interface PagefindHit {
+    data(): Promise<{ excerpt: string; meta: Record<string, string> }>;
+  }
+
+  interface Pagefind {
+    search(query: string, options?: { filters?: Record<string, string> }): Promise<{ results: PagefindHit[] }>;
+  }
+
+  let pagefindLoad: Promise<Pagefind | null> | undefined;
+
+  // The index exists only in a built site; without it the metadata filter
+  // still works, so a failed import is an expected state, not an error.
+  function loadPagefind(url: string): Promise<Pagefind | null> {
+    pagefindLoad ??= import(/* @vite-ignore */ url).then(
+      (module) => module as Pagefind,
+      () => null,
+    );
+    return pagefindLoad;
+  }
+
+  function setUp(root: HTMLElement): void {
+    const input = root.querySelector<HTMLInputElement>("input[type=search]");
+    const list = root.querySelector<HTMLElement>("[data-list]");
+    const status = root.querySelector<HTMLElement>("[data-status]");
+    const none = root.querySelector<HTMLElement>("[data-none]");
+    if (!input || !list || !status || !none) return;
+
+    const items = [...list.querySelectorAll<HTMLLIElement>(":scope > li")];
+    const byId = new Map(items.map((item) => [item.dataset.id ?? "", item]));
+    const tagButtons = [...root.querySelectorAll<HTMLButtonElement>("button[data-tag]")];
+    const pagefindUrl = root.dataset.pagefind ?? "";
+    const limit = root.dataset.limit ? Number(root.dataset.limit) : Number.POSITIVE_INFINITY;
+    let activeTag = "";
+    let run = 0;
+
+    function countText(n: number): string {
+      if (n === 1) return root.dataset.countOne ?? "";
+      return (root.dataset.countMany ?? "{n}").replace("{n}", String(n));
+    }
+
+    function hasTag(item: HTMLLIElement): boolean {
+      return activeTag === "" || (item.dataset.tags ?? "").split("|").includes(activeTag);
+    }
+
+    function show(ranked: HTMLLIElement[], excerpts: Map<string, string>): void {
+      const visible = new Set(ranked);
+      for (const item of ranked) list?.append(item);
+      for (const item of items) {
+        item.hidden = !visible.has(item);
+        const excerpt = item.querySelector<HTMLElement>("[data-excerpt]");
+        if (!excerpt) continue;
+        const html = excerpts.get(item.dataset.id ?? "");
+        excerpt.hidden = html === undefined;
+        // Pagefind returns escaped page text with <mark> around the matches.
+        excerpt.innerHTML = html === undefined ? "" : `${root.dataset.inText ?? ""}: ${html}`;
+      }
+      if (status) status.textContent = ranked.length === 0 ? "" : countText(ranked.length);
+      if (none) none.hidden = ranked.length !== 0;
+    }
+
+    async function update(): Promise<void> {
+      const current = ++run;
+      const query = input?.value.trim() ?? "";
+      const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+      const candidates = items.filter(hasTag);
+
+      if (tokens.length === 0) {
+        show(candidates.slice(0, limit), new Map());
+        if (status && candidates.length > limit) status.textContent = "";
+        return;
+      }
+
+      const byMetadata = candidates.filter((item) => tokens.every((token) => (item.dataset.text ?? "").includes(token)));
+      show(byMetadata, new Map());
+
+      const pagefind = await loadPagefind(pagefindUrl);
+      if (!pagefind || current !== run) return;
+      const found = await pagefind.search(query, { filters: { type: "hub" } });
+      const hits = await Promise.all(found.results.slice(0, 20).map((hit) => hit.data()));
+      if (current !== run) return;
+
+      const ranked = [...byMetadata];
+      const excerpts = new Map<string, string>();
+      for (const hit of hits) {
+        const item = byId.get(hit.meta.entry ?? "");
+        if (!item || !hasTag(item)) continue;
+        excerpts.set(item.dataset.id ?? "", hit.excerpt);
+        if (!ranked.includes(item)) ranked.push(item);
+      }
+      show(ranked, excerpts);
+    }
+
+    function visibleLinks(): HTMLAnchorElement[] {
+      return [...(list?.querySelectorAll<HTMLAnchorElement>(":scope > li:not([hidden]) > a") ?? [])];
+    }
+
+    input.addEventListener("input", () => void update());
+    input.addEventListener("keydown", (event) => {
+      const links = visibleLinks();
+      if (event.key === "Enter" && input.value.trim() !== "" && links[0]) {
+        event.preventDefault();
+        links[0].click();
+      } else if (event.key === "ArrowDown" && links[0]) {
+        event.preventDefault();
+        links[0].focus();
+      }
+    });
+    list.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+      const links = visibleLinks();
+      const at = links.indexOf(document.activeElement as HTMLAnchorElement);
+      if (at === -1) return;
+      event.preventDefault();
+      const next = event.key === "ArrowDown" ? links[at + 1] : at === 0 ? input : links[at - 1];
+      next?.focus();
+    });
+    for (const button of tagButtons) {
+      button.addEventListener("click", () => {
+        activeTag = button.dataset.tag ?? "";
+        for (const other of tagButtons) other.setAttribute("aria-pressed", String(other === button));
+        void update();
+      });
+    }
+
+    // A query restored by the browser (back navigation) filters at once.
+    if (input.value.trim() !== "") void update();
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-hub-search]")) setUp(root);
+</script>
+
+<style>
+  input[type="search"] {
+    width: 100%;
+    max-width: 46rem;
+    font: inherit;
+    font-size: 1.0625rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    appearance: none;
+  }
+
+  .large input[type="search"] {
+    padding: 1rem 1.125rem;
+    border-radius: 10px;
+  }
+
+  @media (min-width: 40rem) {
+    .large input[type="search"] {
+      font-size: 1.25rem;
+      padding: 1.0625rem 1.25rem;
+    }
+  }
+
+  input[type="search"]::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
+
+  input[type="search"]:focus-visible {
+    outline: 3px solid var(--accent-wash);
+    outline-offset: 0;
+    border-color: var(--accent);
+    border-radius: 8px;
+  }
+
+  .large input[type="search"]:focus-visible {
+    border-radius: 10px;
+  }
+
+  input[type="search"]:disabled {
+    border-color: var(--rule);
+    background: var(--wash);
+  }
+
+  .tag-filter {
+    border: 0;
+    padding: 0;
+    margin-inline: 0;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .tag-button {
+    font: inherit;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .tag-button:hover {
+    border-color: var(--muted);
+  }
+
+  .tag-button[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .status,
+  .empty,
+  .no-results {
+    margin-top: 1.25rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .entry-list {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .entry-list > li {
+    padding-block: 1.125rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .entry-name {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 1.0625rem;
+    text-decoration: none;
+  }
+
+  .entry-name:hover {
+    text-decoration: underline;
+  }
+
+  .entry-description {
+    margin-top: 0.25rem;
+    max-width: var(--measure);
+  }
+
+  .entry-excerpt {
+    margin-top: 0.375rem;
+    max-width: var(--measure);
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .entry-excerpt :global(mark) {
+    background: var(--accent-wash);
+    color: var(--ink);
+    padding-inline: 0.1em;
+    border-radius: 2px;
+  }
+
+  .tags {
+    margin-top: 0.625rem;
+  }
+
+  /* The home page is an entry point, not the catalogue: two lines each. */
+  .large .entry-description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    color: var(--muted);
+  }
+
+  .large .tags {
+    display: none;
+  }
+
+  .large .entry-list > li {
+    padding-block: 0.875rem;
+  }
+</style>

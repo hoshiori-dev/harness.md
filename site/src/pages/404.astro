@@ -1,0 +1,20 @@
+---
+import { ui } from "../i18n/ui";
+import Base from "../layouts/Base.astro";
+import { href } from "../lib/paths";
+
+// GitHub Pages serves this one file for every missing URL, so it speaks both
+// languages.
+const en = ui("en").notFound;
+const zh = ui("zh").notFound;
+---
+
+<Base lang="en" path="/" title={en.title}>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>{en.title}</h1>
+      <p class="lead">{en.body} <a href={href("/", "en")}>{en.home}</a>.</p>
+      <p class="lead" lang="zh-CN">{zh.body}<a href={href("/", "zh")}>{zh.home}</a>。</p>
+    </header>
+  </div>
+</Base>

@@ -1,0 +1,219 @@
+---
+import AsideNav from "../../../components/AsideNav.astro";
+import { ui } from "../../../i18n/ui";
+import Base from "../../../layouts/Base.astro";
+import { type HubEntry, hubEntries } from "../../../lib/hub";
+import { hasTopHeading } from "../../../lib/markdown";
+import { asset, href, LANGS, type Lang, REPO_URL } from "../../../lib/paths";
+
+export async function getStaticPaths() {
+  const entries = await hubEntries();
+  return LANGS.flatMap((lang) =>
+    entries.map((entry) => ({
+      params: { lang: lang === "en" ? undefined : lang, name: entry.id },
+      props: { lang, entry },
+    })),
+  );
+}
+
+interface Props {
+  lang: Lang;
+  entry: HubEntry;
+}
+
+const { lang, entry } = Astro.props;
+const t = ui(lang);
+const rawUrl = asset(`/hub/${entry.id}/HARNESS.md`);
+const sections = entry.headings.filter((heading) => heading.depth === 2);
+// The body may open with its own first-level heading; the page keeps one.
+const NameTag = hasTopHeading(entry.html) ? "p" : "h1";
+---
+
+<Base lang={lang} path={`/hub/${entry.id}/`} title={entry.name} description={entry.description} section="hub">
+  <div class="wrap">
+    <header class="entry-head" data-pagefind-body data-pagefind-filter="type:hub">
+      <p class="back" data-pagefind-ignore><a href={href("/hub/", lang)}>{t.hub.back}</a></p>
+      <NameTag class="entry-name" data-pagefind-meta="title">{entry.name}</NameTag>
+      <p class="entry-description" lang="en" data-pagefind-meta="description">{entry.description}</p>
+      <span hidden data-pagefind-meta={`entry:${entry.id}`}></span>
+
+      <dl class="facts" data-pagefind-ignore>
+        {
+          entry.tags.length > 0 && (
+            <div>
+              <dt>{t.hub.tags}</dt>
+              <dd>
+                <ul class="tags">
+                  {entry.tags.map((tag) => (
+                    <li class="tag">{tag}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )
+        }
+        {
+          entry.license && (
+            <div>
+              <dt>{t.hub.license}</dt>
+              <dd>{entry.license}</dd>
+            </div>
+          )
+        }
+        {
+          entry.version && (
+            <div>
+              <dt>{t.hub.version}</dt>
+              <dd>
+                <code>{entry.version}</code>
+              </dd>
+            </div>
+          )
+        }
+        {
+          entry.basedOn.length > 0 && (
+            <div>
+              <dt>{t.hub.basedOn}</dt>
+              <dd>
+                <ul class="based-on">
+                  {entry.basedOn.map((source) => (
+                    <li>{/^https?:\/\//.test(source) ? <a href={source}>{source}</a> : source}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+      {entry.tags.map((tag) => <span hidden data-pagefind-filter="tag">{tag}</span>)}
+
+      <div class="actions" data-pagefind-ignore>
+        <button type="button" class="button primary" data-copy data-copied={t.hub.copied} data-failed={t.hub.copyFailed}>
+          {t.hub.copy}
+        </button>
+        <a class="button" href={rawUrl} download="HARNESS.md">{t.hub.download}</a>
+        <a class="button" href={`${REPO_URL}/blob/main/hub/${entry.id}/HARNESS.md`}>{t.hub.github}</a>
+        <span class="copy-status" role="status" aria-live="polite" data-copy-status></span>
+      </div>
+      <p class="use" data-pagefind-ignore set:html={t.hub.use} />
+      {lang !== "en" && <p class="use" data-pagefind-ignore>{t.hub.entryLang}</p>}
+    </header>
+
+    <div class="with-aside">
+      <AsideNav
+        title={t.hub.sections}
+        label={t.hub.sections}
+        items={sections.map((heading) => ({ href: `#${heading.slug}`, label: heading.text }))}
+      />
+      <article class="prose" lang="en" data-pagefind-body set:html={entry.html} />
+    </div>
+  </div>
+
+  <script type="application/json" id="raw-file" set:html={JSON.stringify(entry.raw).replace(/</g, "\\u003c")} />
+</Base>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>("button[data-copy]");
+  const status = document.querySelector<HTMLElement>("[data-copy-status]");
+  const raw = document.getElementById("raw-file");
+
+  if (button && status && raw) {
+    const label = button.textContent ?? "";
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(JSON.parse(raw.textContent ?? '""') as string);
+        button.textContent = button.dataset.copied ?? label;
+        status.textContent = "";
+        window.setTimeout(() => {
+          button.textContent = label;
+        }, 2000);
+      } catch {
+        // No clipboard permission (or an insecure origin): say so and point
+        // at the download, which needs no permission.
+        status.textContent = button.dataset.failed ?? "";
+      }
+    });
+  }
+</script>
+
+<style>
+  .entry-head {
+    padding-block: 2.5rem 2.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .back {
+    font-size: 0.9375rem;
+  }
+
+  .back a {
+    color: var(--muted);
+  }
+
+  .entry-name {
+    margin-top: 1.25rem;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2rem);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .entry-description {
+    margin-top: 0.75rem;
+    max-width: var(--measure);
+    font-size: 1.0625rem;
+  }
+
+  .facts {
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 0.625rem;
+    font-size: 0.9375rem;
+  }
+
+  .facts > div {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .facts dt {
+    color: var(--muted);
+  }
+
+  .facts dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .based-on {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    margin-top: 1.75rem;
+  }
+
+  .copy-status {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .use {
+    margin-top: 1rem;
+    max-width: var(--measure);
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .use :global(code) {
+    color: var(--ink);
+  }
+</style>
