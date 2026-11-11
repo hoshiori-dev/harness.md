@@ -139,7 +139,8 @@ The code should be easy to replace, because most of it will be.
   When the point of the prototype is a new or niche library, that library's
   documentation goes into the entrypoint (see Knowledge).
 - **Pinned dependencies.** Commit the lockfile, so a prototype that ran
-  yesterday runs today.
+  yesterday runs today. A prototype with no dependencies has nothing to
+  pin and needs no lockfile.
 - **Loud and observable.** Print what the program is doing. Fail with the
   real error; never swallow an exception to keep going. The agent verifies
   its work by reading this output.
@@ -186,8 +187,10 @@ tools. Isolation is what makes it safe to let the agent move fast.
 **Where the agent runs.** Decide in this order and record the answer in
 `AGENTS.md` in one line:
 
-1. The repository already declares an isolated environment (a dev
-   container, a cloud workspace): use it.
+1. The session already runs in an isolated environment (a dev container
+   the repository declares, a cloud workspace, or a container the person
+   started the agent in, which a `/.dockerenv` file or the workspace's own
+   variables show): use it, and still write the permission file below.
 2. Docker or a compatible runtime is available: create
    `.devcontainer/devcontainer.json` from the official base image for the
    stack, and run the agent inside it.
@@ -362,7 +365,11 @@ documentation, because the syntax changes between versions.
 - Deny: `git push --force`, `git push --all`, `git push --mirror`,
   `git reset --hard`, `git clean -fd`, `git commit --no-verify`,
   recursive deletion of the project root or the home directory, and
-  reading `~/.ssh`, `~/.aws`, `~/.config/gh`, and `.env`.
+  reading `~/.ssh`, `~/.aws`, `~/.config/gh`, and `.env`. Denying `.env`
+  stops the agent from opening the file and seeing the values; the
+  program still gets them, because the run recipe loads `.env` into the
+  program's environment (the task runner's dotenv setting, or the
+  language's usual loader).
 - No entries that prompt for confirmation. A rule that asks every time
   trains the person to approve without reading; the decision is made once
   here instead. The person reviews results at the end of each turn.
