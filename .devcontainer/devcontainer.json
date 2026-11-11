@@ -19,6 +19,10 @@
       "toolsToInstall": "pre-commit,rust-just"
     }
   },
+  "forwardPorts": [4321],
+  "portsAttributes": {
+    "4321": { "label": "Website (astro dev / preview)", "onAutoForward": "notify" }
+  },
   "remoteUser": "vscode",
   "postCreateCommand": "bash .devcontainer/setup.sh",
   "customizations": {

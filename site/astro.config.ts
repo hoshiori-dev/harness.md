@@ -7,6 +7,9 @@ export default defineConfig({
   site: "https://hoshiori-dev.github.io",
   base: "/harness.md",
   trailingSlash: "always",
+  // The project is developed in a dev container: listen on every interface
+  // so the forwarded port reaches the dev and preview servers from the host.
+  server: { host: true, port: 4321 },
   build: { format: "directory" },
   i18n: {
     defaultLocale: "en",
