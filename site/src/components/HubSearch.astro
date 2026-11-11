@@ -222,16 +222,32 @@ const inputId = "hub-search-input";
       const next = event.key === "ArrowDown" ? links[at + 1] : at === 0 ? input : links[at - 1];
       next?.focus();
     });
+    function selectTag(button: HTMLButtonElement): void {
+      activeTag = button.dataset.tag ?? "";
+      for (const other of tagButtons) other.setAttribute("aria-pressed", String(other === button));
+    }
+
     for (const button of tagButtons) {
       button.addEventListener("click", () => {
-        activeTag = button.dataset.tag ?? "";
-        for (const other of tagButtons) other.setAttribute("aria-pressed", String(other === button));
+        selectTag(button);
+        // Keep the chosen tag in the address so the filtered list can be
+        // linked to (entry pages link here with `?tag=`) and survives reload.
+        const url = new URL(window.location.href);
+        if (activeTag === "") url.searchParams.delete("tag");
+        else url.searchParams.set("tag", activeTag);
+        window.history.replaceState(null, "", url);
         void update();
       });
     }
 
-    // A query restored by the browser (back navigation) filters at once.
-    if (input.value.trim() !== "") void update();
+    // `?tag=<name>` opens the list already filtered; an unknown tag is ignored.
+    const wanted = new URL(window.location.href).searchParams.get("tag");
+    const preset = wanted ? tagButtons.find((button) => button.dataset.tag === wanted) : undefined;
+    if (preset) selectTag(preset);
+
+    // A preset tag, or a query restored by the browser (back navigation),
+    // filters at once.
+    if (preset || input.value.trim() !== "") void update();
   }
 
   for (const root of document.querySelectorAll<HTMLElement>("[data-hub-search]")) setUp(root);

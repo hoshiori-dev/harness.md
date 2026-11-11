@@ -45,7 +45,15 @@ const NameTag = hasTopHeading(entry.html) ? "p" : "h1";
               <dd>
                 <ul class="tags">
                   {entry.tags.map((tag) => (
-                    <li class="tag">{tag}</li>
+                    <li>
+                      <a
+                        class="tag"
+                        href={`${href("/hub/", lang)}?tag=${encodeURIComponent(tag)}`}
+                        title={t.hub.tagLink.replace("{tag}", tag)}
+                      >
+                        {tag}
+                      </a>
+                    </li>
                   ))}
                 </ul>
               </dd>

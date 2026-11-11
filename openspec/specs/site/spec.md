@@ -43,11 +43,21 @@ and the plugin documentation.
 ### Requirement: Using a hub entry
 A hub entry's page SHALL display the entry, and SHALL offer copying the raw
 file to the clipboard and downloading it as `HARNESS.md`. The hub index SHALL
-offer full-text search and filtering by tag.
+offer full-text search and filtering by tag, and SHALL keep the chosen tag in
+its address. Each tag on an entry's page SHALL link to the hub index filtered
+by that tag.
 
 #### Scenario: Download
 - **WHEN** a reader chooses download on an entry page
 - **THEN** the browser saves a file named `HARNESS.md` whose content is byte-identical to `hub/<name>/HARNESS.md`
+
+#### Scenario: Following a tag from an entry
+- **WHEN** a reader on an entry's page chooses one of its tags
+- **THEN** the hub index of the same language opens showing only the entries that carry that tag, with the tag marked as selected
+
+#### Scenario: Address names a tag no entry carries
+- **WHEN** the hub index is opened with a tag in its address that no entry carries
+- **THEN** every entry is listed and no tag is marked as selected
 
 ### Requirement: Self-contained and accessible
 The site SHALL make no request to another origin at runtime, SHALL work under
