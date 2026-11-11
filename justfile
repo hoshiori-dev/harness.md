@@ -117,18 +117,15 @@ check-fast: (gen "--check") lint validate skills-check harness-check harness-md-
 # Everything CI runs.
 check: check-fast spec-check site-check site-build secrets
 
-# Validate the package with the installed client CLIs (local only; CI has no clients).
+# Validate the package with the installed client CLIs (local only; CI has no clients). Antigravity installs from the unpacked release archive: it copies the whole directory it is given, and the working tree holds node_modules and the website.
 clients-validate:
     claude plugin validate .
     agy plugin validate .
-    agy plugin install . >/dev/null
-    agy plugin list --json | grep -F '"harness-md"'
-    agy plugin uninstall harness-md >/dev/null
     codex plugin marketplace add . >/dev/null
     codex plugin list | grep -F "harness-md@harness-md"
     codex plugin marketplace remove harness-md >/dev/null
     just dist
-    name="$(node -p 'JSON.parse(require("node:fs").readFileSync("plugin.json", "utf8")).name')"; version="$(node -p 'JSON.parse(require("node:fs").readFileSync("plugin.json", "utf8")).version')"; out="$(mktemp -d)"; unzip -q "dist/$name-$version.zip" -d "$out" && claude plugin validate "$out/$name" && agy plugin validate "$out/$name"; rm -rf "$out"
+    name="$(node -p 'JSON.parse(require("node:fs").readFileSync("plugin.json", "utf8")).name')"; version="$(node -p 'JSON.parse(require("node:fs").readFileSync("plugin.json", "utf8")).version')"; out="$(mktemp -d)"; trap 'rm -rf "$out"' EXIT; unzip -q "dist/$name-$version.zip" -d "$out" && claude plugin validate "$out/$name" && agy plugin validate "$out/$name" && agy plugin install "$out/$name" >/dev/null && agy plugin list --json | grep -F "\"$name\"" && agy plugin uninstall "$name" >/dev/null
 
 # Print the versions of the clients and tools the harness is verified against.
 versions:

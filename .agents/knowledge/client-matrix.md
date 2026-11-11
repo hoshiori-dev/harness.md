@@ -62,4 +62,5 @@ to do when it lifts is one row of
 | 2026-10-27 | harness-builder: `agy plugin install <root>` with root `plugin.json` and `skills/` | skills processed; dot-directories not copied |
 | 2026-10-27 | harness-builder: `.agents/plugins/<name> -> ../..` workspace link | loads in the workspace but breaks `agy plugin install`; rejected |
 | 2026-10-27 | harness-builder: a `plugins.json` file under `.agents` with `{"path": "."}` | not picked up by the CLI session; rejected |
-| 2026-11-11 | this repository: `just clients-validate` (Claude Code 2.1.322, Codex CLI 0.167.1, `agy` 1.5.5) | not run yet |
+| 2026-11-11 | this repository: `just clients-validate` (Claude Code 2.1.322, Codex CLI 0.167.1, `agy` 1.5.5) | passes: `claude plugin validate` on the root and on the unpacked archive (one directory warning: no icon), `agy plugin validate` (one warning on the root: `AGENTS.md` is never loaded by a plugin), Codex lists `harness-md@harness-md`, `agy plugin install` of the unpacked archive installs 18 skills |
+| 2026-11-11 | `agy plugin install .` from the working tree | did not finish within a minute: it copies the whole directory, `node_modules` and `site/` included; `just clients-validate` installs from the unpacked release archive instead |
