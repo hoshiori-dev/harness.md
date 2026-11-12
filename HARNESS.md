@@ -480,8 +480,11 @@ the artifact is fixed or this file is changed first, in its own pull request.
 
 ## Open Questions
 
-- The behavioural tests of the shipped skills have not been run;
-  the first implementation was written before the process that requires them.
+- One round of the shipped skills' behavioural tests ran on 2026-11-12
+  through clean-context subagents, each reading the skill from its file;
+  its results are recorded in pull request #1.
+  Loading through a client's own skill discovery has not been tested,
+  and the findings of that round are not yet resolved.
 - Antigravity loads plugin agents only from the plugin root
   and Codex plugins carry no agents,
   so the verifier agent ships to Claude Code only.

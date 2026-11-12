@@ -114,7 +114,9 @@ The validator's scenarios are proven by `just fixtures-check`.
 Every spec under `openspec/specs/` was written directly as the initial state,
 with no change directory and no recorded approval,
 in a session the maintainer ran with the agent before the workflows existed.
-The shipped skills' behavioural tests were not run.
+The shipped skills' behavioural tests were not run at that point;
+one round ran on 2026-11-12, before the first merge,
+and its results are recorded in pull request #1.
 Every later change follows the lifecycle above.
 
 ## Update triggers
