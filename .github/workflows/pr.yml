@@ -1,6 +1,6 @@
 # Pull-request hygiene and the archive gate. `checks / pr`: the title follows
-# Conventional Commits and the body keeps the template's sections with the
-# secrets item ticked (scripts/check_pr.ts); a pull request Dependabot opened
+# Conventional Commits and the body keeps the template's sections
+# (scripts/check_pr.ts); a pull request Dependabot opened
 # is checked on its title only. `checks / spec-archived`: reported
 # only while no OpenSpec change is unarchived (scripts/check_spec_archived.ts),
 # so the ruleset's required check is absent until the archive lands and the run

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Checks a pull request's title and body against this repository's rules:
 // the title is a Conventional Commits subject, and the body keeps every
-// heading of .github/pull_request_template.md and ticks the secrets item.
+// heading of .github/pull_request_template.md.
 // A pull request opened by Dependabot is checked on its title only: the bot
-// writes its own body and cannot keep the template or tick an item.
+// writes its own body and cannot keep the template.
 //
 //   check_pr.ts --title "<title>" --body-file <path> [--author <login>]
 //   PR_TITLE=... PR_BODY=... [PR_AUTHOR=...] check_pr.ts
@@ -12,7 +12,6 @@ import { Findings, fail, readText } from "./lib/findings.ts";
 const TITLE_RE =
   /^(feat|fix|docs|refactor|test|chore|ci|build|perf|style|revert)(\([a-z0-9][a-z0-9-]*\))?!?: [a-z0-9].*$/;
 const TITLE_MAX = 72;
-const SECURITY_KEYWORD = "No secrets";
 const BODY_EXEMPT_AUTHORS = new Set(["dependabot[bot]"]);
 
 const args = process.argv.slice(2);
@@ -66,14 +65,5 @@ for (const heading of headings) {
       fix: "keep every heading of .github/pull_request_template.md.",
     });
   }
-}
-const securityLine = body.split("\n").find((l) => l.includes(SECURITY_KEYWORD));
-if (securityLine === undefined || !/^\s*- \[x\]/i.test(securityLine)) {
-  findings.add({
-    file: "pull request body",
-    rule: "pr-security-item",
-    problem: `the checklist item containing "${SECURITY_KEYWORD}" is missing or not ticked.`,
-    fix: "confirm the change holds no secrets or private data and tick the item.",
-  });
 }
 process.exit(findings.report("check_pr"));

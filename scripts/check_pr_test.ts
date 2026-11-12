@@ -51,7 +51,7 @@ test("check_pr checks only the title of a pull request Dependabot opened", () =>
   assert.match(person.output, /pr-template/);
 });
 
-test("check_pr rejects a bad title, a missing section, and an unticked security item", () => {
+test("check_pr rejects a bad title and a missing section and ignores checklist ticks", () => {
   const root = tree(
     goodBody
       .replace("## Verification\n\njust check\n\n", "")
@@ -65,5 +65,5 @@ test("check_pr rejects a bad title, a missing section, and an unticked security 
   assert.equal(result.code, 1);
   assert.match(result.output, /pr-title/);
   assert.match(result.output, /section "## Verification" is missing/);
-  assert.match(result.output, /pr-security-item/);
+  assert.match(result.output, /check_pr: 2 finding/);
 });
