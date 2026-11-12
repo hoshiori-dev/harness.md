@@ -1,0 +1,40 @@
+---
+import HubSearch from "../../../components/HubSearch.astro";
+import { ui } from "../../../i18n/ui";
+import Base from "../../../layouts/Base.astro";
+import { hubEntries } from "../../../lib/hub";
+import { type Lang, langPaths, REPO_URL } from "../../../lib/paths";
+
+export const getStaticPaths = langPaths;
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui(lang);
+const entries = await hubEntries();
+// The sentence has the link in the middle: `{link}` marks where.
+const [beforeLink = "", afterLink = ""] = t.hub.contribute.split("{link}");
+---
+
+<Base lang={lang} path="/hub/" title={t.hub.title} description={t.hub.lead} section="hub" markdown={false}>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>{t.hub.title}</h1>
+      <p class="lead">{t.hub.lead}</p>
+    </header>
+    <HubSearch lang={lang} entries={entries} showTags />
+    <p class="contribute">
+      <Fragment set:text={beforeLink} /><a href={`${REPO_URL}/tree/main/hub`}>{t.hub.contributeLink}</a><Fragment set:text={afterLink} />
+    </p>
+  </div>
+</Base>
+
+<style>
+  .contribute {
+    margin-top: 2rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+</style>

@@ -1,0 +1,197 @@
+---
+import AgentPrompt from "../../../components/AgentPrompt.astro";
+import AsideNav from "../../../components/AsideNav.astro";
+import PageActions from "../../../components/PageActions.astro";
+import { ui } from "../../../i18n/ui";
+import Base from "../../../layouts/Base.astro";
+import { type HubEntry, hubEntries } from "../../../lib/hub";
+import { hasTopHeading } from "../../../lib/markdown";
+import { DEFAULT_LANG, href, hubFile, LANGS, type Lang, langParam, REPO_URL } from "../../../lib/paths";
+
+export async function getStaticPaths() {
+  const entries = await hubEntries();
+  return LANGS.flatMap((lang) =>
+    entries.map((entry) => ({
+      params: { lang: langParam(lang), name: entry.id },
+      props: { lang, entry },
+    })),
+  );
+}
+
+interface Props {
+  lang: Lang;
+  entry: HubEntry;
+}
+
+const { lang, entry } = Astro.props;
+const t = ui(lang);
+// The entry's Markdown version is the repository file itself.
+const rawUrl = hubFile(entry.id);
+const sections = entry.headings.filter((heading) => heading.depth === 2);
+// The body may open with its own first-level heading; the page keeps one.
+const NameTag = hasTopHeading(entry.html) ? "p" : "h1";
+---
+
+<Base
+  lang={lang}
+  path={`/hub/${entry.id}/`}
+  title={entry.name}
+  description={entry.description}
+  section="hub"
+  markdown={rawUrl}
+>
+  <div class="wrap">
+    <header class="entry-head" data-pagefind-body data-pagefind-filter="type:hub">
+      <p class="back" data-pagefind-ignore><a href={href("/hub/", lang)}>{t.hub.back}</a></p>
+      <NameTag class="entry-name" data-pagefind-meta="title">{entry.name}</NameTag>
+      <p class="entry-description" lang="en" data-pagefind-meta="description">{entry.description}</p>
+      <span hidden data-pagefind-meta={`entry:${entry.id}`}></span>
+
+      <dl class="facts" data-pagefind-ignore>
+        {
+          entry.tags.length > 0 && (
+            <div>
+              <dt>{t.hub.tags}</dt>
+              <dd>
+                <ul class="tags">
+                  {entry.tags.map((tag) => (
+                    <li>
+                      <a
+                        class="tag"
+                        href={`${href("/hub/", lang)}?tag=${encodeURIComponent(tag)}`}
+                        title={t.hub.tagLink.replace("{tag}", tag)}
+                      >
+                        {tag}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )
+        }
+        {
+          entry.license && (
+            <div>
+              <dt>{t.hub.license}</dt>
+              <dd>{entry.license}</dd>
+            </div>
+          )
+        }
+        {
+          entry.version && (
+            <div>
+              <dt>{t.hub.version}</dt>
+              <dd>
+                <code>{entry.version}</code>
+              </dd>
+            </div>
+          )
+        }
+        {
+          entry.basedOn.length > 0 && (
+            <div>
+              <dt>{t.hub.basedOn}</dt>
+              <dd>
+                <ul class="based-on">
+                  {entry.basedOn.map((source) => (
+                    <li>{/^https?:\/\//.test(source) ? <a href={source}>{source}</a> : source}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+      {entry.tags.map((tag) => <span hidden data-pagefind-filter="tag">{tag}</span>)}
+
+      <AgentPrompt lang={lang} entry={entry.id}>
+        <PageActions
+          lang={lang}
+          align="start"
+          markdown={entry.raw}
+          markdownHref={rawUrl}
+          download={{ href: rawUrl, filename: "HARNESS.md" }}
+          github={{ href: `${REPO_URL}/blob/main/hub/${entry.id}/HARNESS.md`, kind: "entry" }}
+          copyFailed={t.hub.copyFailed}
+          labels={t.hub.file}
+        />
+      </AgentPrompt>
+      {lang !== DEFAULT_LANG && <p class="entry-lang" data-pagefind-ignore>{t.hub.entryLang}</p>}
+    </header>
+
+    <div class="with-aside">
+      <AsideNav
+        title={t.hub.sections}
+        label={t.hub.sections}
+        items={sections.map((heading) => ({ href: `#${heading.slug}`, label: heading.text }))}
+      />
+      <article class="prose" lang="en" data-pagefind-body set:html={entry.html} />
+    </div>
+  </div>
+
+</Base>
+
+<style>
+  .entry-head {
+    padding-block: 2.5rem 2.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .back {
+    font-size: 0.9375rem;
+  }
+
+  .back a {
+    color: var(--muted);
+  }
+
+  .entry-name {
+    margin-top: 1.25rem;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2rem);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .entry-description {
+    margin-top: 0.75rem;
+    max-width: var(--measure);
+    font-size: 1.0625rem;
+  }
+
+  .facts {
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 0.625rem;
+    font-size: 0.9375rem;
+  }
+
+  .facts > div {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .facts dt {
+    color: var(--muted);
+  }
+
+  .facts dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .based-on {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .entry-lang {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+</style>

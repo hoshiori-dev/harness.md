@@ -1,0 +1,64 @@
+---
+import { getCollection } from "astro:content";
+import AsideNav from "../../../components/AsideNav.astro";
+import PageActions from "../../../components/PageActions.astro";
+import { ui } from "../../../i18n/ui";
+import Base from "../../../layouts/Base.astro";
+import { docPath, parseDocId } from "../../../lib/docs";
+import { wrapTables } from "../../../lib/markdown";
+import { docMarkdown } from "../../../lib/pagemd";
+import { href, LANGS, type Lang, langParam, markdownPath, REPO_URL } from "../../../lib/paths";
+
+export async function getStaticPaths() {
+  const docs = await getCollection("docs");
+  return docs.map((doc) => {
+    const { lang, page } = parseDocId(doc.id);
+    if (!LANGS.includes(lang)) throw new Error(`docs file "${doc.id}" is not under a known language directory`);
+    return {
+      params: { lang: langParam(lang), slug: page === "index" ? undefined : page },
+      props: { lang, page },
+    };
+  });
+}
+
+interface Props {
+  lang: Lang;
+  page: string;
+}
+
+const { lang, page } = Astro.props;
+const t = ui(lang);
+const docs = (await getCollection("docs", (doc) => parseDocId(doc.id).lang === lang)).sort((a, b) => a.data.order - b.data.order);
+const doc = docs.find((candidate) => parseDocId(candidate.id).page === page);
+if (!doc) throw new Error(`docs page "${lang}/${page}" not found`);
+if (!doc.rendered) throw new Error(`docs page "${doc.id}" was not rendered`);
+// Links in the docs are written relative to the page URL and need no rewriting.
+const html = wrapTables(doc.rendered.html);
+---
+
+<Base lang={lang} path={docPath(page)} title={doc.data.title} description={doc.data.description} section="plugin">
+  <div class="wrap with-aside">
+    <AsideNav
+      title={t.plugin.nav}
+      label={t.plugin.nav}
+      items={docs.map((item) => {
+        const name = parseDocId(item.id).page;
+        return { href: href(docPath(name), lang), label: item.data.title, current: name === page };
+      })}
+    />
+    <div>
+      <div class="page-tools">
+        <PageActions
+          lang={lang}
+          markdown={docMarkdown(lang, page, doc.data.title, doc.body ?? "")}
+          markdownHref={href(markdownPath(docPath(page)), lang)}
+          github={{ href: `${REPO_URL}/blob/main/site/src/content/docs/${lang}/${page}.md`, kind: "source" }}
+        />
+      </div>
+      <article class="prose" data-pagefind-body data-pagefind-filter="type:docs">
+        <h1>{doc.data.title}</h1>
+        <Fragment set:html={html} />
+      </article>
+    </div>
+  </div>
+</Base>

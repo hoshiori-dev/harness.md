@@ -1,0 +1,14 @@
+{
+  "name": "harness-md",
+  "owner": {
+    "name": "hoshiori-dev"
+  },
+  "description": "Designs, builds, extracts, and audits a project's agent harness around one HARNESS.md file: the design is written once, then built layer by layer — environment, knowledge, feedback, gates, authority, completion, entropy — with spec-driven development skills for daily work.",
+  "plugins": [
+    {
+      "name": "harness-md",
+      "source": "./",
+      "description": "Designs, builds, extracts, and audits a project's agent harness around one HARNESS.md file: the design is written once, then built layer by layer — environment, knowledge, feedback, gates, authority, completion, entropy — with spec-driven development skills for daily work."
+    }
+  ]
+}

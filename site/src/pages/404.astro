@@ -1,0 +1,24 @@
+---
+import { ui } from "../i18n/ui";
+import Base from "../layouts/Base.astro";
+import { DEFAULT_LANG, href, htmlLang, LANGS } from "../lib/paths";
+
+// GitHub Pages serves this one file for every missing URL, so it speaks
+// every language the site has. It has no Markdown version.
+const title = ui(DEFAULT_LANG).notFound.title;
+---
+
+<Base lang={DEFAULT_LANG} path="/" title={title} markdown={false}>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>{title}</h1>
+      {
+        LANGS.map((lang) => (
+          <p class="lead" lang={htmlLang(lang)}>
+            {ui(lang).notFound.body} <a href={href("/", lang)}>{ui(lang).notFound.home}</a>
+          </p>
+        ))
+      }
+    </header>
+  </div>
+</Base>

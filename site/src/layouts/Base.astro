@@ -1,0 +1,85 @@
+---
+import "@fontsource/ibm-plex-sans/latin-400.css";
+import "@fontsource/ibm-plex-sans/latin-400-italic.css";
+import "@fontsource/ibm-plex-sans/latin-500.css";
+import "@fontsource/ibm-plex-sans/latin-600.css";
+import "@fontsource/ibm-plex-mono/latin-400.css";
+import "@fontsource/ibm-plex-mono/latin-500.css";
+import "../styles/global.css";
+import LangMenu from "../components/LangMenu.astro";
+import { ui } from "../i18n/ui";
+import { absolute, asset, DEFAULT_LANG, href, htmlLang, LANGS, type Lang, markdownPath, REPO_URL } from "../lib/paths";
+
+interface Props {
+  lang: Lang;
+  /** Page title; the site name is appended. */
+  title?: string;
+  description?: string;
+  /** Path without base or language prefix, starting and ending with `/`. */
+  path: string;
+  /** Which main navigation item is current. */
+  section?: "spec" | "hub" | "plugin";
+  /**
+   * Site URL of the page's Markdown version. Defaults to the one the URL rule
+   * gives (`markdownPath()`); `false` for a page that has none.
+   */
+  markdown?: string | false;
+}
+
+const { lang, title, description, path, section, markdown } = Astro.props;
+const t = ui(lang);
+const fullTitle = title ? `${title} | HARNESS.md` : "HARNESS.md";
+const markdownHref = markdown ?? href(markdownPath(path), lang);
+const nav = [
+  { id: "spec", path: "/spec/", label: t.nav.spec },
+  { id: "hub", path: "/hub/", label: t.nav.hub },
+  { id: "plugin", path: "/plugin/", label: t.nav.plugin },
+] as const;
+---
+
+<!doctype html>
+<html lang={htmlLang(lang)}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description ?? t.siteDescription} />
+    <link rel="icon" type="image/svg+xml" href={asset("/favicon.svg")} />
+    <link rel="canonical" href={absolute(href(path, lang))} />
+    {LANGS.map((code) => <link rel="alternate" hreflang={htmlLang(code)} href={absolute(href(path, code))} />)}
+    <link rel="alternate" hreflang="x-default" href={absolute(href(path, DEFAULT_LANG))} />
+    {markdownHref && <link rel="alternate" type="text/markdown" href={absolute(markdownHref)} />}
+    <link rel="alternate" type="text/plain" title="llms.txt" href={absolute(asset("/llms.txt"))} />
+  </head>
+  <body>
+    <a class="skip" href="#content">{t.skip}</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="wordmark" href={href("/", lang)}>HARNESS.md</a>
+        <nav class="site-nav" aria-label={t.navLabel}>
+          {
+            nav.map((item) => (
+              <a href={href(item.path, lang)} aria-current={section === item.id ? "true" : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+          <LangMenu lang={lang} path={path} />
+        </nav>
+      </div>
+    </header>
+    <main id="content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <a href={REPO_URL}>{t.footer.source}</a>
+        <a href={`${REPO_URL}/blob/main/LICENSE`}>{t.footer.license}</a>
+        <a href={asset("/llms.txt")}>llms.txt</a>
+      </div>
+    </footer>
+    <script>
+      import "../scripts/menu";
+    </script>
+  </body>
+</html>

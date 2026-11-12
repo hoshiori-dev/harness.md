@@ -1,0 +1,20 @@
+# Version updates for the actions the workflows and the composite action use,
+# and for the Node dependencies of the management scripts (/) and the website
+# (/site). Actions are pinned to commit SHAs with the version in a trailing
+# comment and npm dependencies to exact versions; Dependabot updates both.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directories: ["/", "/.github/actions/*"]
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+    labels: ["dependencies", "type:task"]
+  - package-ecosystem: npm
+    directories: ["/", "/site"]
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore
+    labels: ["dependencies", "type:task"]

@@ -1,0 +1,43 @@
+---
+// The left column of a document page. On a phone it is a closed disclosure
+// above the text; on a wide screen the script below opens it.
+interface Item {
+  href: string;
+  label: string;
+  depth?: number;
+  current?: boolean;
+}
+
+interface Props {
+  title: string;
+  items: Item[];
+  /** `nav` landmark label. */
+  label: string;
+}
+
+const { title, items, label } = Astro.props;
+---
+
+<nav class="aside-nav" aria-label={label} data-pagefind-ignore>
+  <details data-aside>
+    <summary>{title}</summary>
+    <ul>
+      {
+        items.map((item) => (
+          <li class={item.depth === 3 ? "depth-3" : undefined}>
+            <a href={item.href} aria-current={item.current ? "page" : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </details>
+</nav>
+
+<script>
+  const wide = window.matchMedia("(min-width: 60rem)");
+  for (const details of document.querySelectorAll<HTMLDetailsElement>("details[data-aside]")) {
+    if (wide.matches) details.open = true;
+  }
+</script>

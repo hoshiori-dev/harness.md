@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: HARNESS.md specification
+    url: https://hoshiori-dev.github.io/harness.md/
+    about: Read the format specification and browse the hub before opening an issue.
+  - name: Agent Plugins specification
+    url: https://github.com/agentplugins/agent-plugins-spec
+    about: Questions about the portable plugin format itself belong upstream.

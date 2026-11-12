@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "attribution": { "commit": "", "pr": "", "sessionUrl": false }, // # CONFIGURE: keep when the design forbids AI attribution; delete the line when the project requires disclosure.
+  "permissions": {
+    "allow": [
+      "{{ALLOW_ENTRIES}}" // # CONFIGURE: one entry per confirmed command or task-runner recipe, each from observed evidence, e.g. "Bash(just test *)", "Bash(just lint *)", "Bash(npm test *)"; never a runner wildcard such as "Bash(just *)" or "Bash(npx *)", and no recipe or command that pushes, publishes, releases, or writes to a tracker.
+    ],
+    "deny": [
+      "Bash(git reset --hard*)",
+      "Bash(git reset * --hard*)",
+      "Bash(git push --force*)",
+      "Bash(git push * --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * -f*)",
+      "Bash(git push --all*)",
+      "Bash(git push * --all*)",
+      "Bash(git push --mirror*)",
+      "Bash(git push * --mirror*)",
+      "Bash(git push --tags*)",
+      "Bash(git push * --tags*)",
+      "Bash(git clean -*f*)",
+      "Bash(git clean * -*f*)",
+      "Bash(git branch -D*)",
+      "Bash(git branch * -D*)",
+      "Bash(rm -rf .)",
+      "Bash(rm -rf ./)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -fr .)",
+      "Bash(rm -fr ./)",
+      "Bash(rm -fr /)",
+      "Bash(rm -fr ~)",
+      "Edit({{POLICY_PATH}})", // # CONFIGURE: the deposited policy file, anchored at the project root with a leading slash, e.g. "Edit(/.agents/knowledge/agent-authority.md)"; delete the line when the design calls for no policy file.
+      "Edit(/.claude/settings.json)",
+      "Edit(/.claude/settings.local.json)",
+      "Edit(/.codex/**)",
+      "Edit({{HOOK_PATHS}})" // # CONFIGURE: the security hooks, one Edit entry each, anchored the same way, e.g. "Edit(/.pre-commit-config.yaml)", "Edit(/.githooks/**)".
+    ]
+  }
+}

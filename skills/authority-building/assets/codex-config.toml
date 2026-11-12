@@ -1,0 +1,2 @@
+# CONFIGURE: the approval mode the design states: "on-request" (interactive) or "never" (unattended runs). Codex accepts no other plain value; per-command approval kept by the owner is written as prompt rules in the rules file, not here.
+approval_policy = "on-request"

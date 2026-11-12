@@ -1,0 +1,155 @@
+---
+// A ready-made prompt for a hub entry: it tells a coding agent to read the
+// entry's file online and build from it, and ends on a line the reader
+// completes with their own project. Copy takes the prompt plus whatever was
+// typed in the box. The default slot sits beside the copy button: the entry
+// page puts the HARNESS.md file's own actions there.
+import { ui } from "../i18n/ui";
+import { absolute, hubFile, type Lang } from "../lib/paths";
+import Icon from "./Icon.astro";
+
+interface Props {
+  lang: Lang;
+  /** The hub entry's directory name. */
+  entry: string;
+}
+
+const { lang, entry } = Astro.props;
+const t = ui(lang).prompt;
+const text = t.text(absolute(hubFile(entry)));
+---
+
+<section class="agent-prompt" aria-labelledby="agent-prompt-heading" data-agent-prompt data-pagefind-ignore>
+  <h2 id="agent-prompt-heading">{t.heading}</h2>
+  <p class="lead">{t.lead}</p>
+  <div class="prompt-box">
+    <pre class="prompt-text" data-prompt>{text}</pre>
+    <label class="visually-hidden" for="agent-prompt-own">{t.ownLabel}</label>
+    <textarea id="agent-prompt-own" rows="3" placeholder={t.placeholder} data-own></textarea>
+  </div>
+  <div class="prompt-actions">
+    <button type="button" class="button primary" data-copy-prompt data-copied={t.copied} data-failed={t.copyFailed}>
+      <Icon name="copy" class="when-idle" />
+      <Icon name="check" class="when-copied" />
+      <span data-label>{t.copy}</span>
+    </button>
+    <span class="copy-status" role="status" aria-live="polite" data-status></span>
+    <slot />
+  </div>
+  <p class="manual" set:html={t.manual} />
+</section>
+
+<script>
+  import { copyText } from "../scripts/copy";
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-agent-prompt]")) {
+    const prompt = root.querySelector<HTMLElement>("[data-prompt]");
+    const own = root.querySelector<HTMLTextAreaElement>("[data-own]");
+    const button = root.querySelector<HTMLButtonElement>("[data-copy-prompt]");
+    const status = root.querySelector<HTMLElement>("[data-status]");
+    if (!prompt || !own || !button) continue;
+    button.addEventListener("click", () => {
+      // With nothing typed the text ends on the prompt's last line, so the
+      // reader can go on typing where they paste it.
+      const typed = own.value.trim();
+      const text = typed === "" ? (prompt.textContent ?? "") : `${prompt.textContent ?? ""}\n${typed}`;
+      void copyText(text, button, status, button.dataset.failed ?? "");
+    });
+  }
+</script>
+
+<style>
+  .agent-prompt {
+    margin-top: 2rem;
+    max-width: var(--measure);
+  }
+
+  h2 {
+    font-size: 1.1875rem;
+  }
+
+  .lead,
+  .manual {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .manual :global(code) {
+    color: var(--ink);
+  }
+
+  /* The prompt and the box for the reader's own lines are one message. */
+  .prompt-box {
+    margin-top: 1rem;
+    border: 1px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--wash);
+  }
+
+  .prompt-box:focus-within {
+    border-color: var(--accent);
+    outline: 3px solid var(--accent-wash);
+  }
+
+  .prompt-text {
+    margin: 0;
+    padding: 0.875rem 1rem 0.5rem;
+    font-family: var(--sans);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 4.5rem;
+    padding: 0.5rem 1rem 0.875rem;
+    border: 0;
+    border-top: 1px dashed var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  textarea::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
+
+  textarea:focus-visible {
+    outline: none;
+  }
+
+  .prompt-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .prompt-actions .button {
+    gap: 0.5rem;
+  }
+
+  .copy-status {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .copy-status:empty {
+    display: none;
+  }
+
+  .button:not([data-state="copied"]) .when-copied,
+  .button[data-state="copied"] .when-idle {
+    display: none;
+  }
+</style>

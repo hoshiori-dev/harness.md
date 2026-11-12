@@ -1,0 +1,533 @@
+/* Tokens. One accent (cobalt) on white; a cool wash for quiet surfaces. */
+:root {
+  --paper: #ffffff;
+  --wash: #f4f7fb;
+  --ink: #14181f;
+  --muted: #5a6472;
+  --rule: #dce3ec;
+  --accent: #2446e5;
+  --accent-wash: #edf1ff;
+
+  --sans:
+    "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC",
+    system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --page: 72rem;
+  --measure: 44rem;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 1.5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+:lang(zh) body,
+body:lang(zh) {
+  line-height: 1.75;
+}
+
+main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+code,
+kbd,
+pre {
+  font-family: var(--mono);
+  font-size: 0.92em;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.skip:focus {
+  top: 0.5rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Header and footer */
+
+.site-header {
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  padding-block: 1rem;
+}
+
+.wordmark {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1.5rem;
+}
+
+.site-nav a {
+  color: var(--ink);
+  text-decoration: none;
+  padding-block: 0.25rem;
+  border-bottom: 2px solid transparent;
+}
+
+.site-nav a:hover {
+  border-bottom-color: var(--rule);
+}
+
+.site-nav a[aria-current="page"],
+.site-nav a[aria-current="true"] {
+  border-bottom-color: var(--accent);
+}
+
+.site-nav .lang-menu {
+  display: inline-flex;
+}
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  margin-top: 5rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.site-footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding-block: 1.5rem;
+}
+
+.site-footer a {
+  color: var(--muted);
+}
+
+/* Icons sit on the text baseline's optical centre and never shrink. */
+.icon {
+  flex: none;
+}
+
+/* Dropdown menus (page actions, language). The element is a popover, so it
+   is drawn above the page; `src/scripts/menu.ts` puts it under its button.
+   Without scripting it opens where it stands in the document. */
+.menu[popover] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0.25rem;
+  min-width: 12.5rem;
+  max-width: calc(100vw - 1rem);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 8px 24px rgb(20 24 31 / 0.1);
+  font-size: 0.9375rem;
+}
+
+.menu [role="menuitem"] {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.3;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu [role="menuitem"]:hover,
+.menu [role="menuitem"]:focus {
+  background: var(--wash);
+}
+
+.menu [role="menuitem"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: 5px;
+}
+
+.menu .icon {
+  color: var(--muted);
+}
+
+.menu [aria-current] {
+  font-weight: 500;
+}
+
+/* The row of page actions above a page's title, at the right edge of the
+   text column. */
+.page-tools {
+  display: flex;
+  justify-content: flex-end;
+  max-width: var(--measure);
+  margin-bottom: 1rem;
+}
+
+/* Page heads */
+
+.page-head {
+  padding-block: 3rem 2rem;
+  max-width: var(--measure);
+}
+
+.page-head h1 {
+  font-size: 2.25rem;
+  letter-spacing: -0.01em;
+}
+
+.page-head .lead {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 1.0625rem;
+}
+
+/* Buttons */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: inherit;
+  font-weight: 500;
+  line-height: 1.2;
+  padding: 0.625rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--wash);
+}
+
+.button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.button.primary:hover {
+  background: #1b37c2;
+  border-color: #1b37c2;
+}
+
+/* Tags */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tag {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: var(--wash);
+  color: var(--muted);
+}
+
+a.tag {
+  display: inline-block;
+  text-decoration: none;
+}
+
+a.tag:hover {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+/* Rendered Markdown: the specification, hub entries, plugin docs */
+
+.prose {
+  max-width: var(--measure);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  overflow-wrap: break-word;
+}
+
+.prose:lang(zh) {
+  line-height: 1.85;
+}
+
+.prose > * + * {
+  margin-top: 1.1em;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  letter-spacing: -0.01em;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.25em;
+  padding-top: 1.1em;
+  border-top: 1px solid var(--rule);
+}
+
+.prose h3 {
+  font-size: 1.1875rem;
+  margin-top: 2.25em;
+}
+
+.prose h4 {
+  font-size: 1.0625rem;
+  margin-top: 1.75em;
+}
+
+.prose h1 + *,
+.prose h2 + *,
+.prose h3 + *,
+.prose h4 + * {
+  margin-top: 0.75em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.4em;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose :not(pre) > code {
+  background: var(--wash);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+.prose pre {
+  /* biome-ignore lint/complexity/noImportantStyles: the highlighter sets its theme background inline */
+  background: var(--wash) !important;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1rem 1.125rem;
+  overflow-x: auto;
+  line-height: 1.55;
+  font-size: 0.875rem;
+}
+
+.prose blockquote {
+  margin-inline: 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--rule);
+  color: var(--muted);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin-block: 2.5em;
+}
+
+/* A wide table scrolls inside its container; the page never scrolls sideways. */
+.prose .table-scroll {
+  overflow-x: auto;
+}
+
+.prose table {
+  width: 100%;
+  min-width: 32rem;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.prose th,
+.prose td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.625rem 1rem 0.625rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.prose th {
+  font-weight: 600;
+  border-bottom-color: var(--ink);
+  white-space: nowrap;
+}
+
+.prose td:last-child,
+.prose th:last-child {
+  padding-right: 0;
+}
+
+/* Sidebar layout for the specification, hub entries, and plugin docs */
+
+.with-aside {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  padding-top: 2.5rem;
+}
+
+.aside-nav {
+  font-size: 0.9375rem;
+}
+
+.aside-nav summary,
+.aside-nav .aside-title {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.aside-nav details > ul {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.aside-nav li + li {
+  margin-top: 0.375rem;
+}
+
+.aside-nav li.depth-3 {
+  padding-left: 0.875rem;
+}
+
+.aside-nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.aside-nav a:hover {
+  color: var(--ink);
+}
+
+.aside-nav a[aria-current="page"] {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+@media (min-width: 60rem) {
+  .with-aside {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+
+  .aside-nav {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

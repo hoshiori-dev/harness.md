@@ -1,0 +1,180 @@
+---
+// What a reader can do with a document as a whole (a page's Markdown version,
+// or a hub entry's HARNESS.md). A split control: the main button copies the
+// text, the toggle opens a menu with the same action plus the file in a new
+// tab and, where there are any, a download and a link to the source on
+// GitHub.
+import { ui } from "../i18n/ui";
+import type { Lang } from "../lib/paths";
+import Icon from "./Icon.astro";
+
+interface Props {
+  lang: Lang;
+  /** The text the copy actions put on the clipboard. */
+  markdown: string;
+  /** Site URL of the page's Markdown version. */
+  markdownHref: string;
+  /** A file to save (hub entries). */
+  download?: { href: string; filename: string };
+  /** The page's source on GitHub. `entry` is a hub file, `source` a file the page is rendered from. */
+  github?: { href: string; kind: "entry" | "source" };
+  /** Message shown when copying fails; defaults to pointing at the Markdown version. */
+  copyFailed?: string;
+  /** Labels that name the file instead of "Markdown" (a hub entry's HARNESS.md). */
+  labels?: { copy: string; copyAs: string; viewAs: string; more: string; menu: string };
+  /** `start` when the control sits at the start of a row beside other buttons. */
+  align?: "start" | "end";
+}
+
+const { lang, markdown, markdownHref, download, github, copyFailed, labels, align = "end" } = Astro.props;
+const strings = ui(lang);
+const t = { ...strings.actions, ...labels };
+const menuId = "page-actions-menu";
+---
+
+<div class="page-actions" data-page-actions data-align={align} data-failed={copyFailed ?? t.copyFailed} data-pagefind-ignore>
+  <span class="copy-status" role="status" aria-live="polite" data-status></span>
+  <div class="split" data-menu-anchor>
+    <button type="button" class="split-main" data-copy data-copied={t.copied}>
+      <Icon name="copy" class="when-idle" />
+      <Icon name="check" class="when-copied" />
+      <span data-label>{t.copy}</span>
+    </button>
+    <button
+      type="button"
+      class="split-toggle"
+      popovertarget={menuId}
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-controls={menuId}
+      aria-label={t.more}
+    >
+      <Icon name="chevron-down" />
+    </button>
+  </div>
+  <div class="menu" id={menuId} popover role="menu" aria-label={t.menu}>
+    <button type="button" role="menuitem" data-copy-item>
+      <Icon name="copy" />
+      <span>{t.copyAs}</span>
+    </button>
+    <a role="menuitem" href={markdownHref} target="_blank" rel="noopener">
+      <Icon name="file-text" />
+      <span>{t.viewAs}<span class="visually-hidden">{strings.parens(t.newTab)}</span></span>
+    </a>
+    {
+      download && (
+        <a role="menuitem" href={download.href} download={download.filename}>
+          <Icon name="download" />
+          <span>{t.download}</span>
+        </a>
+      )
+    }
+    {
+      github && (
+        <a role="menuitem" href={github.href}>
+          <Icon name="code" />
+          <span>{github.kind === "entry" ? t.github : t.source}</span>
+        </a>
+      )
+    }
+  </div>
+  <script type="application/json" data-markdown set:html={JSON.stringify(markdown).replace(/</g, "\\u003c")} />
+</div>
+
+<script>
+  import { copyText } from "../scripts/copy";
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-page-actions]")) {
+    const main = root.querySelector<HTMLButtonElement>("[data-copy]");
+    const item = root.querySelector<HTMLButtonElement>("[data-copy-item]");
+    const status = root.querySelector<HTMLElement>("[data-status]");
+    const source = root.querySelector<HTMLElement>("[data-markdown]");
+    if (!main || !source) continue;
+    // The text is in the page, so copying needs no request and happens inside
+    // the click that asked for it.
+    const copy = () => copyText(JSON.parse(source.textContent ?? '""') as string, main, status, root.dataset.failed ?? "");
+    main.addEventListener("click", () => void copy());
+    item?.addEventListener("click", () => void copy());
+  }
+</script>
+
+<style>
+  .page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .page-actions[data-align="start"] {
+    justify-content: flex-start;
+  }
+
+  .copy-status {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .copy-status:empty {
+    display: none;
+  }
+
+  /* At the start of a row the confirmation follows the control. */
+  .page-actions[data-align="start"] .copy-status {
+    order: 1;
+  }
+
+  .split {
+    display: inline-flex;
+  }
+
+  .split button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    cursor: pointer;
+  }
+
+  .split button:hover,
+  .split-toggle[aria-expanded="true"] {
+    background: var(--wash);
+  }
+
+  .split button:focus-visible {
+    position: relative;
+    z-index: 1;
+  }
+
+  .split-main {
+    padding: 0.4375rem 0.75rem;
+    border-radius: 6px 0 0 6px;
+  }
+
+  .split-toggle {
+    padding: 0.4375rem 0.5rem;
+    margin-left: -1px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Beside other buttons the control is as tall as they are. */
+  .page-actions[data-align="start"] .split-main {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .page-actions[data-align="start"] .split-toggle {
+    padding: 0.625rem;
+  }
+
+  .split-main:not([data-state="copied"]) .when-copied,
+  .split-main[data-state="copied"] .when-idle {
+    display: none;
+  }
+</style>
