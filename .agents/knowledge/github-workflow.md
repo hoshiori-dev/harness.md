@@ -69,4 +69,4 @@ Session logs and handoff notes stay out of the repository.
 |---|---|---|
 | `justfile` recipes ↔ workflow jobs ↔ `.agents/knowledge/github/checks.md` ↔ the Validation table in `AGENTS.md` | the change that edits any of them | adding, renaming, or removing a recipe or job |
 | `.github/labels.json` ↔ issue-form `labels:` ↔ the state names in `scripts/lib/pr_labels.ts` | the change that edits labels | any label rename |
-| pull request template headings and the "No secrets" item ↔ `scripts/check_pr.ts` | the change that edits either | rewording the template |
+| pull request template headings ↔ `scripts/check_pr.ts` | the change that edits either | rewording the template |

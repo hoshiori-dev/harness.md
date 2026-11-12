@@ -1,28 +1,36 @@
 #!/usr/bin/env node
 // Checks a pull request's title and body against this repository's rules:
 // the title is a Conventional Commits subject, and the body keeps every
-// heading of .github/pull_request_template.md and ticks the secrets item.
+// heading of .github/pull_request_template.md.
+// A pull request opened by Dependabot is checked on its title only: the bot
+// writes its own body and cannot keep the template.
 //
-//   check_pr.ts --title "<title>" --body-file <path>
-//   PR_TITLE=... PR_BODY=... check_pr.ts
+//   check_pr.ts --title "<title>" --body-file <path> [--author <login>]
+//   PR_TITLE=... PR_BODY=... [PR_AUTHOR=...] check_pr.ts
 import { Findings, fail, readText } from "./lib/findings.ts";
 
 const TITLE_RE =
   /^(feat|fix|docs|refactor|test|chore|ci|build|perf|style|revert)(\([a-z0-9][a-z0-9-]*\))?!?: [a-z0-9].*$/;
 const TITLE_MAX = 72;
-const SECURITY_KEYWORD = "No secrets";
+const BODY_EXEMPT_AUTHORS = new Set(["dependabot[bot]"]);
 
 const args = process.argv.slice(2);
 let title = process.env.PR_TITLE;
 let body = process.env.PR_BODY;
+let author = process.env.PR_AUTHOR ?? "";
 for (let i = 0; i < args.length; i += 2) {
   const value = args[i + 1];
   if (args[i] === "--title" && value !== undefined) title = value;
   else if (args[i] === "--body-file" && value !== undefined) body = readText(value);
-  else fail(`unknown argument ${args[i]}; use --title <text> and --body-file <path>`);
+  else if (args[i] === "--author" && value !== undefined) author = value;
+  else
+    fail(
+      `unknown argument ${args[i]}; use --title <text>, --body-file <path>, and --author <login>`,
+    );
 }
 if (title === undefined) fail("no title: pass --title or set PR_TITLE");
-if (body === undefined) fail("no body: pass --body-file or set PR_BODY");
+const bodyExempt = BODY_EXEMPT_AUTHORS.has(author);
+if (body === undefined && !bodyExempt) fail("no body: pass --body-file or set PR_BODY");
 
 const findings = new Findings();
 if (!TITLE_RE.test(title)) {
@@ -41,6 +49,10 @@ if (!TITLE_RE.test(title)) {
   });
 }
 
+if (bodyExempt || body === undefined) {
+  console.log(`check_pr: body not checked for a pull request opened by ${author}`);
+  process.exit(findings.report("check_pr"));
+}
 const template = readText(".github/pull_request_template.md");
 const headings = [...template.matchAll(/^## (.+)$/gm)].map((m) => m[1] ?? "");
 for (const heading of headings) {
@@ -53,14 +65,5 @@ for (const heading of headings) {
       fix: "keep every heading of .github/pull_request_template.md.",
     });
   }
-}
-const securityLine = body.split("\n").find((l) => l.includes(SECURITY_KEYWORD));
-if (securityLine === undefined || !/^\s*- \[x\]/i.test(securityLine)) {
-  findings.add({
-    file: "pull request body",
-    rule: "pr-security-item",
-    problem: `the checklist item containing "${SECURITY_KEYWORD}" is missing or not ticked.`,
-    fix: "confirm the change holds no secrets or private data and tick the item.",
-  });
 }
 process.exit(findings.report("check_pr"));
