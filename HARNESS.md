@@ -308,7 +308,9 @@ and one summary job, `checks / gate`, reports for all of them,
 so adding a job never needs a change to the branch rule.
 Three more statuses sit beside the gate:
 `secrets / scan`, a secret scan of the commits the push or pull request adds;
-`checks / pr`, the pull request title;
+`checks / pr`, the pull request title and body
+(a pull request Dependabot opened is checked on its title only,
+because the bot writes its own body);
 and `checks / spec-archived`,
 which is withheld while an OpenSpec change in the pull request is not archived,
 so that a change cannot merge half-finished.
@@ -399,7 +401,8 @@ Work follows GitHub Flow: an issue, a branch created from it,
 a draft pull request, review, squash merge into `main`.
 Squash is the only merge method.
 `main` is protected by a ruleset that requires the four statuses named
-under Gates and forbids direct pushes. Only the maintainer merges.
+under Gates, on a branch that is up to date with `main`,
+and forbids direct pushes. Only the maintainer merges.
 
 Releases are cut by the maintainer:
 a version bump in `plugin.json` on `main`, then a `v*` tag,
