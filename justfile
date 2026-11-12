@@ -99,9 +99,20 @@ pre-commit:
 site-install:
     pnpm install --frozen-lockfile
 
-# Serve the website locally with live reload.
-site-dev:
+# Stop any website server left running in the background (dev or preview). Astro keeps a server alive after its terminal closes, and one that outlived a restructuring of site/ serves broken pages.
+site-stop:
+    pnpm --filter ./site exec astro dev stop
+    pnpm --filter ./site exec astro preview stop
+
+# Serve the website locally with live reload, on a fresh server (no search: the index exists only in a build).
+site-dev: site-stop
+    @echo "Open http://localhost:4321/harness.md/ (Chinese: /harness.md/zh/). The path is required; the first page takes about 30 seconds."
     pnpm --filter ./site run dev
+
+# Build the website and serve the result as GitHub Pages will, search included.
+site-preview: site-stop site-build
+    @echo "Open http://localhost:4321/harness.md/ (Chinese: /harness.md/zh/). The path is required."
+    pnpm --filter ./site run preview
 
 # Build the website into site/dist.
 site-build:
