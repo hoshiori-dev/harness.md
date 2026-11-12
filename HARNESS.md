@@ -401,7 +401,8 @@ Work follows GitHub Flow: an issue, a branch created from it,
 a draft pull request, review, squash merge into `main`.
 Squash is the only merge method.
 `main` is protected by a ruleset that requires the four statuses named
-under Gates and forbids direct pushes. Only the maintainer merges.
+under Gates, on a branch that is up to date with `main`,
+and forbids direct pushes. Only the maintainer merges.
 
 Releases are cut by the maintainer:
 a version bump in `plugin.json` on `main`, then a `v*` tag,
