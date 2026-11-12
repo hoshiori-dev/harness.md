@@ -19,7 +19,7 @@ The skill SHALL load, from a description match, when a harness workflow hands ov
 
 #### Scenario: Where a rule belongs
 - **WHEN** the user says "should our migration procedure live in the root agent instructions, a doc, or somewhere the agent loads only when needed?"
-- **THEN** the skill loads
+- **THEN** the skill does not load (the methodology manual answers a placement question; this skill loads when the files are to be changed)
 
 #### Scenario: Orphaned agent docs
 - **WHEN** the user says "we have a docs/agents folder nobody links to; do the agents even see those files?"

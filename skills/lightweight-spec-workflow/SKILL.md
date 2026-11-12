@@ -279,8 +279,9 @@ and offer to put the request up for review instead.
 
 **Executor, as the contract names it:**
 
-- **No contract**: say that a person performs the freeze by default,
-  then follow the person branch.
+- **No contract**: say that the implementer performs the freeze by default
+  (on a fork's branch, the person who holds the branch),
+  then follow the agent branch, or the person branch on a fork.
 - **A person**: present the fold, deletion, or update as an exact proposed edit,
   commit nothing, and mark the request ready only after the person has made it.
 - **The agent**: commit the edit on the branch before marking the request ready,

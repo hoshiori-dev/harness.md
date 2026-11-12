@@ -7,9 +7,9 @@ description: >-
   repository. Use when asked why agents ignore an entrypoint; whether a
   project needs CI, hooks, a sandbox, or specs; where a rule, procedure, or
   fact should live (entrypoint, knowledge file, project skill, hook, check,
-  type); whether two copies of a fact may coexist; which HARNESS.md section
-  covers a topic; or how parallel agents split worktrees and platform writes.
-  Not for building or restructuring harness files.
+  type); whether two copies of a fact may coexist; or how parallel agents
+  split worktrees and platform writes. Not for building or restructuring
+  harness files, or for what a HARNESS.md section holds.
 license: Apache-2.0
 ---
 

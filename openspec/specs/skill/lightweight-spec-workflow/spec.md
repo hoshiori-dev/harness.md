@@ -154,11 +154,15 @@ The agent SHALL read the project's level from its recorded specification contrac
 - **THEN** the agent leaves the file, records the decision in the pending decisions list, and states that the file will drift from the code
 
 ### Requirement: Behavior: The freeze happens inside the request by the named executor
-The fold, deletion, or living-specification update SHALL happen on the change's branch after the gate owner closes deliberation on the implementation and before the request is marked ready, performed by whoever the contract names as freeze executor; with no contract the agent SHALL say a person performs it by default. When the executor is a person the agent SHALL propose the exact edit and wait rather than commit it; a commit after the freeze SHALL be named as making it stale.
+The fold, deletion, or living-specification update SHALL happen on the change's branch after the gate owner closes deliberation on the implementation and before the request is marked ready, performed by whoever the contract names as freeze executor; with no contract the agent SHALL say the implementer performs it by default. When the executor is a person the agent SHALL propose the exact edit and wait rather than commit it; a commit after the freeze SHALL be named as making it stale.
 
 #### Scenario: Contract names a person
 - **WHEN** the contract records that a person freezes and the deliberation has closed
 - **THEN** the agent presents the fold or deletion as a proposed edit, commits nothing, and marks the request ready only after the person has made the edit
+
+#### Scenario: No contract
+- **WHEN** the project records no contract, the deliberation has closed, and the user has chosen folding or deletion
+- **THEN** the agent says the implementer freezes by default, commits the edit on the branch before marking the request ready, and names that commit in the deliverable
 
 #### Scenario: Contract names the agent
 - **WHEN** the contract records that the agent freezes in the request

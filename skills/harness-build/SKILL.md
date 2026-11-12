@@ -216,7 +216,10 @@ as assumptions the user approves or strikes.
    and hand over in **build** mode: the Context, the layer's section,
    and its assigned parts of Invariants, Style, and File Structure.
    Ask it to run only its Observe step
-   and return the files its Build step would create, change, or delete.
+   and return the files its Build step would create, change, or delete,
+   each by its exact project-relative path with one line on its shape
+   (the jobs of a workflow, the recipes added to a task runner).
+   The plan copies those paths; never write a path the builder did not return.
    When no installed skill claims the layer,
    derive the files from the section yourself with the methodology manual skill
    and record the gap.
@@ -253,8 +256,10 @@ Then, for each planned layer in order:
    and any deviation: a place where a fact in the code made it depart
    from the section. A layer with no builder
    is built from the section and the methodology manual skill.
-2. Only planned files are written.
-   A file the builder needs beyond the plan
+2. Only planned files are written, at the planned paths.
+   A file the builder needs beyond the plan,
+   a planned file under another name,
+   or one whose shape departs from what the plan showed
    is a plan amendment the user approves first.
 3. A remote action the plan includes (a label sync,
    a push) is shown as a dry run and applied only after a separate go-ahead

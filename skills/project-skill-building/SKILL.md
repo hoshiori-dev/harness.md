@@ -281,6 +281,8 @@ reviewing, pruning, or diagnosing any existing skill;
 it holds the symptom index and the ordered fixes.
 Then run step 2 (tests first), step 3 (approval),
 apply the smallest general fix, and run steps 8 to 11.
+When the cause is in the description, the fix is in the description:
+the body changes only by what step 8 removes, and gains no line.
 
 Done when: the symptom names one cause in the skill's text,
 the fix is the smallest change that addresses that cause,

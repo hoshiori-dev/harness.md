@@ -53,7 +53,7 @@ fix errors. It SHALL NOT present a validator pass as a review of the design.
 
 #### Scenario: Writing one section
 - **WHEN** the user asks for a Gates section for a described project
-- **THEN** the section names each check, its tool, where it runs, and its time budget, gives reasons, and says what is deliberately not gated
+- **THEN** the section names each check, its tool, and where it runs, gives its time budget or lists the budget under Open Questions when the request gave none, gives reasons, and says what is deliberately not gated
 
 #### Scenario: uv is not available
 - **WHEN** the validator script cannot run because `uv` is missing

@@ -28,7 +28,14 @@ import re
 import sys
 from pathlib import Path
 
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:
+    sys.stderr.write(
+        "lint_harness_md.py needs PyYAML. Run it with uv, which installs it:\n"
+        "    uv run lint_harness_md.py HARNESS.md\n"
+    )
+    raise SystemExit(2) from None
 
 SECTIONS = [  # the recommended second-level sections, in specification order
     "Context",

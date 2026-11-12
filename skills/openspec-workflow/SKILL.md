@@ -177,7 +177,10 @@ A task list the propose step generated stays a draft:
 it is after-approval material.
 
 Done when: strict validation passes and the package meets the formats above,
-with any not-yet-checkable Acceptance item named.
+with any not-yet-checkable Acceptance item named,
+and every delta spec that creates a capability opens with a `## Purpose`
+of at least 50 characters
+(validation passes without it now and fails after the archive).
 
 ### 4. Publish the package and wait for the first gate
 
@@ -237,8 +240,11 @@ name the open task and archive nothing. Then follow the executor from step 1:
   is uncommitted it exits 1 naming it and changes nothing.
   When an archive, the validation, or the commit fails partway,
   it restores `openspec/` to HEAD and says so, so nothing stays half-archived;
-  fix the cause and run it again. After a successful run,
-  a second run exits 0 with nothing to do.
+  fix the cause and run it again.
+  When the cause is in the approved package (the proposal, a delta spec,
+  the design), the fix changes what was approved:
+  show the edit and get the approval again before committing it.
+  After a successful run, a second run exits 0 with nothing to do.
   Report the validation result and the commit.
   Run [scripts/spec_changes.py](scripts/spec_changes.py) with `--help` first
   when an option is unclear.
