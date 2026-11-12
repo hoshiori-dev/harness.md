@@ -42,17 +42,7 @@ const NameTag = hasTopHeading(entry.html) ? "p" : "h1";
 >
   <div class="wrap">
     <header class="entry-head" data-pagefind-body data-pagefind-filter="type:hub">
-      <div class="head-row" data-pagefind-ignore>
-        <p class="back"><a href={href("/hub/", lang)}>{t.hub.back}</a></p>
-        <PageActions
-          lang={lang}
-          markdown={entry.raw}
-          markdownHref={rawUrl}
-          download={{ href: rawUrl, filename: "HARNESS.md" }}
-          github={{ href: `${REPO_URL}/blob/main/hub/${entry.id}/HARNESS.md`, kind: "entry" }}
-          copyFailed={t.hub.copyFailed}
-        />
-      </div>
+      <p class="back" data-pagefind-ignore><a href={href("/hub/", lang)}>{t.hub.back}</a></p>
       <NameTag class="entry-name" data-pagefind-meta="title">{entry.name}</NameTag>
       <p class="entry-description" lang="en" data-pagefind-meta="description">{entry.description}</p>
       <span hidden data-pagefind-meta={`entry:${entry.id}`}></span>
@@ -115,7 +105,18 @@ const NameTag = hasTopHeading(entry.html) ? "p" : "h1";
       </dl>
       {entry.tags.map((tag) => <span hidden data-pagefind-filter="tag">{tag}</span>)}
 
-      <AgentPrompt lang={lang} entry={entry.id} />
+      <AgentPrompt lang={lang} entry={entry.id}>
+        <PageActions
+          lang={lang}
+          align="start"
+          markdown={entry.raw}
+          markdownHref={rawUrl}
+          download={{ href: rawUrl, filename: "HARNESS.md" }}
+          github={{ href: `${REPO_URL}/blob/main/hub/${entry.id}/HARNESS.md`, kind: "entry" }}
+          copyFailed={t.hub.copyFailed}
+          labels={t.hub.file}
+        />
+      </AgentPrompt>
       {lang !== DEFAULT_LANG && <p class="entry-lang" data-pagefind-ignore>{t.hub.entryLang}</p>}
     </header>
 
@@ -135,14 +136,6 @@ const NameTag = hasTopHeading(entry.html) ? "p" : "h1";
   .entry-head {
     padding-block: 2.5rem 2.5rem;
     border-bottom: 1px solid var(--rule);
-  }
-
-  .head-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem 1rem;
   }
 
   .back {

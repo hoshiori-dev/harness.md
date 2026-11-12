@@ -102,6 +102,13 @@ const en = {
     contributeLink: "hub directory on GitHub",
     back: "All hub entries",
     copyFailed: "Copy failed. Use “Download HARNESS.md” instead.",
+    file: {
+      copy: "Copy HARNESS.md",
+      copyAs: "Copy HARNESS.md",
+      viewAs: "View HARNESS.md",
+      more: "More actions for HARNESS.md",
+      menu: "HARNESS.md actions",
+    },
     tags: "Tags",
     tagLink: "Hub entries tagged {tag}",
     license: "Licence",
@@ -121,7 +128,7 @@ const en = {
     copied: "Copied",
     copyFailed: "Copy failed. Select the prompt and copy it by hand.",
     manual:
-      "To keep the file in the project instead, download it from the menu above, save it as <code>HARNESS.md</code> in the project root, and tell your agent the same thing.",
+      "To keep the file in the project instead, download it from the menu beside the button, save it as <code>HARNESS.md</code> in the project root, and tell your agent the same thing.",
   },
   spec: {
     title: "Specification",
@@ -223,6 +230,13 @@ const zh: Strings = {
     contributeLink: "GitHub 上的 hub 目录",
     back: "全部 hub 条目",
     copyFailed: "复制失败，请改用“下载 HARNESS.md”。",
+    file: {
+      copy: "复制 HARNESS.md",
+      copyAs: "复制 HARNESS.md",
+      viewAs: "查看 HARNESS.md",
+      more: "HARNESS.md 的更多操作",
+      menu: "HARNESS.md 操作",
+    },
     tags: "标签",
     tagLink: "带有 {tag} 标签的 hub 条目",
     license: "许可证",
@@ -242,7 +256,7 @@ const zh: Strings = {
     copied: "已复制",
     copyFailed: "复制失败，请手动选中提示词复制。",
     manual:
-      "想把文件留在项目里的话，用上面的菜单下载，存为项目根目录下的 <code>HARNESS.md</code>，再把同样的话告诉 Agent。",
+      "想把文件留在项目里的话，用按钮旁边的菜单下载，存为项目根目录下的 <code>HARNESS.md</code>，再把同样的话告诉 Agent。",
   },
   spec: {
     title: "规范",

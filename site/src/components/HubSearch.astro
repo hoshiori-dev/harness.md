@@ -5,7 +5,7 @@
 // Pagefind index built after `astro build`.
 import { ui } from "../i18n/ui";
 import type { HubEntry } from "../lib/hub";
-import { allTags } from "../lib/hub";
+import { topTags } from "../lib/hub";
 import { asset, href, type Lang } from "../lib/paths";
 
 interface Props {
@@ -21,7 +21,9 @@ interface Props {
 
 const { lang, entries, showTags = false, size = "regular", limit } = Astro.props;
 const t = ui(lang).search;
-const tags = showTags ? allTags(entries) : [];
+// Only the most used tags get a button; the rest are reached by searching.
+const TAG_BUTTONS = 5;
+const tags = showTags ? topTags(entries, TAG_BUTTONS) : [];
 const inputId = "hub-search-input";
 ---
 
@@ -240,10 +242,12 @@ const inputId = "hub-search-input";
       });
     }
 
-    // `?tag=<name>` opens the list already filtered; an unknown tag is ignored.
+    // `?tag=<name>` opens the list already filtered. A tag with a button
+    // selects it; any other tag goes into the search box, which matches tags.
     const wanted = new URL(window.location.href).searchParams.get("tag");
     const preset = wanted ? tagButtons.find((button) => button.dataset.tag === wanted) : undefined;
     if (preset) selectTag(preset);
+    else if (wanted && tagButtons.length > 0 && input.value.trim() === "") input.value = wanted;
 
     // A preset tag, or a query restored by the browser (back navigation),
     // filters at once.

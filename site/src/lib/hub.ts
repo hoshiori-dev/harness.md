@@ -49,6 +49,16 @@ export async function hubEntries(): Promise<HubEntry[]> {
   return loaded.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export function allTags(entries: HubEntry[]): string[] {
-  return [...new Set(entries.flatMap((entry) => entry.tags))].sort((a, b) => a.localeCompare(b));
+/**
+ * The `limit` tags carried by the most entries, most used first (ties by
+ * name). The hub index offers only these as filter buttons; any other tag is
+ * found through the search box, which matches tags too.
+ */
+export function topTags(entries: HubEntry[], limit: number): string[] {
+  const counts = new Map<string, number>();
+  for (const tag of entries.flatMap((entry) => entry.tags)) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  return [...counts]
+    .sort(([a, countA], [b, countB]) => countB - countA || a.localeCompare(b))
+    .slice(0, limit)
+    .map(([tag]) => tag);
 }

@@ -49,6 +49,7 @@ const nav = [
     {LANGS.map((code) => <link rel="alternate" hreflang={htmlLang(code)} href={absolute(href(path, code))} />)}
     <link rel="alternate" hreflang="x-default" href={absolute(href(path, DEFAULT_LANG))} />
     {markdownHref && <link rel="alternate" type="text/markdown" href={absolute(markdownHref)} />}
+    <link rel="alternate" type="text/plain" title="llms.txt" href={absolute(asset("/llms.txt"))} />
   </head>
   <body>
     <a class="skip" href="#content">{t.skip}</a>
@@ -74,6 +75,7 @@ const nav = [
       <div class="wrap">
         <a href={REPO_URL}>{t.footer.source}</a>
         <a href={`${REPO_URL}/blob/main/LICENSE`}>{t.footer.license}</a>
+        <a href={asset("/llms.txt")}>llms.txt</a>
       </div>
     </footer>
     <script>

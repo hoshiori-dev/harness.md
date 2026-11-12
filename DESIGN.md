@@ -245,10 +245,13 @@ takes the wash on hover. The primary button is cobalt with white text and is
 used once in a view, for the action the page exists for (copying a prompt).
 A button that performs an action carries an icon before its label.
 
-**Split button and menu.** Page actions are one split control near the page
-title: the main part does the most likely thing (copy the page as Markdown),
-and a caret opens a menu with the rest (view as Markdown in a new tab,
-download, view on GitHub). Every menu item is an icon and a label. The menu
+**Split button and menu.** Actions on a document are one split control: the
+main part does the most likely thing (copy the text), and a caret opens a
+menu with the rest (view the file in a new tab, download, view on GitHub).
+On the specification and the plugin documentation it sits near the page
+title; on a hub entry it sits beside the primary button that copies the
+agent prompt and is as tall as that button. The home page and the hub index
+have none: they are for finding things, not for copying. Every menu item is an icon and a label. The menu
 is paper with a hairline border, 6px corners, and the one shadow; the
 hovered or focused item takes the wash. Menus open on click or from the
 keyboard, close on Escape or an outside click, and only one is open at a
@@ -265,7 +268,9 @@ what is searched. Results appear below it as rows.
 
 **Tag.** A small fully rounded label on the wash. Where a tag filters or
 links, it turns to the primary tint and cobalt text on hover, and stays that
-way while selected.
+way while selected. The hub index offers filter buttons for the five most
+used tags only, so the row stays one line; every other tag is found through
+the search field.
 
 **Prompt box.** On a hub entry: a block on the wash with a hairline border
 that shows the text to paste into an agent, an open area beneath it where

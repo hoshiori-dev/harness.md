@@ -1,16 +1,23 @@
-// The Markdown version of each page. A page at `/x/y/` has it at `/x/y.md`
-// (`markdownPath()`); the endpoints under `src/pages` serve what these
-// functions return, and the page-actions menu copies the same text. Links
-// between Markdown versions are absolute, so an agent that fetched one file
-// can follow them.
-import { SECTIONS, ui } from "../i18n/ui";
-import { docPath } from "./docs";
+// The Markdown version of a document page. The specification at `/spec/` has
+// it at `/spec.md` and a plugin docs page at `/plugin/<page>.md`
+// (`markdownPath()`); a hub entry's is its raw `HARNESS.md`. The home page and
+// the hub index are navigation, not documents, and have none: `llms.txt`
+// (`llmsText()`) is the index an agent starts from. Links between Markdown
+// versions are absolute, so an agent that fetched one file can follow them.
+import { ui } from "../i18n/ui";
+import { docPath, parseDocId } from "./docs";
 import type { HubEntry } from "./hub";
 import { absolute, DEFAULT_LANG, href, hubFile, LANGS, type Lang, markdownPath } from "./paths";
 
-/** The absolute URL of the Markdown version of the page at `path`. */
+/** Pages that are navigation and have no Markdown version. */
+const NO_MARKDOWN = new Set(["/", "/hub/"]);
+
+/**
+ * The absolute URL of the Markdown version of the page at `path`, or of the
+ * page itself when it has none.
+ */
 export function markdownUrl(path: string, lang: Lang): string {
-  return absolute(href(markdownPath(path), lang));
+  return absolute(href(NO_MARKDOWN.has(path) ? path : markdownPath(path), lang));
 }
 
 /** The repository file a specification page is rendered from. */
@@ -18,49 +25,54 @@ export function specFile(lang: Lang): string {
   return lang === DEFAULT_LANG ? "spec/spec.md" : `spec/spec.${lang}.md`;
 }
 
-/** UI strings carry `<code>` for the page; in Markdown that is a code span. */
-function inline(html: string): string {
-  return html.replace(/<\/?code>/g, "`");
+/** One docs page as `llms.txt` needs it. */
+export interface DocSummary {
+  /** The collection id, `<lang>` or `<lang>/<page>`. */
+  id: string;
+  title: string;
+  description: string;
+  order: number;
 }
 
-export function homeMarkdown(lang: Lang, entries: HubEntry[]): string {
-  const t = ui(lang);
+/**
+ * `llms.txt`: the index of everything on the site an agent can read as
+ * Markdown, in the llmstxt.org layout (a title, a summary, then sections of
+ * links). English first; the translations go under "Optional", the section
+ * that format reserves for what may be skipped.
+ */
+export function llmsText(entries: HubEntry[], docs: DocSummary[]): string {
+  const pages = (lang: Lang) =>
+    docs
+      .map((doc) => ({ ...doc, ...parseDocId(doc.id) }))
+      .filter((doc) => doc.lang === lang)
+      .sort((a, b) => a.order - b.order);
   const lines = [
     "# HARNESS.md",
     "",
-    ...t.home.what.flatMap((paragraph) => [inline(paragraph), ""]),
-    `## ${t.home.skeletonHeading}`,
+    "> HARNESS.md is one file that records the design of a project's agent harness: where a coding agent runs, what it reads, how it checks its own work, what stops a bad change, and what it may do without asking. This site holds the format specification, a hub of ready-to-use designs, and the documentation of the harness-md plugin.",
     "",
-    t.home.skeletonLead,
+    'To build a harness from a hub entry: read the entry\'s HARNESS.md, follow its "How to use this file" section, check its Context section against the project, show the user a plan, and build only after they approve.',
     "",
-    ...SECTIONS.map(
-      (section, index) =>
-        `${index + 1}. **${section.name}**${t.parens(section.required ? t.home.required : t.home.optional)}${t.colon}${t.home.questions[index]}`,
-    ),
+    "## Specification",
     "",
-    `## ${t.home.nextHeading}`,
-    "",
-    ...t.home.next.map((item) => `- [${item.label}](${markdownUrl(item.path, lang)})${t.colon}${item.note}`),
+    `- [HARNESS.md format specification](${markdownUrl("/spec/", DEFAULT_LANG)}): the frontmatter keys, the fourteen sections, and what a validator reports`,
     "",
   ];
   if (entries.length > 0) {
-    lines.push(`## ${t.hub.title}`, "");
-    for (const entry of entries)
-      lines.push(`- [${entry.name}](${absolute(hubFile(entry.id))})${t.colon}${entry.description}`);
+    lines.push("## Hub", "");
+    for (const entry of entries) lines.push(`- [${entry.name}](${absolute(hubFile(entry.id))}): ${entry.description}`);
     lines.push("");
   }
-  return lines.join("\n");
-}
-
-export function hubIndexMarkdown(lang: Lang, entries: HubEntry[]): string {
-  const t = ui(lang);
-  const lines = [`# ${t.hub.title}`, "", t.hub.lead, ""];
-  if (entries.length === 0) lines.push(t.search.empty, "");
-  for (const entry of entries) {
-    lines.push(`## ${entry.name}`, "", entry.description, "");
-    if (entry.tags.length > 0) lines.push(`- ${t.hub.tags}${t.colon}${entry.tags.join(", ")}`);
-    lines.push(`- HARNESS.md${t.colon}<${absolute(hubFile(entry.id))}>`, "");
+  lines.push("## Plugin", "");
+  for (const doc of pages(DEFAULT_LANG))
+    lines.push(`- [${doc.title}](${markdownUrl(docPath(doc.page), DEFAULT_LANG)}): ${doc.description}`);
+  lines.push("", "## Optional", "");
+  for (const lang of LANGS.filter((code) => code !== DEFAULT_LANG)) {
+    lines.push(`- [${ui(lang).spec.title} (${lang})](${markdownUrl("/spec/", lang)}): ${ui(lang).spec.description}`);
+    for (const doc of pages(lang))
+      lines.push(`- [${doc.title} (${lang})](${markdownUrl(docPath(doc.page), lang)}): ${doc.description}`);
   }
+  lines.push("");
   return lines.join("\n");
 }
 

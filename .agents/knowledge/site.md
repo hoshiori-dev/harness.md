@@ -22,11 +22,24 @@ is `openspec/specs/site/spec.md`.
   in force are the custom properties in `site/src/styles/global.css`. A
   visual change updates both in the same change. No new colour, shadow, or
   card without changing `DESIGN.md` first.
-- Every page has a Markdown version generated at build time (`/x/y/` at
-  `/x/y.md`, the home page at `/index.md`, a hub entry at its raw
-  `HARNESS.md`), reached from the page-actions menu and from a
-  `rel="alternate"` link. A new page type needs its `.md` endpoint and the
-  menu.
+- Every document page has a Markdown version generated at build time: the
+  specification at `/spec.md`, a plugin docs page at `/plugin/<page>.md`, a
+  hub entry at its raw `HARNESS.md`. It is reached from the page-actions
+  menu and from a `rel="alternate"` link. The home page and the hub index
+  are navigation and have none; `/llms.txt` (`llmsText()` in
+  `site/src/lib/pagemd.ts`) is the index an agent starts from and lists
+  every Markdown document. A new document type needs its `.md` endpoint, the
+  menu, and a section in `llms.txt`.
+- On a hub entry's page the file's menu (copy, view, download, GitHub) sits
+  beside the button that copies the agent prompt. The hub index shows
+  buttons for the five most used tags only; other tags are found through
+  the search box, and a `?tag=` address for one of them fills the box.
+- `just site-dev` serves the site with live reload and `just site-preview`
+  serves a fresh build (search works only there); both are at
+  `http://localhost:4321/harness.md/`, and the bare root is a 404. Astro
+  leaves its server running in the background, and a server that outlived a
+  rename or removal under `site/src/` serves errors: both recipes stop
+  leftovers first, and `just site-stop` does only that.
 - Languages are listed once in `site/src/lib/languages.ts`; the header's
   language menu and the routes are built from that list.
 - English is served at the root and Chinese under `/zh/`; every page exists

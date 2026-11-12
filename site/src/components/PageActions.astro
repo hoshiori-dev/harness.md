@@ -1,8 +1,9 @@
 ---
-// What a reader can do with the page as a whole. A split control: the main
-// button copies the page's Markdown, the toggle opens a menu with the same
-// action plus the Markdown version in a new tab and, where the page has
-// them, a download and a link to the source on GitHub.
+// What a reader can do with a document as a whole (a page's Markdown version,
+// or a hub entry's HARNESS.md). A split control: the main button copies the
+// text, the toggle opens a menu with the same action plus the file in a new
+// tab and, where there are any, a download and a link to the source on
+// GitHub.
 import { ui } from "../i18n/ui";
 import type { Lang } from "../lib/paths";
 import Icon from "./Icon.astro";
@@ -19,15 +20,19 @@ interface Props {
   github?: { href: string; kind: "entry" | "source" };
   /** Message shown when copying fails; defaults to pointing at the Markdown version. */
   copyFailed?: string;
+  /** Labels that name the file instead of "Markdown" (a hub entry's HARNESS.md). */
+  labels?: { copy: string; copyAs: string; viewAs: string; more: string; menu: string };
+  /** `start` when the control sits at the start of a row beside other buttons. */
+  align?: "start" | "end";
 }
 
-const { lang, markdown, markdownHref, download, github, copyFailed } = Astro.props;
+const { lang, markdown, markdownHref, download, github, copyFailed, labels, align = "end" } = Astro.props;
 const strings = ui(lang);
-const t = strings.actions;
+const t = { ...strings.actions, ...labels };
 const menuId = "page-actions-menu";
 ---
 
-<div class="page-actions" data-page-actions data-failed={copyFailed ?? t.copyFailed} data-pagefind-ignore>
+<div class="page-actions" data-page-actions data-align={align} data-failed={copyFailed ?? t.copyFailed} data-pagefind-ignore>
   <span class="copy-status" role="status" aria-live="polite" data-status></span>
   <div class="split" data-menu-anchor>
     <button type="button" class="split-main" data-copy data-copied={t.copied}>
@@ -102,6 +107,10 @@ const menuId = "page-actions-menu";
     gap: 0.5rem 0.75rem;
   }
 
+  .page-actions[data-align="start"] {
+    justify-content: flex-start;
+  }
+
   .copy-status {
     color: var(--muted);
     font-size: 0.875rem;
@@ -109,6 +118,11 @@ const menuId = "page-actions-menu";
 
   .copy-status:empty {
     display: none;
+  }
+
+  /* At the start of a row the confirmation follows the control. */
+  .page-actions[data-align="start"] .copy-status {
+    order: 1;
   }
 
   .split {
@@ -148,6 +162,15 @@ const menuId = "page-actions-menu";
     padding: 0.4375rem 0.5rem;
     margin-left: -1px;
     border-radius: 0 6px 6px 0;
+  }
+
+  /* Beside other buttons the control is as tall as they are. */
+  .page-actions[data-align="start"] .split-main {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .page-actions[data-align="start"] .split-toggle {
+    padding: 0.625rem;
   }
 
   .split-main:not([data-state="copied"]) .when-copied,

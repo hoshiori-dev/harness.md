@@ -2,7 +2,8 @@
 // A ready-made prompt for a hub entry: it tells a coding agent to read the
 // entry's file online and build from it, and ends on a line the reader
 // completes with their own project. Copy takes the prompt plus whatever was
-// typed in the box.
+// typed in the box. The default slot sits beside the copy button: the entry
+// page puts the HARNESS.md file's own actions there.
 import { ui } from "../i18n/ui";
 import { absolute, hubFile, type Lang } from "../lib/paths";
 import Icon from "./Icon.astro";
@@ -33,6 +34,7 @@ const text = t.text(absolute(hubFile(entry)));
       <span data-label>{t.copy}</span>
     </button>
     <span class="copy-status" role="status" aria-live="polite" data-status></span>
+    <slot />
   </div>
   <p class="manual" set:html={t.manual} />
 </section>
@@ -140,6 +142,10 @@ const text = t.text(absolute(hubFile(entry)));
   .copy-status {
     color: var(--muted);
     font-size: 0.9375rem;
+  }
+
+  .copy-status:empty {
+    display: none;
   }
 
   .button:not([data-state="copied"]) .when-copied,
