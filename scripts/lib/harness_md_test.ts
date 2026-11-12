@@ -104,11 +104,10 @@ test("name and description limits are warnings", () => {
   ]);
 });
 
-test("version: known, unknown, and not a string", () => {
-  assert.deepEqual(codes(document("name: demo\ndescription: A demo.\nversion: alpha\n")), []);
-  assert.deepEqual(codes(document("name: demo\ndescription: A demo.\nversion: beta\n")), [
-    "version-unknown",
-  ]);
+test("version is any string; only its type is checked", () => {
+  for (const value of ["1.0.0", "alpha", "2026-11", '"3"']) {
+    assert.deepEqual(codes(document(`name: demo\ndescription: A demo.\nversion: ${value}\n`)), []);
+  }
   assert.deepEqual(codes(document("name: demo\ndescription: A demo.\nversion: 1.0\n")), [
     "key-type",
   ]);

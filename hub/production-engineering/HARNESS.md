@@ -11,7 +11,7 @@ description: >-
   a written permission policy with a protected default branch and squash
   merges, specification-driven completion with recorded approval, and
   drift control with a harness self-check.
-version: alpha
+version: 1.0.0
 license: Apache-2.0
 metadata:
   tags:

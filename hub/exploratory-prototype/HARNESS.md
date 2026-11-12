@@ -9,7 +9,7 @@ description: >-
   credentials, a secret scan, one command that runs the thing, a smoke
   check, and checkpoint commits. States the triggers for moving to a
   heavier design.
-version: alpha
+version: 1.0.0
 license: Apache-2.0
 metadata:
   tags:

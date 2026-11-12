@@ -60,7 +60,7 @@ An entry lives at `hub/<name>/HARNESS.md`.
 Beyond the format itself, the hub asks for the following.
 
 - The directory name equals the `name` in the frontmatter.
-- The frontmatter has `name`, `description`, `version: alpha`,
+- The frontmatter has `name`, `description`,
   `license: Apache-2.0`, and `metadata.tags`, a non-empty list of lowercase,
   hyphenated words used for filtering.
   It may have `metadata.based-on`,

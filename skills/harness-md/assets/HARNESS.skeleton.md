@@ -1,7 +1,6 @@
 ---
 name: "{{NAME}}"  # CONFIGURE: lowercase letters, digits, single hyphens; at most 64 characters.
 description: "{{DESCRIPTION}}"  # CONFIGURE: what this design is and what kind of project it suits; at most 1024 characters.
-version: alpha
 ---
 
 # {{TITLE}} <!-- # CONFIGURE: free text; usually the project or design name. -->

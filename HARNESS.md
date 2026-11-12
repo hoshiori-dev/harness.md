@@ -8,7 +8,7 @@ description: >-
   static website. Suits a documentation-and-tooling repository where agents
   work task by task under review and outside contributors arrive with
   their own agents.
-version: alpha
+version: 1.0.0
 license: Apache-2.0
 ---
 
@@ -54,7 +54,7 @@ before these rules existed. The rules below apply to every change after it.
   and the hub entries are copied into other people's projects,
   so a wrong rule or a bad default spreads and cannot be recalled;
   and a broken skill misleads every agent that loads it.
-- **Horizon: long.** The format is at version `alpha` and is expected to evolve
+- **Horizon: long.** The format is at version `1.0.0` and is expected to evolve
   for years, with the hub growing entry by entry.
 - **Who relies on the conventions:** one maintainer,
   plus outside contributors

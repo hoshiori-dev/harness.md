@@ -14,8 +14,8 @@ design.
 ## Requirements
 
 ### Requirement: Findings
-The validator SHALL report each finding with a severity (`error`, `warning`,
-or `note`), a stable code, a message that says what is wrong and how to fix
+The validator SHALL report each finding with a severity (`error` or `warning`),
+a stable code, a message that says what is wrong and how to fix
 it, and the line it concerns, printed as `path:line: severity[code]: message`.
 
 #### Scenario: Unknown top-level key
@@ -36,10 +36,10 @@ and `key-duplicate`, as defined by the `format/document` and
 - **WHEN** a file lacks `description`, has an undefined key, and repeats a recommended section
 - **THEN** every problem is reported in one run, ordered by line
 
-### Requirement: Warnings and notes
+### Requirement: Warnings
 The validator SHALL report as warnings `title-missing`, `title-multiple`,
 `section-duplicate`, `section-order`, `name-length`, `name-format`,
-`description-length`, and `version-unknown`, and as a note `version-older`.
+and `description-length`. It SHALL report nothing about the value of `version`.
 `title-multiple` SHALL be reported once for a file,
 and `section-duplicate` once for each repeated name.
 

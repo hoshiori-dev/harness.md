@@ -62,17 +62,16 @@ the containing directory or the title of the body.
 - **WHEN** a project's root `HARNESS.md` has a `name` unrelated to the directory it is in
 - **THEN** a validator reports nothing
 
-### Requirement: Version handling
-When `version` is absent a validator SHALL validate the file against the
-version it currently supports. When `version` names a version older than the
-current one, the validator SHALL give a note only. When `version` names a
-version the validator does not know, it SHALL warn and validate against its
-current version. The only version defined is `alpha`.
+### Requirement: Version is a free string
+`version`, when present, SHALL be a string. Its form and meaning belong to
+the author, for example the version of the design itself. A validator SHALL
+NOT interpret it, compare it, or report anything about its value. The
+specification itself is versioned with Semantic Versioning, currently `1.0.0`.
 
-#### Scenario: Version omitted
-- **WHEN** a file has no `version` key
-- **THEN** it is validated as `alpha` and nothing is reported
+#### Scenario: Any wording
+- **WHEN** a file states `version: alpha`, `version: 2026-11`, or `version: "3"`
+- **THEN** a validator reports nothing
 
-#### Scenario: Version not known
-- **WHEN** a file states `version: beta`
-- **THEN** a validator reports a warning and still checks the file as `alpha`
+#### Scenario: Version that is not a string
+- **WHEN** a file states `version: 1.0`, which YAML reads as a number
+- **THEN** a validator reports an error naming the key

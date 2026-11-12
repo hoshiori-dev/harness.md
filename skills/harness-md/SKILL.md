@@ -59,7 +59,7 @@ Frontmatter (YAML, first line `---`), identity only:
 |---|---|---|
 | `name` | yes | short name: lowercase letters, digits, single hyphens, at most 64 characters |
 | `description` | yes | what the design is and what kind of project it suits, at most 1024 characters |
-| `version` | no | `alpha` |
+| `version` | no | any string: the version of this design, in whatever form the author uses |
 | `license` | no | the licence of this file |
 | `metadata` | no | any structure, for whichever platform wants it |
 
@@ -187,7 +187,7 @@ and say that the validator did not run.
 
 Fix every error. A warning (a missing or repeated title,
 a repeated or out-of-order recommended section,
-`name` or `description` over the limits, an unknown `version`)
+`name` or `description` over the limits)
 is fixed unless the user wants it kept.
 A clean result says the file is well-formed, not that the design is good:
 never report a validator pass as a review of the design.

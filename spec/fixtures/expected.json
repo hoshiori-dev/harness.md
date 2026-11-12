@@ -77,6 +77,9 @@
   "valid/sections-omitted.md": [],
   "valid/title-differs-from-name.md": [],
   "valid/typical.md": [],
+  "valid/version-alpha.md": [],
+  "valid/version-any-word.md": [],
+  "valid/version-quoted.md": [],
   "warnings/description-length.md": [
     "description-length"
   ],
@@ -128,8 +131,5 @@
   ],
   "warnings/title-setext.md": [
     "title-missing"
-  ],
-  "warnings/version-unknown.md": [
-    "version-unknown"
   ]
 }

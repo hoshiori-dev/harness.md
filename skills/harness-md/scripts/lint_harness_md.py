@@ -30,9 +30,6 @@ from pathlib import Path
 
 import yaml
 
-VERSIONS = ["alpha"]  # oldest first; the last is the version this script supports
-CURRENT_VERSION = VERSIONS[-1]
-
 SECTIONS = [  # the recommended second-level sections, in specification order
     "Context",
     "Invariants",
@@ -235,28 +232,6 @@ def check_frontmatter(lines: list[str], findings: list[dict]) -> int | None:
                 present["description"][0],
             )
         )
-    version = strings.get("version")
-    if version is not None:
-        line = present["version"][0]
-        if version not in VERSIONS:
-            findings.append(
-                finding(
-                    "warning",
-                    "version-unknown",
-                    f"`version: {version}` is not a version this validator knows "
-                    f"({', '.join(VERSIONS)}); the file was checked against `{CURRENT_VERSION}`",
-                    line,
-                )
-            )
-        elif VERSIONS.index(version) < len(VERSIONS) - 1:
-            findings.append(
-                finding(
-                    "note",
-                    "version-older",
-                    f"the file is written for `{version}`; the current version is `{CURRENT_VERSION}`",
-                    line,
-                )
-            )
     return end + 1
 
 

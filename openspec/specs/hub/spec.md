@@ -23,8 +23,8 @@ entry directories, `README.md`, and `README.zh.md`.
 - **THEN** `just hub-check` fails naming the file and both names
 
 ### Requirement: Entry is clean under the format
-An entry SHALL produce no error, warning, or note from the format validator,
-SHALL state `version`, and SHALL state `license`.
+An entry SHALL produce no error or warning from the format validator
+and SHALL state `license`.
 
 #### Scenario: Entry with a warning
 - **WHEN** an entry's recommended sections are out of the specification's order, or it has no first-level heading

@@ -49,7 +49,7 @@ harness 建好之后，这份文件怎么处理由你决定。可以删掉，har
 条目放在 `hub/<name>/HARNESS.md`。除格式本身之外，hub 还有以下要求。
 
 - 目录名与 frontmatter 里的 `name` 相同。
-- frontmatter 包含 `name`、`description`、`version: alpha`、
+- frontmatter 包含 `name`、`description`、
   `license: Apache-2.0` 和 `metadata.tags`。
   `tags` 是一个非空列表，由小写、连字符连接的词组成，用于筛选。
   可以有 `metadata.based-on`，列出这份条目所依据的设计或资料的 URL。

@@ -3,7 +3,7 @@ name: fixture-2
 description: >-
   A fixture with every key
   and every recommended section.
-version: alpha
+version: 1.0.0
 license: Apache-2.0
 metadata:
   tags: [a, b]

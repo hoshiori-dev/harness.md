@@ -20,7 +20,7 @@ the reviewer does. The two validators are kept equal by the fixtures.
 
 Anything that alters what a conforming file is or what a validator reports:
 a key, a recommended section, the order, a heading or title rule,
-a finding or its severity, a version.
+a finding or its severity.
 It needs an OpenSpec change (`.agents/knowledge/spec-workflow.md`).
 A reworded sentence of the prose that changes no rule is spec-less,
 but still updates the mirror and the skill's copy in the same change.
@@ -40,8 +40,9 @@ but still updates the mirror and the skill's copy in the same change.
    when a key or section changes;
    its spec under `openspec/specs/skill/harness-md/` when its behaviour changes.
 5. Both validators, changed together:
-   constants (`SECTIONS`, `KEYS`, `VERSIONS`), rules, finding codes,
-   and messages. A new format version is appended to `VERSIONS` in both.
+   constants (`SECTIONS`, `KEYS`), rules, finding codes,
+   and messages. The specification is versioned with Semantic Versioning
+   in its "Version:" line; a file's own `version` key is a free string.
 6. `spec/fixtures/`: one case per new or changed rule,
    with its codes in `spec/fixtures/expected.json`.
    A fixture is a skeleton with placeholder text, never a worked design.

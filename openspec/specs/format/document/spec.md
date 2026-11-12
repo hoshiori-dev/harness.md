@@ -116,7 +116,7 @@ and check nothing else in it.
 
 ### Requirement: Conformance
 A file SHALL conform to the format when a validator reports no error for it;
-warnings and notes SHALL NOT affect conformance.
+warnings SHALL NOT affect conformance.
 
 #### Scenario: File with warnings only
 - **WHEN** a file's recommended sections are out of order and nothing else is wrong

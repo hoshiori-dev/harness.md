@@ -1,6 +1,6 @@
 # HARNESS.md Format Specification
 
-Version: `alpha`
+Version: `1.0.0` (the specification itself is versioned with Semantic Versioning)
 
 `HARNESS.md` is a document format for representing, storing,
 and exchanging the design of an agent harness in software engineering.
@@ -365,7 +365,7 @@ The format defines only the following five top-level frontmatter fields:
 | ----- | ----- | ----- | ----- | ----- |
 | `name` | yes | non-empty string; only ASCII lowercase letters, digits, and non-consecutive hyphens are recommended | the short name (identifier) of this harness design | missing, empty, or not a string: Error; violates the length or character naming rules: Warning |
 | `description` | yes | non-empty string; no more than 1024 characters is recommended | briefly says what this design is and what kind of project it suits | missing, empty, or not a string: Error; more than 1024 characters: Warning |
-| `version` | no | string (the version currently defined is `alpha`) | declares the version of the `HARNESS.md` format specification that the file is based on | present but not a string: Error; for version recognition behaviour see section 4.4 |
+| `version` | no | string; its form is not constrained | the version of this design itself; its form and meaning are decided by the author, and the format neither interprets nor compares it | present but not a string: Error |
 | `license` | no | string | declares the licence name of this `HARNESS.md` file itself, or points to a licence file shipped with the file | present but not a string: Error |
 | `metadata` | no | any YAML data structure | additional extension information for a specific platform, tool, or organisation | the format does not check its internal structure or content |
 
@@ -427,48 +427,6 @@ The specific rules for each top-level field are as follows:
   that belongs to the hub's platform rules
   and has nothing to do with whether a file conforms
   to the `HARNESS.md` format specification.
-
-### 4.4 Rules for handling format versions
-
-The `version` field identifies the version
-of the `HARNESS.md` format specification that the file follows.
-Version numbers of this specification evolve in order of release.
-`alpha` is the first version this specification has released,
-and is at present the only version defined.
-
-When handling the `version` field,
-a validator must follow this definite behavioural contract:
-
-1. **`version` not declared**: when the file omits the `version` field,
-   the validator by default checks the file
-   against the newest version of the specification
-   that the validator itself supports.
-
-2. **The supported, currently newest version declared**:
-   the validator performs its checks according to the declared version.
-
-3. **A supported, known older version declared**:
-   when in future the specification has several versions,
-   and the `version` a file declares is an older version
-   that the validator supports
-   but that is earlier than the newest version the validator supports,
-   the validator checks according to the rules
-   of the older version the file declares,
-   and additionally attaches a note (Note)
-   saying that a newer format version exists.
-
-4. **An unknown version declared**:
-   when the string value of `version`
-   is not any version identifier the validator knows,
-   the validator issues a warning (Warning) and falls back
-   to checking the file according to the rules of the newest version
-   the validator itself supports.
-
-Because only the `alpha` version is defined at present,
-and the specific differences
-between future versions have not yet been determined,
-this specification makes no advance compatibility commitment for future versions
-that have not been released.
 
 ## 5. Body organisation and the recommended vocabulary
 
@@ -565,7 +523,7 @@ validators and tools follow these explicit rules:
   (such as `## Context`),
   and the heading text must match the English name in the table
   in section 5.2 exactly (case-sensitive);
-  for the syntax details see section 7.5.
+  for the syntax details see section 7.4.
   Although the body paragraphs of a `HARNESS.md`
   may be written in Chinese or any other natural language,
   it is recommended that second-level headings themselves stay in English
@@ -588,7 +546,7 @@ validators and tools follow these explicit rules:
   Authors need only pick and write the sections
   that have real expressive value for the current design;
   recommended sections that are not adopted are simply omitted,
-  and a validator produces no error, warning, or note for this.
+  and a validator produces no error or warning for this.
 
 * **Any extra sections are allowed**:
   authors may add any number of custom second-level headings
@@ -825,8 +783,8 @@ Whether a `HARNESS.md` file conforms to this format specification
 is determined entirely by whether a format validator reports an error (Error):
 **as long as a validator reports no Error for a file,
 the file conforms to this format specification.**
-Warnings (Warning) and notes (Note) are used to give the author feedback
-on structural suggestions or version information,
+Warnings (Warning) are used to give the author feedback
+on structural suggestions,
 and do not affect the file's format conformance.
 
 **Format conformance** and **design adequacy** must be clearly distinguished.
@@ -912,29 +870,11 @@ but the file still conforms to this format:
 6. **`description` exceeds the advised length**:
    the `description` string is longer than 1024 characters.
 
-7. **`version` is an unknown version**:
-   the `version` field declares a version string the validator does not know;
-   in this case the validator, while issuing this warning,
-   falls back to completing the remaining checks according to the rules
-   of the newest version it supports.
-
-### 7.3 Notes (Note: do not affect conformance)
-
-In the following case, a validator reports a Note,
-and the file still conforms to this format:
-
-* **A supported, known older version is declared**:
-  the version declared in the file's `version` field
-  is supported by the validator,
-  but is older than the newest format version the validator supports;
-  in this case the validator completes its checks according to the rules
-  of the declared older version, and attaches this note.
-
-### 7.4 What is not checked and not reported
+### 7.3 What is not checked and not reported
 
 To guarantee the body's freedom of expression
 and the independence of platform extensions,
-a validator **must not** report any error, warning, or note for the following:
+a validator **must not** report any error or warning for the following:
 
 * **Omitting any or all of the recommended second-level sections**:
   one, several, or even all thirteen of the recommended second-level headings
@@ -966,7 +906,7 @@ a validator **must not** report any error, warning, or note for the following:
   whether the body mentions particular harness layers, particular tool commands,
   or the configuration of a particular coding agent client.
 
-### 7.5 Syntax boundaries of heading recognition
+### 7.4 Syntax boundaries of heading recognition
 
 When recognising first-level headings (H1)
 and recommended second-level headings (H2) in the Markdown body,

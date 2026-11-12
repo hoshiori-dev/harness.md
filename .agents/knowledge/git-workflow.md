@@ -68,6 +68,6 @@ is the pull request's title and body.
 `just dist --tag` refuses a mismatch.
 Bump the version in a normal pull request, merge,
 then the maintainer tags `main` and pushes the tag,
-which runs the release workflow. The format's own version (`alpha`)
+which runs the release workflow. The specification's own version (`1.0.0`, Semantic Versioning)
 is independent of the plugin's and changes only through a format change
 (`.agents/knowledge/format-changes.md`).

@@ -17,7 +17,7 @@ function hubWith(entry: string, frontmatter: string): string {
 }
 
 const GOOD =
-  "name: demo\ndescription: A demo.\nversion: alpha\nlicense: Apache-2.0\nmetadata:\n  tags: [demo, small-team]\n  based-on:\n    - https://example.com/design\n";
+  "name: demo\ndescription: A demo.\nversion: 1.0.0\nlicense: Apache-2.0\nmetadata:\n  tags: [demo, small-team]\n  based-on:\n    - https://example.com/design\n";
 
 test("a conforming entry is clean", () => {
   assert.deepEqual(checkHub(hubWith("demo", GOOD)), []);
@@ -29,14 +29,14 @@ test("the directory name must equal name", () => {
   assert.match(problems[0] ?? "", /must equal the directory name/);
 });
 
-test("version, licence, and tags are required of an entry", () => {
+test("licence and tags are required of an entry; version is not", () => {
   const problems = checkEntry(hubWith("demo", "name: demo\ndescription: A demo.\n"), "demo");
-  assert.equal(problems.length, 3);
+  assert.equal(problems.length, 2);
 });
 
 test("tags and based-on are checked for shape", () => {
   const frontmatter =
-    "name: demo\ndescription: A demo.\nversion: alpha\nlicense: MIT\nmetadata:\n  tags: [Bad Tag, ok, ok]\n  based-on: [not-a-url]\n";
+    "name: demo\ndescription: A demo.\nversion: 1.0.0\nlicense: MIT\nmetadata:\n  tags: [Bad Tag, ok, ok]\n  based-on: [not-a-url]\n";
   const problems = checkEntry(hubWith("demo", frontmatter), "demo").join("\n");
   assert.match(problems, /Bad Tag/);
   assert.match(problems, /lists a tag twice/);

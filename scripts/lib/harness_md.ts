@@ -6,7 +6,7 @@
 // `just fixtures-check` runs through both.
 import { isMap, isScalar, LineCounter, parseDocument } from "yaml";
 
-export type Severity = "error" | "warning" | "note";
+export type Severity = "error" | "warning";
 
 export interface Finding {
   severity: Severity;
@@ -15,10 +15,6 @@ export interface Finding {
   /** 1-based line in the file; 1 when the finding is about the file as a whole. */
   line: number;
 }
-
-/** Format versions, oldest first; the last one is what this validator supports. */
-export const VERSIONS = ["alpha"] as const;
-export const CURRENT_VERSION = VERSIONS[VERSIONS.length - 1] as string;
 
 /** The recommended second-level sections in specification order (section 5.2). */
 export const SECTIONS = [
@@ -233,27 +229,6 @@ function parseFrontmatter(
       line: present.get("description")?.line ?? 1,
     });
   }
-  const version = strings.version;
-  if (version !== undefined) {
-    const line = present.get("version")?.line ?? 1;
-    const index = (VERSIONS as readonly string[]).indexOf(version);
-    if (index === -1) {
-      findings.push({
-        severity: "warning",
-        code: "version-unknown",
-        message: `\`version: ${version}\` is not a version this validator knows (${VERSIONS.join(", ")}); the file was checked against \`${CURRENT_VERSION}\``,
-        line,
-      });
-    } else if (index < VERSIONS.length - 1) {
-      findings.push({
-        severity: "note",
-        code: "version-older",
-        message: `the file is written for \`${version}\`; the current version is \`${CURRENT_VERSION}\``,
-        line,
-      });
-    }
-  }
-
   const data = doc.toJS() as Record<string, unknown>;
   return { frontmatter: { keys, strings, data }, bodyStart: end + 1 };
 }

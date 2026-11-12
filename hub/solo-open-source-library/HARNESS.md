@@ -10,7 +10,7 @@ description: >-
   a snapshot, semantic versioning, and a changelog, asks for a short
   proposal only when the API changes, and keeps ceremony low everywhere
   else.
-version: alpha
+version: 1.0.0
 license: Apache-2.0
 metadata:
   tags:

@@ -106,11 +106,10 @@ def test_name_and_description_limits_are_warnings():
     }
 
 
-def test_version_rules():
-    assert codes(document("name: demo\ndescription: A demo.\nversion: alpha\n")) == []
-    assert codes(document("name: demo\ndescription: A demo.\nversion: beta\n")) == [
-        "version-unknown"
-    ]
+def test_version_is_any_string():
+    for value in ("1.0.0", "alpha", "2026-11", '"3"'):
+        text = document(f"name: demo\ndescription: A demo.\nversion: {value}\n")
+        assert codes(text) == []
     assert codes(document("name: demo\ndescription: A demo.\nversion: 1.0\n")) == [
         "key-type"
     ]

@@ -18,7 +18,7 @@ The contract is `openspec/specs/hub/spec.md`; `hub/README.md` (mirror:
   where the directory name equals the frontmatter `name`;
   nothing else in the hub root but the two READMEs.
 - No error, warning, or note from the format validator;
-  `version` and `license` present.
+  `license` present.
 - `metadata.tags`: a non-empty list of distinct lowercase hyphenated tags.
   `metadata.based-on`: optional list of http(s) URLs the entry was derived from.
   No other hub metadata.

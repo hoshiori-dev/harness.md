@@ -8,7 +8,7 @@
 // 1 findings, 2 bad arguments.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { CURRENT_VERSION, format, parseBytes } from "./lib/harness_md.ts";
+import { format, parseBytes } from "./lib/harness_md.ts";
 
 const TAG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -32,7 +32,7 @@ export function checkEntry(hub: string, entry: string): string[] {
   const file = join(dir, ENTRY_FILE);
   if (!existsSync(file)) return [`${dir}: an entry directory must contain ${ENTRY_FILE}`];
   const parsed = parseBytes(readFileSync(file));
-  // An entry has to be clean: warnings and notes count too.
+  // An entry has to be clean: warnings count too.
   const problems = format(file, parsed.findings);
   const frontmatter = parsed.frontmatter;
   if (!frontmatter) return problems;
@@ -42,9 +42,6 @@ export function checkEntry(hub: string, entry: string): string[] {
     say(
       `\`name: ${frontmatter.strings.name}\` must equal the directory name \`${entry}\`; rename one of them`,
     );
-  }
-  if (frontmatter.strings.version !== CURRENT_VERSION) {
-    say(`a hub entry states its format version; add \`version: ${CURRENT_VERSION}\``);
   }
   if (!frontmatter.strings.license) {
     say("a hub entry states its licence; add `license:` (the hub's own entries use Apache-2.0)");
