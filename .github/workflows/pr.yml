@@ -1,6 +1,7 @@
 # Pull-request hygiene and the archive gate. `checks / pr`: the title follows
-# Conventional Commits and the body keeps the template's sections with the
-# secrets item ticked (scripts/check_pr.ts). `checks / spec-archived`: reported
+# Conventional Commits and the body keeps the template's sections
+# (scripts/check_pr.ts); a pull request Dependabot opened
+# is checked on its title only. `checks / spec-archived`: reported
 # only while no OpenSpec change is unarchived (scripts/check_spec_archived.ts),
 # so the ruleset's required check is absent until the archive lands and the run
 # stays green meanwhile. Reruns on edits and ready/draft transitions without
@@ -31,6 +32,9 @@ jobs:
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}
+          # The login of the account that opened the pull request, which a
+          # later push or rerun by someone else does not change.
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: node scripts/check_pr.ts
   # Decides whether the tree holds an unarchived OpenSpec change. The verdict
   # depends on the tree alone, so every run on a commit agrees. Status 1 is a
