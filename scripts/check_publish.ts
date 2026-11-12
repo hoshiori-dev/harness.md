@@ -44,7 +44,13 @@ for (let i = 0; i < args.length; i++) {
       fail("--commits needs a git range, e.g. origin/main..HEAD");
     const log = run("git", ["log", "-p", "--format=fuller", range]);
     if (log.code !== 0) fail(`git log ${range} exited ${log.code}: ${log.stderr.trim()}`);
-    inputs.push({ label: `commits ${range}`, text: log.stdout, isLog: true });
+    // Removed lines are left out: they are already public on the base, and
+    // a commit that deletes a leak must not be blocked for showing it.
+    const text = log.stdout
+      .split("\n")
+      .filter((line) => !line.startsWith("-"))
+      .join("\n");
+    inputs.push({ label: `commits ${range}`, text, isLog: true });
   } else if (arg.startsWith("-")) {
     fail(`unknown argument ${arg}; pass files and --commits <range>`);
   } else {

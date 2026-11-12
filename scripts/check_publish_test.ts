@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { chmodSync } from "node:fs";
+import { chmodSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { makeTree, runScript } from "./lib/testing.ts";
@@ -71,6 +71,14 @@ test("check_publish scans commit authors and messages in a range", () => {
   const leaked = runScript("check_publish.ts", ["--commits", "HEAD~1..HEAD"], root, env);
   assert.equal(leaked.code, 1);
   assert.match(leaked.output, /commits HEAD~1\.\.HEAD \(commit [0-9a-f]{7}\): publish-email/);
+  // A commit that removes personal data passes: the removed line is not scanned.
+  git(["config", "user.email", "t@example.com"], "t@example.com");
+  writeFileSync(join(root, "a.txt"), `${PERSON_EMAIL}\n`);
+  git(["commit", "-qam", "chore: add"], "t@example.com");
+  writeFileSync(join(root, "a.txt"), "a\n");
+  git(["commit", "-qam", "chore: remove"], "t@example.com");
+  const removal = runScript("check_publish.ts", ["--commits", "HEAD~1..HEAD"], root, env);
+  assert.equal(removal.code, 0, removal.output);
 });
 
 test("check_publish fails on bad arguments", () => {
