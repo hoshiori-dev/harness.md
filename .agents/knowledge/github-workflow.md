@@ -22,7 +22,8 @@ who also reviews outside contributions. Remote settings:
 ## The loop
 
 1. Take an issue: `gh issue edit <n> --add-assignee @me`,
-   then `gh issue develop -c <n>`
+   then `gh issue develop -c <n>`;
+   for a task the maintainer gave without one, create the issue first
    (branch naming in `.agents/knowledge/git-workflow.md`).
 2. Open a draft pull request at once with `Closes #<n>`
    and the OpenSpec change directory (or `spec-less: <reason>`);
@@ -37,8 +38,9 @@ who also reviews outside contributions. Remote settings:
 6. Review, archive on the branch, squash merge by the maintainer;
    the branch is deleted.
 
-Every push, label, comment, and state change in this loop is an outward action:
-take it only when the plan or issue pre-authorised it
+Every issue, push, comment, and state change in this loop is an outward action.
+On the agent's own task it needs no approval, only the publishing gate;
+anything beyond the task is a pending decision
 (`.agents/knowledge/agent-authority.md`).
 Every such change is an explicit `gh` call; GitHub has no slash commands.
 Non-interactive issue creation ignores forms:
@@ -60,7 +62,8 @@ A new hub entry from a contributor needs no OpenSpec change
 Issues, pull requests, commits, and CI logs are public.
 Never paste tokens, local paths with user names, e-mail addresses,
 or session transcripts;
-betterleaks blocks commits locally and CI scans every pushed commit.
+betterleaks blocks commits locally, `just publish-check` runs before every
+push and every `gh` write, and CI scans every pushed commit.
 Session logs and handoff notes stay out of the repository.
 
 ## Synchronization
