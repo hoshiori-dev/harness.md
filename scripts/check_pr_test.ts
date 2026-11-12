@@ -26,7 +26,7 @@ test("check_pr accepts a conventional title and a complete body", () => {
   assert.equal(fromEnv.code, 0, fromEnv.output);
 });
 
-test("check_pr checks only the title of a pull request Dependabot opened", () => {
+test("check_pr checks only the title form of a pull request Dependabot opened", () => {
   const botBody = "Bumps typescript from 6.0.3 to 7.0.2.\n";
   const root = tree(botBody);
   const bot = runScript("check_pr.ts", [], root, {
@@ -35,6 +35,22 @@ test("check_pr checks only the title of a pull request Dependabot opened", () =>
     PR_AUTHOR: "dependabot[bot]",
   });
   assert.equal(bot.code, 0, bot.output);
+  const longTitle =
+    "ci: bump astral-sh/setup-uv from 10.3.2 to 10.3.3 in /.github/actions/setup-tools";
+  assert.ok(longTitle.length > 72);
+  const botLong = runScript("check_pr.ts", [], root, {
+    PR_TITLE: longTitle,
+    PR_BODY: botBody,
+    PR_AUTHOR: "dependabot[bot]",
+  });
+  assert.equal(botLong.code, 0, botLong.output);
+  const personLong = runScript("check_pr.ts", [], tree(goodBody), {
+    PR_TITLE: longTitle,
+    PR_BODY: goodBody,
+    PR_AUTHOR: "someone",
+  });
+  assert.equal(personLong.code, 1);
+  assert.match(personLong.output, /limit 72/);
   const badTitle = runScript(
     "check_pr.ts",
     ["--title", "Bump typescript", "--body-file", "body.md", "--author", "dependabot[bot]"],

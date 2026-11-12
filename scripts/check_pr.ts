@@ -2,8 +2,10 @@
 // Checks a pull request's title and body against this repository's rules:
 // the title is a Conventional Commits subject, and the body keeps every
 // heading of .github/pull_request_template.md.
-// A pull request opened by Dependabot is checked on its title only: the bot
-// writes its own body and cannot keep the template.
+// A pull request opened by Dependabot is checked only on the form of its
+// title: the bot writes its own body and cannot keep the template, and it
+// builds the title from the package, the versions, and the directory, so
+// its length is not something the bot or the project can set.
 //
 //   check_pr.ts --title "<title>" --body-file <path> [--author <login>]
 //   PR_TITLE=... PR_BODY=... [PR_AUTHOR=...] check_pr.ts
@@ -12,7 +14,8 @@ import { Findings, fail, readText } from "./lib/findings.ts";
 const TITLE_RE =
   /^(feat|fix|docs|refactor|test|chore|ci|build|perf|style|revert)(\([a-z0-9][a-z0-9-]*\))?!?: [a-z0-9].*$/;
 const TITLE_MAX = 72;
-const BODY_EXEMPT_AUTHORS = new Set(["dependabot[bot]"]);
+// Accounts whose pull requests are exempt from the body rules and the title length.
+const BOT_AUTHORS = new Set(["dependabot[bot]"]);
 
 const args = process.argv.slice(2);
 let title = process.env.PR_TITLE;
@@ -29,7 +32,7 @@ for (let i = 0; i < args.length; i += 2) {
     );
 }
 if (title === undefined) fail("no title: pass --title or set PR_TITLE");
-const bodyExempt = BODY_EXEMPT_AUTHORS.has(author);
+const bodyExempt = BOT_AUTHORS.has(author);
 if (body === undefined && !bodyExempt) fail("no body: pass --body-file or set PR_BODY");
 
 const findings = new Findings();
@@ -40,7 +43,7 @@ if (!TITLE_RE.test(title)) {
     problem: `"${title}" is not a Conventional Commits subject.`,
     fix: "use `<type>(<scope>)?: <lowercase subject>` with a type from feat, fix, docs, refactor, test, chore, ci, build, perf, style, revert.",
   });
-} else if (title.length > TITLE_MAX) {
+} else if (title.length > TITLE_MAX && !bodyExempt) {
   findings.add({
     file: "pull request title",
     rule: "pr-title",
@@ -50,7 +53,7 @@ if (!TITLE_RE.test(title)) {
 }
 
 if (bodyExempt || body === undefined) {
-  console.log(`check_pr: body not checked for a pull request opened by ${author}`);
+  console.log(`check_pr: body and title length not checked for a pull request opened by ${author}`);
   process.exit(findings.report("check_pr"));
 }
 const template = readText(".github/pull_request_template.md");
