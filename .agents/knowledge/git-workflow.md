@@ -25,7 +25,8 @@ short-lived issue branches, every version a tag of `main`.
 - A task that turns out to hold two independent changes goes back to the plan
   and is split there; do not carve commits out of a mixed diff by hunk.
 - Draft commits never leave the machine.
-  Push only after the task's commit exists,
+  Push only after the task's commit exists
+  and `just publish-check --commits <base>..HEAD` passes,
   and push one explicit ref (`git push origin HEAD`), never `--all`, `--mirror`,
   or `--tags`. Only unpushed history is rewritten; pushed history is reverted.
 - Squashing changes no content: the pre-commit hooks, betterleaks included,
