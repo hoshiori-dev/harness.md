@@ -309,8 +309,8 @@ so adding a job never needs a change to the branch rule.
 Three more statuses sit beside the gate:
 `secrets / scan`, a secret scan of the commits the push or pull request adds;
 `checks / pr`, the pull request title and body
-(a pull request Dependabot opened is checked on its title only,
-because the bot writes its own body);
+(a pull request Dependabot opened is checked only on the form of its title,
+because the bot writes its own body and sets the title's length);
 and `checks / spec-archived`,
 which is withheld while an OpenSpec change in the pull request is not archived,
 so that a change cannot merge half-finished.
