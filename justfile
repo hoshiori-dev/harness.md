@@ -89,7 +89,7 @@ secrets:
 
 # Secret scan of the commits in a git range (empty: the whole history); the secrets workflow runs it on the commits a push or pull request adds. The GIT_CONFIG_* variables let the git that betterleaks spawns trust the dev container's root-owned checkout.
 secrets-commits range="":
-    GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0='*' betterleaks git . --no-banner --redact {{ if range == "" { "" } else { "--log-opts=" + range } }}
+    GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0='*' betterleaks git . --no-banner --redact {{ if range == "" { "" } else { quote("--log-opts=" + range) } }}
 
 # Every pre-commit hook on every file.
 pre-commit:
