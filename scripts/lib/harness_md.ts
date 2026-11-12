@@ -1,5 +1,5 @@
 // The HARNESS.md format validator this repository runs on its own files (the
-// root HARNESS.md and every hub entry). It implements section 6 of
+// root HARNESS.md and every hub entry). It implements section 7 of
 // spec/spec.md and nothing else. A second implementation ships to users
 // inside the format skill (skills/harness-md/scripts/lint_harness_md.py);
 // the two are kept in step by the shared cases under spec/fixtures/, which
@@ -20,9 +20,8 @@ export interface Finding {
 export const VERSIONS = ["alpha"] as const;
 export const CURRENT_VERSION = VERSIONS[VERSIONS.length - 1] as string;
 
-/** The defined sections in specification order. */
+/** The recommended second-level sections in specification order (section 5.2). */
 export const SECTIONS = [
-  "Overview",
   "Context",
   "Invariants",
   "Style",
@@ -38,16 +37,6 @@ export const SECTIONS = [
   "References",
 ] as const;
 
-export const REQUIRED_SECTIONS = [
-  "Overview",
-  "Context",
-  "Environment",
-  "Knowledge",
-  "Feedback",
-  "Gates",
-  "Authority",
-] as const;
-
 export const KEYS = ["name", "description", "version", "license", "metadata"] as const;
 
 const NAME_MAX = 64;
@@ -55,6 +44,7 @@ const DESCRIPTION_MAX = 1024;
 const NAME_FORMAT = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const DELIMITER = /^---[ \t]*$/;
 const FENCE = /^ {0,3}(`{3,}|~{3,})/;
+const H1 = /^ {0,3}#(?:[ \t].*)?$/;
 const H2 = /^ {0,3}##(?!#)[ \t]+(.*)$/;
 
 export interface Frontmatter {
@@ -70,8 +60,10 @@ export interface Parsed {
   findings: Finding[];
   /** Absent when the frontmatter is missing or invalid. */
   frontmatter?: Frontmatter;
-  /** Defined sections found, in file order, with their lines. */
+  /** Recommended sections found, in file order, with their lines. */
   sections: { name: string; line: number }[];
+  /** Lines of the first-level headings in the body, in file order. */
+  titles: number[];
 }
 
 function codePoints(text: string): number {
@@ -85,7 +77,7 @@ function normalise(text: string): string[] {
 function parseFrontmatter(
   lines: string[],
   findings: Finding[],
-): { frontmatter?: Frontmatter; bodyStart: number } {
+): { frontmatter?: Frontmatter; bodyStart: number; noBody?: boolean } {
   if (!DELIMITER.test(lines[0] ?? "")) {
     findings.push({
       severity: "error",
@@ -105,7 +97,7 @@ function parseFrontmatter(
         "the frontmatter is never closed; add a line containing only `---` after the last key",
       line: 1,
     });
-    return { bodyStart: lines.length };
+    return { bodyStart: lines.length, noBody: true };
   }
   const source = lines.slice(1, end).join("\n");
   const lineCounter = new LineCounter();
@@ -266,8 +258,12 @@ function parseFrontmatter(
   return { frontmatter: { keys, strings, data }, bodyStart: end + 1 };
 }
 
-function findSections(lines: string[], bodyStart: number): { name: string; line: number }[] {
+function findHeadings(
+  lines: string[],
+  bodyStart: number,
+): { sections: { name: string; line: number }[]; titles: number[] } {
   const found: { name: string; line: number }[] = [];
+  const titles: number[] = [];
   const defined: readonly string[] = SECTIONS;
   let fence: { char: string; length: number } | undefined;
   for (let index = bodyStart; index < lines.length; index++) {
@@ -288,41 +284,58 @@ function findSections(lines: string[], bodyStart: number): { name: string; line:
       fence = { char: fenceMatch[1].charAt(0), length: fenceMatch[1].length };
       continue;
     }
+    if (H1.test(line)) {
+      titles.push(index + 1);
+      continue;
+    }
     const heading = H2.exec(line);
     if (!heading) continue;
     const text = (heading[1] ?? "").replace(/[ \t]+#+[ \t]*$/, "").trim();
     if (defined.includes(text)) found.push({ name: text, line: index + 1 });
   }
-  return found;
+  return { sections: found, titles };
 }
 
-/** Parse a HARNESS.md and collect every finding of spec/spec.md section 6. */
+/** Parse a HARNESS.md and collect every finding of spec/spec.md section 7. */
 export function parse(text: string): Parsed {
   const findings: Finding[] = [];
   const lines = normalise(text);
-  const { frontmatter, bodyStart } = parseFrontmatter(lines, findings);
-  const sections = findSections(lines, bodyStart);
+  const { frontmatter, bodyStart, noBody } = parseFrontmatter(lines, findings);
+  const { sections, titles } = findHeadings(lines, bodyStart);
 
-  const firstLine = new Map<string, number>();
-  for (const section of sections) {
-    if (firstLine.has(section.name)) {
+  // An unclosed frontmatter leaves no body to look at; say nothing about it.
+  if (!noBody) {
+    if (titles.length === 0) {
       findings.push({
-        severity: "error",
-        code: "section-duplicate",
-        message: `the section \`${section.name}\` appears more than once (first on line ${firstLine.get(section.name)}); merge them`,
-        line: section.line,
+        severity: "warning",
+        code: "title-missing",
+        message:
+          "the body has no first-level heading; start it with a `# Title` line, followed by an introduction",
+        line: Math.min(bodyStart + 1, lines.length),
       });
-    } else {
-      firstLine.set(section.name, section.line);
+    } else if (titles.length > 1) {
+      findings.push({
+        severity: "warning",
+        code: "title-multiple",
+        message: `the body has ${titles.length} first-level headings (the first on line ${titles[0]}); keep one as the title of the document`,
+        line: titles[1] ?? 1,
+      });
     }
   }
-  for (const name of REQUIRED_SECTIONS) {
-    if (!firstLine.has(name)) {
+
+  const firstLine = new Map<string, number>();
+  const repeated = new Set<string>();
+  for (const section of sections) {
+    if (!firstLine.has(section.name)) {
+      firstLine.set(section.name, section.line);
+    } else if (!repeated.has(section.name)) {
+      // Once for each repeated name, however often it repeats.
+      repeated.add(section.name);
       findings.push({
-        severity: "error",
-        code: "section-missing",
-        message: `the required section \`## ${name}\` is missing; a layer the project does nothing in still needs its section, saying so and why`,
-        line: 1,
+        severity: "warning",
+        code: "section-duplicate",
+        message: `the recommended section \`${section.name}\` appears more than once (first on line ${firstLine.get(section.name)}); merge them`,
+        line: section.line,
       });
     }
   }
@@ -334,7 +347,7 @@ export function parse(text: string): Parsed {
       findings.push({
         severity: "warning",
         code: "section-order",
-        message: `\`${name}\` comes after \`${latest.name}\`; the specification puts it before`,
+        message: `\`${name}\` comes after \`${latest.name}\`; the recommended order puts it before`,
         line,
       });
     } else {
@@ -343,11 +356,33 @@ export function parse(text: string): Parsed {
   }
 
   findings.sort((a, b) => a.line - b.line);
-  return { findings, frontmatter, sections };
+  return { findings, frontmatter, sections, titles };
 }
 
 export function lint(text: string): Finding[] {
   return parse(text).findings;
+}
+
+const ENCODING_INVALID: Finding = {
+  severity: "error",
+  code: "encoding-invalid",
+  message: "the file is not valid UTF-8 text; save it as UTF-8",
+  line: 1,
+};
+
+/** Parse the bytes of a file; a file that is not UTF-8 gets that one finding and no other. */
+export function parseBytes(bytes: Uint8Array): Parsed {
+  let text: string;
+  try {
+    text = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(bytes);
+  } catch {
+    return { findings: [{ ...ENCODING_INVALID }], sections: [], titles: [] };
+  }
+  return parse(text);
+}
+
+export function lintBytes(bytes: Uint8Array): Finding[] {
+  return parseBytes(bytes).findings;
 }
 
 /** One line per finding, in the shape editors and CI logs link: `path:line: severity[code]: message`. */

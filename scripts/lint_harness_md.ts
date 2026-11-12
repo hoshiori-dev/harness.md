@@ -1,4 +1,4 @@
-// Validate HARNESS.md files against spec/spec.md section 6.
+// Validate HARNESS.md files against spec/spec.md section 7.
 //
 //   node scripts/lint_harness_md.ts [--json] [--strict] [<path>...]
 //   node scripts/lint_harness_md.ts --fixtures <dir>
@@ -7,7 +7,7 @@
 // 0 no errors (and, with --strict, no warnings), 1 findings, 2 bad arguments.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { type Finding, format, lint } from "./lib/harness_md.ts";
+import { type Finding, format, lintBytes } from "./lib/harness_md.ts";
 
 const USAGE = `usage: node scripts/lint_harness_md.ts [--json] [--strict] [<path>...]
        node scripts/lint_harness_md.ts --fixtures <dir>
@@ -60,7 +60,7 @@ export function runFixtures(dir: string): string[] {
       problems.push(`${key}: no entry in expected.json`);
       continue;
     }
-    const got = lint(readFileSync(file, "utf8"))
+    const got = lintBytes(readFileSync(file))
       .map((f) => f.code)
       .sort();
     const wanted = [...want].sort();
@@ -125,7 +125,7 @@ function main(argv: string[]): number {
       console.error(`${path}: not a file`);
       return 2;
     }
-    results.push({ path, findings: lint(readFileSync(path, "utf8")) });
+    results.push({ path, findings: lintBytes(readFileSync(path)) });
   }
   const count = (severity: string) =>
     results.reduce((sum, r) => sum + r.findings.filter((f) => f.severity === severity).length, 0);

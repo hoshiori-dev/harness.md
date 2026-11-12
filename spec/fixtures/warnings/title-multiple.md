@@ -5,9 +5,7 @@ description: A fixture for the validator.
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 
@@ -21,14 +19,22 @@ Placeholder text.
 
 Placeholder text.
 
+# Second title
+
+Placeholder text.
+
 ## Feedback
 
 Placeholder text.
 
-## gates
+## Gates
 
 Placeholder text.
 
 ## Authority
+
+Placeholder text.
+
+# Third title
 
 Placeholder text.

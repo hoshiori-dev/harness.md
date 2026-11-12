@@ -126,13 +126,18 @@ decisions) and SHALL create or change no file before the user approves it.
 
 ### Requirement: Layers are built in order through their builders
 The agent SHALL build Environment, Knowledge, Feedback, Gates, Authority,
-Completion, and Entropy in that order, skipping an absent optional section,
+Completion, and Entropy in that order,
+skipping Completion or Entropy when the design is silent on it,
 each through the installed skill that claims the layer in build mode, and
 SHALL commit each verified layer without attribution and without pushing.
 
-#### Scenario: Optional section absent
-- **WHEN** the design has no Entropy section
+#### Scenario: Design silent on Entropy
+- **WHEN** the design has no Entropy section and covers the subject nowhere else
 - **THEN** no Entropy artifact is built and the closing report says nothing keeps the file and the harness in step
+
+#### Scenario: Core section missing in a file written elsewhere
+- **WHEN** the design has no `## Gates` section
+- **THEN** the agent looks for the subject elsewhere in the file and plans from that text; when the file is silent, the plan lists the builder's defaults for the file's Context as assumptions for the user to approve or strike
 
 #### Scenario: No builder installed for a layer
 - **WHEN** no installed skill claims the Gates layer

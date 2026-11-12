@@ -72,10 +72,18 @@ project's own.
 **The format in brief.** A `HARNESS.md` is YAML frontmatter followed by a
 Markdown body. Frontmatter: `name` and `description` are required;
 `version`, `license`, and `metadata` are optional; any other top-level key
-is an error. Body: second-level headings with exactly these English names,
-in this order, required ones marked `*`: Overview*, Context*, Invariants,
-Style, File Structure, Environment*, Knowledge*, Feedback*, Gates*,
-Authority*, Completion, Entropy, Open Questions, References. The prose may
+is an error. Body: free-form. It opens with one first-level heading, the title,
+and an introduction with no heading of its own:
+who the harness serves, what it is meant to achieve,
+what it leaves unmanaged, and what always stays with a human.
+The format requires no section. It recommends these second-level headings,
+with exactly these English names and in this order: Context, Invariants,
+Style, File Structure, Environment, Knowledge, Feedback, Gates, Authority,
+Completion, Entropy, Open Questions, References.
+A design of a complete harness usually covers Context and the five core
+layers (Environment, Knowledge, Feedback, Gates, Authority);
+a file that describes only part of a harness may leave out any of them.
+The prose may
 be in any language; the headings are never translated; other sections may
 appear anywhere. For the full rules and the validator script, load the
 skill that reads, writes, and validates `HARNESS.md`; without it, check
@@ -140,17 +148,19 @@ Open Questions and is shown with the draft.
 Done when: every Context condition is observed, a confirmed inference, or
 the user's answer.
 
-### 4. Write Overview and Context
+### 4. Write the introduction and Context
 
 Read [references/sections.md](references/sections.md) before writing any
-section yourself; it holds what each of the seven sections outside the
-layers must contain. Write Overview (who the harness serves, what it is
+part yourself; it holds what the introduction and each of the six sections
+outside the layers must contain. Write the introduction, which sits under
+the title with no heading of its own (who the harness serves, what it is
 meant to achieve, what it does not police, what always stays with a human)
 and Context (the given conditions from step 3 and the observed facts the
 design has to fit). A goal that reaches beyond the harness (splitting a
-monolith, changing a framework) is named in Overview as outside the design.
+monolith, changing a framework)
+is named in the introduction as outside the design.
 
-Done when: both sections are drafted and every later default can cite a
+Done when: both are drafted and every later default can cite a
 sentence of Context.
 
 ### 5. Collect the layer sections
@@ -159,13 +169,17 @@ For each layer in this order: Environment, Knowledge, Feedback, Gates,
 Authority, Completion, Entropy. Find the installed skill whose description
 contains `Owns the <Layer> layer`, load it, and hand over in **design**
 mode: the Context, the goal, what step 2 observed for this layer, anything
-Overview rules out, and the layer's existing section when the start is a
+the introduction rules out, and the layer's existing section when the start is a
 design from elsewhere or a revision. Take back the section as prose, the
 defaults it applied, and the questions no default could answer.
 
-- Environment, Knowledge, Feedback, Gates, and Authority always get a
-  section. A layer that should do nothing gets a section that says so and
-  why.
+- The design describes the complete harness unless the user asked for
+  only some aspects of it. A complete design has a section for each of
+  Environment, Knowledge, Feedback, Gates, and Authority;
+  a layer that should do nothing gets a section that says so and why.
+- A design of only some aspects has the sections for those aspects alone.
+  Collect only the layers the user named,
+  and say in the introduction what the file covers and what it leaves out.
 - Completion and Entropy get a section unless the builder returns that the
   layer should be left out for this Context; then the section is absent and
   the reason goes into the approval summary.
@@ -180,7 +194,9 @@ one some section creates; no two sections decide the same thing
 differently. Fix a disagreement by returning to the builder of the layer
 that owns the topic.
 
-Done when: every required layer has a section, and the cross-reading finds
+Done when: a complete design has a section for each of the five core
+layers, a partial design has the sections the user asked for,
+and the cross-reading finds
 no disagreement.
 
 ### 6. Write the remaining sections and the frontmatter
@@ -189,8 +205,8 @@ Following references/sections.md, write Invariants, Style, and File
 Structure where the design has something to say, then Open Questions (every
 question a builder returned, every unresolved contradiction, every
 suggested replacement of a working habit) and References (outside material
-the design actually relied on, each one checked to exist). Leave out an
-optional section that would be empty.
+the design actually relied on, each one checked to exist). Leave out any
+of these that would be empty.
 
 Rework [assets/harness-skeleton.md](assets/harness-skeleton.md) into the
 file: it gives the frontmatter and the heading order. Frontmatter: `name`
@@ -199,7 +215,9 @@ file: it gives the frontmatter and the heading order. Frontmatter: `name`
 most 1024 characters). Add `license` only when the user intends to publish
 the file; leave `version` and `metadata` out unless the user asks for them.
 
-Done when: the draft has frontmatter and every required section, in order.
+Done when: the draft has frontmatter, a title, and an introduction,
+and its sections are in the recommended order;
+a complete design also has Context and the five core layer sections.
 
 ### 7. Review and validate the draft
 

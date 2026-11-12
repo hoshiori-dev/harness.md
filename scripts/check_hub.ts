@@ -8,9 +8,10 @@
 // 1 findings, 2 bad arguments.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { CURRENT_VERSION, format, parse } from "./lib/harness_md.ts";
+import { CURRENT_VERSION, format, parseBytes } from "./lib/harness_md.ts";
 
 const TAG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
 const ENTRY_FILE = "HARNESS.md";
 /** Files that may sit in hub/ beside the entry directories. */
 const HUB_FILES = new Set(["README.md", "README.zh.md"]);
@@ -30,7 +31,7 @@ export function checkEntry(hub: string, entry: string): string[] {
   const dir = join(hub, entry);
   const file = join(dir, ENTRY_FILE);
   if (!existsSync(file)) return [`${dir}: an entry directory must contain ${ENTRY_FILE}`];
-  const parsed = parse(readFileSync(file, "utf8"));
+  const parsed = parseBytes(readFileSync(file));
   // An entry has to be clean: warnings and notes count too.
   const problems = format(file, parsed.findings);
   const frontmatter = parsed.frontmatter;

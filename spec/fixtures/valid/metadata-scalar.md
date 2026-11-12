@@ -1,15 +1,14 @@
 ---
 name: fixture
 description: A fixture for the validator.
+metadata: just a string
 ---
 
 # Fixture
 
-## Overview
+Placeholder introduction.
 
-Placeholder text.
-
-### Context
+## Context
 
 Placeholder text.
 

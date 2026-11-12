@@ -2,7 +2,7 @@
 name: fixture-2
 description: >-
   A fixture with every key
-  and every section.
+  and every recommended section.
 version: alpha
 license: Apache-2.0
 metadata:
@@ -11,9 +11,7 @@ metadata:
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 

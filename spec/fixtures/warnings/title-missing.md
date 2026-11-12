@@ -3,12 +3,6 @@ name: fixture
 description: A fixture for the validator.
 ---
 
-# Fixture
-
-## Overview
-
-Placeholder text.
-
 ## Context
 
 Placeholder text.
@@ -30,9 +24,5 @@ Placeholder text.
 Placeholder text.
 
 ## Authority
-
-Placeholder text.
-
-## Gates
 
 Placeholder text.

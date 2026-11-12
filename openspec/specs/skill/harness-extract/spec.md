@@ -53,11 +53,11 @@ sentence of a layer section SHALL trace to an artifact it found.
 - **WHEN** the entrypoint names a test command the task runner does not define
 - **THEN** the description records both facts and lists the contradiction under Open Questions, without choosing a corrected command
 
-#### Scenario: Required layer with nothing found
-- **WHEN** the repository has no permission file, policy, or platform configuration
+#### Scenario: Core layer with nothing found
+- **WHEN** a whole extraction finds no permission file, policy, or platform configuration
 - **THEN** the Authority section says nothing was found and lists what was looked for, worded as an observation and not as the project's decision
 
-#### Scenario: Optional layer with nothing found
+#### Scenario: Completion or Entropy with nothing found
 - **WHEN** nothing for Entropy is found
 - **THEN** the file has no Entropy section and the closing summary says what was looked for
 

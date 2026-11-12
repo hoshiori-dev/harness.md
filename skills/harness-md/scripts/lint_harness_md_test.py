@@ -16,14 +16,22 @@ assert SPEC and SPEC.loader
 lint_harness_md = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(lint_harness_md)
 
-REQUIRED = lint_harness_md.REQUIRED_SECTIONS
+CORE = ["Context", "Environment", "Knowledge", "Feedback", "Gates", "Authority"]
+TITLE = "# Demo\n\nAn introduction.\n\n"
 
 
 def document(
-    frontmatter: str = "name: demo\ndescription: A demo.\n", sections=None
+    frontmatter: str = "name: demo\ndescription: A demo.\n",
+    sections=None,
+    title: str = TITLE,
 ) -> str:
-    body = "".join(f"## {name}\n\nText.\n\n" for name in (sections or REQUIRED))
-    return f"---\n{frontmatter}---\n\n# Demo\n\n{body}"
+    names = CORE if sections is None else sections
+    body = "".join(f"## {name}\n\nText.\n\n" for name in names)
+    return f"---\n{frontmatter}---\n\n{title}{body}"
+
+
+def kinds(text: str) -> list[tuple[str, str]]:
+    return [(f["severity"], f["code"]) for f in lint_harness_md.lint(text)]
 
 
 def codes(text: str) -> list[str]:
@@ -52,21 +60,40 @@ def test_metadata_is_never_inspected():
     assert codes(document(frontmatter)) == []
 
 
-def test_missing_required_section_and_optional_absence():
-    without_gates = [name for name in REQUIRED if name != "Gates"]
-    assert codes(document(sections=without_gates)) == ["section-missing"]
+def test_no_section_is_required_and_overview_is_an_ordinary_heading():
+    assert codes(document(sections=[])) == []
+    assert codes(document(sections=["Gates"])) == []
+    assert codes(document(sections=["Overview", "Context", "Overview"])) == []
+    assert "Overview" not in lint_harness_md.SECTIONS
+    assert len(lint_harness_md.SECTIONS) == 13
 
 
-def test_order_is_a_warning_and_duplicate_an_error():
-    swapped = ["Context", "Overview", *REQUIRED[2:]]
-    assert codes(document(sections=swapped)) == ["section-order"]
-    assert codes(document(sections=[*REQUIRED, "Gates"])) == ["section-duplicate"]
+def test_order_and_repetition_are_warnings_reported_once_per_name():
+    swapped = ["Environment", "Context", *CORE[2:]]
+    assert kinds(document(sections=swapped)) == [("warning", "section-order")]
+    assert kinds(document(sections=[*CORE, "Gates", "Gates"])) == [
+        ("warning", "section-duplicate")
+    ]
 
 
 def test_headings_inside_fences_and_other_levels_do_not_count():
-    text = document(sections=[n for n in REQUIRED if n != "Authority"])
-    text += "```\n## Authority\n```\n\n### Authority\n"
-    assert codes(text) == ["section-missing"]
+    text = document() + "```\n## Gates\n# Another title\n```\n\n### Gates\n"
+    assert codes(text) == []
+
+
+def test_missing_or_repeated_first_level_heading_is_a_warning():
+    assert kinds(document(title="")) == [("warning", "title-missing")]
+    assert kinds(document() + "# Second\n\n# Third\n") == [
+        ("warning", "title-multiple")
+    ]
+    assert codes(document(title="Demo\n====\n\n")) == ["title-missing"]
+    assert codes(document(title="   # Demo #\n\n")) == []
+
+
+def test_unclosed_frontmatter_is_the_only_finding():
+    assert codes("---\nname: demo\ndescription: A demo.\n\n# Demo\n") == [
+        "frontmatter-invalid"
+    ]
 
 
 def test_name_and_description_limits_are_warnings():
@@ -109,8 +136,18 @@ def test_cli_exit_codes_and_json(tmp_path, capsys):
 
     assert lint_harness_md.main(["--json", str(bad)]) == 1
     report = json.loads(capsys.readouterr().out)
-    assert report["errors"] == 8
+    assert report["errors"] == 1
+    assert report["warnings"] == 1
     assert report["files"][0]["findings"][0]["code"] == "frontmatter-missing"
+
+
+def test_file_that_is_not_utf8_gets_one_error(tmp_path, capsys):
+    found = lint_harness_md.lint_bytes(b"---\nname: \xff\n---\n")
+    assert [f["code"] for f in found] == ["encoding-invalid"]
+    bad = tmp_path / "latin1.md"
+    bad.write_bytes("---\nname: caf\u00e9\n---\n".encode("latin-1"))
+    assert lint_harness_md.main([str(bad)]) == 1
+    assert "error[encoding-invalid]" in capsys.readouterr().out
 
 
 def test_help_exits_zero(capsys):

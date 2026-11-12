@@ -11,7 +11,7 @@ Apart from the four workflows, the plugin's skills load on their own when a task
 
 The `harness-md` skill, which shares its name with the plugin, reads, writes, and validates a `HARNESS.md`. It comes with three things: a copy of the [specification](../../spec/); a writing standard, which says how complete a section has to be for the harness to be built from the file alone; and the validator script.
 
-The validator checks the format of a single file: the frontmatter, the required sections, their order. It does not judge the prose, and the plugin ships no tool that compares two files.
+The validator checks the format of a single file: the frontmatter, the title, and the order and repetition of the recommended sections. It requires no section. It does not judge the prose, and the plugin ships no tool that compares two files.
 
 ## The methodology manual
 

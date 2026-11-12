@@ -53,7 +53,13 @@ The agent SHALL work in the mode the handover names or the request implies. In d
 - **THEN** the agent returns findings, each with a severity of high, medium, or low, evidence as a path and line, the sentence of the section concerned, and whether to fix the artifact or amend the design, and no file changes
 
 ### Requirement: Behavior: An absent section means the layer is omitted
-When the project's `HARNESS.md` has no Completion section, the agent in build or audit mode SHALL report that the design omits the layer and SHALL write nothing. In audit mode it SHALL add one finding when the project nevertheless runs a specification tool or keeps a specification contract.
+When the project's `HARNESS.md` has no Completion section
+and covers the subject nowhere else,
+the agent in build or audit mode SHALL report that the design omits the layer
+and SHALL write nothing.
+In audit mode it SHALL add one finding
+when the project nevertheless runs a specification tool
+or keeps a specification contract.
 
 #### Scenario: Build with no section
 - **WHEN** build mode runs on a design without a Completion section

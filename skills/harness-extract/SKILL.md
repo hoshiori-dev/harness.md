@@ -62,10 +62,18 @@ project's own.
 **The format in brief.** A `HARNESS.md` is YAML frontmatter followed by a
 Markdown body. Frontmatter: `name` and `description` are required;
 `version`, `license`, and `metadata` are optional; any other top-level key
-is an error. Body: second-level headings with exactly these English names,
-in this order, required ones marked `*`: Overview*, Context*, Invariants,
-Style, File Structure, Environment*, Knowledge*, Feedback*, Gates*,
-Authority*, Completion, Entropy, Open Questions, References. The prose may
+is an error. Body: free-form. It opens with one first-level heading, the title,
+and an introduction with no heading of its own:
+who the harness serves, what it is meant to achieve,
+what it leaves unmanaged, and what always stays with a human.
+The format requires no section. It recommends these second-level headings,
+with exactly these English names and in this order: Context, Invariants,
+Style, File Structure, Environment, Knowledge, Feedback, Gates, Authority,
+Completion, Entropy, Open Questions, References.
+A design of a complete harness usually covers Context and the five core
+layers (Environment, Knowledge, Feedback, Gates, Authority);
+a file that describes only part of a harness may leave out any of them.
+The prose may
 be in any language; the headings are never translated; other sections may
 appear anywhere. For the full rules and the validator script, load the
 skill that reads, writes, and validates `HARNESS.md`; without it, check
@@ -126,21 +134,27 @@ contains `Owns the <Layer> layer`, load it, and hand over in **extract**
 mode: the inventory rows for its layer, and the project location. Take
 back the section as prose, with inferred intent marked.
 
-- A required layer (Environment, Knowledge, Feedback, Gates, Authority)
+- An extraction describes the whole harness unless the user asked for
+  only some aspects. In a whole extraction,
+  a core layer (Environment, Knowledge, Feedback, Gates, Authority)
   with nothing found still gets its section. It says that nothing was found
   for the layer and lists what was looked for, worded as an observation,
   never as the project's decision.
-- An optional layer (Completion, Entropy) with nothing found gets no
+  In an extraction of some aspects, only those layers are handed over,
+  and the introduction says what the file covers.
+- Completion or Entropy with nothing found gets no
   section; the closing report says what was looked for.
 - When no installed skill claims a layer, write its section yourself from
   the inventory with the methodology manual skill, and record the gap.
 
-Done when: every required layer has a section and every sentence in every
+Done when: a whole extraction has a section for each of the five core
+layers, a partial one has the sections asked for, and every sentence in every
 section traces to an inventory row.
 
 ### 4. Write the remaining sections
 
-- **Overview**: who the harness serves and what it is for, from the
+- **The introduction** (paragraphs under the title, with no heading of
+  their own): who the harness serves and what it is for, from the
   entrypoint, the README, and the contribution documents; what it visibly
   does not police; what the project keeps for humans (who merges, who
   releases), from permission files and platform configuration. Mark
@@ -167,7 +181,9 @@ section traces to an inventory row.
 Frontmatter: `name` and `description`. The description says whose harness
 this describes and that it was extracted, not designed.
 
-Done when: every required section exists and the headings are in order.
+Done when: the file has a title and an introduction,
+a whole extraction also has Context and the five core layer sections,
+and the headings are in order.
 
 ### 5. Generalise, only when asked
 

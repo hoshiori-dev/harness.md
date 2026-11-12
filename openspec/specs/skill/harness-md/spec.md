@@ -48,8 +48,8 @@ Given a validation task, it SHALL run the validator, explain each finding, and
 fix errors. It SHALL NOT present a validator pass as a review of the design.
 
 #### Scenario: Repairing a malformed file
-- **WHEN** the skill is given a file with `tags:` at the top level, a `## 概述` heading, and no Feedback section
-- **THEN** the result moves `tags` under `metadata`, restores the `## Overview` heading while keeping the Chinese prose, adds a Feedback section or asks what it should say, and the validator exits 0
+- **WHEN** the skill is given a file with `tags:` at the top level, a `## 背景` heading, no first-level heading, and no Feedback section
+- **THEN** the result moves `tags` under `metadata`, restores the `## Context` heading while keeping the Chinese prose, adds a title, asks whether the file is meant to describe the whole harness before adding a Feedback section, and the validator exits 0 with no warning
 
 #### Scenario: Writing one section
 - **WHEN** the user asks for a Gates section for a described project

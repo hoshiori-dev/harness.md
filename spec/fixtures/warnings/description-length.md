@@ -5,9 +5,7 @@ description: ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 

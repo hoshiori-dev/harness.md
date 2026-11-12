@@ -5,9 +5,7 @@ description: {{DESCRIPTION}} # CONFIGURE: what this design is and what kind of p
 
 # {{TITLE}} <!-- # CONFIGURE: free; usually the project's name and "agent harness" -->
 
-## Overview
-
-<!-- Who the harness serves, what it is meant to achieve, what it does not police, what always stays with a human. -->
+<!-- Introduction, in ordinary paragraphs with no heading of its own. Who the harness serves, what it is meant to achieve, what it does not police, what always stays with a human. -->
 
 ## Context
 

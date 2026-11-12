@@ -73,6 +73,7 @@ and recommend the design workflow, which can start from the same file.
 
 ## What stays untouched in both cases
 
-Overview's "what stays with a human" and every Authority sentence are never
+The introduction's "what stays with a human" and every Authority sentence
+are never
 loosened by an adaptation. A condition that would justify giving agents
 more room than the file gives is reported as a suggestion, not applied.

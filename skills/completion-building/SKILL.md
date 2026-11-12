@@ -83,7 +83,9 @@ defined. `HARNESS.md` and its section names may be named: the file is the
 project's own.
 <!-- /shared:deposited-files-stand-alone -->
 
-- **Completion is optional.** A `HARNESS.md` without a Completion section
+- **Completion is optional.** A `HARNESS.md` that has no Completion section
+  and covers the subject nowhere else (not in the introduction, another
+  section, or a custom heading)
   has omitted the layer. In build mode report "Completion: omitted by the
   design", write nothing, and go to step 6. In audit mode do the same, plus
   one finding when step 1 shows the project nevertheless runs a

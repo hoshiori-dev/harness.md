@@ -104,10 +104,18 @@ project's own.
 **The format in brief.** A `HARNESS.md` is YAML frontmatter followed by a
 Markdown body. Frontmatter: `name` and `description` are required;
 `version`, `license`, and `metadata` are optional; any other top-level key
-is an error. Body: second-level headings with exactly these English names,
-in this order, required ones marked `*`: Overview*, Context*, Invariants,
-Style, File Structure, Environment*, Knowledge*, Feedback*, Gates*,
-Authority*, Completion, Entropy, Open Questions, References. The prose may
+is an error. Body: free-form. It opens with one first-level heading, the title,
+and an introduction with no heading of its own:
+who the harness serves, what it is meant to achieve,
+what it leaves unmanaged, and what always stays with a human.
+The format requires no section. It recommends these second-level headings,
+with exactly these English names and in this order: Context, Invariants,
+Style, File Structure, Environment, Knowledge, Feedback, Gates, Authority,
+Completion, Entropy, Open Questions, References.
+A design of a complete harness usually covers Context and the five core
+layers (Environment, Knowledge, Feedback, Gates, Authority);
+a file that describes only part of a harness may leave out any of them.
+The prose may
 be in any language; the headings are never translated; other sections may
 appear anywhere. For the full rules and the validator script, load the
 skill that reads, writes, and validates `HARNESS.md`; without it, check
@@ -176,9 +184,16 @@ answered.
 
 Derive the plan from the design, one layer at a time, in this order:
 Environment, Knowledge, Feedback, Gates, Authority, Completion, Entropy. A
-layer whose optional section (Completion, Entropy) is absent is skipped. A
 section that says the project does nothing there is recorded as "nothing
 to build" with its reason.
+The format requires no section, so a file written elsewhere may lack one.
+A missing section is not a decision: look for the layer's subject in the
+introduction, in another section, or under a custom heading,
+and plan from that text.
+When the file says nothing about Completion or Entropy, skip the layer.
+When it says nothing about one of the five core layers,
+plan the builder's defaults for the file's Context
+and list them in the plan as assumptions the user approves or strikes.
 
 1. Assign Invariants, Style, and File Structure to the layers:
 

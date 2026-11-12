@@ -65,9 +65,12 @@ Conventions every builder and workflow shares:
   stays within its budget; otherwise it hands back a "route owed" (the
   situation and the file). The build workflow passes routes owed to the
   Knowledge builder.
-- **Audit with no section.** A required layer is compared with the step 2
+- **Audit with no section.** The format requires no section, so a missing
+  one is not a decision: the workflow first looks for the layer's subject
+  elsewhere in the file. A core layer (Environment, Knowledge, Feedback,
+  Gates, Authority) the file is silent on is compared with the step 2
   defaults for the project's Context and each finding is marked "no design
-  to compare with"; an optional layer with no section is reported as
+  to compare with"; Completion or Entropy the file is silent on is reported as
   omitted by the design.
 - **Keep In Sync marker.** The entrypoint's `## Keep In Sync` section
   carries `<!-- harness: keep-in-sync -->`; Knowledge writes it when the

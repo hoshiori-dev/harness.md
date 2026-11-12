@@ -5,9 +5,7 @@ description: A fixture for the validator.
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 
@@ -36,7 +34,9 @@ Placeholder text.
 ## Example
 
 ````markdown
-## Overview
+# Another title
+
+## Context
 
 ```
 ## Gates
@@ -44,5 +44,7 @@ Placeholder text.
 ````
 
 ~~~
+# Yet another title
+
 ## Authority
 ~~~

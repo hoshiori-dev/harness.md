@@ -3,11 +3,10 @@ name: fixture
 description: A fixture for the validator.
 ---
 
-# Fixture
+Fixture
+=======
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 
@@ -18,6 +17,10 @@ Placeholder text.
 Placeholder text.
 
 ## Knowledge
+
+Placeholder text.
+
+## Feedback
 
 Placeholder text.
 

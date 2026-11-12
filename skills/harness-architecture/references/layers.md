@@ -50,7 +50,7 @@ entropy last because it checks everything before it.
 
 | Section | What it holds | Where it becomes real |
 | --- | --- | --- |
-| Overview | Who the harness serves, what it achieves, what it does not police, what stays with a human | The frame every layer is judged against |
+| The introduction (under the title, no heading of its own) | Who the harness serves, what it achieves, what it does not police, what stays with a human | The frame every layer is judged against |
 | Context | The given conditions the design has to fit | The reason behind each layer's amount |
 | Invariants | Cross-layer rules every task follows | Knowledge (the always-on rules of the entrypoint), Gates (each one a check can enforce), Authority (each one about what an agent may do) |
 | Style | The shape the code should have so agents can work in it | Gates (what a formatter, linter, type checker, or structure check enforces), Knowledge (conventions an agent has to read), Feedback (test granularity) |
@@ -62,10 +62,17 @@ Style comes before the layers because the more the code explains itself
 (cohesive modules, constraints in types, one entry for commands), the less
 the layers have to explain around it.
 
-## Required and optional
+## Core layers and the rest
 
-Environment, Knowledge, Feedback, Gates, and Authority are always present
-in a design, even when a section says the project does nothing there and
-why: a decision not to act must not look like a forgotten section.
-Completion and Entropy may be left out; an absent section means the project
-does nothing for that layer.
+The format requires no section, and neither does the method.
+To describe a complete harness, the recommended way is a section for each
+of Environment, Knowledge, Feedback, Gates, and Authority,
+even when a section says the project does nothing there and why:
+in a design meant to be complete,
+a decision not to act must not look like a forgotten section.
+Completion and Entropy may be left out when the design does nothing for
+that layer.
+A `HARNESS.md` may also describe only some aspects of a harness;
+it then has only the sections for those aspects.
+In a file written elsewhere, a missing section says nothing by itself:
+the subject may be covered in the introduction or under another heading.

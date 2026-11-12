@@ -43,31 +43,35 @@ both.
 
 ## The format in one minute
 
-A `HARNESS.md` is YAML frontmatter that identifies the design (`name`,
-`description`, and optionally `version`, `license`, `metadata`) followed by
-prose under fixed English headings:
+A `HARNESS.md` is YAML frontmatter that identifies the design
+(`name`, `description`, and optionally `version`, `license`, `metadata`),
+followed by a free-form Markdown body.
+The body opens with a title and an introduction:
+who the harness serves, what it is for, and what stays with a human.
+No section is required. The format recommends thirteen English headings,
+in this order, so that readers find the same subject in the same place:
 
-| Section | Required | What it answers |
-|---|---|---|
-| Overview | yes | Who the harness serves and what it is for |
-| Context | yes | The conditions the design has to fit |
-| Invariants | | Rules every task follows |
-| Style | | What the code should look like so agents can work in it |
-| File Structure | | The layout the design requires |
-| Environment | yes | Where the agent runs and what it can reach |
-| Knowledge | yes | What the agent reads, and when |
-| Feedback | yes | How the agent verifies its own work |
-| Gates | yes | Which checks stop defects |
-| Authority | yes | What the agent may do, and how it commits, merges, and releases |
-| Completion | | How a goal is agreed and what counts as done |
-| Entropy | | How the harness stays consistent with the code |
-| Open Questions | | What is undecided |
-| References | | What the design drew on |
+| Section | What it usually covers |
+|---|---|
+| Context | The conditions the design has to fit |
+| Invariants | Rules every task follows |
+| Style | What the code should look like so agents can work in it |
+| File Structure | The layout the design expects |
+| Environment | Where the agent runs and what it can reach |
+| Knowledge | What the agent reads, and when |
+| Feedback | How the agent verifies its own work |
+| Gates | Which checks stop defects |
+| Authority | What the agent may do on its own, and what needs a human |
+| Completion | How a goal is agreed and what counts as done |
+| Entropy | How the harness stays consistent with the code |
+| Open Questions | What is undecided |
+| References | What the design drew on |
 
-The format has one goal: writing a `HARNESS.md` requires the specification;
-understanding one does not. Everything under the headings is ordinary
-prose, and because agents rarely load the file, it can be as long as the
-design needs. The [specification](spec/spec.md) is short and has a
+The format has one goal: the specification helps you write a `HARNESS.md`,
+and reading one does not depend on it.
+Everything in the body is ordinary prose,
+and because agents rarely load the file, it can be as long as the design needs.
+The [specification](spec/spec.md) has a
 [Chinese translation](spec/spec.zh.md).
 
 ## The plugin
@@ -102,8 +106,10 @@ and so on) to the skill that knows that layer.
 
 ## Validate a file
 
-The validator checks the frontmatter and the section headings and nothing
-else. It never judges the prose. With the plugin installed, ask your agent
+The validator checks the frontmatter, the title, and the order and repetition
+of the recommended headings, and nothing else.
+It requires no section and never judges the prose. With the plugin installed,
+ask your agent
 to validate the file. From a clone of this repository:
 
 ```sh

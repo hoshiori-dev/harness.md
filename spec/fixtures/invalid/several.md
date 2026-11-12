@@ -5,15 +5,13 @@ extra: 1
 
 # Fixture
 
-## Context
-
-Placeholder text.
-
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Environment
+
+Placeholder text.
+
+## Context
 
 Placeholder text.
 

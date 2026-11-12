@@ -6,6 +6,12 @@
   "invalid/description-empty.md": [
     "key-missing"
   ],
+  "invalid/description-whitespace.md": [
+    "key-missing"
+  ],
+  "invalid/encoding-invalid.md": [
+    "encoding-invalid"
+  ],
   "invalid/frontmatter-bad-yaml.md": [
     "frontmatter-invalid"
   ],
@@ -22,26 +28,7 @@
     "frontmatter-missing"
   ],
   "invalid/frontmatter-unclosed.md": [
-    "frontmatter-invalid",
-    "section-missing",
-    "section-missing",
-    "section-missing",
-    "section-missing",
-    "section-missing",
-    "section-missing",
-    "section-missing"
-  ],
-  "invalid/heading-lowercase.md": [
-    "section-missing"
-  ],
-  "invalid/heading-only-in-fence.md": [
-    "section-missing"
-  ],
-  "invalid/heading-translated.md": [
-    "section-missing"
-  ],
-  "invalid/heading-wrong-level.md": [
-    "section-missing"
+    "frontmatter-invalid"
   ],
   "invalid/key-duplicate.md": [
     "key-duplicate"
@@ -62,18 +49,11 @@
   "invalid/name-null.md": [
     "key-missing"
   ],
-  "invalid/section-duplicate.md": [
-    "section-duplicate"
-  ],
-  "invalid/section-missing.md": [
-    "section-missing"
-  ],
   "invalid/several.md": [
     "key-missing",
     "key-unknown",
     "name-format",
     "section-duplicate",
-    "section-missing",
     "section-order"
   ],
   "invalid/version-not-string.md": [
@@ -83,11 +63,20 @@
   "valid/body-in-another-language.md": [],
   "valid/bom.md": [],
   "valid/closing-hashes.md": [],
+  "valid/delimiter-trailing-space.md": [],
   "valid/extra-sections.md": [],
   "valid/heading-inside-fence.md": [],
+  "valid/heading-lowercase.md": [],
+  "valid/heading-translated.md": [],
+  "valid/heading-wrong-level.md": [],
   "valid/metadata-any-structure.md": [],
+  "valid/metadata-scalar.md": [],
   "valid/minimal.md": [],
-  "valid/no-first-level-heading.md": [],
+  "valid/no-introduction.md": [],
+  "valid/no-recommended-sections.md": [],
+  "valid/sections-omitted.md": [],
+  "valid/title-differs-from-name.md": [],
+  "valid/typical.md": [],
   "warnings/description-length.md": [
     "description-length"
   ],
@@ -97,14 +86,48 @@
   "warnings/name-format.md": [
     "name-format"
   ],
+  "warnings/name-leading-hyphen.md": [
+    "name-format"
+  ],
   "warnings/name-length.md": [
     "name-length"
   ],
-  "warnings/section-order-optional.md": [
+  "warnings/section-duplicate-thrice.md": [
+    "section-duplicate"
+  ],
+  "warnings/section-duplicate-two-names.md": [
+    "section-duplicate",
+    "section-duplicate"
+  ],
+  "warnings/section-duplicate.md": [
+    "section-duplicate"
+  ],
+  "warnings/section-order-indented.md": [
+    "section-order"
+  ],
+  "warnings/section-order-last.md": [
     "section-order"
   ],
   "warnings/section-order.md": [
     "section-order"
+  ],
+  "warnings/title-missing-empty-body.md": [
+    "title-missing"
+  ],
+  "warnings/title-missing.md": [
+    "title-missing"
+  ],
+  "warnings/title-multiple.md": [
+    "title-multiple"
+  ],
+  "warnings/title-no-space.md": [
+    "title-missing"
+  ],
+  "warnings/title-only-in-fence.md": [
+    "title-missing"
+  ],
+  "warnings/title-setext.md": [
+    "title-missing"
   ],
   "warnings/version-unknown.md": [
     "version-unknown"

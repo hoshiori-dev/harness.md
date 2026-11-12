@@ -6,58 +6,56 @@ version: alpha
 
 # {{TITLE}} <!-- # CONFIGURE: free text; usually the project or design name. -->
 
-## Overview
-
-<!-- Required. Who the harness serves, what it is meant to achieve, what it does not police, and what always stays with a human. -->
+<!-- Introduction, in ordinary paragraphs, with no heading of its own. Who the harness serves, what it is meant to achieve, what it deliberately leaves unmanaged, and which decisions always stay with a human. -->
 
 ## Context
 
-<!-- Required. The given conditions the design has to fit: the cost of a wrong change, how long the project will be maintained, who relies on its conventions, how unattended agents are, the code-hosting platform, the clients and models it targets. -->
+<!-- For a complete harness. The facts and conditions the design has to fit: the cost of a wrong change, how long the project will be maintained, who relies on its conventions, how unattended agents are, the code-hosting platform, the clients and models it targets. -->
 
 ## Invariants
 
-<!-- Optional. The cross-layer rules every task must follow. Delete the section when there are none. -->
+<!-- When needed. The constraints every task must respect, and the rules that may never be broken. Delete the section when there are none. -->
 
 ## Style
 
-<!-- Optional. What the code itself should look like so that agents can work in it. Formatting and naming rules stay in the formatter and linter configuration. -->
+<!-- When needed. The code structure and engineering style the project prefers so that agents can understand, change, and verify the code. Formatting and naming rules stay in the formatter and linter configuration. -->
 
 ## File Structure
 
-<!-- Optional. The directory layout this design requires: which directories and files have to exist and what each holds. -->
+<!-- When needed. The layout this design expects: which directories and key files have to exist and what each is for. -->
 
 ## Environment
 
-<!-- Required. Where the agent runs, which tools it holds, and what it can reach. -->
+<!-- For a complete harness. Where the agent runs, which tools it can call, and what it can reach. -->
 
 ## Knowledge
 
-<!-- Required. How the agent learns about the project, and what it reads when. -->
+<!-- For a complete harness. What the agent consults about the project, and when it reads each. -->
 
 ## Feedback
 
-<!-- Required. What the agent can run and observe to verify its own work. -->
+<!-- For a complete harness. What the agent runs and observes to check its own changes. -->
 
 ## Gates
 
-<!-- Required. Which deterministic checks stop defects. -->
+<!-- For a complete harness. Which deterministic checks stop defects, and where they run. -->
 
 ## Authority
 
-<!-- Required. What the agent may do directly and what needs a human; how it commits, branches, merges, and releases. -->
+<!-- For a complete harness. What the agent may do on its own and what needs a human; how it commits, branches, merges, and releases. -->
 
 ## Completion
 
-<!-- Optional. How the goal is agreed before work starts, and what counts as done. -->
+<!-- When needed. How the goal is agreed before work starts, and what counts as done. -->
 
 ## Entropy
 
-<!-- Optional. How the harness is kept consistent with the code. -->
+<!-- When needed. How drift between the harness, the documentation, and the code is found and repaired. -->
 
 ## Open Questions
 
-<!-- Optional. What is still undecided. -->
+<!-- When needed. What is still undecided. -->
 
 ## References
 
-<!-- Optional. The outside material this design drew on. Material an agent reads while working belongs in Knowledge. -->
+<!-- When needed. The outside material this design drew on. Material an agent reads while working belongs in Knowledge. -->

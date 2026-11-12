@@ -53,7 +53,13 @@ The agent SHALL work in the mode the handover names or the request implies. In d
 - **THEN** the agent runs it, includes its findings among its own with a severity of high, medium, or low and evidence, and changes no file
 
 ### Requirement: Behavior: An absent section means the layer is omitted
-When the project's `HARNESS.md` has no Entropy section, the agent in build or audit mode SHALL report that the design omits the layer. In build mode it SHALL write nothing except removing a reserved, empty keep-in-sync heading and its marker from the entrypoint. In audit mode it SHALL add one finding when the project nevertheless runs a harness check or sync rule.
+When the project's `HARNESS.md` has no Entropy section
+and covers the subject nowhere else,
+the agent in build or audit mode SHALL report that the design omits the layer.
+In build mode it SHALL write nothing except removing a reserved,
+empty keep-in-sync heading and its marker from the entrypoint.
+In audit mode it SHALL add one finding
+when the project nevertheless runs a harness check or sync rule.
 
 #### Scenario: Build with no section
 - **WHEN** build mode runs on a design without an Entropy section and the entrypoint holds an empty reserved keep-in-sync heading

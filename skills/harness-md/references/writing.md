@@ -17,7 +17,12 @@ use the project name. `description` says what the design is and what kind
 of project it suits, in words a search would match; it does not summarise
 the layers.
 
-## Overview
+## Title and introduction
+
+The body opens with one first-level heading, the title, and then the
+introduction: ordinary paragraphs with no heading of their own, placed
+before the first second-level heading. There is no `## Overview` section.
+The introduction covers:
 
 - Who the harness serves: which people, which agents, doing what kind of
   work.

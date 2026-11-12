@@ -87,21 +87,30 @@ SHALL NOT be asked when the remote shows it.
 ### Requirement: Layer sections come from the layer builders
 For each of the seven layers the agent SHALL obtain the section from the
 installed skill whose description contains `Owns the <Layer> layer`, in
-design mode, and SHALL write the five required layer sections even when a
-layer does nothing. With no such skill installed it SHALL write the section
+design mode. With no such skill installed it SHALL write the section
 itself and report the gap.
 
 #### Scenario: Layer that should do nothing
 - **WHEN** the Context is a prototype discarded within a quarter and the Gates builder returns that only a secret scan is warranted
 - **THEN** the draft has a Gates section that says so with the reason
 
-#### Scenario: Optional layer left out
+#### Scenario: Completion or Entropy left out
 - **WHEN** the Entropy builder returns that the layer should be left out for a project discarded within a quarter
 - **THEN** the draft has no Entropy section and the approval summary gives the reason
 
 #### Scenario: No builder installed for a layer
 - **WHEN** no installed skill's description claims the Feedback layer
 - **THEN** the agent writes the Feedback section itself and names the gap in the approval summary
+
+### Requirement: Complete by default, partial on request
+A design of the complete harness, the default, SHALL have the five core
+layer sections even when a layer does nothing. A design of only some
+aspects, when the user asks for one, SHALL have those sections alone and
+SHALL say in its introduction what it covers.
+
+#### Scenario: Design of one aspect only
+- **WHEN** the user asks for a `HARNESS.md` that describes only how agents get permission to act
+- **THEN** the draft has a title, an introduction that says the file covers Authority only, and an Authority section, and the validator reports nothing
 
 ### Requirement: A draft that can be built from
 The draft SHALL name the files, commands, tools, thresholds, and budgets

@@ -1,13 +1,16 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { format, lint, parse, REQUIRED_SECTIONS } from "./harness_md.ts";
+import { format, lint, lintBytes, parse, SECTIONS } from "./harness_md.ts";
+
+const CORE = ["Context", "Environment", "Knowledge", "Feedback", "Gates", "Authority"] as const;
 
 function document(
   frontmatter = "name: demo\ndescription: A demo.\n",
-  sections: readonly string[] = REQUIRED_SECTIONS,
+  sections: readonly string[] = CORE,
+  title = "# Demo\n\nAn introduction.\n\n",
 ): string {
   const body = sections.map((name) => `## ${name}\n\nText.\n\n`).join("");
-  return `---\n${frontmatter}---\n\n# Demo\n\n${body}`;
+  return `---\n${frontmatter}---\n\n${title}${body}`;
 }
 
 const codes = (text: string) =>
@@ -38,23 +41,59 @@ test("metadata is never inspected, duplicates inside it included", () => {
   ]);
 });
 
-test("a missing required section is an error; an absent optional one is nothing", () => {
-  const withoutGates = REQUIRED_SECTIONS.filter((name) => name !== "Gates");
-  assert.deepEqual(codes(document(undefined, withoutGates)), ["section-missing"]);
+test("no section is required, and Overview is an ordinary heading", () => {
+  assert.deepEqual(lint(document(undefined, [])), []);
+  assert.deepEqual(lint(document(undefined, ["Gates"])), []);
+  assert.deepEqual(lint(document(undefined, ["Overview", "Context", "Overview"])), []);
+  assert.equal((SECTIONS as readonly string[]).includes("Overview"), false);
+  assert.equal(SECTIONS.length, 13);
 });
 
-test("order is a warning and a duplicate is an error", () => {
-  const swapped = ["Context", "Overview", ...REQUIRED_SECTIONS.slice(2)];
-  assert.deepEqual(codes(document(undefined, swapped)), ["section-order"]);
-  assert.deepEqual(codes(document(undefined, [...REQUIRED_SECTIONS, "Gates"])), [
-    "section-duplicate",
-  ]);
+test("order and repetition are warnings; a repeated name is reported once", () => {
+  const swapped = ["Environment", "Context", ...CORE.slice(2)];
+  assert.deepEqual(
+    lint(document(undefined, swapped)).map((f) => `${f.severity}:${f.code}`),
+    ["warning:section-order"],
+  );
+  assert.deepEqual(
+    lint(document(undefined, [...CORE, "Gates", "Gates"])).map((f) => `${f.severity}:${f.code}`),
+    ["warning:section-duplicate"],
+  );
 });
 
 test("headings inside fences and at other levels do not count", () => {
-  const withoutAuthority = REQUIRED_SECTIONS.filter((name) => name !== "Authority");
-  const fenced = ["```", "## Authority", "```", "", "### Authority", ""].join("\n");
-  assert.deepEqual(codes(document(undefined, withoutAuthority) + fenced), ["section-missing"]);
+  const fenced = ["```", "## Gates", "# Another title", "```", "", "### Gates", ""].join("\n");
+  assert.deepEqual(codes(document() + fenced), []);
+});
+
+test("a missing or repeated first-level heading is a warning", () => {
+  assert.deepEqual(
+    lint(document(undefined, CORE, "")).map((f) => `${f.severity}:${f.code}`),
+    ["warning:title-missing"],
+  );
+  const three = `${document()}# Second\n\n# Third\n`;
+  assert.deepEqual(
+    lint(three).map((f) => `${f.severity}:${f.code}`),
+    ["warning:title-multiple"],
+  );
+  assert.deepEqual(codes(document(undefined, CORE, "Demo\n====\n\n")), ["title-missing"]);
+  assert.deepEqual(codes(document(undefined, CORE, "   # Demo #\n\n")), []);
+  assert.deepEqual(parse(document()).titles, [6]);
+});
+
+test("a file that is not UTF-8 gets one error and nothing else", () => {
+  const bytes = new Uint8Array([0x2d, 0x2d, 0x2d, 0x0a, 0xff, 0x0a]);
+  assert.deepEqual(
+    lintBytes(bytes).map((f) => `${f.severity}:${f.code}`),
+    ["error:encoding-invalid"],
+  );
+  assert.deepEqual(lintBytes(new TextEncoder().encode(`\uFEFF${document()}`)), []);
+});
+
+test("an unclosed frontmatter is the only finding for that file", () => {
+  assert.deepEqual(codes("---\nname: demo\ndescription: A demo.\n\n# Demo\n"), [
+    "frontmatter-invalid",
+  ]);
 });
 
 test("name and description limits are warnings", () => {

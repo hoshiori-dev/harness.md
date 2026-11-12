@@ -47,10 +47,18 @@ the installed skill whose description claims that layer.
 **The format in brief.** A `HARNESS.md` is YAML frontmatter followed by a
 Markdown body. Frontmatter: `name` and `description` are required;
 `version`, `license`, and `metadata` are optional; any other top-level key
-is an error. Body: second-level headings with exactly these English names,
-in this order, required ones marked `*`: Overview*, Context*, Invariants,
-Style, File Structure, Environment*, Knowledge*, Feedback*, Gates*,
-Authority*, Completion, Entropy, Open Questions, References. The prose may
+is an error. Body: free-form. It opens with one first-level heading, the title,
+and an introduction with no heading of its own:
+who the harness serves, what it is meant to achieve,
+what it leaves unmanaged, and what always stays with a human.
+The format requires no section. It recommends these second-level headings,
+with exactly these English names and in this order: Context, Invariants,
+Style, File Structure, Environment, Knowledge, Feedback, Gates, Authority,
+Completion, Entropy, Open Questions, References.
+A design of a complete harness usually covers Context and the five core
+layers (Environment, Knowledge, Feedback, Gates, Authority);
+a file that describes only part of a harness may leave out any of them.
+The prose may
 be in any language; the headings are never translated; other sections may
 appear anywhere. For the full rules and the validator script, load the
 skill that reads, writes, and validates `HARNESS.md`; without it, check
@@ -112,12 +120,18 @@ Take back its findings. When no installed skill claims the layer, compare
 the section with the inventory yourself, sentence by sentence, and record
 the gap.
 
-- A required layer with no section (there is no `HARNESS.md`, or it lacks
-  the section): the builder compares the project with its own defaults for
+- A layer with no section of its own is not thereby undecided: the format
+  requires no section, so first look for the layer's subject in the
+  introduction, in another section, or under a custom heading, and hand
+  that text over as the layer's design.
+- A core layer (Environment, Knowledge, Feedback, Gates, Authority) the
+  file says nothing about (there is no `HARNESS.md`, or it is silent on
+  the layer): the builder compares the project with its own defaults for
   the project's Context and marks each finding "no design to compare
   with". Ask the Context conditions the repository cannot show in one
   message before the first such layer, and only then.
-- An optional layer with no section is reported as left out by the design,
+- Completion or Entropy that the file says nothing about is reported as left out
+  by the design,
   with no finding, unless step 5 says the Context calls for it.
 
 Then audit what no layer owns: each invariant is upheld where it should be

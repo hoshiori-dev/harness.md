@@ -6,9 +6,7 @@ version: 1.0
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 

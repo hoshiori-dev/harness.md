@@ -15,7 +15,7 @@ which defects were left out.
    maintained for years; agents checked between tasks; hosted on GitHub".
    A reader decides from Context whether the design fits them, so every
    condition a decision depends on has to be there.
-3. **Rewrite Overview** for that kind of project.
+3. **Rewrite the introduction** for that kind of project.
 4. **Remove what identifies the source.** Project and organisation names,
    people, addresses, internal systems, issue numbers. Replace each with
    its role ("the release workflow", "the default branch") or with a

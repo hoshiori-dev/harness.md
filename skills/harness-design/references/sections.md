@@ -1,8 +1,10 @@
 # The Sections Outside the Layers
 
-Read before writing Overview, Context, Invariants, Style, File Structure,
+Read before writing the introduction, Context, Invariants, Style,
+File Structure,
 Open Questions, or References. The seven layer sections come from their
-builders; these seven are written here. For each: what it must contain,
+builders; the introduction and these six sections are written here. For each:
+what it must contain,
 where its content comes from, and what does not belong.
 
 ## The writing standard
@@ -27,8 +29,11 @@ section against it before accepting it.
 - **Design, not inventory.** Say what must be true. Facts the code states
   (a full directory listing, a command's flags) stay in the code.
 
-## Overview (required)
+## The introduction
 
+It sits directly under the title, before the first second-level heading,
+as ordinary paragraphs with no heading of its own.
+The format has no `## Overview` section; the introduction does that work.
 Four things: who the harness serves (which people, which agents); what it
 is meant to achieve, in terms of outcomes ("an agent can take an issue to a
 reviewed pull request without a person watching"); what it does not police
@@ -36,7 +41,7 @@ reviewed pull request without a person watching"); what it does not police
 a human (merging, releases, remote settings, or whatever the user said).
 Name here any goal that reaches beyond the harness as outside the design.
 
-## Context (required)
+## Context (in every complete design)
 
 The given conditions, as prose: what a wrong change costs, how long the
 project will be maintained, who relies on its conventions, how unattended

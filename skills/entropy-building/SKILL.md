@@ -98,7 +98,9 @@ defined. `HARNESS.md` and its section names may be named: the file is the
 project's own.
 <!-- /shared:deposited-files-stand-alone -->
 
-- **Entropy is optional.** A `HARNESS.md` without an Entropy section has
+- **Entropy is optional.** A `HARNESS.md` that has no Entropy section
+  and covers the subject nowhere else (not in the introduction, another
+  section, or a custom heading) has
   omitted the layer. In build mode report "Entropy: omitted by the design",
   write nothing except removing a reserved, empty keep-in-sync heading and
   its marker from the entrypoint, and go to step 6. In audit mode report

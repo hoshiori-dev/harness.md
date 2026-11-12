@@ -4,9 +4,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { checkEntry, checkHub } from "./check_hub.ts";
-import { REQUIRED_SECTIONS } from "./lib/harness_md.ts";
 
-const BODY = REQUIRED_SECTIONS.map((name) => `## ${name}\n\nText.\n\n`).join("");
+const body = (sections: readonly string[]) =>
+  `# Demo\n\nAn introduction.\n\n${sections.map((name) => `## ${name}\n\nText.\n\n`).join("")}`;
+const BODY = body(["Context", "Authority"]);
 
 function hubWith(entry: string, frontmatter: string): string {
   const hub = mkdtempSync(join(tmpdir(), "hub-"));
@@ -48,6 +49,16 @@ test("format warnings fail an entry, and stray files are reported", () => {
   const problems = checkHub(hub).join("\n");
   assert.match(problems, /warning\[name-format\]/);
   assert.match(problems, /notes\.txt/);
+});
+
+test("an entry needs no particular section, but a missing title fails it", () => {
+  const hub = mkdtempSync(join(tmpdir(), "hub-"));
+  mkdirSync(join(hub, "demo"));
+  const text = `---\n${GOOD}---\n\n${body(["Gates"]).replace("# Demo\n\n", "")}`;
+  writeFileSync(join(hub, "demo", "HARNESS.md"), text);
+  const problems = checkEntry(hub, "demo");
+  assert.equal(problems.length, 1);
+  assert.match(problems[0] ?? "", /warning\[title-missing\]/);
 });
 
 test("a directory without HARNESS.md is reported", () => {

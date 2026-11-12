@@ -35,30 +35,34 @@ harness。
 
 ## 一分钟看懂格式
 
-一份 `HARNESS.md` 由两部分组成。开头是 YAML frontmatter，写明这份设计叫什么、
-适合什么项目（`name`、`description`，以及可选的 `version`、`license`、
-`metadata`）。后面是正文，写在固定的英文标题下：
+一份 `HARNESS.md` 由两部分组成。开头是 YAML frontmatter，
+写明这份设计叫什么、适合什么项目
+（`name`、`description`，以及可选的 `version`、`license`、`metadata`）。
+后面是自由书写的 Markdown 正文。
+正文以标题和一段导言开头：harness 为谁服务，要达成什么，哪些事始终由人来做。
+没有必选章节。格式推荐十三个英文标题和它们的顺序，
+这样读者总能在同一个地方找到同一类内容：
 
-| 章节 | 必选 | 回答什么 |
-|---|---|---|
-| Overview | 是 | harness 为谁服务，要达成什么 |
-| Context | 是 | 设计必须适应的既定条件 |
-| Invariants | | 每个任务都要遵守的规则 |
-| Style | | 代码应该是什么样，Agent 才好在里面工作 |
-| File Structure | | 设计要求的目录布局 |
-| Environment | 是 | Agent 在哪里运行，能碰到什么 |
-| Knowledge | 是 | Agent 读什么，什么时候读 |
-| Feedback | 是 | Agent 怎样验证自己的工作 |
-| Gates | 是 | 哪些检查拦住缺陷 |
-| Authority | 是 | Agent 可以做什么，怎样提交、合并和发布 |
-| Completion | | 怎样对齐目标，怎样算做完 |
-| Entropy | | harness 怎样与代码保持一致 |
-| Open Questions | | 还没决定的事 |
-| References | | 设计参考了什么 |
+| 章节 | 通常写什么 |
+|---|---|
+| Context | 设计必须适应的既定条件 |
+| Invariants | 每个任务都要遵守的规则 |
+| Style | 代码应该是什么样，Agent 才好在里面工作 |
+| File Structure | 设计要求的目录布局 |
+| Environment | Agent 在哪里运行，能访问什么 |
+| Knowledge | Agent 读什么，什么时候读 |
+| Feedback | Agent 怎样验证自己的工作 |
+| Gates | 哪些检查拦住缺陷 |
+| Authority | 哪些事 Agent 可以自己做，哪些需要人 |
+| Completion | 怎样对齐目标，怎样算做完 |
+| Entropy | harness 怎样与代码保持一致 |
+| Open Questions | 还没决定的事 |
+| References | 设计参考了什么 |
 
-这个格式只有一个目标：写一份 `HARNESS.md` 需要规范，读懂一份不需要。标题下面
-全是普通的文字。Agent 很少加载这个文件，所以设计需要写多长，它就可以有多长。
-[规范](spec/spec.zh.md)很短，以[英文版](spec/spec.md)为准。
+这个格式只有一个目标：写 `HARNESS.md` 时可以借助规范，读懂它不依赖规范。
+正文全是普通的文字。Agent 很少加载这个文件，
+所以设计需要写多长，它就可以有多长。
+[规范](spec/spec.zh.md)以[英文版](spec/spec.md)为准。
 
 ## 插件
 
@@ -91,7 +95,8 @@ harness。
 
 ## 校验一个文件
 
-校验器只检查 frontmatter 和章节标题，从不评判正文写得怎么样。装了插件的话，
+校验器只检查 frontmatter、标题，以及推荐章节的顺序和重复。
+它不要求任何章节，也从不评判正文写得怎么样。装了插件的话，
 让 Agent 替你校验即可。在本仓库的克隆里可以直接运行：
 
 ```sh

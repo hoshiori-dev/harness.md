@@ -3,11 +3,11 @@ name: fixture
 description: A fixture for the validator.
 ---
 
-## Overview
+# Fixture
 
-Placeholder text.
+Placeholder introduction.
 
-## Context
+## 背景
 
 Placeholder text.
 
@@ -30,3 +30,7 @@ Placeholder text.
 ## Authority
 
 Placeholder text.
+
+## 背景
+
+A translated heading is a custom heading.

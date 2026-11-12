@@ -3,11 +3,9 @@ name: fixture
 description: A fixture for the validator.
 ---
 
-# Fixture
+# 示例
 
-## Overview
-
-这一节用中文书写，标题保持英文。
+这一段用中文书写，章节标题保持英文。
 
 ## Context
 

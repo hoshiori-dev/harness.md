@@ -5,8 +5,9 @@
 # ///
 """Validate HARNESS.md files against the HARNESS.md format specification.
 
-Checks the frontmatter keys and the section skeleton, and nothing else: the
-prose of a section and anything inside `metadata` are never judged.
+Checks the frontmatter keys, the document title, and the order and repetition
+of the recommended section headings, and nothing else: no section is required,
+and the prose of the body and anything inside `metadata` are never judged.
 
 Usage:
     uv run lint_harness_md.py [--json] [--strict] [PATH ...]
@@ -32,8 +33,7 @@ import yaml
 VERSIONS = ["alpha"]  # oldest first; the last is the version this script supports
 CURRENT_VERSION = VERSIONS[-1]
 
-SECTIONS = [
-    "Overview",
+SECTIONS = [  # the recommended second-level sections, in specification order
     "Context",
     "Invariants",
     "Style",
@@ -48,15 +48,6 @@ SECTIONS = [
     "Open Questions",
     "References",
 ]
-REQUIRED_SECTIONS = [
-    "Overview",
-    "Context",
-    "Environment",
-    "Knowledge",
-    "Feedback",
-    "Gates",
-    "Authority",
-]
 KEYS = ["name", "description", "version", "license", "metadata"]
 
 NAME_MAX = 64
@@ -64,6 +55,7 @@ DESCRIPTION_MAX = 1024
 NAME_FORMAT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 DELIMITER = re.compile(r"^---[ \t]*$")
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})")
+H1 = re.compile(r"^ {0,3}#(?:[ \t].*)?$")
 H2 = re.compile(r"^ {0,3}##(?!#)[ \t]+(.*)$")
 CLOSING_HASHES = re.compile(r"[ \t]+#+[ \t]*$")
 
@@ -80,8 +72,11 @@ def normalise(text: str) -> list[str]:
     return text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
 
 
-def check_frontmatter(lines: list[str], findings: list[dict]) -> int:
-    """Check the frontmatter; return the index of the first body line."""
+def check_frontmatter(lines: list[str], findings: list[dict]) -> int | None:
+    """Check the frontmatter; return the index of the first body line.
+
+    Returns None when the frontmatter is never closed, so there is no body.
+    """
     if not lines or not DELIMITER.match(lines[0]):
         findings.append(
             finding(
@@ -103,7 +98,7 @@ def check_frontmatter(lines: list[str], findings: list[dict]) -> int:
                 1,
             )
         )
-        return len(lines)
+        return None
     source = "\n".join(lines[1:end])
     try:
         node = yaml.compose(source, Loader=yaml.SafeLoader)
@@ -265,9 +260,13 @@ def check_frontmatter(lines: list[str], findings: list[dict]) -> int:
     return end + 1
 
 
-def find_sections(lines: list[str], body_start: int) -> list[tuple[str, int]]:
-    """Return the defined sections found as (name, 1-based line), in file order."""
+def find_headings(
+    lines: list[str], body_start: int
+) -> tuple[list[tuple[str, int]], list[int]]:
+    """Return the recommended sections found as (name, 1-based line), in file
+    order, and the lines of the first-level headings."""
     found: list[tuple[str, int]] = []
+    titles: list[int] = []
     fence: tuple[str, int] | None = None
     for index in range(body_start, len(lines)):
         line = lines[index]
@@ -285,13 +284,16 @@ def find_sections(lines: list[str], body_start: int) -> list[tuple[str, int]]:
         if fence_match:
             fence = (fence_match.group(1)[0], len(fence_match.group(1)))
             continue
+        if H1.match(line):
+            titles.append(index + 1)
+            continue
         heading = H2.match(line)
         if not heading:
             continue
         text = CLOSING_HASHES.sub("", heading.group(1)).strip()
         if text in SECTIONS:
             found.append((text, index + 1))
-    return found
+    return found, titles
 
 
 def lint(text: str) -> list[dict]:
@@ -299,31 +301,47 @@ def lint(text: str) -> list[dict]:
     findings: list[dict] = []
     lines = normalise(text)
     body_start = check_frontmatter(lines, findings)
-    sections = find_sections(lines, body_start)
+    # An unclosed frontmatter leaves no body to look at; say nothing about it.
+    has_body = body_start is not None
+    start = body_start if body_start is not None else len(lines)
+    sections, titles = find_headings(lines, start)
+
+    if has_body and not titles:
+        findings.append(
+            finding(
+                "warning",
+                "title-missing",
+                "the body has no first-level heading; start it with a `# Title` line, "
+                "followed by an introduction",
+                min(start + 1, len(lines)),
+            )
+        )
+    elif has_body and len(titles) > 1:
+        findings.append(
+            finding(
+                "warning",
+                "title-multiple",
+                f"the body has {len(titles)} first-level headings (the first on line "
+                f"{titles[0]}); keep one as the title of the document",
+                titles[1],
+            )
+        )
 
     first_line: dict[str, int] = {}
+    repeated: set[str] = set()
     for name, line in sections:
-        if name in first_line:
+        if name not in first_line:
+            first_line[name] = line
+        elif name not in repeated:
+            # Once for each repeated name, however often it repeats.
+            repeated.add(name)
             findings.append(
                 finding(
-                    "error",
+                    "warning",
                     "section-duplicate",
-                    f"the section `{name}` appears more than once "
+                    f"the recommended section `{name}` appears more than once "
                     f"(first on line {first_line[name]}); merge them",
                     line,
-                )
-            )
-        else:
-            first_line[name] = line
-    for name in REQUIRED_SECTIONS:
-        if name not in first_line:
-            findings.append(
-                finding(
-                    "error",
-                    "section-missing",
-                    f"the required section `## {name}` is missing; a layer the project does "
-                    "nothing in still needs its section, saying so and why",
-                    1,
                 )
             )
     latest: tuple[str, int] | None = None
@@ -334,7 +352,7 @@ def lint(text: str) -> list[dict]:
                 finding(
                     "warning",
                     "section-order",
-                    f"`{name}` comes after `{latest[0]}`; the specification puts it before",
+                    f"`{name}` comes after `{latest[0]}`; the recommended order puts it before",
                     line,
                 )
             )
@@ -343,6 +361,22 @@ def lint(text: str) -> list[dict]:
 
     findings.sort(key=lambda item: item["line"])
     return findings
+
+
+def lint_bytes(data: bytes) -> list[dict]:
+    """Lint the bytes of a file; one that is not UTF-8 gets that finding only."""
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError:
+        return [
+            finding(
+                "error",
+                "encoding-invalid",
+                "the file is not valid UTF-8 text; save it as UTF-8",
+                1,
+            )
+        ]
+    return lint(text)
 
 
 def run_fixtures(directory: Path) -> list[str]:
@@ -358,7 +392,7 @@ def run_fixtures(directory: Path) -> list[str]:
         if key not in expected:
             problems.append(f"{key}: no entry in expected.json")
             continue
-        got = sorted(item["code"] for item in lint(file.read_bytes().decode("utf-8")))
+        got = sorted(item["code"] for item in lint_bytes(file.read_bytes()))
         wanted = sorted(expected[key])
         if got != wanted:
             problems.append(
@@ -420,12 +454,7 @@ def main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 2
-        try:
-            text = path.read_bytes().decode("utf-8")
-        except UnicodeDecodeError:
-            print(f"{path}: not UTF-8 text; save the file as UTF-8", file=sys.stderr)
-            return 2
-        results.append({"path": str(path), "findings": lint(text)})
+        results.append({"path": str(path), "findings": lint_bytes(path.read_bytes())})
 
     def count(severity: str) -> int:
         return sum(

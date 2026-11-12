@@ -1,21 +1,20 @@
 import type { Lang } from "../lib/paths";
 
-/** The fourteen sections the specification defines, in order (spec/spec.md section 5.1). */
+/** The thirteen second-level headings the specification recommends, in order (spec/spec.md section 5.2). */
 export const SECTIONS = [
-  { name: "Overview", required: true },
-  { name: "Context", required: true },
-  { name: "Invariants", required: false },
-  { name: "Style", required: false },
-  { name: "File Structure", required: false },
-  { name: "Environment", required: true },
-  { name: "Knowledge", required: true },
-  { name: "Feedback", required: true },
-  { name: "Gates", required: true },
-  { name: "Authority", required: true },
-  { name: "Completion", required: false },
-  { name: "Entropy", required: false },
-  { name: "Open Questions", required: false },
-  { name: "References", required: false },
+  "Context",
+  "Invariants",
+  "Style",
+  "File Structure",
+  "Environment",
+  "Knowledge",
+  "Feedback",
+  "Gates",
+  "Authority",
+  "Completion",
+  "Entropy",
+  "Open Questions",
+  "References",
 ] as const;
 
 const en = {
@@ -49,16 +48,13 @@ const en = {
     what: [
       "A <code>HARNESS.md</code> records the design of a project's agent harness: where a coding agent runs, what it reads, how it checks its own work, what stops a bad change, and what it may do without asking. The entrypoint file, the permission files, the hooks, and the CI configuration are built from it.",
       "You can use one in two ways. As a template: save a file from the hub in your project root, tell your coding agent what the project is for, and have it check the file's Context section against your project before it builds the harness. Delete the file afterwards if you like. Or as an anchor document: keep it in the repository as the project's lasting record of the design, change it rarely, and open it only to check the harness for drift or to improve it.",
-      "Writing a <code>HARNESS.md</code> requires the specification; understanding one does not. An agent that has never seen the specification, with no plugin installed, can still read the file and act on it.",
+      "The specification is there to help you write a <code>HARNESS.md</code>; reading one does not depend on it. An agent that has never seen the specification, with no plugin installed, can still read the file and act on it.",
     ],
     skeletonHeading: "What is in the file",
     skeletonLead:
-      "A short frontmatter with the file's name and description, then up to fourteen sections. Seven are required.",
-    required: "required",
-    optional: "optional",
+      "A short frontmatter with the file's name and description, then a title, an introduction, and prose under whatever headings suit the design. The specification recommends these thirteen headings, in this order. None is required.",
     questions: [
-      "who the harness serves, and what stays with a human",
-      "what the designer cannot change: cost of a mistake, team, platform",
+      "the facts that shape the design: cost of a mistake, team, platform",
       "rules every task follows",
       "what the code should look like so agents can work in it",
       "the directories and files the design requires",
@@ -66,8 +62,8 @@ const en = {
       "what the agent reads, and when",
       "how the agent verifies its own work",
       "the checks that stop defects",
-      "what the agent may do without asking",
-      "what counts as done",
+      "what the agent may do on its own, and what needs a human",
+      "how a goal is agreed, and what counts as done",
       "how the harness stays true to the code",
       "what is still undecided",
       "the material the design drew on",
@@ -132,7 +128,8 @@ const en = {
   },
   spec: {
     title: "Specification",
-    description: "The HARNESS.md format specification: frontmatter, the section skeleton, and what a validator checks.",
+    description:
+      "The HARNESS.md format specification: what the format is for, the frontmatter, the recommended sections, and what a validator reports.",
     toc: "On this page",
   },
   plugin: {
@@ -178,15 +175,13 @@ const zh: Strings = {
     what: [
       "<code>HARNESS.md</code> 记录一个项目的 Agent harness 设计：编码 Agent 在哪里运行，读什么，怎样检查自己的工作，什么会拦住一次错误的改动，哪些事它可以不问就做。入口文件、权限文件、Hook 和 CI 配置都照着它来建。",
       "它有两种用法。当作模板：从 hub 里挑一份存到项目根目录，告诉编码 Agent 这个项目要做什么，让它先对照你的项目核对文件里的 Context 一节，再把 harness 建出来；建完可以把文件删掉。当作锚定文档：把它长期留在仓库里，作为项目的设计记录，很少改动，只在检查 harness 有没有漂移或者要改进它的时候才打开。",
-      "写一份 <code>HARNESS.md</code> 要对照规范，读懂一份不用。Agent 即使从没见过规范，也没装任何插件，照样能读懂这份文件并照着做。",
+      "写 <code>HARNESS.md</code> 时可以对照规范，读懂它不靠规范。Agent 即使从没见过规范，也没装任何插件，照样能读懂这份文件并照着做。",
     ],
     skeletonHeading: "文件里有什么",
-    skeletonLead: "开头是一段简短的 frontmatter，写明文件的名称和说明；后面最多十四个章节，其中七个必选。",
-    required: "必选",
-    optional: "可选",
+    skeletonLead:
+      "开头是一段简短的 frontmatter，写明文件的名称和说明；后面是标题、一段导言和正文，正文用哪些标题由设计决定。规范推荐下面十三个标题和这个顺序，没有一个是必选的。",
     questions: [
-      "harness 为谁服务，哪些事始终由人来做",
-      "设计者改变不了的条件：出错的代价、团队、平台",
+      "影响设计的项目条件：出错的代价、团队、平台",
       "每个任务都要遵守的规则",
       "代码应该是什么样，Agent 才能在里面工作",
       "设计要求的目录和文件",
@@ -194,8 +189,8 @@ const zh: Strings = {
       "Agent 读什么，什么时候读",
       "Agent 怎样验证自己的工作",
       "拦住缺陷的检查",
-      "哪些事 Agent 可以不问就做",
-      "怎样算做完",
+      "哪些事 Agent 可以自己做，哪些需要人",
+      "怎样对齐目标，怎样算做完",
       "harness 怎样与代码保持一致",
       "还没有决定的事",
       "这份设计依据的资料",
@@ -260,7 +255,7 @@ const zh: Strings = {
   },
   spec: {
     title: "规范",
-    description: "HARNESS.md 格式规范：frontmatter、章节骨架，以及校验器检查什么。",
+    description: "HARNESS.md 格式规范：格式的定位、frontmatter、推荐章节，以及校验器报告什么。",
     toc: "本页目录",
   },
   plugin: {

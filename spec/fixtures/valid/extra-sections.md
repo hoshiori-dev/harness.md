@@ -5,21 +5,15 @@ description: A fixture for the validator.
 
 # Fixture
 
+Placeholder introduction.
+
 ## How to use this file
 
 Text.
 
 ## Overview
 
-Text.
-
-## Notes on Overview
-
-Text.
-
-### Overview
-
-A third-level heading is free.
+A heading earlier drafts defined; now an ordinary custom heading.
 
 ## Context
 
@@ -29,7 +23,7 @@ Text.
 
 Text.
 
-### Overview
+### Context
 
 A third-level heading is free.
 
@@ -41,7 +35,7 @@ Text.
 
 Text.
 
-### Overview
+### Environment
 
 A third-level heading is free.
 
@@ -53,7 +47,7 @@ Text.
 
 Text.
 
-### Overview
+### Knowledge
 
 A third-level heading is free.
 
@@ -65,7 +59,7 @@ Text.
 
 Text.
 
-### Overview
+### Feedback
 
 A third-level heading is free.
 
@@ -77,7 +71,7 @@ Text.
 
 Text.
 
-### Overview
+### Gates
 
 A third-level heading is free.
 
@@ -89,6 +83,10 @@ Text.
 
 Text.
 
-### Overview
+### Authority
 
 A third-level heading is free.
+
+## Overview
+
+A custom heading may repeat.

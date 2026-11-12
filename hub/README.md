@@ -66,9 +66,9 @@ hub asks for the following.
 - The `description` says what the design is and which kind of project it
   suits, in 1024 characters or fewer. Search reads it, so use the words
   someone looking for this design would type.
-- The body is in English and contains the seven required sections
-  (Overview, Context, Environment, Knowledge, Feedback, Gates, Authority).
-  The validator reports no errors and no warnings.
+- The body is in English.
+  The validator reports no errors and no warnings,
+  so the body has one title and its recommended sections are in order.
 - The entry can be built from the file alone. It names the files to
   create and what goes in them, the commands, the checks and their
   limits, and the permission rules, and it gives the reason for each

@@ -22,7 +22,9 @@ and listed in the approval summary.
 1. **Rewrite Context.** Replace it with this project's conditions from
    step 3 and the facts from step 2. Keep a copy of the old Context in
    working notes for the comparison below; it does not stay in the file.
-2. **Rewrite Overview** for this project's goal: who the harness serves,
+2. **Rewrite the introduction** (the paragraphs under the title; in an
+   older file, the `## Overview` section, whose text moves up under the title)
+   for this project's goal: who the harness serves,
    what it achieves, what it does not police, what stays with a human.
 3. **Mark what depended on the old Context.** Go through every other
    section sentence by sentence. A decision whose stated reason is a

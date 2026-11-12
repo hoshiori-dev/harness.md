@@ -34,6 +34,27 @@ quickly, and every rule that protects code also slows the search. Most
 sections below say what is left out and why; a few things are kept because
 they stay dangerous or expensive however disposable the code is.
 
+The harness serves one person exploring an idea together with a coding
+agent. Its goal is the shortest loop from "try this" to "here it is
+running, look", with two guarantees: any attempt can be thrown away without
+losing the last working state, and nothing private leaves the machine by
+accident.
+
+It does not police code style, structure, test coverage, commit history, or
+documentation. Variety is welcome here: the person judges each result by
+looking at it, so automated guards against variety would only slow the
+search.
+
+These always stay with the person:
+
+- judging whether a result is good;
+- anything that leaves the machine: pushing, publishing, deploying, sharing
+  a link, opening an issue or pull request, sending a message;
+- spending money, including calls to a paid service beyond the development
+  key the person provided;
+- deleting or changing anything outside the project directory;
+- putting real credentials or real personal data into the project.
+
 ## How to use this file
 
 You are a coding agent that was given this file and a sentence about what
@@ -65,29 +86,6 @@ the project is for. Do this in order.
 A project that keeps this file as its long-term design document first
 rewrites Context to describe itself, then revisits every section whose
 reasons depended on the old Context.
-
-## Overview
-
-The harness serves one person exploring an idea together with a coding
-agent. Its goal is the shortest loop from "try this" to "here it is
-running, look", with two guarantees: any attempt can be thrown away without
-losing the last working state, and nothing private leaves the machine by
-accident.
-
-It does not police code style, structure, test coverage, commit history, or
-documentation. Variety is welcome here: the person judges each result by
-looking at it, so automated guards against variety would only slow the
-search.
-
-These always stay with the person:
-
-- judging whether a result is good;
-- anything that leaves the machine: pushing, publishing, deploying, sharing
-  a link, opening an issue or pull request, sending a message;
-- spending money, including calls to a paid service beyond the development
-  key the person provided;
-- deleting or changing anything outside the project directory;
-- putting real credentials or real personal data into the project.
 
 ## Context
 

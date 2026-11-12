@@ -16,7 +16,7 @@ The frontmatter SHALL be a YAML mapping whose top-level keys are drawn from
 when present, SHALL be strings.
 
 #### Scenario: Required key absent or empty
-- **WHEN** `name` or `description` is absent, null, or an empty string
+- **WHEN** `name` or `description` is absent, null, an empty string, or a string of only whitespace
 - **THEN** a validator reports an error naming the key
 
 #### Scenario: Value of the wrong type
@@ -51,8 +51,8 @@ SHALL NOT read, validate, or compare anything inside it.
 A validator SHALL warn, and SHALL NOT report an error, when `name` is longer
 than 64 characters, when `name` is not made of lowercase letters, digits, and
 single hyphens with no hyphen at either end, or when `description` is longer
-than 1024 characters. The format SHALL NOT require `name` to equal the name of
-the containing directory.
+than 1024 characters, counting Unicode code points. The format SHALL NOT require `name` to equal the name of
+the containing directory or the title of the body.
 
 #### Scenario: Name outside the character rules
 - **WHEN** `name` is `My_Design` or `my--design`

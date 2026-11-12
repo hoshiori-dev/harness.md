@@ -5,9 +5,7 @@ description: A fixture for the validator.
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 
@@ -25,7 +23,7 @@ Placeholder text.
 
 Placeholder text.
 
-## Gates
+## gates
 
 Placeholder text.
 
@@ -33,6 +31,6 @@ Placeholder text.
 
 Placeholder text.
 
-## Style
+## context
 
-Placeholder text.
+Not the recommended section: the letter case differs.

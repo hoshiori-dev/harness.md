@@ -3,7 +3,8 @@ name: harness-md
 description: >-
   HARNESS.md format — reads, writes, revises, and validates a HARNESS.md, the
   file that records a project's agent harness design (frontmatter identity
-  plus fourteen named sections). Use when a HARNESS.md is the file at hand or
+  plus a free-form body with recommended sections).
+  Use when a HARNESS.md is the file at hand or
   is about to be created; when asked what a section must contain, where a
   piece of harness design belongs in the file, or why the validator reports
   a finding; or when a pasted or downloaded HARNESS.md has to be checked
@@ -20,8 +21,10 @@ where a coding agent runs, what it reads, how it checks its own work, what
 blocks a bad change, and what it may do without asking. The entrypoint,
 knowledge files, permission files, hooks, checks, and CI are implementations
 of it. This skill holds the format, the standard a section is written to,
-and the validator. Writing a file requires the format; reading one must
-not, so everything in a file is plain prose under fixed English headings.
+and the validator. The format helps an author write a file;
+reading one must not depend on it,
+so everything in a file is plain prose,
+and the recommended headings are plain English words.
 
 ## Rules on every step
 
@@ -59,30 +62,48 @@ Frontmatter (YAML, first line `---`), identity only:
 
 Any other top-level key is an error: put it under `metadata`.
 
-Body: second-level headings with exactly these English names, in this
-order. The prose under them may be in any language; other sections may be
-added anywhere.
+Body: free-form Markdown. It opens with one first-level heading, the title,
+and an introduction in ordinary paragraphs:
+who the harness serves, what it is meant to achieve,
+what it deliberately leaves unmanaged,
+and which decisions always stay with a human.
+There is no `## Overview` section; the introduction does that work.
 
-| # | Section | Required | The question it answers |
-|---|---|---|---|
-| 1 | Overview | yes | Who the harness serves, what it achieves, what it does not police, what stays with a human |
-| 2 | Context | yes | The given conditions the design must fit: cost of a wrong change, maintenance horizon, who relies on the conventions, how unattended agents are, hosting platform, clients and models |
-| 3 | Invariants | no | Cross-layer rules every task must follow |
-| 4 | Style | no | What the code itself should look like so agents can work in it |
-| 5 | File Structure | no | The directory layout the design requires |
-| 6 | Environment | yes | Where the agent runs, which tools it holds, what it can reach |
-| 7 | Knowledge | yes | How the agent learns the project and what it reads when |
-| 8 | Feedback | yes | What the agent can run and observe to verify its own work |
-| 9 | Gates | yes | Which deterministic checks stop defects |
-| 10 | Authority | yes | What the agent may do directly and what needs a human; how it commits, branches, merges, releases |
-| 11 | Completion | no | How the goal is agreed before work starts and what counts as done |
-| 12 | Entropy | no | How the harness is kept consistent with the code |
-| 13 | Open Questions | no | What is still undecided |
-| 14 | References | no | Outside material the design drew on |
+After the introduction come second-level headings.
+The format requires none of them. It recommends these thirteen,
+with exactly these English names and in this order.
+The prose under them may be in any language;
+other sections may be added anywhere.
 
-A required section must exist even when the project does nothing in that
-layer: it then says so and gives the reason. An absent optional section
-means the item is omitted.
+| # | Section | What it usually covers |
+|---|---|---|
+| 1 | Context | The facts and conditions that shape the design: cost of a wrong change, maintenance horizon, who relies on the conventions, how unattended agents are, hosting platform, clients and models |
+| 2 | Invariants | Constraints that hold across every task, and rules that may never be broken |
+| 3 | Style | The code structure and engineering style preferred so agents can understand, change, and verify the code |
+| 4 | File Structure | The layout of directories and key files the design expects, and what each path is for |
+| 5 | Environment | Where the agent runs, which tools it can call, what it can reach |
+| 6 | Knowledge | What the agent consults in everyday work and when it reads each |
+| 7 | Feedback | Which commands the agent runs and what it observes to check its own changes |
+| 8 | Gates | The deterministic checks that stop defects at commit, merge, or release |
+| 9 | Authority | What the agent may do on its own and what needs a human |
+| 10 | Completion | How the goal is agreed before a task starts and what counts as done |
+| 11 | Entropy | How drift between the harness, the documentation, and the code is found and repaired |
+| 12 | Open Questions | What is still undecided |
+| 13 | References | Outside material the design drew on |
+
+A file with none of these headings still conforms.
+None of them is required by this skill either.
+To describe a complete harness, the recommended way is to cover Context
+and the five layers an agent cannot work without
+(Environment, Knowledge, Feedback, Gates, Authority), each in its own section.
+A file may also describe only some aspects of a harness,
+and then it lacks some or all of these sections;
+its introduction says what it covers.
+In a design meant to be complete,
+a layer the project does nothing in still gets its section,
+which says so and gives the reason,
+because a reader must never take a missing section
+to mean that a mechanism is switched off.
 
 Read [references/specification.md](references/specification.md) when a rule above is not
 enough to settle a question: an edge of the frontmatter or heading rules,
@@ -128,12 +149,16 @@ section: it lists, section by section, what the prose has to settle and
 where content that seems to fit two sections goes.
 
 Start a new file from [assets/HARNESS.skeleton.md](assets/HARNESS.skeleton.md): rework it line
-by line, delete every comment, and delete each optional section the design
-omits. When revising, change only the sections the request touches and
+by line, delete every comment, and delete each section marked "when needed"
+that the design has nothing to say in. When revising,
+change only the sections the request touches and
 keep the author's wording elsewhere.
 
-Done when: every required section exists and answers its question; no
-sentence needs outside vocabulary; step 4 reports no errors.
+Done when: the file has a title and an introduction;
+a design meant to be complete has Context and the five core sections,
+and a partial one says in its introduction what it covers;
+every section answers its question; no sentence needs outside vocabulary;
+step 4 reports no errors.
 
 ### 4. Validate
 
@@ -147,12 +172,15 @@ uv run scripts/lint_harness_md.py HARNESS.md
 (the script path is relative to this skill's directory; pass the file's
 real path). It prints one line per finding, `path:line: severity[code]:
 message`, and exits 1 when there is an error; `--strict` also fails on
-warnings, `--json` prints JSON. It checks the frontmatter keys and the
-section skeleton only. When `uv` is not available, check the rules of the
+warnings, `--json` prints JSON. It checks the frontmatter keys, the title,
+and the order and repetition of the recommended headings, and nothing else:
+it requires no section. When `uv` is not available, check the rules of the
 format section above by reading, and say that the validator did not run.
 
-Fix every error. A warning (section order, `name` or `description` over
-the limits, an unknown `version`) is fixed unless the user wants it kept.
+Fix every error. A warning (a missing or repeated title,
+a repeated or out-of-order recommended section,
+`name` or `description` over the limits, an unknown `version`)
+is fixed unless the user wants it kept.
 A clean result says the file is well-formed, not that the design is good:
 never report a validator pass as a review of the design.
 
@@ -161,8 +189,12 @@ the user chose to keep.
 
 ## Gotchas
 
-- A translated or re-levelled heading (`## 概述`, `### Overview`) is not
-  that section; the validator then reports the section missing.
+- A translated or re-levelled heading (`## 背景`, `### Context`) is not
+  that section. The validator reports nothing, because no section is required,
+  but a tool or reader looking for the section will not find it.
+- `## Overview` was a section in earlier drafts of the format.
+  A file that still has it conforms; when revising one,
+  move that text up under the title as the introduction.
 - A heading inside a fenced code block does not count, so a file can quote
   its own skeleton safely.
 - `tags`, `status`, `based-on`, and similar keys at the top level are

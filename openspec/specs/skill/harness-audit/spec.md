@@ -94,7 +94,11 @@ intent, the design when it names a fact the code states differently.
 
 #### Scenario: No design to compare with
 - **WHEN** there is no `HARNESS.md`
-- **THEN** each required layer is compared with the usual practice for the project's Context and each finding is marked "no design to compare with"
+- **THEN** each core layer (Environment, Knowledge, Feedback, Gates, Authority) is compared with the usual practice for the project's Context and each finding is marked "no design to compare with"
+
+#### Scenario: Layer described under a custom heading
+- **WHEN** a `HARNESS.md` has no `## Gates` section and describes its checks under `## Quality bar`
+- **THEN** that text is handed over as the Gates design, and the layer is not reported as undesigned
 
 #### Scenario: No builder installed for a layer
 - **WHEN** no installed skill claims the Entropy layer

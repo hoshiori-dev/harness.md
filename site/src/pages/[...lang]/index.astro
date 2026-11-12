@@ -53,16 +53,15 @@ const entries = await hubEntries();
         <p class="skeleton-lead">{t.home.skeletonLead}</p>
         <ol>
           {
-            SECTIONS.map((section, index) => (
-              <li class={section.required ? "required" : "optional"}>
+            SECTIONS.map((name, index) => (
+              <li>
                 <span class="heading" lang="en">
                   <span class="marks" aria-hidden="true">
                     ##
                   </span>{" "}
-                  {section.name}
+                  {name}
                 </span>
                 <span class="question">{t.home.questions[index]}</span>
-                <span class="need">{section.required ? t.home.required : t.home.optional}</span>
               </li>
             ))
           }
@@ -126,12 +125,9 @@ const entries = await hubEntries();
     border-top: 1px solid var(--rule);
   }
 
-  /* One line of the outline: the heading as it is written in the file, the
-     question it answers, and whether the format requires it. */
+  /* One line of the outline: the heading as it is written in the file, and
+     what a section under it usually covers. */
   .skeleton li {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: 1rem;
     padding-block: 0.5rem;
     border-bottom: 1px solid var(--rule);
   }
@@ -146,30 +142,11 @@ const entries = await hubEntries();
     color: var(--accent);
   }
 
-  .skeleton .need {
-    grid-column: 2;
-    grid-row: 1;
-    font-size: 0.8125rem;
-    color: var(--muted);
-    align-self: center;
-  }
-
   .skeleton .question {
-    grid-column: 1 / -1;
+    display: block;
     color: var(--muted);
     font-size: 0.9375rem;
     line-height: 1.5;
-  }
-
-  .skeleton .optional .heading,
-  .skeleton .optional .marks {
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  .skeleton .required .need {
-    color: var(--ink);
-    font-weight: 500;
   }
 
   .next-heading {

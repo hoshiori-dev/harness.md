@@ -27,7 +27,7 @@ An entry SHALL produce no error, warning, or note from the format validator,
 SHALL state `version`, and SHALL state `license`.
 
 #### Scenario: Entry with a warning
-- **WHEN** an entry's sections are out of the specification's order
+- **WHEN** an entry's recommended sections are out of the specification's order, or it has no first-level heading
 - **THEN** `just hub-check` fails, although the same file would pass as a project's own `HARNESS.md`
 
 ### Requirement: Hub metadata

@@ -38,6 +38,30 @@ The design is stack-neutral. Where a tool depends on the language, it
 states the rule for choosing and a default; the agent building the harness
 fits it to the project's actual stack and keeps what already works.
 
+The harness serves a team of engineers and the coding agents working with
+them. It aims at one outcome: an agent can take a scoped task from an
+approved specification to a pull request that is ready for review without
+a person steering each step, while a wrong change is stopped by a machine
+before it reaches the default branch and no agent action reaches
+production or the outside world without a human decision.
+
+It does not decide what to build, in what order, or which architecture is
+right; it records those decisions once people make them and enforces the
+ones a machine can check. It does not regulate formatting taste beyond
+what the formatter does.
+
+These always stay with a person:
+
+- approving a specification, and approving and merging a pull request;
+- releasing and deploying to production, and running a data migration
+  there;
+- changing the control plane: permission files, security hooks, the secret
+  scanner's configuration, CI gate definitions, branch protection,
+  repository settings, the isolated environment's security configuration;
+- creating, widening, or rotating credentials;
+- deleting anything on the remote that someone else created;
+- every item on a pending decisions list (defined under Authority).
+
 ## How to use this file
 
 You are a coding agent that was given this file and a description of the
@@ -88,32 +112,6 @@ then revisits each section whose reasons depended on the old Context.
 Afterwards, design intent is read from this file and facts are read from
 the code: when the two disagree about what should be, fix the artifact or
 change this file first; when they disagree about what is, the code wins.
-
-## Overview
-
-The harness serves a team of engineers and the coding agents working with
-them. It aims at one outcome: an agent can take a scoped task from an
-approved specification to a pull request that is ready for review without
-a person steering each step, while a wrong change is stopped by a machine
-before it reaches the default branch and no agent action reaches
-production or the outside world without a human decision.
-
-It does not decide what to build, in what order, or which architecture is
-right; it records those decisions once people make them and enforces the
-ones a machine can check. It does not regulate formatting taste beyond
-what the formatter does.
-
-These always stay with a person:
-
-- approving a specification, and approving and merging a pull request;
-- releasing and deploying to production, and running a data migration
-  there;
-- changing the control plane: permission files, security hooks, the secret
-  scanner's configuration, CI gate definitions, branch protection,
-  repository settings, the isolated environment's security configuration;
-- creating, widening, or rotating credentials;
-- deleting anything on the remote that someone else created;
-- every item on a pending decisions list (defined under Authority).
 
 ## Context
 

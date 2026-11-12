@@ -6,9 +6,7 @@ description: A fixture for the validator.
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 

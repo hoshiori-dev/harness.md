@@ -4,9 +4,7 @@ license: MIT
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 

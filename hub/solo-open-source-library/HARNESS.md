@@ -43,6 +43,33 @@ The design is stack-neutral: it gives the rule for each tool choice and a
 default, and the agent building the harness fits it to the library's
 language and keeps what already works.
 
+The harness serves three readers: the maintainer, the maintainer's coding
+agent, and the agents of outside contributors. It aims at three outcomes.
+
+- A contributor's agent that has never seen the project can set it up,
+  make a change, and prove the change passes everything the maintainer
+  will check, without asking the maintainer anything.
+- The maintainer can accept or reject a contribution quickly, because the
+  checks have already answered the mechanical questions and what remains
+  is judgement.
+- Users who depend on the library are not broken by accident: a change to
+  the public API is always visible, deliberate, versioned, and announced.
+
+It does not police how a contributor works on their own machine, which
+client or model they use, or the internal style of code beyond what the
+formatter and linter enforce. It does not manage a roadmap.
+
+These always stay with the maintainer:
+
+- deciding whether the library should do something at all;
+- approving any change to the public API;
+- merging, tagging, and releasing;
+- handling security reports;
+- changing CI, branch protection, repository settings, and the release
+  credentials' configuration;
+- everything published under the maintainer's name: issues, comments,
+  review replies, announcements.
+
 ## How to use this file
 
 You are a coding agent that was given this file and a description of the
@@ -87,35 +114,6 @@ library. Do this in order.
 A project that keeps this file first rewrites Context to describe itself,
 then revisits each section whose reasons depended on the old Context.
 Afterwards, design intent is read from this file and facts from the code.
-
-## Overview
-
-The harness serves three readers: the maintainer, the maintainer's coding
-agent, and the agents of outside contributors. It aims at three outcomes.
-
-- A contributor's agent that has never seen the project can set it up,
-  make a change, and prove the change passes everything the maintainer
-  will check, without asking the maintainer anything.
-- The maintainer can accept or reject a contribution quickly, because the
-  checks have already answered the mechanical questions and what remains
-  is judgement.
-- Users who depend on the library are not broken by accident: a change to
-  the public API is always visible, deliberate, versioned, and announced.
-
-It does not police how a contributor works on their own machine, which
-client or model they use, or the internal style of code beyond what the
-formatter and linter enforce. It does not manage a roadmap.
-
-These always stay with the maintainer:
-
-- deciding whether the library should do something at all;
-- approving any change to the public API;
-- merging, tagging, and releasing;
-- handling security reports;
-- changing CI, branch protection, repository settings, and the release
-  credentials' configuration;
-- everything published under the maintainer's name: issues, comments,
-  review replies, announcements.
 
 ## Context
 

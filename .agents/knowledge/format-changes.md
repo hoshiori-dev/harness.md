@@ -19,7 +19,7 @@ reviewer does. The two validators are kept equal by the fixtures.
 ## What counts as a format change
 
 Anything that alters what a conforming file is or what a validator reports:
-a key, a section, its required status, the order, a heading rule, a finding
+a key, a recommended section, the order, a heading or title rule, a finding
 or its severity, a version. It needs an OpenSpec change
 (`.agents/knowledge/spec-workflow.md`). A reworded sentence of the prose
 that changes no rule is spec-less, but still updates the mirror and the
@@ -40,7 +40,7 @@ skill's copy in the same change.
    changes; its spec under `openspec/specs/skill/harness-md/` when its
    behaviour changes.
 5. Both validators, changed together: constants (`SECTIONS`,
-   `REQUIRED_SECTIONS`, `KEYS`, `VERSIONS`), rules, finding codes, and
+   `KEYS`, `VERSIONS`), rules, finding codes, and
    messages. A new format version is appended to `VERSIONS` in both.
 6. `spec/fixtures/`: one case per new or changed rule, with its codes in
    `spec/fixtures/expected.json`. A fixture is a skeleton with placeholder
@@ -61,9 +61,10 @@ mirror's heading structure), then `just check`.
 
 ## Rules that bind every format change
 
-- The specification defines identity keys and the section skeleton only:
-  no design values in frontmatter, no writing guidance, no filled-in
-  example file.
+- The specification defines the file's outer structure, five metadata
+  keys, and the rules for recognising headings. No body section is required.
+  Its guidance on expressing a design (section 6) adds no validation rule.
+  No design values in frontmatter, and no filled-in example file.
 - A reader with no tool and no knowledge of the specification must still
   understand a conforming file; reject a key or value that needs a lookup.
 - First-party tools never read `metadata`. The hub check reads it because

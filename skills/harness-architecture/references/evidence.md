@@ -56,7 +56,7 @@ Claude Code's best-practices documentation calls giving the agent a way to
 verify its own work (tests, screenshots, expected outputs) the single
 highest-leverage thing a team can do. An agent that can run a check and see
 the result corrects itself; an agent that cannot reports work it never saw
-working. This is why Feedback is a required layer and why a fast, scoped
+working. This is why Feedback is a core layer and why a fast, scoped
 test command is in every default.
 
 ## How to use this file

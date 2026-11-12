@@ -14,8 +14,6 @@ license: Apache-2.0
 
 # The harness of harness.md
 
-## Overview
-
 This harness serves the maintainer of `hoshiori-dev/harness.md`, the coding
 agents the maintainer works with (Claude Code, Codex, Antigravity), and
 outside contributors whose agents arrive knowing nothing about the
@@ -107,6 +105,13 @@ rules existed. The rules below apply to every change after it.
    READMEs, hub READMEs, and site copy are drafted and reviewed with the
    `human-writing` skill; text for agents (skills, knowledge files, this
    file) follows `.agents/knowledge/skill-quality.md`. Enforced by review.
+10. **Markdown lines break where the meaning does.**
+    A line of Markdown source ends at punctuation or another semantic boundary.
+    A line that is too long and has no punctuation to break at
+    still breaks between words, never inside a word or a number;
+    this holds for Chinese as for English.
+    Wrapping by width alone is not acceptable. A URL may make a line long.
+    Enforced by review.
 
 ## Style
 
@@ -430,9 +435,6 @@ own pull request.
 
 ## Open Questions
 
-- The `human-writing` skill is installed locally from an outside library
-  and is not committed. Invariant 9 depends on it. Whether to vendor it, pin
-  it, or only name it is undecided.
 - The behavioural tests of the shipped skills have not been run; the first
   implementation was written before the process that requires them.
 - Antigravity loads plugin agents only from the plugin root and Codex

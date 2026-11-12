@@ -32,6 +32,7 @@ itself is checked or changed, never for an ordinary task.
 - Prose for people (specification, READMEs, site copy) is drafted and
   reviewed with the `human-writing` skill; text for agents follows
   `.agents/knowledge/skill-quality.md`.
+- Break Markdown lines at punctuation, never inside a word or by width alone.
 - No filled-in example `HARNESS.md` in the specification or a skill asset.
 - Report only what you ran: never call a check passed, a page good-looking,
   or a skill working in a client without having verified it.

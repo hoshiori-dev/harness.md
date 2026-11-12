@@ -55,7 +55,7 @@ export function llmsText(entries: HubEntry[], docs: DocSummary[]): string {
     "",
     "## Specification",
     "",
-    `- [HARNESS.md format specification](${markdownUrl("/spec/", DEFAULT_LANG)}): the frontmatter keys, the fourteen sections, and what a validator reports`,
+    `- [HARNESS.md format specification](${markdownUrl("/spec/", DEFAULT_LANG)}): the frontmatter keys, the thirteen recommended sections, and what a validator reports`,
     "",
   ];
   if (entries.length > 0) {

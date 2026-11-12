@@ -5,9 +5,7 @@ description: A fixture.
 
 # Fixture
 
-## Overview
-
-Placeholder text.
+Placeholder introduction.
 
 ## Context
 

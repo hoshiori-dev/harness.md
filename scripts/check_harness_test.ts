@@ -19,7 +19,7 @@ function harness(): Record<string, FileSpec> {
   return {
     "AGENTS.md":
       "# Fixture\n\nRead [the guide](.agents/knowledge/guide.md). Run `just check`.\nScripts live in `scripts/tool.ts`; build output goes to `scripts/out/`; entries are `scripts/<name>.ts`.\n",
-    "HARNESS.md": "---\nname: fixture\ndescription: Fixture.\n---\n\n## Overview\n",
+    "HARNESS.md": "---\nname: fixture\ndescription: Fixture.\n---\n\n# Fixture\n",
     justfile: "check:\n    echo ok\n",
     ".gitignore": "scripts/out/\n",
     "scripts/tool.ts": "// tool\n",
