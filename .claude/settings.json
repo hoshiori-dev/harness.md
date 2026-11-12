@@ -29,6 +29,7 @@
       "Bash(just pr-labels *)",
       "Bash(just secrets)",
       "Bash(just secrets-commits *)",
+      "Bash(just publish-check *)",
       "Bash(just site-check)",
       "Bash(just site-build)",
       "Bash(just client-footprint *)",

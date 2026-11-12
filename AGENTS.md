@@ -24,11 +24,10 @@ itself is checked or changed, never for an ordinary task.
 - Commits: Conventional Commits, lowercase imperative subject of at most 50
   characters, no AI or tool attribution. One commit per verified task;
   drafts are squashed before a push and never reach the remote.
-- Irreversible or outward actions (push, ready, comment, label, release,
-  remote settings) happen only when the plan or issue pre-authorised them;
-  otherwise queue them as pending decisions and finish the rest.
+- Your own task runs to a ready pull request without asking; spec work
+  waits for `spec:approved`; other outward actions are pending decisions.
 - Nothing secret or private enters the repository, an issue, or a pull
-  request; everything here is public.
+  request: `just publish-check` before every push and every `gh` write.
 - Prose for people (specification, READMEs, site copy) is drafted and
   reviewed with the `human-writing` skill; text for agents follows
   `.agents/knowledge/skill-quality.md`.
@@ -67,7 +66,7 @@ site/  DESIGN.md               <- the website (Astro, Pagefind; own pnpm package
 | Taking an issue, opening or finishing a pull request, any `gh` write | the `github-project-workflow` skill, `.agents/knowledge/github-workflow.md` |
 | A check is red; adding or renaming a recipe or CI job | `.agents/knowledge/github/checks.md` |
 | Branching, committing, squashing, pushing, tags | `.agents/knowledge/git-workflow.md` |
-| Before any push, comment, label, release; an action was refused | `.agents/knowledge/agent-authority.md` |
+| Before any issue, push, comment, label, release; an action was refused | `.agents/knowledge/agent-authority.md` |
 | Before reading or changing a remote setting | `.agents/knowledge/github/platform-settings.md` |
 | Editing this file, a knowledge file, or a check; adding a client; every tenth merged pull request | `.agents/knowledge/maintenance.md` |
 
@@ -93,6 +92,7 @@ person's own login. Never store a credential in the repository.
 | Specs strict; no unarchived change (merge gate) | `just spec-check`; `just spec-archived` |
 | Site checks and static build | `just site-check`; `just site-build` |
 | Plugin loads in the real clients (local only) | `just clients-validate` |
+| Text or commits about to be published hold no secret or personal data | `just publish-check <file>`; `just publish-check --commits <range>` |
 
 ## Workflow
 

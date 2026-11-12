@@ -91,6 +91,10 @@ secrets:
 secrets-commits range="":
     GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0='*' betterleaks git . --no-banner --redact {{ if range == "" { "" } else { quote("--log-opts=" + range) } }}
 
+# Secret and personal-data scan of text about to leave the machine: files (an issue or pull request body, a comment) and `--commits <range>` (the commits a push adds, authors and messages included). Run before every push and every gh write.
+publish-check +args:
+    node scripts/check_publish.ts "$@"
+
 # Every pre-commit hook on every file.
 pre-commit:
     pre-commit run --all-files

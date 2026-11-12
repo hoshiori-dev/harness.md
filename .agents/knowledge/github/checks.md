@@ -65,6 +65,8 @@ the recipe is the source of truth and this table is the map.
 
 Not in CI: `just clients-validate` needs the client CLIs and runs
 in the dev container only;
+`just publish-check` runs before a push or a `gh` write,
+on text that is not yet in the repository;
 the behavioural tests of the skills need an agent and run by hand
 (`.agents/knowledge/spec-workflow.md`, Validation).
 
