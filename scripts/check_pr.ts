@@ -4,8 +4,9 @@
 // heading of .github/pull_request_template.md.
 // A pull request opened by Dependabot is checked only on the form of its
 // title: the bot writes its own body and cannot keep the template, and it
-// builds the title from the package, the versions, and the directory, so
-// its length is not something the bot or the project can set.
+// builds the title from the package, the versions, and the directory.
+// Only grouping updates in .github/dependabot.yml would shorten that title;
+// the project keeps one pull request per dependency instead.
 //
 //   check_pr.ts --title "<title>" --body-file <path> [--author <login>]
 //   PR_TITLE=... PR_BODY=... [PR_AUTHOR=...] check_pr.ts
@@ -32,8 +33,8 @@ for (let i = 0; i < args.length; i += 2) {
     );
 }
 if (title === undefined) fail("no title: pass --title or set PR_TITLE");
-const bodyExempt = BOT_AUTHORS.has(author);
-if (body === undefined && !bodyExempt) fail("no body: pass --body-file or set PR_BODY");
+const botAuthor = BOT_AUTHORS.has(author);
+if (body === undefined && !botAuthor) fail("no body: pass --body-file or set PR_BODY");
 
 const findings = new Findings();
 if (!TITLE_RE.test(title)) {
@@ -43,7 +44,7 @@ if (!TITLE_RE.test(title)) {
     problem: `"${title}" is not a Conventional Commits subject.`,
     fix: "use `<type>(<scope>)?: <lowercase subject>` with a type from feat, fix, docs, refactor, test, chore, ci, build, perf, style, revert.",
   });
-} else if (title.length > TITLE_MAX && !bodyExempt) {
+} else if (title.length > TITLE_MAX && !botAuthor) {
   findings.add({
     file: "pull request title",
     rule: "pr-title",
@@ -52,7 +53,7 @@ if (!TITLE_RE.test(title)) {
   });
 }
 
-if (bodyExempt || body === undefined) {
+if (botAuthor || body === undefined) {
   console.log(`check_pr: body and title length not checked for a pull request opened by ${author}`);
   process.exit(findings.report("check_pr"));
 }

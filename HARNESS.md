@@ -310,7 +310,8 @@ Three more statuses sit beside the gate:
 `secrets / scan`, a secret scan of the commits the push or pull request adds;
 `checks / pr`, the pull request title and body
 (a pull request Dependabot opened is checked only on the form of its title,
-because the bot writes its own body and sets the title's length);
+because the bot writes its own body
+and builds the title from the package, the versions, and the directory);
 and `checks / spec-archived`,
 which is withheld while an OpenSpec change in the pull request is not archived,
 so that a change cannot merge half-finished.
@@ -395,7 +396,9 @@ Every verified task is one commit;
 draft commits are squashed per task before a push and never reach the remote.
 A pull request's title follows the same convention within 72 characters
 (`checks / pr` enforces it),
-because it becomes the subject of the squash commit.
+because it becomes the subject of the squash commit;
+a title Dependabot wrote is held to the convention only,
+since shortening it would mean grouping its updates.
 
 Work follows GitHub Flow: an issue, a branch created from it,
 a draft pull request, review, squash merge into `main`.

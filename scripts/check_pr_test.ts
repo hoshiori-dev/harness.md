@@ -58,6 +58,13 @@ test("check_pr checks only the title form of a pull request Dependabot opened", 
   );
   assert.equal(badTitle.code, 1);
   assert.match(badTitle.output, /pr-title/);
+  const badLong = runScript("check_pr.ts", [], root, {
+    PR_TITLE: longTitle.replace("ci: bump", "Bump"),
+    PR_BODY: botBody,
+    PR_AUTHOR: "dependabot[bot]",
+  });
+  assert.equal(badLong.code, 1);
+  assert.match(badLong.output, /not a Conventional Commits subject/);
   const person = runScript("check_pr.ts", [], root, {
     PR_TITLE: "chore: bump typescript from 6.0.3 to 7.0.2 in /site",
     PR_BODY: botBody,

@@ -53,7 +53,9 @@ a reworded sentence of the specification is `docs`.
 No AI or tool attribution, in a trailer or anywhere else.
 The pull request title follows the same rule
 because it becomes the commit on `main`;
-`checks / pr` enforces the form and a ceiling of 72 characters.
+`checks / pr` enforces the form and a ceiling of 72 characters;
+a pull request Dependabot opened is held to the form only
+(`.agents/knowledge/github/checks.md`).
 
 ## Merge method
 
