@@ -1,4 +1,7 @@
-Read this when a command hangs or prompts, before touching a credential, a mount, a container or sandbox file, a security hook, or a lint, test, type-check, or build configuration, when a tool you expected is missing, and when asked what this environment can reach.
+Read this when a command hangs or prompts, before touching a credential,
+a mount, a container or sandbox file, a security hook, or a lint, test,
+type-check, or build configuration, when a tool you expected is missing,
+and when asked what this environment can reach.
 
 # Agent Environment
 
@@ -12,7 +15,8 @@ The design behind these rules is the Environment section of `HARNESS.md`; change
 
 {{CREDENTIALS}} <!-- # CONFIGURE: {{CREDENTIALS}}: one line per credential the agent holds: the variable or file name, the system, the scopes. Names only, never a value. -->
 
-Never print, copy, or commit a credential's value. Never widen a token or add a credential; ask the owner.
+Never print, copy, or commit a credential's value.
+Never widen a token or add a credential; ask the owner.
 
 ## Tools
 
@@ -32,7 +36,9 @@ Change these only under the rule in {{GATES_KNOWLEDGE}}: <!-- # CONFIGURE: {{GAT
 
 {{SOFT_READ_ONLY}} <!-- # CONFIGURE: {{SOFT_READ_ONLY}}: one line per soft read-only file. -->
 
-A refusal from a security rule, a read-only mount, or the network is a policy boundary, not a fault: do not retry it by another route; report it with the action that was refused.
+A refusal from a security rule, a read-only mount,
+or the network is a policy boundary, not a fault:
+do not retry it by another route; report it with the action that was refused.
 
 ## Non-interactive commands
 

@@ -1,11 +1,11 @@
 # Compatibility Watch
 
-Read at every reclamation run, after any client or OpenSpec upgrade, when a
-client behaves differently from `.agents/knowledge/client-matrix.md`, and
-before removing a workaround. This file is the one list of known
-limitations, the workarounds built for them, and the condition under which
-each workaround goes away. The matrix describes how things work today and
-points here for why.
+Read at every reclamation run, after any client or OpenSpec upgrade,
+when a client behaves differently from `.agents/knowledge/client-matrix.md`,
+and before removing a workaround.
+This file is the one list of known limitations, the workarounds built for them,
+and the condition under which each workaround goes away.
+The matrix describes how things work today and points here for why.
 
 ## Versions these facts were recorded against
 
@@ -18,17 +18,18 @@ points here for why.
 | Antigravity CLI (`agy`) | 1.5.5 | 2026-10-27 on 1.4.7 | `agy changelog` (first line) |
 | OpenSpec | 1.17.0 | 2026-11-11 | `openspec --version` |
 
-`just versions` prints the installed versions for the log. The rows below
-were verified in the predecessor repository (harness-builder) and carried
-over; re-run each "Re-check how" at the first reclamation.
+`just versions` prints the installed versions for the log.
+The rows below were verified in the predecessor repository (harness-builder)
+and carried over; re-run each "Re-check how" at the first reclamation.
 
 ## Watch list
 
-Each row is a limitation the harness carries today, with the workaround
-built for it or, where the capability is simply not offered, the check that
-keeps it from creeping back. When the resolving condition is true, apply
-the disposition in one change, update the matrix, and delete the row. IDs
-are kept from the predecessor, so numbers are not contiguous.
+Each row is a limitation the harness carries today,
+with the workaround built for it or, where the capability is simply not offered,
+the check that keeps it from creeping back.
+When the resolving condition is true, apply the disposition in one change,
+update the matrix, and delete the row.
+IDs are kept from the predecessor, so numbers are not contiguous.
 
 | ID | Limitation | Workaround in this repository | Re-check how | Resolved when | Then |
 |---|---|---|---|---|---|
@@ -46,8 +47,9 @@ are kept from the predecessor, so numbers are not contiguous.
 
 ## Adding a row
 
-Add a row whenever a check, generator branch, or document exists only
-because a client or specification cannot do something yet, or whenever a
-capability is deliberately withheld from a client for that reason. Name the
-file that carries the workaround so the disposition can be executed without
-rediscovery.
+Add a row whenever a check, generator branch,
+or document exists only because a client
+or specification cannot do something yet,
+or whenever a capability is deliberately withheld from a client for that reason.
+Name the file that carries the workaround so the disposition
+can be executed without rediscovery.

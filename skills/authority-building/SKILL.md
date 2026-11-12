@@ -13,13 +13,14 @@ compatibility: >-
 
 # Authority Building
 
-The environment decides what an agent *can* do; Authority decides what it
-*may* do alone. How it works with the repository and the hosting platform
-is the same question, so the layer has a **policy half** (action classes,
-permission lists, refusals, checkpoints, commits), built for every project,
-and a **platform half** (branches, merging, releases, labels, forms, remote
-settings), built only when the Context names GitHub or GitLab. With no
-hosted remote, skip every platform item; the section says so.
+The environment decides what an agent *can* do;
+Authority decides what it *may* do alone.
+How it works with the repository and the hosting platform is the same question,
+so the layer has a **policy half** (action classes, permission lists, refusals,
+checkpoints, commits), built for every project,
+and a **platform half** (branches, merging, releases, labels, forms,
+remote settings), built only when the Context names GitHub or GitLab.
+With no hosted remote, skip every platform item; the section says so.
 
 Steps by mode: design and extract run 1, 2, 6; build runs 1, 3, 4, 6;
 audit runs 1, 5, 6.
@@ -153,36 +154,41 @@ permission files (`.claude/settings*.json`, `.codex/config.toml`,
 `.codex/rules/`); any authority or git-workflow document; security hooks;
 the entrypoint; the clients in use; signs of parallel agents.
 
-Platform half, only when `origin` or the Context names GitHub or GitLab: run
-the read-only probe [scripts/check_platform.py](scripts/check_platform.py) as
-`uv run <this skill's directory>/scripts/check_platform.py --path <target>`;
-add `--repo`, `--platform`, or `--hostname` only when `origin` does not
-answer them. Never redirect its output into the target. Read alongside: platform knowledge files, the settings register,
-templates, forms, and every file the probe lists under `label_files`.
+Platform half, only when `origin` or the Context names GitHub or GitLab:
+run the read-only probe [scripts/check_platform.py](scripts/check_platform.py)
+as `uv run <this skill's directory>/scripts/check_platform.py --path <target>`;
+add `--repo`, `--platform`,
+or `--hostname` only when `origin` does not answer them.
+Never redirect its output into the target. Read alongside:
+platform knowledge files, the settings register, templates, forms,
+and every file the probe lists under `label_files`.
 
-- Exit 2 (platform unknown): re-run with `--platform` and `--hostname` when
-  the remote URL or the Context settles them; otherwise ask in step 2.
-- Exit 1 (tool missing or logged out): quote the command its stderr names,
-  install nothing, and continue from facts the user supplies; register rows
-  are then marked unverified and every remote write becomes a pending human
-  action with its exact command.
-- Owner type, plan or tier, and visibility are three facts; an `unknown`
-  one is asked, never inferred.
+- Exit 2 (platform unknown):
+  re-run with `--platform` and `--hostname`
+  when the remote URL or the Context settles them; otherwise ask in step 2.
+- Exit 1 (tool missing or logged out):
+  quote the command its stderr names, install nothing,
+  and continue from facts the user supplies;
+  register rows are then marked unverified
+  and every remote write becomes a pending human action with its exact command.
+- Owner type, plan or tier, and visibility are three facts;
+  an `unknown` one is asked, never inferred.
 
-Done when: every item is observed, absent, or "ask"; the probe ran or its
-failure is recorded; no file changed.
+Done when: every item is observed, absent, or "ask";
+the probe ran or its failure is recorded; no file changed.
 
 ### 2. Write the section
 
-**extract**: describe what the project does today for every row below, mark
-inferred intent "(inferred)", and keep practices that contradict the
-defaults, listing them in step 6.
+**extract**: describe what the project does today for every row below,
+mark inferred intent "(inferred)",
+and keep practices that contradict the defaults, listing them in step 6.
 
-**design**: ask, in one round, only what step 1 could not show: who reviews
-and merges, who owns remote settings, whether several agents write at once,
-whether outsiders open requests from forks, how unattended agents run. Then
-settle every row: the default, unless Context or evidence selects the
-variant.
+**design**: ask, in one round, only what step 1 could not show:
+who reviews and merges, who owns remote settings,
+whether several agents write at once,
+whether outsiders open requests from forks, how unattended agents run.
+Then settle every row: the default,
+unless Context or evidence selects the variant.
 
 | Decision | Default, and why | Variant, and what selects it |
 |---|---|---|
@@ -208,32 +214,36 @@ variant.
 | Remote settings | Each has an owner and a row in a settings register; none changes without a go-ahead for that delta | — |
 | Issue-to-merge procedure | One project skill from taking an issue to merging, with a publish gate before every outward write | — |
 
-Challenge each of these once, with its reason, then record the user's
-choice and reason in the section: per-command approval; an ask entry; an
-allowed push or force push; an AI co-author trailer; a board, milestone, or
-`priority:` label; git-flow for a new project; a release bot. Decline, and
-do not record, "let the agent fix the rule that blocked it".
+Challenge each of these once, with its reason,
+then record the user's choice and reason in the section: per-command approval;
+an ask entry; an allowed push or force push; an AI co-author trailer;
+a board, milestone, or `priority:` label; git-flow for a new project;
+a release bot. Decline, and do not record,
+"let the agent fix the rule that blocked it".
 
-Write prose a reader without this skill can build from, each item with its
-reason. It states: the two classes with examples and the standing list;
-the refusal rule; the pending decisions fields; each client's allow and deny
-entries, or the rule that derives them from the task runner; the checkpoint
-rules and recipe names; the commit convention and attribution rule;
-concurrency; and, with a hosted remote, branch naming and base, merge
-method, who marks ready and who merges, what protects the default branch
-and who enforces it, the release trigger and who may pull it, the entities
-kept and those deliberately absent, the label file path, and who owns
-remote settings.
+Write prose a reader without this skill can build from,
+each item with its reason. It states:
+the two classes with examples and the standing list; the refusal rule;
+the pending decisions fields; each client's allow and deny entries,
+or the rule that derives them from the task runner;
+the checkpoint rules and recipe names;
+the commit convention and attribution rule; concurrency;
+and, with a hosted remote, branch naming and base, merge method,
+who marks ready and who merges,
+what protects the default branch and who enforces it,
+the release trigger and who may pull it,
+the entities kept and those deliberately absent, the label file path,
+and who owns remote settings.
 
-Done when: every row has text in the section or a sentence that it does
-not apply, each challenged choice carries the user's reason, and no file
-changed.
+Done when: every row has text in the section or a sentence
+that it does not apply, each challenged choice carries the user's reason,
+and no file changed.
 
 ### 3. Build
 
-Create only what the section, or the File Structure part handed over,
-covers. Rework each asset line by line: every `# CONFIGURE:` line resolved,
-guidance and inapplicable sections deleted.
+Create only what the section, or the File Structure part handed over, covers.
+Rework each asset line by line: every `# CONFIGURE:`
+line resolved, guidance and inapplicable sections deleted.
 
 1. **Policy file**, when the section calls for one: rework
    [assets/knowledge-authority.md](assets/knowledge-authority.md) into the knowledge directory, with the
@@ -270,65 +280,72 @@ guidance and inapplicable sections deleted.
    and go on. Unreachable or rights missing: a pending human action with
    its command.
 
-Done when: every file the section covers exists; every delta is applied
-with its readback, declined and recorded, or pending with its command;
-nothing outside the section was written.
+Done when: every file the section covers exists;
+every delta is applied with its readback, declined and recorded,
+or pending with its command; nothing outside the section was written.
 
 ### 4. Verify
 
-- Each permission file parses; Codex rules pass
+- Each permission file parses;
+  Codex rules pass
   `codex execpolicy check --rules <file> -- <a denied command>`.
-- No allow entry matches a command or recipe that pushes, publishes,
-  releases, or writes to a tracker, wildcards included; no ask entry exists
-  that the section does not record.
-- Every recipe ran in the clone; the clone is gone; the target's status,
-  branches, and stashes are unchanged.
+- No allow entry matches a command or recipe that pushes, publishes, releases,
+  or writes to a tracker, wildcards included;
+  no ask entry exists that the section does not record.
+- Every recipe ran in the clone; the clone is gone;
+  the target's status, branches, and stashes are unchanged.
 - `grep -rnE '\{\{[A-Z_]+\}\}'` over the delivered files prints nothing;
   delivered tests pass; no delivered file names a skill directory.
-- Every sentence of the section maps to a line in a delivered file, a
-  register row, or a deviation for step 6.
+- Every sentence of the section maps to a line in a delivered file,
+  a register row, or a deviation for step 6.
 
 Done when: every check passes or its failure is in the hand-back.
 
 ### 5. Audit
 
-Compare the section with the project and the remote, read-only. With no
-Authority section, compare with the step 2 defaults for the Context and
-mark each finding "no design to compare with". Report: an
-ask entry or runner wildcard; an allowed push or force push; a missing
-deny entry; stash-as-checkpoint or no rollback recipe; attribution in
-recent commits against the rule; the policy, permission files, and
-entrypoint core disagreeing; a register row whose readback differs from
-the remote; merge methods, protection, or labels differing from the
-section; a required check naming a job that does not exist; entities
-outside the section; anything the project does that the section omits.
+Compare the section with the project and the remote, read-only.
+With no Authority section,
+compare with the step 2 defaults for the Context
+and mark each finding "no design to compare with". Report:
+an ask entry or runner wildcard; an allowed push or force push;
+a missing deny entry; stash-as-checkpoint or no rollback recipe;
+attribution in recent commits against the rule;
+the policy, permission files, and entrypoint core disagreeing;
+a register row whose readback differs from the remote;
+merge methods, protection, or labels differing from the section;
+a required check naming a job that does not exist; entities outside the section;
+anything the project does that the section omits.
 
-Severity: `high` when a safety boundary or always-on rule is missing or
-contradicted (an unrecoverable or outward action can happen without a
-decision); `medium` when design and project disagree so a task could go
-wrong; `low` for wording or tidiness. Each finding gives evidence
-(`path:line`, or a readback command and output), the section's sentence,
+Severity: `high` when a safety boundary or always-on rule
+is missing or contradicted
+(an unrecoverable or outward action can happen without a decision);
+`medium` when design and project disagree so a task could go wrong;
+`low` for wording or tidiness. Each finding gives evidence (`path:line`,
+or a readback command and output), the section's sentence,
 and whether to fix the artifact or amend the design.
 
 Done when: every row of step 2 is checked and nothing changed.
 
 ### 6. Hand back
 
-- **design, extract**: the section as prose; each default applied
-  with the Context that selected it; questions no default can answer; in
-  extract, the practices that contradict the defaults.
-- **build**: files (path, role, verification); deltas with readbacks,
-  declines, and pending human actions with commands; deviations for
-  `HARNESS.md`; the pending decisions list; routes and rules owed; by-hand
-  entries for clients without a generated file; Invariants nothing
-  enforces; the markers left for the layer that owns Completion; that the
-  project owns the delivered scripts, recipes, and automation.
+- **design, extract**: the section as prose;
+  each default applied with the Context that selected it;
+  questions no default can answer;
+  in extract, the practices that contradict the defaults.
+- **build**: files (path, role, verification);
+  deltas with readbacks, declines, and pending human actions with commands;
+  deviations for `HARNESS.md`; the pending decisions list;
+  routes and rules owed; by-hand entries for clients without a generated file;
+  Invariants nothing enforces;
+  the markers left for the layer that owns Completion;
+  that the project owns the delivered scripts, recipes, and automation.
 - **audit**: the findings table.
 
 Name no skill in a hand-back.
 
 ## Gotchas
 
-- Claude Code matches command text: `git -C . push` escapes a
-  `Bash(git push *)` deny. Add the spellings history shows, no more.
+- Claude Code matches command text:
+  `git -C . push` escapes a `Bash(git push *)` deny.
+  Add the spellings history shows, no more.
 - Codex no longer accepts `approval_policy = "untrusted"`: a finding.

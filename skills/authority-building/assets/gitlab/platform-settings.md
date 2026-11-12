@@ -1,12 +1,16 @@
-Read this when changing or relying on a GitLab setting: merge method, squash, protected branches, pipeline-must-succeed, approvals, or label sync.
+Read this when changing or relying on a GitLab setting:
+merge method, squash, protected branches, pipeline-must-succeed, approvals,
+or label sync.
 
 # GitLab Platform Settings
 
-Remote state no checkout can prove. One row per setting. Status is
-`enforced` (the platform refuses a violation), `convention` (a named person
-enforces it; the trigger says what would make it a setting), `declined`
-(the user kept the current value; the trigger reopens it), or
-`pending human` (the command a human still has to run).
+Remote state no checkout can prove. One row per setting.
+Status is `enforced` (the platform refuses a violation),
+`convention` (a named person enforces it;
+the trigger says what would make it a setting),
+`declined` (the user kept the current value;
+the trigger reopens it),
+or `pending human` (the command a human still has to run).
 
 Project `{{PROJECT_PATH}}` on {{HOST}}: {{OWNER_TYPE}} namespace, {{VISIBILITY}}, {{PLAN}} tier. {{VERIFIED_STATE}} <!-- # CONFIGURE: the probed facts, then "Read back on DATE." or "UNVERIFIED: written from facts the user supplied." -->
 

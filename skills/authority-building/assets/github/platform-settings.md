@@ -1,12 +1,16 @@
-Read this when changing or relying on a GitHub setting: merge methods, the default-branch ruleset or branch protection, required checks, label sync, or repository features.
+Read this when changing or relying on a GitHub setting:
+merge methods, the default-branch ruleset or branch protection, required checks,
+label sync, or repository features.
 
 # GitHub Platform Settings
 
-Remote state no checkout can prove. One row per setting. Status is
-`enforced` (the platform refuses a violation), `convention` (a named person
-enforces it; the trigger says what would make it a setting), `declined`
-(the user kept the current value; the trigger reopens it), or
-`pending human` (the command a human still has to run).
+Remote state no checkout can prove. One row per setting.
+Status is `enforced` (the platform refuses a violation),
+`convention` (a named person enforces it;
+the trigger says what would make it a setting),
+`declined` (the user kept the current value;
+the trigger reopens it),
+or `pending human` (the command a human still has to run).
 
 Repository `{{OWNER_REPO}}`: {{OWNER_TYPE}} owner, {{VISIBILITY}}, {{PLAN}} plan. {{VERIFIED_STATE}} <!-- # CONFIGURE: the probed facts, then "Read back on DATE." or "UNVERIFIED: written from facts the user supplied." -->
 

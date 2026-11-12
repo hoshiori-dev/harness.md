@@ -1,4 +1,5 @@
-Read this before starting a change that alters behaviour, before writing or approving a spec, and before freezing a record.
+Read this before starting a change that alters behaviour,
+before writing or approving a spec, and before freezing a record.
 
 # Specification Workflow
 
@@ -11,8 +12,8 @@ Tool: {{TOOL}}. <!-- # CONFIGURE: {{TOOL}}: OpenSpec, Spec-Kit, the framework ke
 
 {{SPEC_LOCATIONS}} <!-- # CONFIGURE: {{SPEC_LOCATIONS}}: the verified paths for living specs, one change in progress, and the archive; for per-change documents, where SPEC.md and PLAN.md sit and when plan mode is enough. -->
 
-Behaviour lives in the specs; this file, the entrypoint, issues, and pull
-request bodies link to them and never restate them.
+Behaviour lives in the specs; this file, the entrypoint, issues,
+and pull request bodies link to them and never restate them.
 
 {{NOT_AUTHORITATIVE}} <!-- # CONFIGURE: {{NOT_AUTHORITATIVE}}: delete when no contradiction is left open; otherwise "Not yet authoritative: <spec path>. It disagrees with <code path>; trust the code until it is fixed." -->
 
@@ -21,19 +22,19 @@ request bodies link to them and never restate them.
 1. How done is judged: scenarios or a final check the agent runs itself,
    including "no draft commit left on the branch".
 2. What is not done: the non-goals.
-3. What is delivered: the pull request, report, or deployment, and the list
-   of decisions that waited on a person.
-4. Which irreversible actions are pre-authorised for this change: which
-   branch may be pushed, whether comments or a pull request may be opened.
+3. What is delivered: the pull request, report, or deployment,
+   and the list of decisions that waited on a person.
+4. Which irreversible actions are pre-authorised for this change:
+   which branch may be pushed, whether comments or a pull request may be opened.
 
 And every spec obeys four rules:
 
-- Each goal has at least one scenario a reader who never saw the code can
-  judge; at least one scenario in the spec covers a failure or edge path.
+- Each goal has at least one scenario a reader who never saw the code can judge;
+  at least one scenario in the spec covers a failure or edge path.
 - Non-goals are written down.
 - Goals describe behaviour, never the diff.
-- Verification runs the scenarios and records the results; reading the diff
-  is not verification.
+- Verification runs the scenarios and records the results;
+  reading the diff is not verification.
 
 {{HEADINGS}} <!-- # CONFIGURE: {{HEADINGS}}: per-change documents only: "Every SPEC.md or PLAN.md carries these headings: ..." with the five headings (Done when, Not doing, Delivers, Pre-authorised, Scenarios), each followed by the answers and rules it holds; for a framework, delete and say which of the tool's files answers each item. -->
 
@@ -80,7 +81,7 @@ often than code does.
 ## Update this file when
 
 - The tool is upgraded, replaced, or its layout moves.
-- How long specs live, an approval owner, or the way approval is recorded
-  changes.
+- How long specs live, an approval owner,
+  or the way approval is recorded changes.
 - A second copy of any fact here appears; merge it back.
 - The scoped or the full check changes.

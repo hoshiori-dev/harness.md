@@ -1,12 +1,14 @@
 # Client Matrix
 
-Read when adding or changing a skill or the agent, when a client does not
-load something, or before touching `com.anthropic.claude-code/`, a
-generated manifest, or a wiring file. The loading facts below were verified
-in the predecessor repository (harness-builder) on 2026-10-27 with Claude
-Code 2.1.311, Codex CLI 0.164.0, and Antigravity CLI (`agy`) 1.4.7; this
-repository carries the same layout and has not re-verified them yet (see
-the log). Re-verify when a client updates and record the date.
+Read when adding or changing a skill or the agent,
+when a client does not load something,
+or before touching `com.anthropic.claude-code/`, a generated manifest,
+or a wiring file. The loading facts below were verified
+in the predecessor repository (harness-builder)
+on 2026-10-27 with Claude Code 2.1.311, Codex CLI 0.164.0,
+and Antigravity CLI (`agy`) 1.4.7;
+this repository carries the same layout and has not re-verified them yet
+(see the log). Re-verify when a client updates and record the date.
 
 ## How each client loads each component
 
@@ -21,8 +23,8 @@ the log). Re-verify when a client updates and record the date.
 | Install from GitHub | `codex plugin marketplace add hoshiori-dev/harness.md` | `/plugin marketplace add hoshiori-dev/harness.md` (through the generated `.claude-plugin/marketplace.json`) | `agy plugin install https://github.com/hoshiori-dev/harness.md` |
 | Validator | `codex plugin marketplace add .` + `codex plugin list` | `claude plugin validate .` | `agy plugin validate .` |
 
-`just clients-validate` runs the validator row for all three, then repeats
-the Claude Code and Antigravity validation on the release archive.
+`just clients-validate` runs the validator row for all three,
+then repeats the Claude Code and Antigravity validation on the release archive.
 
 Decision rule behind the table: spec-defined things use the spec; a client
 that cannot read the spec gets a pointer in its own manifest when it has
@@ -49,9 +51,9 @@ so a shipped skill and a project skill may never share a name.
 
 ## Known limitations
 
-Every limitation, the workaround built for it, how to re-check it, and what
-to do when it lifts is one row of
-`.agents/knowledge/compatibility-watch.md`.
+Every limitation, the workaround built for it, how to re-check it,
+and what to do when it lifts
+is one row of `.agents/knowledge/compatibility-watch.md`.
 
 ## Verification log
 

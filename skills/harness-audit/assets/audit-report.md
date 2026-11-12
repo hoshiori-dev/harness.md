@@ -15,9 +15,10 @@ Audited: {{DATE}}. Nothing was changed. <!-- # CONFIGURE: {{DATE}}: the absolute
 
 ## Findings
 
-One block per group, in this order: `HARNESS.md`, Context, Environment,
-Knowledge, Feedback, Gates, Authority, Completion, Entropy, across layers.
-Within a group, most severe first. Delete a group with no finding.
+One block per group, in this order:
+`HARNESS.md`, Context, Environment, Knowledge, Feedback, Gates, Authority,
+Completion, Entropy, across layers. Within a group, most severe first.
+Delete a group with no finding.
 
 ### {{GROUP}} <!-- # CONFIGURE: {{GROUP}}: the group name. -->
 

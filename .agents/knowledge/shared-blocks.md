@@ -9,8 +9,8 @@ no skill uses. Edit the canon first, then paste it into every skill that uses
 the id, in the same change.
 
 Blocks exist because a plugin skill may not link outside its own directory:
-repetition is the only way to carry one rule into several skills, and this
-file makes the repetition checkable instead of silent drift.
+repetition is the only way to carry one rule into several skills,
+and this file makes the repetition checkable instead of silent drift.
 
 ## layer-modes
 

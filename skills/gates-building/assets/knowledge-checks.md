@@ -1,7 +1,6 @@
 # Checks
 
-Read this when changing a check, a hook, or a CI file, or when a check
-fails.
+Read this when changing a check, a hook, or a CI file, or when a check fails.
 
 Commit-hook budget: {{BUDGET}} seconds on a typical commit. <!-- # CONFIGURE: {{BUDGET}}: the number the design states. -->
 
@@ -34,8 +33,9 @@ user and wait. <!-- # CONFIGURE: when another knowledge file already states this
 
 {{CHECK_CONFIGURATION}} <!-- # CONFIGURE: {{CHECK_CONFIGURATION}}: one line per configuration file of a check (pyproject.toml [tool.ruff], pyrightconfig.json, .pre-commit-config.yaml outside the secret-scan hook, the CI files). -->
 
-Hard read-only, never changed by an agent: the secret-scan hook and the
-CI secret-scan job. A refusal from either is a policy boundary; report it.
+Hard read-only, never changed by an agent:
+the secret-scan hook and the CI secret-scan job.
+A refusal from either is a policy boundary; report it.
 
 ## Output
 

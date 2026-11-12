@@ -1,4 +1,6 @@
-Read this when taking, creating, or finishing an issue or pull request, before any `gh` write, when a check is red, or before changing labels, issue forms, branch rules, or merge settings.
+Read this when taking, creating, or finishing an issue or pull request,
+before any `gh` write, when a check is red, or before changing labels,
+issue forms, branch rules, or merge settings.
 
 # GitHub Workflow
 
@@ -15,10 +17,11 @@ The procedure for every issue and pull request is the `github-project-workflow` 
 | Pull requests | the only path into the default branch; opened as drafts; body from `.github/pull_request_template.md` with `Closes #<n>` |
 | Not used | Projects, boards, milestones; add one only when the user can name what management ability is lost without it |
 
-`.github/labels.json` is the one label definition. `scripts/sync_labels.py`
-plans by default and changes labels only with `--apply`; it deletes labels
-only with `--prune`, which runs only when the user approves that exact
-delete list.
+`.github/labels.json` is the one label definition.
+`scripts/sync_labels.py` plans by default
+and changes labels only with `--apply`;
+it deletes labels only with `--prune`,
+which runs only when the user approves that exact delete list.
 
 ## Branches and merging
 

@@ -10,13 +10,14 @@ compatibility: The inventory script needs Python 3.10+; run it with uv or plain 
 
 # Completion Building
 
-An agent without an agreed goal anchors on the first code it writes, and an
-agent without a checkable finish either stops at "the tests ran" or never
-stops. This skill handles the Completion section of a project's
-`HARNESS.md`: it writes the section, describes what a project already does,
+An agent without an agreed goal anchors on the first code it writes,
+and an agent without a checkable finish either stops at "the tests ran"
+or never stops. This skill handles the Completion section
+of a project's `HARNESS.md`: it writes the section,
+describes what a project already does,
 turns the section into a specification contract in the project's own words,
-or reports where the two disagree. Running the specification tool itself
-belongs to the skill for that tool.
+or reports where the two disagree.
+Running the specification tool itself belongs to the skill for that tool.
 
 ## Rules on every step
 
@@ -83,54 +84,61 @@ defined. `HARNESS.md` and its section names may be named: the file is the
 project's own.
 <!-- /shared:deposited-files-stand-alone -->
 
-- **Completion is optional.** A `HARNESS.md` that has no Completion section
-  and covers the subject nowhere else (not in the introduction, another
-  section, or a custom heading)
-  has omitted the layer. In build mode report "Completion: omitted by the
-  design", write nothing, and go to step 6. In audit mode do the same, plus
-  one finding when step 1 shows the project nevertheless runs a
-  specification tool or keeps a specification contract: the design omits
-  what the project does.
-- **Run without a workflow.** Infer the mode from the request. Before
-  writing a file no Completion section covers, draft the section (or the
-  change to it) by steps 1 and 2, get one approval, and write it into
-  `HARNESS.md` when the project keeps that file; then build.
-- **Never touch the tool.** Do not initialise, install, configure, or run
-  the specification tool, and print no install command. Adoption, layout,
-  commands, and automation belong to the skill for that tool (step 3.7).
-- **Words that stay in this skill.** "Carrier" (the tool or document form
-  that holds an approved goal), "level", "first gate", "second gate", and
-  the bare noun "request" never appear in the section or in a deposited
-  file. Write the tool's name, "the spec and its design", and the platform's
-  "pull request" or "merge request".
-- **Hand adjacent work over by role, never by skill name**: the commands
-  that check work to the layers that own Feedback and Gates; labels, request
-  templates, and who may merge to the layer that owns Authority; the harness
-  self-check to the layer that owns Entropy; writing one specification to
-  the skill for the spec-driven development method.
+- **Completion is optional.**
+  A `HARNESS.md` that has no Completion section
+  and covers the subject nowhere else (not in the introduction, another section,
+  or a custom heading) has omitted the layer. In build mode report "Completion:
+  omitted by the design", write nothing, and go to step 6.
+  In audit mode do the same,
+  plus one finding when step 1 shows the project nevertheless runs
+  a specification tool or keeps a specification contract:
+  the design omits what the project does.
+- **Run without a workflow.** Infer the mode from the request.
+  Before writing a file no Completion section covers,
+  draft the section (or the change to it) by steps 1 and 2, get one approval,
+  and write it into `HARNESS.md` when the project keeps that file; then build.
+- **Never touch the tool.** Do not initialise, install, configure,
+  or run the specification tool, and print no install command.
+  Adoption, layout, commands,
+  and automation belong to the skill for that tool (step 3.7).
+- **Words that stay in this skill.**
+  "Carrier" (the tool or document form that holds an approved goal), "level",
+  "first gate", "second gate",
+  and the bare noun "request" never appear in the section
+  or in a deposited file. Write the tool's name, "the spec and its design",
+  and the platform's "pull request" or "merge request".
+- **Hand adjacent work over by role, never by skill name**:
+  the commands that check work to the layers that own Feedback and Gates;
+  labels, request templates, and who may merge to the layer that owns Authority;
+  the harness self-check to the layer that owns Entropy;
+  writing one specification to the skill for the spec-driven development method.
 
 ## Workflow
 
 ### 1. Observe
 
-Read and record; write nothing. Run
-[scripts/detect_spec_tooling.py](scripts/detect_spec_tooling.py) from this
-skill's directory against the project and keep its stderr summary line:
+Read and record; write nothing.
+Run [scripts/detect_spec_tooling.py](scripts/detect_spec_tooling.py)
+from this skill's directory against the project
+and keep its stderr summary line:
 
 ```bash
 uv run scripts/detect_spec_tooling.py --root <project>
 ```
 
 (`python3 scripts/detect_spec_tooling.py --root <project>` works too;
-`--help` lists the options.) Its JSON lists each specification tool found
-(OpenSpec, Spec-Kit, Kiro, committed `SPEC.md`/`PLAN.md` or spec
-directories) with counts and owned paths, the entrypoint lines that point at
-spec artifacts, the documents that look like they restate requirements, and
-whether a `HARNESS.md` exists. Exit 1 means a path was unreadable: record it
-and read that path by hand. With neither `uv` nor `python3`, check the same
-places yourself (`openspec/`, `.specify/`, `specs/NNN-*/`, `.kiro/`, root
-`SPEC.md` and `PLAN.md`, issue and request templates, every markdown file
-mentioning acceptance criteria) and record "inventory by hand".
+`--help` lists the options.)
+Its JSON lists each specification tool found (OpenSpec, Spec-Kit, Kiro,
+committed `SPEC.md`/`PLAN.md` or spec directories) with counts and owned paths,
+the entrypoint lines that point at spec artifacts,
+the documents that look like they restate requirements,
+and whether a `HARNESS.md` exists. Exit 1 means a path was unreadable:
+record it and read that path by hand.
+With neither `uv` nor `python3`, check the same places yourself (`openspec/`,
+`.specify/`, `specs/NNN-*/`, `.kiro/`, root `SPEC.md` and `PLAN.md`,
+issue and request templates,
+every markdown file mentioning acceptance criteria) and record "inventory
+by hand".
 
 Then read in full:
 
@@ -152,19 +160,19 @@ Then read in full:
   [references/spec-drift.md](references/spec-drift.md) when one disagrees
   with the code or with another spec.
 
-Done when: the summary line or the by-hand note is recorded; every tool,
-restating document, behaviour sentence, marker, check command, and
-contradiction is listed with its path; and no file in the project changed.
+Done when: the summary line or the by-hand note is recorded;
+every tool, restating document, behaviour sentence, marker, check command,
+and contradiction is listed with its path; and no file in the project changed.
 
 ### 2. Write the section
 
-Design mode drafts what the project should do; extract mode describes what
-step 1 found and decides nothing. Both return prose for the `## Completion`
-section and write no file.
+Design mode drafts what the project should do;
+extract mode describes what step 1 found and decides nothing.
+Both return prose for the `## Completion` section and write no file.
 
-**Design.** Settle every decision below with its default. The Context
-column names what selects it; take those facts from the handover and ask
-none of them again.
+**Design.** Settle every decision below with its default.
+The Context column names what selects it;
+take those facts from the handover and ask none of them again.
 
 | # | Decision | Default, and the Context that selects it |
 |---|---|---|
@@ -180,29 +188,31 @@ none of them again.
 | 10 | Handoff notes | `.agents/handoff/`, gitignored, because such notes carry logs and credentials more often than code does. The alternative is the system temporary directory. |
 | 11 | Requirements written elsewhere, and specs that contradict the code | Each restating document becomes a pointer to the spec. For each contradicting spec the user decides which side is right: put it in the questions, never in the defaults. |
 
-Read [references/carrier-choice.md](references/carrier-choice.md) when the
-tool in use does not fit the project's shape or is none of the three. Read
-[references/approval-gates.md](references/approval-gates.md) when writing
-decisions 4 and 5 or when the user wants a job that approves or archives.
+Read [references/carrier-choice.md](references/carrier-choice.md) when the tool in use does not fit the project's shape or is none of the three.
+Read [references/approval-gates.md](references/approval-gates.md) when writing decisions 4 and 5 or when the user wants a job
+that approves or archives.
 
-The section is finished when a reader who has never seen this skill could
-set the project up from it alone. It states, in plain sentences with the
-reason beside each choice: the tool by name and where its files live; how
-long a spec lives; who approves the spec and who approves the finished
-work, where each approval is recorded, when the task list may be written,
-and who freezes the record; which changes need no spec; the four answers
-and four rules every spec carries; the two check commands by name; where
-handoff notes go; and what was deliberately left out (for example "no job
-archives a spec; a person does").
+The section is finished when a reader
+who has never seen this skill could set the project up from it alone.
+It states, in plain sentences with the reason beside each choice:
+the tool by name and where its files live; how long a spec lives;
+who approves the spec and who approves the finished work,
+where each approval is recorded, when the task list may be written,
+and who freezes the record; which changes need no spec;
+the four answers and four rules every spec carries;
+the two check commands by name; where handoff notes go;
+and what was deliberately left out (for example "no job archives a spec;
+a person does").
 
-**Extract.** Write the same section in the present tense from what step 1
-found. Mark every intent the files do not state as inferred ("approval
-appears to be given in conversation: no label or check records it").
+**Extract.** Write the same section in the present tense from what step 1 found.
+Mark every intent the files do not state as inferred
+("approval appears to be given in conversation: no label or check records it").
 Describe a contradiction as one; do not resolve it.
 
-Done when: the section text is complete; every default applied is listed
-with the Context fact that selected it; and each open point is either a
-question for the user or, in extract mode, marked as inferred.
+Done when: the section text is complete;
+every default applied is listed with the Context fact that selected it;
+and each open point is either a question for the user or, in extract mode,
+marked as inferred.
 
 ### 3. Build
 
@@ -254,8 +264,8 @@ question for the user or, in extract mode, marked as inferred.
    pending decisions list and the contract names that spec as not yet
    authoritative.
 
-Done when: every file on the list is written or its blocker is on the
-pending decisions list, and nothing outside the list changed.
+Done when: every file on the list is written or its blocker
+is on the pending decisions list, and nothing outside the list changed.
 
 ### 4. Verify
 
@@ -280,39 +290,42 @@ pending decisions list, and nothing outside the list changed.
   the file paths and the questions; when none can be dispatched, answer
   them yourself in a fresh pass and record "read-back not clean-context".
 
-Done when: every check has a stated result and every gap found is fixed or
-reported.
+Done when: every check has a stated result and every gap found
+is fixed or reported.
 
 ### 5. Audit
 
 Compare the section with the project sentence by sentence; change nothing.
 Report a finding when:
 
-- the section names a tool, a spec lifetime, an approval owner, or a way of
-  recording approval that the contract, the tool's files, or recent pull or
-  merge requests contradict;
-- the contract is missing, unreachable from the entrypoint, or states
-  something the section does not;
+- the section names a tool, a spec lifetime, an approval owner,
+  or a way of recording approval that the contract, the tool's files,
+  or recent pull or merge requests contradict;
+- the contract is missing, unreachable from the entrypoint,
+  or states something the section does not;
 - a marker block disagrees with the contract;
 - a check command the section or contract names does not exist or fails;
 - a document outside the specs restates requirements or acceptance;
-- a spec contradicts the code or another spec (read
-  [references/spec-drift.md](references/spec-drift.md) when reporting one);
+- a spec contradicts the code or another spec
+  (read [references/spec-drift.md](references/spec-drift.md) when reporting one);
 - the handoff location is not gitignored, or handoff notes are committed;
-- the section is too thick or too thin for the Context: recorded approval
-  for one person who reviews in conversation, or conversational approval
-  where agents work unattended.
+- the section is too thick or too thin for the Context:
+  recorded approval for one person who reviews in conversation,
+  or conversational approval where agents work unattended.
 
-Each finding carries a severity, the evidence as `path:line`, the sentence
-of the section it concerns, and whether to fix the artifact or amend the
-design. Severity is `high` when a safety boundary or an always-on rule is
-missing or contradicted, `medium` when the design and the project disagree
-so that a task could go wrong, and `low` for wording or tidiness only. Which side of a
-spec-versus-code contradiction is right is the user's call: state both
-readings.
+Each finding carries a severity, the evidence as `path:line`,
+the sentence of the section it concerns,
+and whether to fix the artifact or amend the design.
+Severity is `high` when a safety boundary or an always-on rule
+is missing or contradicted,
+`medium` when the design and the project disagree so that a task could go wrong,
+and `low` for wording or tidiness only.
+Which side of a spec-versus-code contradiction is right is the user's call:
+state both readings.
 
-Done when: every sentence of the section is either confirmed against the
-project or carries a finding, and no file changed.
+Done when: every sentence of the section
+is either confirmed against the project or carries a finding,
+and no file changed.
 
 ### 6. Hand back
 
@@ -323,18 +336,18 @@ project or carries a finding, and no file changed.
 | build | each file written or changed with its role and verification result; deviations where the code forced a departure from the section, for `HARNESS.md` to be reconciled; routes owed; the tool handoff by role; gaps named to other layers; the pending decisions list; the read-back questions or the read-back result |
 | audit | the findings table, or "omitted by the design" |
 
-Name no skill in what is handed back, and record every degradation
-(inventory by hand, read-back not clean-context).
+Name no skill in what is handed back,
+and record every degradation (inventory by hand, read-back not clean-context).
 
 ## Gotchas
 
-- Acceptance criteria copied into an issue template or the entrypoint are
-  the most common contradiction: the copy drifts while the spec moves. The
-  copy becomes a link to the spec's scenarios.
+- Acceptance criteria copied into an issue template or the entrypoint
+  are the most common contradiction: the copy drifts while the spec moves.
+  The copy becomes a link to the spec's scenarios.
 - Freezing a record early to turn the awaiting-archive check green freezes
   a version nobody reviewed. Leave the check red until the review closes.
-- A section that names a tool the repository does not hold yet is not a
-  conflict with the code: adopting the tool is the handoff in step 3.7.
+- A section that names a tool the repository does not hold yet
+  is not a conflict with the code: adopting the tool is the handoff in step 3.7.
 - The inventory script never lists `HARNESS.md` as a restating document,
-  however many requirement words it holds: it is the design, not a copy of
-  the specs.
+  however many requirement words it holds:
+  it is the design, not a copy of the specs.

@@ -1,14 +1,14 @@
 # Tools and Their Quiet Flags
 
-Read when naming a tool for a check in the section or writing any check
-command into a hook, recipe, or CI job. Each row lists the default first,
-then the alternatives. The quiet column is what the recipe runs. Test
-runners are not listed: the test recipes belong to the layer that owns
-Feedback.
+Read when naming a tool for a check in the section or writing any check command
+into a hook, recipe, or CI job. Each row lists the default first,
+then the alternatives. The quiet column is what the recipe runs.
+Test runners are not listed:
+the test recipes belong to the layer that owns Feedback.
 
-Before writing a flag, confirm it in `<tool> --help` of the version the
-project pins: flags change between major versions, and a flag that does
-not exist fails the check on its first run.
+Before writing a flag, confirm it in `<tool> --help` of the version the project
+pins: flags change between major versions,
+and a flag that does not exist fails the check on its first run.
 
 ## Python
 
@@ -27,8 +27,8 @@ not exist fails the check on its first run.
 | Typecheck | **tsc** | `tsc --noEmit --pretty false` |
 | Runner | the package manager | `npm run --silent <script>`; `pnpm --silent <script>` |
 
-A project that already formats and lints with one tool (biome, deno) keeps
-that tool in both roles.
+A project that already formats and lints with one tool (biome,
+deno) keeps that tool in both roles.
 
 ## Deno
 
@@ -72,24 +72,27 @@ that tool in both roles.
 | Shell | **shellcheck** | `shellcheck -f gcc <files>` |
 | YAML | **yamllint** | `yamllint -f parsable .` |
 
-The scanners ship release binaries on their release pages; verify the
-published checksum. Installing a tool into the agent environment is the
-work of the layer that owns Environment; this layer names the tool and its
-version.
+The scanners ship release binaries on their release pages;
+verify the published checksum.
+Installing a tool into the agent environment is the work of the layer
+that owns Environment; this layer names the tool and its version.
 
 ## Adopting a tool that is already there
 
-Adopt a tool without a second thought only in a role that is observable: a
-hook, recipe, script, or CI step runs it in that role, or its configuration
-for exactly that role exists. A `ruff` lint table makes `ruff` the linter,
-not the formatter. For any other role the default of the table applies and
-is reported as an assumption.
+Adopt a tool without a second thought only in a role that is observable:
+a hook, recipe, script, or CI step runs it in that role,
+or its configuration for exactly that role exists.
+A `ruff` lint table makes `ruff` the linter, not the formatter.
+For any other role the default of the table applies and is reported
+as an assumption.
 
 ## When a tool has no quiet mode
 
 Keep the native output and add one sentence to the knowledge file:
-"`<tool>` prints full logs; no compact flag exists; accepted." Do not
-write a parser, filter, or `| grep` wrapper; a scoped command (one file,
-one package) is the only other remedy. When the user insists on a filter,
-say once that it is a second system to maintain, then write it as
-project-owned code and record the trade-off in the knowledge file.
+"`<tool>` prints full logs; no compact flag exists; accepted."
+Do not write a parser, filter, or `| grep` wrapper;
+a scoped command (one file, one package) is the only other remedy.
+When the user insists on a filter,
+say once that it is a second system to maintain,
+then write it as project-owned code and record the trade-off
+in the knowledge file.

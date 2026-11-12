@@ -18,46 +18,52 @@ changes state: write one only when it is the intended change.
 
 ## Take work
 
-1. Read the issue (`glab issue view <n>`): open, unassigned or assigned to
-   you, acceptance criteria checkable. Otherwise stop and ask.
-2. `glab issue update <n> --assignee <your-username>`, re-read, and confirm
-   you are the only assignee; create the branch `<n>-<slug>` from the
-   default branch.
-3. Commit the first task, pass the publish gate below, push the one branch
-   (`git push -u origin HEAD`), and open the merge request as a draft:
+1. Read the issue (`glab issue view <n>`):
+   open, unassigned or assigned to you, acceptance criteria checkable.
+   Otherwise stop and ask.
+2. `glab issue update <n> --assignee <your-username>`, re-read,
+   and confirm you are the only assignee;
+   create the branch `<n>-<slug>` from the default branch.
+3. Commit the first task, pass the publish gate below,
+   push the one branch (`git push -u origin HEAD`),
+   and open the merge request as a draft:
    `glab mr create --draft --title <title> --description "$(cat <file>)"`,
-   body from `.gitlab/merge_request_templates/Default.md` with
-   `Closes #<n>`. The draft is the claim and the work log.
+   body from `.gitlab/merge_request_templates/Default.md` with `Closes #<n>`.
+   The draft is the claim and the work log.
 4. Keep the description current; comment decisions reviewers will need.
-5. Abandon by un-assigning, closing the draft with a status comment, and
-   leaving the issue open.
+5. Abandon by un-assigning, closing the draft with a status comment,
+   and leaving the issue open.
 
 ## Create issues
 
-Write the body with the template's `###` headings and pass its label, for
-example `glab issue create --title <t> --description "$(cat <f>)" --label type:task`.
+Write the body with the template's `###` headings and pass its label,
+for example
+`glab issue create --title <t> --description "$(cat <f>)" --label type:task`.
 Labels come only from `.gitlab/labels.json`; never create one by hand.
 
 ## Publish gate
 
-Everything pushed or posted is visible to everyone who can see the project
-and cannot be reliably erased. Every push, merge request, comment, label,
-and release passes this gate.
+Everything pushed or posted is visible to everyone
+who can see the project and cannot be reliably erased.
+Every push, merge request, comment, label, and release passes this gate.
 
-1. Assemble the exact payload as files in a directory outside the
-   repository: `title.txt`, `body.md`, and for a push or merge request
-   `commits.txt` (`git log <target>..HEAD --format=full`) and `diff.patch`
-   (`git diff <target>...HEAD`).
-2. Dispatch one clean-context subagent whose whole prompt is the review
-   prompt below with `<DIR>` replaced. Add nothing else.
-3. Without subagent support, re-read every payload file from disk against
-   the same checklist, judging only what the files contain, and write
-   `Review mode: file-only (not clean-context)` directly above the verdict.
-4. Publish only on a last line of exactly `SAFE TO PUBLISH: YES`; any other
-   last line is NO. On NO, fix every finding, rebuild the directory, and
-   review again. Any edit after the verdict needs a fresh review.
-5. Confirm the authority policy covers the action, run it
-   non-interactively, read the result back, and delete the directory.
+1. Assemble the exact payload as files in a directory outside the repository:
+   `title.txt`, `body.md`,
+   and for a push or merge request `commits.txt`
+   (`git log <target>..HEAD --format=full`)
+   and `diff.patch` (`git diff <target>...HEAD`).
+2. Dispatch one clean-context subagent whose whole prompt
+   is the review prompt below with `<DIR>` replaced. Add nothing else.
+3. Without subagent support,
+   re-read every payload file from disk against the same checklist,
+   judging only what the files contain,
+   and write `Review mode: file-only (not clean-context)` directly above
+   the verdict.
+4. Publish only on a last line of exactly `SAFE TO PUBLISH: YES`;
+   any other last line is NO. On NO, fix every finding, rebuild the directory,
+   and review again. Any edit after the verdict needs a fresh review.
+5. Confirm the authority policy covers the action, run it non-interactively,
+   read the result back, and delete the directory.
 
 Review prompt:
 

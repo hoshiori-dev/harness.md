@@ -1,4 +1,6 @@
-Read this when taking, creating, or finishing an issue or merge request, before any `glab` write, when a pipeline is red, or before changing labels, templates, protected branches, or merge settings.
+Read this when taking, creating, or finishing an issue or merge request,
+before any `glab` write, when a pipeline is red, or before changing labels,
+templates, protected branches, or merge settings.
 
 # GitLab Workflow
 
@@ -15,10 +17,11 @@ The procedure for every issue and merge request is the `gitlab-project-workflow`
 | Merge requests | the only path into the default branch; opened as drafts; body from `.gitlab/merge_request_templates/Default.md` with `Closes #<n>` |
 | Not used | milestones, iterations, epics, boards; add one only when the user can name what management ability is lost without it |
 
-`.gitlab/labels.json` is the one label definition. `scripts/sync_labels.py`
-plans by default and changes labels only with `--apply`; it deletes labels
-only with `--prune`, which runs only when the user approves that exact
-delete list.
+`.gitlab/labels.json` is the one label definition.
+`scripts/sync_labels.py` plans by default
+and changes labels only with `--apply`;
+it deletes labels only with `--prune`,
+which runs only when the user approves that exact delete list.
 
 ## Branches and merging
 

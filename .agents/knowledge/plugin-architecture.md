@@ -1,15 +1,16 @@
 # Plugin Architecture
 
-Read before adding, removing, or re-scoping a shipped skill or the agent, or
-when a change touches how the workflow skills hand work to the layer
-builders. This file is the contract between them; `scripts/lib/layers.ts`
-holds the layer names and `just skills-check` enforces the mechanical parts.
+Read before adding, removing, or re-scoping a shipped skill or the agent,
+or when a change touches how the workflow skills hand work
+to the layer builders. This file is the contract between them;
+`scripts/lib/layers.ts` holds the layer names
+and `just skills-check` enforces the mechanical parts.
 
 ## What ships
 
-The plugin `harness-md` is built around one document: a project's
-`HARNESS.md` (format: `spec/spec.md`). Every skill either produces that
-document, reads it, or turns it into a harness.
+The plugin `harness-md` is built around one document:
+a project's `HARNESS.md` (format: `spec/spec.md`).
+Every skill either produces that document, reads it, or turns it into a harness.
 
 | Skill | Kind | Invocation | Job |
 |---|---|---|---|
@@ -23,19 +24,20 @@ document, reads it, or turns it into a harness.
 | `spec-driven-development`, `openspec-workflow`, `spec-kit-workflow`, `lightweight-spec-workflow`, `project-skill-building` | daily | model | Work inside a harness that already exists |
 | `harness-verifier` | agent (Claude Code only) | dispatched | Read-only read-back of harness files in a clean context |
 
-The five user scenarios map onto the workflows: greenfield is design then
-build; brownfield is audit, then design, then build; continuous improvement
-is audit, then a design revision, then build; documenting or learning from a
-harness is extract; migrating to a given `HARNESS.md` is build.
+The five user scenarios map onto the workflows: greenfield is design then build;
+brownfield is audit, then design, then build;
+continuous improvement is audit, then a design revision, then build;
+documenting or learning from a harness is extract;
+migrating to a given `HARNESS.md` is build.
 
 ## The layer builder contract
 
-One builder per layer, named `<layer>-building` in lowercase, for the seven
-layers in `scripts/lib/layers.ts`: Environment, Knowledge, Feedback, Gates,
-Authority, Completion, Entropy. A builder's description is one sentence of
-at most 240 characters that contains `Owns the <Layer> layer` with the
-layer's section name; the workflows find builders by that phrase and never
-by skill name.
+One builder per layer, named `<layer>-building` in lowercase,
+for the seven layers in `scripts/lib/layers.ts`:
+Environment, Knowledge, Feedback, Gates, Authority, Completion, Entropy.
+A builder's description is one sentence of at most 240 characters
+that contains `Owns the <Layer> layer` with the layer's section name;
+the workflows find builders by that phrase and never by skill name.
 
 A builder works in four modes (shared block `layer-modes`):
 
@@ -46,13 +48,14 @@ A builder works in four modes (shared block `layer-modes`):
 | build | the section, plus assigned parts of Invariants, Style, File Structure | files, their verification, deviations for the workflow to reconcile into `HARNESS.md` | yes |
 | audit | the section and the project | findings: severity, evidence (`path:line`), the sentence of the section, and whether to fix the artifact or amend the design | no |
 
-Every builder's `SKILL.md` has the same workflow steps so the workflows can
-address them: 1 Observe, 2 Write the section (design, extract), 3 Build,
-4 Verify (build), 5 Audit, 6 Hand back. Step 2 carries the layer's decision
-list: every decision the section must settle, each with a default chosen
-from the project's Context (cost of a wrong change, maintenance horizon,
-who relies on the conventions, how unattended agents are, hosting platform,
-clients and models) and the reason for it.
+Every builder's `SKILL.md` has the same workflow steps so the workflows
+can address them: 1 Observe, 2 Write the section (design, extract), 3 Build,
+4 Verify (build), 5 Audit, 6 Hand back.
+Step 2 carries the layer's decision list:
+every decision the section must settle,
+each with a default chosen from the project's Context (cost of a wrong change,
+maintenance horizon, who relies on the conventions, how unattended agents are,
+hosting platform, clients and models) and the reason for it.
 
 Conventions every builder and workflow shares:
 
@@ -76,16 +79,17 @@ Conventions every builder and workflow shares:
   carries `<!-- harness: keep-in-sync -->`; Knowledge writes it when the
   design has an Entropy section and Entropy fills it.
 
-Run directly by a user without a workflow, a builder infers the mode from
-the request. Before it writes files that no `HARNESS.md` section covers, it
-drafts the section (or the change to it), gets one approval, and, when the
-project keeps `HARNESS.md` as its anchor document, records it there.
+Run directly by a user without a workflow,
+a builder infers the mode from the request.
+Before it writes files that no `HARNESS.md` section covers,
+it drafts the section (or the change to it), gets one approval, and,
+when the project keeps `HARNESS.md` as its anchor document, records it there.
 
-Layer boundaries follow `spec/spec.md` section 5.1. Authority includes the
-platform lifecycle (commits, branches, merge method, labels, issue forms,
-request templates, releases, remote settings). Feedback is what an agent
-can run and observe to verify its own work; Gates is what blocks a defect
-whether or not the agent looked.
+Layer boundaries follow `spec/spec.md` section 5.1.
+Authority includes the platform lifecycle (commits, branches, merge method,
+labels, issue forms, request templates, releases, remote settings).
+Feedback is what an agent can run and observe to verify its own work;
+Gates is what blocks a defect whether or not the agent looked.
 
 ## The three sections that are not layers
 
@@ -100,17 +104,18 @@ no builder owns them.
 
 ## Budgets
 
-Codex lists every skill description in at most 8,000 characters or 2% of
-context, so descriptions are a shared budget: all shipped descriptions
-together stay under 8,000 characters; a builder's is at most 240, a
-workflow's at most 400, any other at most 700. The four workflows carry
-`disable-model-invocation: true`.
+Codex lists every skill description in at most 8,000 characters
+or 2% of context, so descriptions are a shared budget:
+all shipped descriptions together stay under 8,000 characters;
+a builder's is at most 240, a workflow's at most 400, any other at most 700.
+The four workflows carry `disable-model-invocation: true`.
 
 ## What the plugin never does
 
-- It does not carry the methodology as one document; each skill carries the
-  principles it needs and `harness-architecture` explains the whole.
-- It ships no diff tool: the validator checks one file's format and nothing
-  else.
-- It writes nothing into a target project that names the plugin (shared
-  block `deposited-files-stand-alone`).
+- It does not carry the methodology as one document;
+  each skill carries the principles it needs
+  and `harness-architecture` explains the whole.
+- It ships no diff tool:
+  the validator checks one file's format and nothing else.
+- It writes nothing into a target project that names the plugin
+  (shared block `deposited-files-stand-alone`).

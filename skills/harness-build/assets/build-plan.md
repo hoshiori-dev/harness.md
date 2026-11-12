@@ -1,9 +1,10 @@
 # Harness build plan: {{PROJECT}} <!-- # CONFIGURE: {{PROJECT}}: the repository name. -->
 
-Approving this plan authorises creating or changing exactly the files
-listed below. Publishing, changing a remote setting, deleting work, and
-widening what agents may do on their own are each asked separately when the
-build reaches them.
+Approving this plan authorises creating
+or changing exactly the files listed below.
+Publishing, changing a remote setting, deleting work,
+and widening what agents may do on their own are each asked separately
+when the build reaches them.
 
 ## Goal
 
@@ -28,9 +29,9 @@ Only when the file is used as a template; delete this section otherwise.
 
 ## Layers
 
-One block per layer, in build order. A layer whose section says the project
-does nothing there keeps its heading and the reason; a layer with no
-section is deleted from the plan.
+One block per layer, in build order.
+A layer whose section says the project does nothing there keeps its heading
+and the reason; a layer with no section is deleted from the plan.
 
 ### {{LAYER}} <!-- # CONFIGURE: {{LAYER}}: Environment, Knowledge, Feedback, Gates, Authority, Completion, or Entropy. -->
 
@@ -42,8 +43,8 @@ Already built: {{CONFORMING}} <!-- # CONFIGURE: {{CONFORMING}}: artifacts that a
 
 ## Skeleton
 
-Paths File Structure requires that no layer owns, and what an empty project
-needs for the design's commands to run.
+Paths File Structure requires that no layer owns,
+and what an empty project needs for the design's commands to run.
 
 | Path | Purpose |
 | --- | --- |

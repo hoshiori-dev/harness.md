@@ -1,9 +1,11 @@
 # From Symptom to Layer
 
-Read when the user reported a symptom: something agents keep doing, or
-keep failing to do. A symptom is where the harness shows; the cause is
-usually one layer earlier than it looks. For each symptom, check the
-causes in order and stop at the first the evidence supports.
+Read when the user reported a symptom:
+something agents keep doing, or keep failing to do.
+A symptom is where the harness shows;
+the cause is usually one layer earlier than it looks.
+For each symptom, check the causes in order and stop
+at the first the evidence supports.
 
 | Symptom | Check, in order |
 | --- | --- |
@@ -23,8 +25,8 @@ causes in order and stop at the first the evidence supports.
 
 ## Choosing the fix
 
-Propose the cheapest mechanism that makes the failure impossible or
-visible, in this order of preference:
+Propose the cheapest mechanism that makes the failure impossible or visible,
+in this order of preference:
 
 1. a type, schema, or assertion in the code;
 2. a deterministic check (formatter, linter, hook, CI);
@@ -32,13 +34,14 @@ visible, in this order of preference:
 4. an always-on rule in the entrypoint;
 5. a routed knowledge file or project skill.
 
-Restating a rule more forcefully is not on the list. A rule an agent
-missed three times is in the wrong place, not in the wrong tone.
+Restating a rule more forcefully is not on the list.
+A rule an agent missed three times is in the wrong place, not in the wrong tone.
 
 ## Writing it up
 
-For each symptom: the symptom in the user's words; where it was found or
-reproduced; the cause, as findings from the drift or fitness pass; the
-layer that owns the fix; and the sentence of the design to add or change.
-A recurring failure is fixed in the design first and built afterwards, so
-that the fix outlives the session that made it.
+For each symptom: the symptom in the user's words;
+where it was found or reproduced;
+the cause, as findings from the drift or fitness pass;
+the layer that owns the fix; and the sentence of the design to add or change.
+A recurring failure is fixed in the design first and built afterwards,
+so that the fix outlives the session that made it.

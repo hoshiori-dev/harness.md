@@ -10,12 +10,13 @@ compatibility: The self-check asset needs Python 3.10+; run it with uv or plain 
 
 # Entropy Building
 
-A stale harness is worse than none: an agent without one reads the code,
-while an agent with a wrong one trusts it, fails, or loops. This skill
-handles the Entropy section of a project's `HARNESS.md`: it writes the
-section, describes what a project already does, builds the mechanisms that
-keep the harness true to the code and to its own design, or reports where
-they have slipped.
+A stale harness is worse than none:
+an agent without one reads the code, while an agent with a wrong one trusts it,
+fails, or loops. This skill handles the Entropy section
+of a project's `HARNESS.md`: it writes the section,
+describes what a project already does,
+builds the mechanisms that keep the harness true to the code
+and to its own design, or reports where they have slipped.
 
 ## Rules on every step
 
@@ -98,32 +99,33 @@ defined. `HARNESS.md` and its section names may be named: the file is the
 project's own.
 <!-- /shared:deposited-files-stand-alone -->
 
-- **Entropy is optional.** A `HARNESS.md` that has no Entropy section
-  and covers the subject nowhere else (not in the introduction, another
-  section, or a custom heading) has
-  omitted the layer. In build mode report "Entropy: omitted by the design",
-  write nothing except removing a reserved, empty keep-in-sync heading and
-  its marker from the entrypoint, and go to step 6. In audit mode report
-  the same, plus one finding when step 1 shows the project nevertheless
-  runs a harness check or a sync rule the design does not describe.
-- **Run without a workflow.** Infer the mode from the request. Before
-  writing a file no Entropy section covers, draft the section (or the
-  change to it) by steps 1 and 2, get one approval, and write it into
-  `HARNESS.md` when the project keeps that file; then build.
-- **The design document is either an anchor or gone.** A project keeps
-  `HARNESS.md` as its long-lived design, or used it once as a template and
-  deleted it. The section says which. Everything this skill does about the
-  file itself applies only to the first case. Read
-  [references/design-document.md](references/design-document.md) when the
-  project keeps the file or the section does not say.
-- **No self-editing harness.** Repeated agent failures yield a reported
-  pattern and a recommendation, never an automatic edit to knowledge.
-- **Hand adjacent work over by role, never by skill name**: product lint,
-  tests, and CI jobs to the layer that owns Gates; the entrypoint's
-  structure and line budget to the layer that owns Knowledge; labels and
-  other remote entities, and the pending decisions format, to the layer
-  that owns Authority; writing, linting, and testing a project skill to the
-  skill that writes project skills.
+- **Entropy is optional.**
+  A `HARNESS.md` that has no Entropy section and covers the subject nowhere else
+  (not in the introduction, another section,
+  or a custom heading) has omitted the layer. In build mode report "Entropy:
+  omitted by the design", write nothing except removing a reserved,
+  empty keep-in-sync heading and its marker from the entrypoint,
+  and go to step 6. In audit mode report the same,
+  plus one finding when step 1 shows the project nevertheless runs a harness
+  check or a sync rule the design does not describe.
+- **Run without a workflow.** Infer the mode from the request.
+  Before writing a file no Entropy section covers,
+  draft the section (or the change to it) by steps 1 and 2, get one approval,
+  and write it into `HARNESS.md` when the project keeps that file; then build.
+- **The design document is either an anchor or gone.**
+  A project keeps `HARNESS.md` as its long-lived design,
+  or used it once as a template and deleted it. The section says which.
+  Everything this skill does about the file itself applies only to the first
+  case. Read [references/design-document.md](references/design-document.md) when the project keeps the file or the section does not say.
+- **No self-editing harness.**
+  Repeated agent failures yield a reported pattern and a recommendation,
+  never an automatic edit to knowledge.
+- **Hand adjacent work over by role, never by skill name**:
+  product lint, tests, and CI jobs to the layer that owns Gates;
+  the entrypoint's structure and line budget to the layer that owns Knowledge;
+  labels and other remote entities, and the pending decisions format,
+  to the layer that owns Authority; writing, linting,
+  and testing a project skill to the skill that writes project skills.
 
 ## Workflow
 
@@ -158,17 +160,17 @@ Read and record; write nothing.
   a mirror pair with the sections that must match and its source side (the
   original language wins).
 
-Done when: every item is recorded as observed or absent with its path, the
-copies and mirror pairs are listed, and no file in the project changed.
+Done when: every item is recorded as observed or absent with its path,
+the copies and mirror pairs are listed, and no file in the project changed.
 
 ### 2. Write the section
 
-Design mode drafts what the project should do; extract mode describes what
-step 1 found and decides nothing. Both return prose for the `## Entropy`
-section and write no file.
+Design mode drafts what the project should do;
+extract mode describes what step 1 found and decides nothing.
+Both return prose for the `## Entropy` section and write no file.
 
-**Design.** Settle every decision below with its default. Take the Context
-facts from the handover and ask none of them again.
+**Design.** Settle every decision below with its default.
+Take the Context facts from the handover and ask none of them again.
 
 | # | Decision | Default, and the Context that selects it |
 |---|---|---|
@@ -181,26 +183,29 @@ facts from the handover and ask none of them again.
 | 7 | Periodic reclamation | On when the project is maintained for years or its harness is heavy: a dated routine anchored to a team event (a release, a retro), monthly for a fast-moving project and quarterly otherwise. Off for anything shorter-lived; the section then names what would add it. Read [references/reclamation.md](references/reclamation.md) when writing it. |
 | 8 | Session logs and canary tasks | Not part of the section unless the user asks. Read [references/observation.md](references/observation.md) when they do. |
 
-The section is finished when a reader who has never seen this skill could
-build the mechanisms from it alone. It states, in plain sentences with the
-reason beside each choice: which side wins a disagreement and each mirror
-pair with its source side; what an agent does on finding drift and where
-the trace goes; each concern kept in step, by what (a table row or a named
-project skill), in both directions; what the self-check verifies, where the
-script lives, the recipe that runs it, where CI runs it, and whether the
-gate depends on it; whether `HARNESS.md` is kept and what holds it and the
-harness together; the reclamation event, cadence, and form; and what was
-deliberately left out ("no canary tasks: the harness is small enough to
-re-read").
+The section is finished when a reader
+who has never seen this skill could build the mechanisms from it alone.
+It states, in plain sentences with the reason beside each choice:
+which side wins a disagreement and each mirror pair with its source side;
+what an agent does on finding drift and where the trace goes;
+each concern kept in step, by what (a table row or a named project skill),
+in both directions; what the self-check verifies, where the script lives,
+the recipe that runs it, where CI runs it, and whether the gate depends on it;
+whether `HARNESS.md` is kept and what holds it and the harness together;
+the reclamation event, cadence, and form;
+and what was deliberately left out ("no canary tasks:
+the harness is small enough to re-read").
 
-**Extract.** Write the same section in the present tense from what step 1
-found: the mechanisms that exist, what each covers, and the copies nothing
-keeps in step. Mark every intent the files do not state as inferred.
+**Extract.** Write the same section in the present tense from what step 1 found:
+the mechanisms that exist, what each covers,
+and the copies nothing keeps in step.
+Mark every intent the files do not state as inferred.
 
-Done when: the section text is complete; every default applied is listed
-with the Context fact that selected it; and each open point (a mirror
-pair's source side the repository does not show, a drift label name) is a
-question for the user or, in extract mode, marked as inferred.
+Done when: the section text is complete;
+every default applied is listed with the Context fact that selected it;
+and each open point (a mirror pair's source side the repository does not show,
+a drift label name) is a question for the user or, in extract mode,
+marked as inferred.
 
 ### 3. Build
 
@@ -252,64 +257,73 @@ question for the user or, in extract mode, marked as inferred.
 
 Skip every numbered item the section does not call for.
 
-Done when: every file on the list is written or its blocker is on the
-pending decisions list, and nothing outside the list changed.
+Done when: every file on the list is written or its blocker
+is on the pending decisions list, and nothing outside the list changed.
 
 ### 4. Verify
 
-- Run the self-check recipe once and keep its output verbatim. For each
-  finding of that first run, the fix is to the harness content or to a
-  setting, decided per finding by the user (under a workflow: handed back
-  as pending decisions). Never edit the check's logic to make it pass.
-- The marker no longer appears in the entrypoint, the entrypoint has
-  exactly one sync section, and the entrypoint is within its line budget.
-- With the three-disposition form: the section names all three with their
-  criteria, says a conversation-only report does not count, and every table
-  row has all three cells.
-- The aggregate check recipe runs the self-check; the CI job runs the
-  recipe; the gate depends on it where the section says so.
+- Run the self-check recipe once and keep its output verbatim.
+  For each finding of that first run,
+  the fix is to the harness content or to a setting,
+  decided per finding by the user (under a workflow:
+  handed back as pending decisions).
+  Never edit the check's logic to make it pass.
+- The marker no longer appears in the entrypoint,
+  the entrypoint has exactly one sync section,
+  and the entrypoint is within its line budget.
+- With the three-disposition form:
+  the section names all three with their criteria,
+  says a conversation-only report does not count,
+  and every table row has all three cells.
+- The aggregate check recipe runs the self-check; the CI job runs the recipe;
+  the gate depends on it where the section says so.
 - The script and the CI job call nothing inside a skill directory.
-- Every deposited mechanism is reachable from the entrypoint, or its route
-  is handed back as owed.
-- The reclamation routine carries the hunt list, the thinning signal, the
-  anchor event, the cadence, and `Last run:` with the date of the first
-  sweep.
+- Every deposited mechanism is reachable from the entrypoint,
+  or its route is handed back as owed.
+- The reclamation routine carries the hunt list, the thinning signal,
+  the anchor event, the cadence, and `Last run:`
+  with the date of the first sweep.
 
-Done when: every check that applies has a stated result, and every failure
-is fixed or reported, never silently repaired.
+Done when: every check that applies has a stated result,
+and every failure is fixed or reported, never silently repaired.
 
 ### 5. Audit
 
 Compare the section with the project sentence by sentence; change nothing.
-When a self-check exists, run it and include its findings. Report a finding
-when:
+When a self-check exists, run it and include its findings.
+Report a finding when:
 
-- a mechanism the section describes is missing, is not wired where the
-  section says (recipe, aggregate check, CI, gate), or no longer runs;
+- a mechanism the section describes is missing,
+  is not wired where the section says (recipe, aggregate check, CI, gate),
+  or no longer runs;
 - a mechanism exists that the section does not describe;
-- a table row or sync skill names a document, recipe, or path that no
-  longer exists, or two mechanisms own one concern;
+- a table row or sync skill names a document, recipe,
+  or path that no longer exists, or two mechanisms own one concern;
 - a fact is stated in two places and nothing keeps the copies in step;
 - the reclamation's `Last run:` is older than its cadence, or "never";
 - a CI step or script calls a file inside a skill directory;
-- the project keeps `HARNESS.md` and a path its File Structure section
-  requires is missing, or the self-check's required paths and that section
-  disagree; or the section says the file was deleted and it is still there;
-- the section is too thick or too thin for the Context: a monthly sweep and
-  a gated self-check on a project nobody else relies on, or no self-check
-  on a harness several people and unattended agents depend on.
+- the project keeps `HARNESS.md` and a path its File Structure section requires
+  is missing, or the self-check's required paths and that section disagree;
+  or the section says the file was deleted and it is still there;
+- the section is too thick or too thin for the Context:
+  a monthly sweep and a gated self-check on a project nobody else relies on,
+  or no self-check on a harness several people and unattended agents depend on.
 
-Each finding carries a severity, the evidence as `path:line`, the sentence
-of the section it concerns, and whether to fix the artifact or amend the
-design. Severity is `high` when a safety boundary or an always-on rule is
-missing or contradicted, `medium` when the design and the project disagree
-so that a task could go wrong, and `low` for wording or tidiness only. When the project keeps
-`HARNESS.md` and the two disagree on intent, the default is to fix the
-artifact; amending the design is the fix only when the code shows the
-design sentence can no longer be built.
+Each finding carries a severity, the evidence as `path:line`,
+the sentence of the section it concerns,
+and whether to fix the artifact or amend the design.
+Severity is `high` when a safety boundary or an always-on rule
+is missing or contradicted,
+`medium` when the design and the project disagree so that a task could go wrong,
+and `low` for wording or tidiness only.
+When the project keeps `HARNESS.md` and the two disagree on intent,
+the default is to fix the artifact;
+amending the design is the fix only when the code shows the design sentence
+can no longer be built.
 
-Done when: every sentence of the section is either confirmed against the
-project or carries a finding, and no file changed.
+Done when: every sentence of the section
+is either confirmed against the project or carries a finding,
+and no file changed.
 
 ### 6. Hand back
 
@@ -320,20 +334,21 @@ project or carries a finding, and no file changed.
 | build | each file written or changed with its role and verification result; the self-check's first output; deviations where the code forced a departure from the section, for `HARNESS.md` to be reconciled; routes owed; requests handed to other skills by role; remote items; the pending decisions list |
 | audit | the findings table, or "omitted by the design" |
 
-Name no skill in what is handed back, and say that the project owns every
-deposited copy.
+Name no skill in what is handed back,
+and say that the project owns every deposited copy.
 
 ## Gotchas
 
-- A mirror pair of translations never matches word for word: the check
-  compares what a translation keeps (link targets, code spans, code blocks,
-  table row counts) inside the configured sections, so name sections whose
-  code and links really are shared.
-- The check counts a knowledge file as reachable only when the entrypoint
-  names it. A two-hop layout (entrypoint, then an index file) yields a
-  finding per file behind the index; report it to the layer that owns
-  Knowledge instead of weakening the check.
-- `HARNESS.md` is not a harness document for the link and path checks: it
-  may name paths that are required but not built yet, and paths it rules
-  out. Keep it out of the documents the check scans; the required-path list
-  covers it.
+- A mirror pair of translations never matches word for word:
+  the check compares what a translation keeps (link targets, code spans,
+  code blocks, table row counts) inside the configured sections,
+  so name sections whose code and links really are shared.
+- The check counts a knowledge file
+  as reachable only when the entrypoint names it.
+  A two-hop layout (entrypoint,
+  then an index file) yields a finding per file behind the index;
+  report it to the layer that owns Knowledge instead of weakening the check.
+- `HARNESS.md` is not a harness document for the link and path checks:
+  it may name paths that are required but not built yet, and paths it rules out.
+  Keep it out of the documents the check scans;
+  the required-path list covers it.

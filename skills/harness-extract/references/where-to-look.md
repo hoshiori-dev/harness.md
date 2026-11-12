@@ -1,9 +1,9 @@
 # Where to Look
 
-Read at the start of step 2 and walk every location. Paths are the common
-ones; a project may use others, so also follow every pointer the
-entrypoint gives. Record each location as found or absent: an absence is
-a finding for the layer it belongs to.
+Read at the start of step 2 and walk every location. Paths are the common ones;
+a project may use others, so also follow every pointer the entrypoint gives.
+Record each location as found or absent:
+an absence is a finding for the layer it belongs to.
 
 ## Locations by layer
 
@@ -30,24 +30,23 @@ a finding for the layer it belongs to.
 
 Read the last 50 commit titles and the branch names:
 
-- the commit convention actually used, and whether an older one was
-  abandoned;
+- the commit convention actually used, and whether an older one was abandoned;
 - whether commits carry tool or AI attribution;
-- the merge method visible in the history (merge commits, squashes,
-  rebases);
+- the merge method visible in the history (merge commits, squashes, rebases);
 - how releases are tagged.
 
-History tells current practice from abandoned practice. When a document
-states one convention and the history shows another, record both.
+History tells current practice from abandoned practice.
+When a document states one convention and the history shows another,
+record both.
 
 ## What the files cannot show
 
-Write these as "not observable from the repository" unless the project is
-the user's own and a read-only platform query or the user answers them:
+Write these as "not observable from the repository" unless the project
+is the user's own and a read-only platform query or the user answers them:
 
 - repository settings: branch protection, required checks, who may merge;
-- how unattended agents are, and what triggers them, beyond what workflow
-  files show;
+- how unattended agents are, and what triggers them,
+  beyond what workflow files show;
 - what a wrong change costs and how long the project will be maintained;
 - which models the team allows.
 

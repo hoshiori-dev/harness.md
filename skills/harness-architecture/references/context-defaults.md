@@ -1,9 +1,9 @@
 # From Context to Defaults
 
-Read before saying how much a layer should do for a project, or when a user
-disputes a default. A layer's amount is set from the project's Context, one
-layer at a time, never from a project label and never for the project as a
-whole.
+Read before saying how much a layer should do for a project,
+or when a user disputes a default.
+A layer's amount is set from the project's Context, one layer at a time,
+never from a project label and never for the project as a whole.
 
 ## The Context conditions
 
@@ -16,16 +16,17 @@ whole.
 | Hosting platform | GitHub, GitLab, another host, none | Authority (the platform half), Gates (CI) |
 | Clients and weakest model | one client or several; the least capable model that will work here | Knowledge, Authority (permission files) |
 
-An existing isolated environment (a dev container, a disposable VM) is a
-fact about the project, observed, and it works in the other direction:
-stronger isolation allows a wider allow list and lighter gates, because the
-environment absorbs the mistake.
+An existing isolated environment (a dev container,
+a disposable VM) is a fact about the project, observed,
+and it works in the other direction:
+stronger isolation allows a wider allow list and lighter gates,
+because the environment absorbs the mistake.
 
 ## Defaults per layer
 
 Each row gives the default when nothing in the Context pushes the layer,
-then what pushes it up and what lets it shrink. "Nothing, because …" is a
-legitimate design for any layer.
+then what pushes it up and what lets it shrink.
+"Nothing, because …" is a legitimate design for any layer.
 
 | Layer | Default | Does more when | Does less when |
 | --- | --- | --- | --- |
@@ -39,8 +40,8 @@ legitimate design for any layer.
 
 ## Two common combinations
 
-Start from the closer column, then adjust each layer where its conditions
-differ from the project's.
+Start from the closer column,
+then adjust each layer where its conditions differ from the project's.
 
 | Layer | Exploratory (demo, experiment, early prototype) | Engineering (production system, shared main line) |
 | --- | --- | --- |
@@ -54,22 +55,24 @@ differ from the project's.
 
 ## Adjusting per area
 
-Ask of each layer: do the cost of a wrong change, the horizon, and the
-unattended time in this part of the repository match the project's overall
-values? Where one differs, set the layer for that area in the direction the
-condition pushes, and say so in the layer's section.
+Ask of each layer: do the cost of a wrong change, the horizon,
+and the unattended time in this part of the repository match
+the project's overall values? Where one differs,
+set the layer for that area in the direction the condition pushes,
+and say so in the layer's section.
 
-- A research repository with a data pipeline that must not break: Gates and
-  Entropy take the engineering column for the pipeline; the rest stays
-  exploratory.
+- A research repository with a data pipeline that must not break:
+  Gates and Entropy take the engineering column for the pipeline;
+  the rest stays exploratory.
 - An `experiments/` directory inside a production repository: the reverse.
 - A production project with one maintainer who watches every session:
   Knowledge and Authority shrink; Gates do not.
 
 ## Too much is also a defect
 
-A constraint that no longer catches anything still costs: it slows the
-agent and teaches it to work around gates. A layer shrinks when what its
-constraint caught no longer occurs (the module is gone, the migration is
-finished, a stronger check covers it), and only on that evidence; "nobody
-remembers why it exists" is a question for the user, not evidence.
+A constraint that no longer catches anything still costs:
+it slows the agent and teaches it to work around gates.
+A layer shrinks when what its constraint caught no longer occurs
+(the module is gone, the migration is finished, a stronger check covers it),
+and only on that evidence;
+"nobody remembers why it exists" is a question for the user, not evidence.

@@ -1,8 +1,8 @@
 # Checks
 
-Read when a check is red or when adding, renaming, or removing a recipe or
-job. Every CI job runs a `just` recipe that also runs locally; the recipe is
-the source of truth and this table is the map.
+Read when a check is red or when adding, renaming, or removing a recipe or job.
+Every CI job runs a `just` recipe that also runs locally;
+the recipe is the source of truth and this table is the map.
 
 | Job name (required-check name) | Workflow and trigger | Recipe | What a healthy run shows |
 |---|---|---|---|
@@ -25,48 +25,55 @@ the source of truth and this table is the map.
 
 ## Workflows
 
-- `push` is the fast lane: one job, no openspec, website, pre-commit, or
-  betterleaks install. On a branch with an open pull request it runs beside
-  `checks`; the overlap is accepted for the quick signal.
-- `checks` is the full suite. A pull request runs it on the merge result of
-  its latest commit and a newer push cancels the older run, so only the
-  last commit of a pull request is ever fully checked. The push to `main`
-  after a squash merge runs it once more on the merged commit.
-- `secrets` is separate so that a change to it stands out in review and so
-  the ruleset requires it on its own. It scans the commits a push or pull
-  request adds. Push runs are never cancelled: each covers only its own
-  commits. The working tree is still scanned by the betterleaks hook inside
-  `checks / lint` and by `just secrets` inside `just check`.
-- `pr` reruns on title and body edits without rerunning the suite, which is
-  why it is not folded into `checks`. It also carries the archive gate: a
-  required check that is reported only when the tree holds no unarchived
-  OpenSpec change. Absent is not failed, so a pull request
-  mid-implementation is green yet unmergeable, and `just spec-archived`
-  tells you why.
-- `labels` applies the label declaration on `main` only. A pull request
-  that edits `.github/labels.json` is reviewed like any other; the labels
-  change when it merges.
-- `pr-labels` is the one workflow on `pull_request_target`, which runs
-  `main`'s copy of the workflow and script with a token that may write to
-  the pull request. The rule for that file: never check out, fetch, or run
-  anything of the pull request; pull request data reaches the script
-  through environment variables and `gh api`, never inside a `run:` line;
-  the job alone holds `pull-requests: write`; the token is set on the steps
-  that call `gh` and nowhere else; no third-party action beyond the pinned
-  checkout, pnpm, and node setup; dependencies installed from `main`'s
-  lockfile without install scripts. A change to it is reviewed against this
-  list.
+- `push` is the fast lane: one job, no openspec, website, pre-commit,
+  or betterleaks install.
+  On a branch with an open pull request it runs beside `checks`;
+  the overlap is accepted for the quick signal.
+- `checks` is the full suite.
+  A pull request runs it on the merge result of its latest commit
+  and a newer push cancels the older run,
+  so only the last commit of a pull request is ever fully checked.
+  The push to `main` after a squash merge runs it once more on the merged
+  commit.
+- `secrets` is separate so that a change to it stands out in review
+  and so the ruleset requires it on its own.
+  It scans the commits a push or pull request adds.
+  Push runs are never cancelled: each covers only its own commits.
+  The working tree is still scanned
+  by the betterleaks hook inside `checks / lint`
+  and by `just secrets` inside `just check`.
+- `pr` reruns on title and body edits without rerunning the suite,
+  which is why it is not folded into `checks`. It also carries the archive gate:
+  a required check that is reported only when the tree holds no unarchived
+  OpenSpec change. Absent is not failed,
+  so a pull request mid-implementation is green yet unmergeable,
+  and `just spec-archived` tells you why.
+- `labels` applies the label declaration on `main` only.
+  A pull request that edits `.github/labels.json` is reviewed like any other;
+  the labels change when it merges.
+- `pr-labels` is the one workflow on `pull_request_target`,
+  which runs `main`'s copy of the workflow and script with a token
+  that may write to the pull request. The rule for that file:
+  never check out, fetch, or run anything of the pull request;
+  pull request data reaches the script through environment variables
+  and `gh api`, never inside a `run:` line;
+  the job alone holds `pull-requests: write`;
+  the token is set on the steps that call `gh` and nowhere else;
+  no third-party action beyond the pinned checkout, pnpm, and node setup;
+  dependencies installed from `main`'s lockfile without install scripts.
+  A change to it is reviewed against this list.
 
-Not in CI: `just clients-validate` needs the client CLIs and runs in the
-dev container only; the behavioural tests of the skills need an agent and
-run by hand (`.agents/knowledge/spec-workflow.md`, Validation).
+Not in CI: `just clients-validate` needs the client CLIs and runs
+in the dev container only;
+the behavioural tests of the skills need an agent and run by hand
+(`.agents/knowledge/spec-workflow.md`, Validation).
 
-Every `uses:` is pinned to a commit SHA with the version tag in a trailing
-comment, and every checkout sets `persist-credentials: false`; Dependabot
-(`.github/dependabot.yml`) bumps SHA and comment together. When adding an
-action, resolve the tag with
-`gh api repos/<owner>/<repo>/git/ref/tags/<tag>` and pin the same way.
+Every `uses:` is pinned to a commit SHA with the version tag
+in a trailing comment, and every checkout sets `persist-credentials: false`;
+Dependabot (`.github/dependabot.yml`) bumps SHA and comment together.
+When adding an action, resolve the tag
+with `gh api repos/<owner>/<repo>/git/ref/tags/<tag>` and pin the same way.
 
-Toolchain versions for CI live in
-`.github/actions/setup-tools/action.yml`; the dev container pins its own in
-`.devcontainer/devcontainer.json`. When one changes, check the other.
+Toolchain versions for CI live in `.github/actions/setup-tools/action.yml`;
+the dev container pins its own in `.devcontainer/devcontainer.json`.
+When one changes, check the other.

@@ -1,17 +1,19 @@
 # Platform Settings Register
 
-Read before reading back or changing a remote setting of
-`hoshiori-dev/harness.md`, and when a check is "not running" rather than
-failing. These are account-side settings no checkout can recreate.
+Read before reading back or changing a remote setting
+of `hoshiori-dev/harness.md`,
+and when a check is "not running" rather than failing.
+These are account-side settings no checkout can recreate.
 
-A setting is applied by the maintainer, or by an agent only after the exact
-command and resulting state were shown and the maintainer approved that one
-action (`.agents/knowledge/agent-authority.md`). After applying, run the
-readback and record date and result in the last column.
+A setting is applied by the maintainer,
+or by an agent only after the exact command and resulting state were shown
+and the maintainer approved that one action
+(`.agents/knowledge/agent-authority.md`).
+After applying, run the readback and record date and result in the last column.
 
-Observed state on 2026-11-11 (read-only): public repository; merge commit,
-squash, and rebase all allowed; GitHub's default labels only; no rulesets;
-Pages not enabled.
+Observed state on 2026-11-11 (read-only): public repository;
+merge commit, squash, and rebase all allowed; GitHub's default labels only;
+no rulesets; Pages not enabled.
 
 | Setting | Intended value | Readback | Applied |
 |---|---|---|---|
@@ -24,10 +26,10 @@ Pages not enabled.
 | Actions default token | read-only; workflows request write scopes per job | `gh api repos/{owner}/{repo}/actions/permissions/workflow` → `read`, approvals `false` | not read back yet |
 | Repository metadata | description and homepage equal to `plugin.json`; topics from its `keywords` | `gh repo view --json description,homepageUrl,repositoryTopics` | not applied yet; applied by the maintainer or after a per-action approval |
 
-Secrets and variables: none required. The release and site workflows use
-the workflow's own `GITHUB_TOKEN`.
+Secrets and variables: none required.
+The release and site workflows use the workflow's own `GITHUB_TOKEN`.
 
 Update trigger: when a setting is applied or its intended value changes,
-edit its row in the same pull request or, for a setting applied outside a
-pull request, in the next one. The intended values follow the Authority
-section of `HARNESS.md`.
+edit its row in the same pull request or,
+for a setting applied outside a pull request, in the next one.
+The intended values follow the Authority section of `HARNESS.md`.

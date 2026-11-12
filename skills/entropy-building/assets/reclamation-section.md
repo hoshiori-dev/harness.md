@@ -25,14 +25,14 @@ Walk the entrypoint, every knowledge file, every project skill, and the open
    hosting platform), then reconsider every section that leaned on the old
    one.
 
-Give every finding one disposition: update, reconnect, merge, thin, or
-delete, with its evidence. Thin only after the user approves the finding and
-its evidence; delete only on current, unambiguous evidence (a path that does
-not exist, a command that fails) or the user's approval; otherwise report
-it. A change to what `HARNESS.md` intends is the user's decision, never the
-sweep's. When repeated agent failures on one instruction prompted the run,
-report the pattern and a recommendation and edit nothing on that basis
-alone.
+Give every finding one disposition:
+update, reconnect, merge, thin, or delete, with its evidence.
+Thin only after the user approves the finding and its evidence;
+delete only on current, unambiguous evidence (a path that does not exist,
+a command that fails) or the user's approval; otherwise report it.
+A change to what `HARNESS.md` intends is the user's decision, never the sweep's.
+When repeated agent failures on one instruction prompted the run,
+report the pattern and a recommendation and edit nothing on that basis alone.
 
-Close the run by updating `Last run:` to today's absolute date and closing
-the drift issues it resolved.
+Close the run by updating `Last run:`
+to today's absolute date and closing the drift issues it resolved.

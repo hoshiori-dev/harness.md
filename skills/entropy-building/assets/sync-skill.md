@@ -26,8 +26,8 @@ Apply the update in the same change, never as a follow-up.
 
 ## Before editing the document
 
-Check first, and fix or report every mismatch found, not only the one that
-prompted the edit:
+Check first, and fix or report every mismatch found,
+not only the one that prompted the edit:
 
 - `just --summary` lists every recipe the section names. <!-- # CONFIGURE: the runner's recipe-listing command and the reverse checks the section names. -->
 - Each named recipe runs and does what its line says.

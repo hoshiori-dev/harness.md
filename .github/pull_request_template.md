@@ -15,5 +15,6 @@
 - [ ] `just check` passes locally.
 - [ ] Acceptance criteria of the linked issue or OpenSpec change are met.
 - [ ] Generated client files come from `just gen`, not from hand edits.
-- [ ] A change to `spec/spec.md` is mirrored in `spec/spec.zh.md` and copied into the format skill.
+- [ ] A change to `spec/spec.md` is mirrored in `spec/spec.zh.md` and copied
+      into the format skill.
 - [ ] No secrets, tokens, or private data are in this change.

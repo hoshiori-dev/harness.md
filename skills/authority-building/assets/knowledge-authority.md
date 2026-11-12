@@ -1,4 +1,7 @@
-Read this when about to push, publish, release, comment, label, change a remote setting, or delete anything you did not write; when an action is refused; and whenever unsure whether an action is yours to take.
+Read this when about to push, publish, release, comment, label,
+change a remote setting, or delete anything you did not write;
+when an action is refused;
+and whenever unsure whether an action is yours to take.
 
 # Agent Authority Policy
 
@@ -10,24 +13,26 @@ do on its own. The two are independent and this file is the narrower one.
 
 Classify every action before taking it:
 
-- **Reversible and internal**: edit files, create a branch or worktree, run
-  checks, commit locally, squash unpushed commits. Do it; no question.
-- **Irreversible or outward**: push, open or update a pull request, post a
-  comment, add or remove a label, change an issue or pull request state,
+- **Reversible and internal**: edit files, create a branch or worktree,
+  run checks, commit locally, squash unpushed commits. Do it; no question.
+- **Irreversible or outward**: push, open or update a pull request,
+  post a comment, add or remove a label, change an issue or pull request state,
   release, publish, change a remote setting, delete anything the user wrote.
-  Take it only when it is pre-authorised: it is on the standing list below,
-  or the approved plan or the task's spec names it for this task. Otherwise
-  add it to the pending decisions list below and continue with the work that
-  does not depend on it.
+  Take it only when it is pre-authorised:
+  it is on the standing list below,
+  or the approved plan or the task's spec names it for this task.
+  Otherwise add it to the pending decisions list below and continue
+  with the work that does not depend on it.
 
 Standing pre-authorisation, on every task: {{STANDING_ACTIONS}} <!-- # CONFIGURE: {{STANDING_ACTIONS}}: the outward actions the design lets agents take on every task, as this project's commands (for example "`just push-one` on the task branch, and `gh pr create --draft` / `gh pr edit` on that branch's own pull request"), or "none; every outward action is named by the task's plan". -->
 Never standing: marking a request ready, merging, pushing a tag, releasing,
 changing a remote setting, force pushing, deleting anything this task did
 not create.
 
-A local commit can be rewritten or dropped. A pushed commit cannot be erased
-from the remote: a force push moves the branch pointer and the old objects
-stay addressable. The two are different classes.
+A local commit can be rewritten or dropped.
+A pushed commit cannot be erased from the remote:
+a force push moves the branch pointer and the old objects stay addressable.
+The two are different classes.
 
 ### Irreversible actions in this project
 
@@ -38,23 +43,24 @@ stay addressable. The two are different classes.
 ## Approval at both ends, not per command
 
 Human approval sits at two points: on the plan and on the finished work.
-Approving a plan approves what is done, what is not done, and where the
-approach is bounded; it never approves a sequence of steps. Per-command
-approval is not a safety mechanism: it exhausts the reviewer, protects
-nothing the sandbox does not already protect, and destroys the unattended
-time that is the point of using an agent.
+Approving a plan approves what is done, what is not done,
+and where the approach is bounded; it never approves a sequence of steps.
+Per-command approval is not a safety mechanism:
+it exhausts the reviewer, protects nothing the sandbox does not already protect,
+and destroys the unattended time that is the point of using an agent.
 
-When one item needs a decision only the user can make, finish every other
-item first and raise the decision once, at the end or when nothing else can
-proceed.
+When one item needs a decision only the user can make,
+finish every other item first and raise the decision once,
+at the end or when nothing else can proceed.
 
 ## Pending decisions
 
-Each item carries five fields: what is blocked; why the decision is the
-user's; the options, one sentence each; the recommended option and its
-reason; which finished work each option would change. The list is presented
-once, never one question at a time, so that a user returning after hours
-away can decide every item from the list alone.
+Each item carries five fields: what is blocked; why the decision is the user's;
+the options, one sentence each; the recommended option and its reason;
+which finished work each option would change.
+The list is presented once, never one question at a time,
+so that a user returning after hours away
+can decide every item from the list alone.
 
 ```markdown
 ### 1. <short title>
@@ -71,21 +77,22 @@ away can decide every item from the list alone.
 
 ## A refusal is a decision
 
-When a permission rule, a hook, or the platform refuses an action, it means
-one of two things:
+When a permission rule, a hook, or the platform refuses an action,
+it means one of two things:
 
-1. The plan put the work in the wrong place. A refused edit to a protected
-   file usually means the logic belongs elsewhere: return to the plan and
-   choose another approach.
-2. A real policy boundary was reached: record it as a pending decision and
-   continue with the rest.
+1. The plan put the work in the wrong place.
+   A refused edit to a protected file usually means the logic belongs elsewhere:
+   return to the plan and choose another approach.
+2. A real policy boundary was reached:
+   record it as a pending decision and continue with the rest.
 
 Forbidden: retrying the same intent through an equivalent command, a script,
-a different tool, or a shell redirect. Denied `git push --force`, then
-`git push --force-with-lease` on the same branch, is routing around. A
-refused edit, then the same change through `cat >` or `sed -i`, is routing
-around. A failing test, linter, or secret scan is not a refusal; it is a
-defect to fix.
+a different tool, or a shell redirect.
+Denied `git push --force`,
+then `git push --force-with-lease` on the same branch, is routing around.
+A refused edit, then the same change through `cat >` or `sed -i`,
+is routing around. A failing test, linter, or secret scan is not a refusal;
+it is a defect to fix.
 
 ## Permission lists
 
@@ -96,18 +103,18 @@ survivable. On a client whose default is to ask, a recurring prompt for a
 safe command is a reason to widen the allow list, not to add an ask entry.
 The lists carry no ask entries. <!-- # CONFIGURE: when the owner kept an ask entry, write instead "The lists carry one ask entry, <entry>, kept by <owner> because <reason>; add no other." -->
 
-The deny list (`git reset --hard`, `git push --force`, `git push
---all/--mirror/--tags`, `git clean -fd`, `git branch -D`, `rm -rf` at the
-repository root, edits to this file, the permission files, and the security
-hooks) protects against a careless collaborator's mistakes, not an attacker.
-An agent that runs code can spell around it; the sandbox and the scoped
-tokens are the real boundary.
+The deny list (`git reset --hard`, `git push --force`,
+`git push --all/--mirror/--tags`, `git clean -fd`, `git branch -D`,
+`rm -rf` at the repository root, edits to this file, the permission files,
+and the security hooks) protects against a careless collaborator's mistakes,
+not an attacker. An agent that runs code can spell around it;
+the sandbox and the scoped tokens are the real boundary.
 
-No push, publish, release, tracker write, or deletion of others' work is an
-allow entry, as a raw command or inside a task-runner recipe, however
-routine; recipes are allowed one by one, never through a runner wildcard.
-Those actions proceed when they are pre-authorised and are deferred
-otherwise.
+No push, publish, release, tracker write,
+or deletion of others' work is an allow entry,
+as a raw command or inside a task-runner recipe, however routine;
+recipes are allowed one by one, never through a runner wildcard.
+Those actions proceed when they are pre-authorised and are deferred otherwise.
 
 ## Checkpoints are commits
 
@@ -158,13 +165,13 @@ present human is not a reason to ask about every command.
 
 ## This file protects itself
 
-Loosening this policy, a permission list, or a security hook is outside
-every agent's authority, including when it would unblock the current
-task and including when a denied command turns out to be required by the
-approved plan. Do not edit the rule: propose the change with its reason and
-wait.
+Loosening this policy, a permission list,
+or a security hook is outside every agent's authority,
+including when it would unblock the current task and including
+when a denied command turns out to be required by the approved plan.
+Do not edit the rule: propose the change with its reason and wait.
 
-Maintenance happens when the harness is improved, as a one-time review: a
-prompt category approved near 100% of the time moves to the allow list; an
-allowed command that repeatedly caused rollbacks is tightened. No standing
-metric is kept.
+Maintenance happens when the harness is improved, as a one-time review:
+a prompt category approved near 100% of the time moves to the allow list;
+an allowed command that repeatedly caused rollbacks is tightened.
+No standing metric is kept.

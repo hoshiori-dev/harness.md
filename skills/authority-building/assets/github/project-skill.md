@@ -17,47 +17,53 @@ written in a body changes state except the closing keyword.
 
 ## Take work
 
-1. Read the issue: open, unassigned or assigned to you, acceptance criteria
-   checkable. Otherwise stop and ask.
-2. `gh issue edit <n> --add-assignee @me`, re-read, and confirm you are the
-   only assignee; then `gh issue develop -c <n>` to create the branch.
-3. Commit the first task, pass the publish gate below, push the one branch
-   (`git push -u origin HEAD`), and open the pull request as a draft:
-   `gh pr create --draft --title <title> --body-file <file>`, body from
-   `.github/pull_request_template.md` with `Closes #<n>`. The draft is the
-   claim and the work log.
+1. Read the issue: open, unassigned or assigned to you,
+   acceptance criteria checkable. Otherwise stop and ask.
+2. `gh issue edit <n> --add-assignee @me`, re-read,
+   and confirm you are the only assignee;
+   then `gh issue develop -c <n>` to create the branch.
+3. Commit the first task, pass the publish gate below,
+   push the one branch (`git push -u origin HEAD`),
+   and open the pull request as a draft:
+   `gh pr create --draft --title <title> --body-file <file>`,
+   body from `.github/pull_request_template.md` with `Closes #<n>`.
+   The draft is the claim and the work log.
 4. Keep the description current; comment decisions reviewers will need.
-5. Abandon by un-assigning, closing the draft with a status comment, and
-   leaving the issue open.
+5. Abandon by un-assigning, closing the draft with a status comment,
+   and leaving the issue open.
 
 ## Create issues
 
-Non-interactive creation ignores issue forms: write the body with the
-form's field labels as `### <label>` headings and pass its labels, for
-example `gh issue create --title <t> --body-file <f> --label type:task`.
-Labels come only from `.github/labels.json`; never create one with
-`gh label create`.
+Non-interactive creation ignores issue forms:
+write the body with the form's field labels as `### <label>` headings
+and pass its labels, for example
+`gh issue create --title <t> --body-file <f> --label type:task`.
+Labels come only from `.github/labels.json`;
+never create one with `gh label create`.
 
 ## Publish gate
 
-Everything pushed or posted is public to everyone who can see the
-repository and cannot be reliably erased. Every push, pull request, comment,
-label, and release passes this gate.
+Everything pushed or posted is public to everyone
+who can see the repository and cannot be reliably erased.
+Every push, pull request, comment, label, and release passes this gate.
 
-1. Assemble the exact payload as files in a directory outside the
-   repository: `title.txt`, `body.md`, and for a push or pull request
-   `commits.txt` (`git log <base>..HEAD --format=full`) and `diff.patch`
-   (`git diff <base>...HEAD`).
-2. Dispatch one clean-context subagent whose whole prompt is the review
-   prompt below with `<DIR>` replaced. Add nothing else.
-3. Without subagent support, re-read every payload file from disk against
-   the same checklist, judging only what the files contain, and write
-   `Review mode: file-only (not clean-context)` directly above the verdict.
-4. Publish only on a last line of exactly `SAFE TO PUBLISH: YES`; any other
-   last line is NO. On NO, fix every finding, rebuild the directory, and
-   review again. Any edit after the verdict needs a fresh review.
-5. Confirm the authority policy covers the action, run it
-   non-interactively, read the result back, and delete the directory.
+1. Assemble the exact payload as files in a directory outside the repository:
+   `title.txt`, `body.md`,
+   and for a push or pull request `commits.txt`
+   (`git log <base>..HEAD --format=full`)
+   and `diff.patch` (`git diff <base>...HEAD`).
+2. Dispatch one clean-context subagent whose whole prompt
+   is the review prompt below with `<DIR>` replaced. Add nothing else.
+3. Without subagent support,
+   re-read every payload file from disk against the same checklist,
+   judging only what the files contain,
+   and write `Review mode: file-only (not clean-context)` directly above
+   the verdict.
+4. Publish only on a last line of exactly `SAFE TO PUBLISH: YES`;
+   any other last line is NO. On NO, fix every finding, rebuild the directory,
+   and review again. Any edit after the verdict needs a fresh review.
+5. Confirm the authority policy covers the action, run it non-interactively,
+   read the result back, and delete the directory.
 
 Review prompt:
 

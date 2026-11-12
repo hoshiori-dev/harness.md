@@ -23,9 +23,10 @@ and `HARNESS.md` disagree on intent, fix the harness file, or change
 `HARNESS.md` first and then the file; on a fact (what a command does,
 whether a path exists) the code wins and `HARNESS.md` is corrected. <!-- # CONFIGURE: delete this paragraph when the project keeps no HARNESS.md. -->
 
-Before finishing an edit to any harness document, run the "Check first"
-cell of every row naming that document, and fix or report every mismatch
-found there, not only the one that prompted the edit.
+Before finishing an edit to any harness document,
+run the "Check first" cell of every row naming that document,
+and fix or report every mismatch found there,
+not only the one that prompted the edit.
 
 | When this changes | Update | Check first when editing that document |
 |---|---|---|

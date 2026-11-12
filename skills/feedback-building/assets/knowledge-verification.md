@@ -1,7 +1,7 @@
 # Verifying Work
 
-Read this before calling a task done, when a check fails, or when the
-running system must be inspected.
+Read this before calling a task done, when a check fails,
+or when the running system must be inspected.
 
 ## Commands
 
@@ -13,8 +13,8 @@ running system must be inspected.
 | One test file or directory | `just test-fast <path>` | seconds | the same |
 | Before calling a task done | `just check` | about 4 min | the same; the full log path on failure |
 
-A red result is fixed in the code. Never change a test, an expected
-output, or a threshold to make it green.
+A red result is fixed in the code. Never change a test, an expected output,
+or a threshold to make it green.
 
 ## Running the system
 
@@ -28,8 +28,7 @@ output, or a threshold to make it green.
 
 {{TESTS}} <!-- # CONFIGURE: {{TESTS}}: the level tests are written at, where fixtures live, the seed and reset command, the command that updates golden files, and the quarantine marker; delete what the design does not name. -->
 
-A bug fix starts with a test or a script that fails for the reported
-reason.
+A bug fix starts with a test or a script that fails for the reported reason.
 
 ## Evidence
 

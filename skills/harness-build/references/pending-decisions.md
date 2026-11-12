@@ -1,8 +1,8 @@
 # Pending Decisions
 
-Read when a step is blocked on a decision only the user can make, when
-writing the pending decisions section of a policy, or when checking an item
-someone else wrote.
+Read when a step is blocked on a decision only the user can make,
+when writing the pending decisions section of a policy,
+or when checking an item someone else wrote.
 
 ## Rule
 
@@ -15,25 +15,24 @@ change. Present the list once, at the end or when nothing else can proceed,
 never one question at a time.
 <!-- /shared:pending-decisions -->
 
-A user returning after hours away must be able to decide each item from the
-list alone.
+A user returning after hours away must be able to decide each item
+from the list alone.
 
 ## Fields of one item
 
 Every item carries all five, in this order, under these labels:
 
 1. **Blocked**: the step or action that cannot proceed.
-2. **Why**: what makes the decision the user's (a policy boundary, a refused
-   action, an outward effect nobody pre-authorised, two readings of the
-   request).
-3. **Options**: each option in one sentence; include "do nothing" when it is
-   viable.
+2. **Why**: what makes the decision the user's (a policy boundary,
+   a refused action, an outward effect nobody pre-authorised,
+   two readings of the request).
+3. **Options**: each option in one sentence;
+   include "do nothing" when it is viable.
 4. **Recommended**: one option and its reason.
-5. **Impact on finished work**: for each option, which already finished work
-   changes, and how; "none" when nothing changes.
+5. **Impact on finished work**: for each option,
+   which already finished work changes, and how; "none" when nothing changes.
 
-An item missing any field is incomplete and is completed before it is
-presented.
+An item missing any field is incomplete and is completed before it is presented.
 
 ## Format
 

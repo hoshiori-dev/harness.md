@@ -32,18 +32,19 @@ Walk the entrypoint, every knowledge file, every project skill, and the open
 
 ## Dispositions
 
-Every finding gets one: update, reconnect, merge, thin, or delete, with its
-evidence. Thin only after the user approves the finding and its evidence;
-delete only on current, unambiguous evidence (a path that does not exist, a
-command that fails) or the user's approval; otherwise report. A change to
-what `HARNESS.md` intends is the user's decision. A run prompted by repeated
-agent failures reports the pattern and a recommendation and edits nothing on
-that basis alone.
+Every finding gets one: update, reconnect, merge, thin, or delete,
+with its evidence. Thin only after the user approves the finding
+and its evidence; delete only on current,
+unambiguous evidence (a path that does not exist,
+a command that fails) or the user's approval; otherwise report.
+A change to what `HARNESS.md` intends is the user's decision.
+A run prompted by repeated agent failures reports the pattern
+and a recommendation and edits nothing on that basis alone.
 
 ## Close
 
-Set `Last run:` above to today's absolute date and close the drift issues
-the run resolved.
+Set `Last run:` above to today's absolute date
+and close the drift issues the run resolved.
 
-Done when: every finding has an applied or reported disposition with its
-evidence and `Last run:` holds today's date.
+Done when: every finding has an applied or reported disposition
+with its evidence and `Last run:` holds today's date.
