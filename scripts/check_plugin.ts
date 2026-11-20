@@ -8,6 +8,7 @@
 //   check_plugin.ts --footprint <id> print the files that belong to one client
 import { lstatSync, readFileSync, realpathSync } from "node:fs";
 import { join, sep } from "node:path";
+import { fromMarkdown } from "mdast-util-from-markdown";
 import { parse as parseYaml } from "yaml";
 import type { ClientSpec } from "./lib/clients.ts";
 import { CLIENTS, clientById, footprint } from "./lib/clients.ts";
@@ -21,13 +22,12 @@ import {
   SKILL_NAME_RE,
 } from "./lib/plugin.ts";
 
-const CONTAINER_PREFIX = /^(?:[ \t]*>[ \t]?|[ \t]*(?:[-*+]|\d{1,9}[.)])[ \t]+)*/;
-const FENCE_OPEN = /^[ \t]*(`{3,}|~{3,})(.*)$/;
-const FENCE_CLOSE = /^[ \t]*(`{3,}|~{3,})[ \t]*$/;
-const H2 = /^##[ \t]+(.+)$/;
-const REQUIREMENT = /^###[ \t]*Requirement:[ \t]*(.+)$/i;
-const REMOVED_BULLET =
-  /^[ \t]*[-*+][ \t]*(?:`###[ \t]*Requirement:[ \t]*(.+?)`|###[ \t]*Requirement:[ \t]*(.+))[ \t]*$/i;
+const FENCE_OPEN = /^\s*(`{3,}|~{3,})(.*)/;
+const FENCE_CLOSE = /^\s*(`{3,}|~{3,})\s*$/;
+const H2 = /^##\s+(.+)$/;
+const REQUIREMENT = /^###\s*Requirement:\s*(.+)\s*$/i;
+const REMOVED_BULLET = /^\s*[-*+]\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
+const KEBAB_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const root = process.cwd();
 const realRoot = realpathSync(root);
@@ -441,38 +441,57 @@ function readRepoFile(path: string): string | null {
   }
 }
 
-function specSections(text: string, allowBulletRequirements = false): Map<string, Set<string>> {
+function* specLines(text: string, isDelta: boolean): Iterable<string> {
+  const normalized = text.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
+  const codeLines = new Set<number>();
+  if (isDelta) {
+    // OpenSpec's line parser does not track Markdown containers. A removal must
+    // also be outside rendered code blocks, including list and quote examples.
+    const nodes = [...fromMarkdown(normalized).children];
+    while (nodes.length > 0) {
+      const node = nodes.pop();
+      if (!node) break;
+      if (node.type === "code" && node.position) {
+        for (let line = node.position.start.line; line <= node.position.end.line; line++) {
+          codeLines.add(line);
+        }
+      } else if (node.type === "blockquote") {
+        nodes.push(...node.children);
+      } else if (node.type === "list") {
+        for (const item of node.children) nodes.push(...item.children);
+      }
+    }
+  }
+
+  // Track the raw-line fence interpretation used by OpenSpec 1.17 as well.
+  // A container-prefixed fence marker cannot open or close one of these.
+  let fence: string | undefined;
+  for (const [index, line] of normalized.split("\n").entries()) {
+    if (fence) {
+      const close = FENCE_CLOSE.exec(line)?.[1];
+      if (close?.startsWith(fence)) fence = undefined;
+      continue;
+    }
+    const open = FENCE_OPEN.exec(line);
+    const marker = open?.[1];
+    if (marker && !(marker.startsWith("`") && open?.[2]?.includes("`"))) {
+      fence = marker;
+      continue;
+    }
+    if (!codeLines.has(index + 1)) yield line;
+  }
+}
+
+function specSections(text: string, isDelta: boolean): Map<string, Set<string>> | null {
   const sections = new Map<string, Set<string>>();
   let current: Set<string> | undefined;
   let currentName: string | undefined;
-  let fence: { char: string; length: number } | undefined;
-  for (const line of text
-    .replace(/^\uFEFF/, "")
-    .replace(/\r\n?/g, "\n")
-    .split("\n")) {
-    const stripped = line.replace(CONTAINER_PREFIX, "");
-    if (fence) {
-      const closeMatch = FENCE_CLOSE.exec(stripped);
-      const marker = closeMatch?.[1];
-      if (marker?.startsWith(fence.char) && marker.length >= fence.length) {
-        fence = undefined;
-      }
-      continue;
-    }
-    const openMatch = FENCE_OPEN.exec(stripped);
-    if (openMatch?.[1]) {
-      const char = openMatch[1].charAt(0);
-      const info = openMatch[2] ?? "";
-      // CommonMark: a backtick fence's info string cannot contain a backtick (inline code).
-      if (!(char === "`" && info.includes("`"))) {
-        fence = { char, length: openMatch[1].length };
-        continue;
-      }
-    }
+  for (const line of specLines(text, isDelta)) {
     const h2 = H2.exec(line);
     if (h2) {
       const heading = stripClosingHashes(h2[1] ?? "").toLowerCase();
       let set = sections.get(heading);
+      if (!isDelta && heading === "requirements" && set) return null;
       if (!set) {
         set = new Set();
         sections.set(heading, set);
@@ -481,20 +500,15 @@ function specSections(text: string, allowBulletRequirements = false): Map<string
       currentName = heading;
       continue;
     }
-    if (!current) continue;
-    const req = REQUIREMENT.exec(line);
-    if (req) {
-      const name = stripClosingHashes(req[1] ?? "");
-      if (name) current.add(name);
+    if (!current || currentName !== (isDelta ? "removed requirements" : "requirements")) continue;
+    const req = REQUIREMENT.exec(line) ?? (isDelta ? REMOVED_BULLET.exec(line) : null);
+    if (!req) {
+      if (!isDelta && /^###\s+/.test(line)) return null;
       continue;
     }
-    if (allowBulletRequirements && currentName === "removed requirements") {
-      const bullet = REMOVED_BULLET.exec(line);
-      if (bullet) {
-        const name = stripClosingHashes(bullet[1] ?? bullet[2] ?? "");
-        if (name) current.add(name);
-      }
-    }
+    const name = stripClosingHashes(req[1] ?? "");
+    if (!name || current.has(name)) return null;
+    current.add(name);
   }
   return sections;
 }
@@ -502,7 +516,7 @@ function specSections(text: string, allowBulletRequirements = false): Map<string
 function removesAllRequirements(deltaText: string, mainReqs: Set<string>): boolean {
   if (mainReqs.size === 0) return false;
   const sections = specSections(deltaText, true);
-  if (sections.size !== 1) return false;
+  if (sections?.size !== 1) return false;
   const removed = sections.get("removed requirements");
   if (!removed) return false;
   return [...mainReqs].every((req) => removed.has(req));
@@ -518,11 +532,33 @@ function declaresCapabilityRetirement(changeDir: string): boolean {
     return false;
   }
   if (typeof doc !== "object" || doc === null || Array.isArray(doc)) return false;
-  const meta = doc as { schema?: unknown; retire_capabilities?: unknown };
+  const { schema, retire_capabilities, created, goal, affected_areas, initiative, skip_specs } =
+    doc as Record<string, unknown>;
+  // The repository uses OpenSpec 1.17's built-in spec-driven workflow.
+  // Validate its marker's known metadata fields before treating it as authorization.
   return (
-    typeof meta.schema === "string" &&
-    meta.schema.trim().length > 0 &&
-    meta.retire_capabilities === true
+    schema === "spec-driven" &&
+    retire_capabilities === true &&
+    (created === undefined ||
+      (typeof created === "string" && /^\d{4}-\d{2}-\d{2}$/.test(created))) &&
+    (goal === undefined || (typeof goal === "string" && goal.length > 0)) &&
+    (affected_areas === undefined ||
+      (Array.isArray(affected_areas) &&
+        affected_areas.every((area) => typeof area === "string" && area.length > 0))) &&
+    (initiative === undefined || isInitiativeLink(initiative)) &&
+    (skip_specs === undefined || skip_specs === false)
+  );
+}
+
+function isInitiativeLink(value: unknown): boolean {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const { id, store } = value as Record<string, unknown>;
+  return (
+    Object.keys(value).length === 2 &&
+    typeof id === "string" &&
+    KEBAB_ID.test(id) &&
+    typeof store === "string" &&
+    KEBAB_ID.test(store)
   );
 }
 
@@ -538,7 +574,7 @@ function removedSpecs(catalog: string, mainDir: string, specNames: string[]): Se
   for (const name of specNames) {
     const mainText = readRepoFile(join(mainDir, name, "spec.md"));
     if (mainText === null) continue;
-    const reqs = specSections(mainText, false).get("requirements");
+    const reqs = specSections(mainText, false)?.get("requirements");
     if (reqs && reqs.size > 0) mainByName.set(name, reqs);
   }
   if (mainByName.size === 0) return names;

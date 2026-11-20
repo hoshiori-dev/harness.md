@@ -133,19 +133,37 @@ test("check_plugin accepts an entry whose spec an unarchived retiring change rem
   const ciResult = runScript("check_plugin.ts", [], ciRoot);
   assert.equal(ciResult.code, 0, ciResult.output);
 
-  // Bullet-form removal entries (`-`, `*` with backticks, `+` with embedded backticks)
+  // Use bare headings for names ending in backticks.
   const bulletMain =
-    "# alpha\n\n## Requirements\n\n### Requirement: First\n\n### Requirement: Second\n\n### Requirement: Use `x`\n";
+    "# alpha\n\n## Requirements\n\n### Requirement: First\n\n### Requirement: Second\n\n### Requirement: Third\n\n### Requirement: Use `x`\n";
   const bulletRoot = makeTree(fixturePlugin());
   rmSync(join(bulletRoot, "skills/alpha"), { recursive: true });
   writeTree(bulletRoot, {
     "openspec/specs/skill/alpha/spec.md": bulletMain,
     "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
     "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
-      "# Spec Delta\n\n## REMOVED Requirements\n\n- ### Requirement: First\n* `### Requirement: Second`\n+ ### Requirement: Use `x`\n",
+      "# Spec Delta\n\n## REMOVED Requirements\n\n- ### Requirement: First\n* `### Requirement: Second`\n+ ### Requirement: Third\n### Requirement: Use `x`\n",
   });
   const bulletResult = runScript("check_plugin.ts", [], bulletRoot);
   assert.equal(bulletResult.code, 0, bulletResult.output);
+
+  writeTree(bulletRoot, {
+    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## REMOVED Requirements\n- ### Requirement: First\n- ### Requirement: Second\n- ### Requirement: Third\n- ### Requirement: Use `x`\n",
+  });
+  const mismatchedBullet = runScript("check_plugin.ts", [], bulletRoot);
+  assert.equal(mismatchedBullet.code, 1);
+  assertIncludes(mismatchedBullet.output, [
+    "openspec/specs/skill/alpha/spec.md: catalog-orphan-spec",
+  ]);
+
+  // Leaving the quote ends its fenced example, even without an explicit closer.
+  writeTree(root, {
+    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n> ```markdown\n> An example\n\n### Requirement: Second\n",
+  });
+  const quoted = runScript("check_plugin.ts", [], root);
+  assert.equal(quoted.code, 0, quoted.output);
 });
 
 test("check_plugin rejects partial, mixed, fenced, empty, archived, unretired, and symlinked spec removals", () => {
@@ -185,6 +203,8 @@ test("check_plugin rejects partial, mixed, fenced, empty, archived, unretired, a
 
   // Requirement inside top-level and list-item fenced code blocks
   for (const fencedDelta of [
+    "# Spec Delta\n\n## REMOVED Requirements\n### Requirement: First\n\n```markdown\n- ```\n### Requirement: Second\n```\n",
+    "# Spec Delta\n\n## REMOVED Requirements\n### Requirement: First\n\n```markdown\n> ```\n### Requirement: Second\n```\n",
     "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n```markdown\n### Requirement: Second\n```\n",
     "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n- ```markdown\n  ### Requirement: Second\n  ```\n",
     "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n- ```markdown\n  - ### Requirement: Second\n  ```\n",
@@ -226,12 +246,14 @@ test("check_plugin rejects partial, mixed, fenced, empty, archived, unretired, a
   assert.equal(archived.code, 1);
   assertIncludes(archived.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
 
-  // Missing, false, string-typed, or schema-less retire_capabilities metadata
+  // Missing or malformed retirement metadata must not exempt an orphan.
   for (const meta of [
     null,
     "schema: spec-driven\nretire_capabilities: false\n",
     'schema: spec-driven\nretire_capabilities: "true"\n',
     "retire_capabilities: true\n",
+    "schema: unknown-workflow\nretire_capabilities: true\n",
+    `${RETIRE_META}created: recently\n`,
   ]) {
     const metaRoot = makeTree(fixturePlugin());
     rmSync(join(metaRoot, "skills/alpha"), { recursive: true });
