@@ -16,9 +16,9 @@
   and update `.agents/knowledge/compatibility-watch.md`
   and `.agents/skills/plugin-development/SKILL.md` to the new entries and two agents.
   Verify: `just harness-check` passes.
-- [ ] 1.4 Resolve the four `catalog-orphan-spec` findings from
+- [x] 1.4 Resolve the four `catalog-orphan-spec` findings from
   `scripts/check_plugin.ts` for removed unarchived skills
-  (companion PR #21 / issue #20 awaiting merge into `main`, then merge back here).
+  (companion PR #21 / issue #20 merged into `main` and merged into this branch).
   Verify: `just validate` exits 0.
 
 ## 2. Read-only agents
@@ -91,7 +91,7 @@
 - [x] 7.1 Verify the package in all three clients (`just clients-validate`).
   Verify: `claude plugin validate`, `agy plugin validate` / `install`,
   and `codex plugin marketplace` pass.
-- [ ] 7.2 Run `just check` after resolving items 1.4 and 4.2
+- [x] 7.2 Run `just check` after resolving items 1.4 and 4.2
   (excluding `spec-archived`, which waits for review).
   Verify: `just check-fast`, `just spec-check`, `just site-check`,
   `just site-build`, and `just secrets` exit 0.
