@@ -69,9 +69,10 @@ one that holds only because of the chosen approach goes in the design.
    and delta specs on the pull request and adds `spec:approved`.
    Approval is always that recorded label, never a sentence in a conversation.
    The `pr-labels` workflow records it (commit, account,
-   hash of every file under the unarchived changes)
-   and keeps the label only while that package is unchanged;
-   an edit puts `spec:pending` back. Tasks are written only after the label.
+   hash of every file under the unarchived changes except each change's
+   `tasks.md`) and keeps the label only while that package is unchanged;
+   an edit puts `spec:pending` back. Tasks are written only after the label,
+   so writing and ticking `tasks.md` leaves the approval standing.
 3. **Implement**: `openspec-apply-change`, one task at a time,
    `just check` green between tasks;
    `just gen` after any change to `plugin.json` or an agents directory.
