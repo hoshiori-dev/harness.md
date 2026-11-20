@@ -6,7 +6,9 @@
 //
 //   check_plugin.ts                  run every rule
 //   check_plugin.ts --footprint <id> print the files that belong to one client
-import { join } from "node:path";
+import { lstatSync, readFileSync, realpathSync } from "node:fs";
+import { join, sep } from "node:path";
+import { parse as parseYaml } from "yaml";
 import type { ClientSpec } from "./lib/clients.ts";
 import { CLIENTS, clientById, footprint } from "./lib/clients.ts";
 import { exists, Findings, fail, isDirectory, listDir, readText } from "./lib/findings.ts";
@@ -19,11 +21,17 @@ import {
   SKILL_NAME_RE,
 } from "./lib/plugin.ts";
 
-const FENCE = /^ {0,3}(`{3,}|~{3,})/;
-const H2 = /^ {0,3}##(?!#)[ \t]+(.*)$/;
-const REQUIREMENT = /^ {0,3}###(?!#)[ \t]+Requirement:[ \t]*(.+)$/;
+const CONTAINER_PREFIX = /^(?:[ \t]*>[ \t]?|[ \t]*(?:[-*+]|\d{1,9}[.)])[ \t]+)*/;
+const FENCE_OPEN = /^[ \t]*(`{3,}|~{3,})(.*)$/;
+const FENCE_CLOSE = /^[ \t]*(`{3,}|~{3,})[ \t]*$/;
+const H2 = /^##[ \t]+(.+)$/;
+const REQUIREMENT = /^###[ \t]*Requirement:[ \t]*(.+)$/i;
+const REMOVED_BULLET =
+  /^[ \t]*[-*+][ \t]*(?:`###[ \t]*Requirement:[ \t]*(.+?)`|###[ \t]*Requirement:[ \t]*(.+))[ \t]*$/i;
 
 const root = process.cwd();
+const realRoot = realpathSync(root);
+const realPrefix = realRoot.endsWith(sep) ? realRoot : `${realRoot}${sep}`;
 const args = process.argv.slice(2);
 
 if (args[0] === "--footprint") {
@@ -389,7 +397,7 @@ function checkCatalogs(skills: string[], agents: Map<string, AgentFile[]>) {
           rule: "catalog-orphan-spec",
           problem:
             `spec exists but ${where.replace("<name>", name)} is not implemented, ` +
-            "and no unarchived change removes every requirement of the spec.",
+            "and no unarchived change retires the capability and removes every requirement of the spec.",
           fix: "implement it, or remove the spec through an OpenSpec change.",
         });
       }
@@ -416,45 +424,76 @@ function proposedSpecs(catalog: string): Set<string> {
   return names;
 }
 
-function specSections(text: string): Map<string, Set<string>> {
+function stripClosingHashes(text: string): string {
+  return text.replace(/[ \t]+#+[ \t]*$/, "").trim();
+}
+
+function readRepoFile(path: string): string | null {
+  try {
+    if (!lstatSync(path).isFile()) return null;
+    const realPath = realpathSync(path);
+    if (!realPath.startsWith(realPrefix)) return null;
+    return readFileSync(realPath, "utf8");
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === "ENOENT" || code === "ENOTDIR") return null;
+    throw error;
+  }
+}
+
+function specSections(text: string, allowBulletRequirements = false): Map<string, Set<string>> {
   const sections = new Map<string, Set<string>>();
   let current: Set<string> | undefined;
+  let currentName: string | undefined;
   let fence: { char: string; length: number } | undefined;
   for (const line of text
     .replace(/^\uFEFF/, "")
     .replace(/\r\n?/g, "\n")
     .split("\n")) {
-    const fenceMatch = FENCE.exec(line);
+    const stripped = line.replace(CONTAINER_PREFIX, "");
     if (fence) {
-      const marker = fenceMatch?.[1];
-      if (
-        marker?.startsWith(fence.char) &&
-        marker.length >= fence.length &&
-        line.trim() === marker
-      ) {
+      const closeMatch = FENCE_CLOSE.exec(stripped);
+      const marker = closeMatch?.[1];
+      if (marker?.startsWith(fence.char) && marker.length >= fence.length) {
         fence = undefined;
       }
       continue;
     }
-    if (fenceMatch?.[1]) {
-      fence = { char: fenceMatch[1].charAt(0), length: fenceMatch[1].length };
-      continue;
+    const openMatch = FENCE_OPEN.exec(stripped);
+    if (openMatch?.[1]) {
+      const char = openMatch[1].charAt(0);
+      const info = openMatch[2] ?? "";
+      // CommonMark: a backtick fence's info string cannot contain a backtick (inline code).
+      if (!(char === "`" && info.includes("`"))) {
+        fence = { char, length: openMatch[1].length };
+        continue;
+      }
     }
     const h2 = H2.exec(line);
     if (h2) {
-      const heading = (h2[1] ?? "").replace(/[ \t]+#+[ \t]*$/, "").trim();
+      const heading = stripClosingHashes(h2[1] ?? "").toLowerCase();
       let set = sections.get(heading);
       if (!set) {
         set = new Set();
         sections.set(heading, set);
       }
       current = set;
+      currentName = heading;
       continue;
     }
+    if (!current) continue;
     const req = REQUIREMENT.exec(line);
-    if (req && current) {
-      const name = (req[1] ?? "").replace(/[ \t]+#+[ \t]*$/, "").trim();
+    if (req) {
+      const name = stripClosingHashes(req[1] ?? "");
       if (name) current.add(name);
+      continue;
+    }
+    if (allowBulletRequirements && currentName === "removed requirements") {
+      const bullet = REMOVED_BULLET.exec(line);
+      if (bullet) {
+        const name = stripClosingHashes(bullet[1] ?? bullet[2] ?? "");
+        if (name) current.add(name);
+      }
     }
   }
   return sections;
@@ -462,37 +501,59 @@ function specSections(text: string): Map<string, Set<string>> {
 
 function removesAllRequirements(deltaText: string, mainReqs: Set<string>): boolean {
   if (mainReqs.size === 0) return false;
-  const sections = specSections(deltaText);
+  const sections = specSections(deltaText, true);
   if (sections.size !== 1) return false;
-  const removed = sections.get("REMOVED Requirements");
+  const removed = sections.get("removed requirements");
   if (!removed) return false;
   return [...mainReqs].every((req) => removed.has(req));
 }
 
+function declaresCapabilityRetirement(changeDir: string): boolean {
+  const text = readRepoFile(join(changeDir, ".openspec.yaml"));
+  if (text === null) return false;
+  let doc: unknown;
+  try {
+    doc = parseYaml(text);
+  } catch {
+    return false;
+  }
+  if (typeof doc !== "object" || doc === null || Array.isArray(doc)) return false;
+  const meta = doc as { schema?: unknown; retire_capabilities?: unknown };
+  return (
+    typeof meta.schema === "string" &&
+    meta.schema.trim().length > 0 &&
+    meta.retire_capabilities === true
+  );
+}
+
 // Entries whose main spec an unarchived change deletes completely: `openspec validate --all
 // --strict` requires the main spec to stay until archive when a delta uses `## REMOVED
-// Requirements`, while `checks / spec-archived` keeps the branch from merging before then.
+// Requirements`, archive deletes the emptied spec when `.openspec.yaml` declares
+// `retire_capabilities: true`, and `checks / spec-archived` keeps the branch from merging first.
 function removedSpecs(catalog: string, mainDir: string, specNames: string[]): Set<string> {
   const changes = join(root, "openspec/changes");
   const names = new Set<string>();
   if (!isDirectory(changes)) return names;
   const mainByName = new Map<string, Set<string>>();
   for (const name of specNames) {
-    const reqs = specSections(readText(join(mainDir, name, "spec.md"))).get("Requirements");
+    const mainText = readRepoFile(join(mainDir, name, "spec.md"));
+    if (mainText === null) continue;
+    const reqs = specSections(mainText, false).get("requirements");
     if (reqs && reqs.size > 0) mainByName.set(name, reqs);
   }
   if (mainByName.size === 0) return names;
   for (const change of listDir(changes)) {
     if (!change.isDirectory || change.name === "archive") continue;
-    const dir = join(changes, change.name, "specs", catalog);
+    const changeDir = join(changes, change.name);
+    if (!declaresCapabilityRetirement(changeDir)) continue;
+    const dir = join(changeDir, "specs", catalog);
     if (!isDirectory(dir)) continue;
     for (const entry of listDir(dir)) {
       if (!entry.isDirectory) continue;
       const mainReqs = mainByName.get(entry.name);
       if (!mainReqs) continue;
-      const deltaFile = join(dir, entry.name, "spec.md");
-      if (!exists(deltaFile)) continue;
-      if (removesAllRequirements(readText(deltaFile), mainReqs)) names.add(entry.name);
+      const deltaText = readRepoFile(join(dir, entry.name, "spec.md"));
+      if (deltaText !== null && removesAllRequirements(deltaText, mainReqs)) names.add(entry.name);
     }
   }
   return names;

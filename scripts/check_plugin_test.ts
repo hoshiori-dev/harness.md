@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
-import { rmSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fixturePlugin, MANIFEST, makeTree, runScript, writeTree } from "./lib/testing.ts";
+
+const RETIRE_META = "schema: spec-driven\nretire_capabilities: true\n";
 
 function assertIncludes(output: string, expected: string[]) {
   for (const text of expected) assert.ok(output.includes(text), `missing "${text}" in:\n${output}`);
@@ -102,28 +105,59 @@ test("check_plugin accepts an entry whose spec an unarchived change proposes", (
   assertIncludes(archivedOnly.output, ["openspec/specs/skill/alpha/spec.md: catalog-missing-spec"]);
 });
 
-test("check_plugin accepts an entry whose spec an unarchived change removes completely", () => {
+test("check_plugin accepts an entry whose spec an unarchived retiring change removes completely", () => {
+  const mainSpec =
+    "# alpha\n\n## Requirements\n\n### Requirement: First\n\n### Requirement: Second\n";
+
+  // Standard bare requirement headings
   const root = makeTree(fixturePlugin());
   rmSync(join(root, "skills/alpha"), { recursive: true });
   writeTree(root, {
-    "openspec/specs/skill/alpha/spec.md":
-      "# alpha\n\n## Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
+    "openspec/specs/skill/alpha/spec.md": mainSpec,
+    "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
     "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
       "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
   });
   const full = runScript("check_plugin.ts", [], root);
   assert.equal(full.code, 0, full.output);
+
+  // Case-insensitive and repeated section headings
+  const ciRoot = makeTree(fixturePlugin());
+  rmSync(join(ciRoot, "skills/alpha"), { recursive: true });
+  writeTree(ciRoot, {
+    "openspec/specs/skill/alpha/spec.md": mainSpec,
+    "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
+    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## Removed Requirements\n\n### Requirement: First\n\n## removed requirements\n\n### Requirement: Second\n",
+  });
+  const ciResult = runScript("check_plugin.ts", [], ciRoot);
+  assert.equal(ciResult.code, 0, ciResult.output);
+
+  // Bullet-form removal entries (`-`, `*` with backticks, `+` with embedded backticks)
+  const bulletMain =
+    "# alpha\n\n## Requirements\n\n### Requirement: First\n\n### Requirement: Second\n\n### Requirement: Use `x`\n";
+  const bulletRoot = makeTree(fixturePlugin());
+  rmSync(join(bulletRoot, "skills/alpha"), { recursive: true });
+  writeTree(bulletRoot, {
+    "openspec/specs/skill/alpha/spec.md": bulletMain,
+    "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
+    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## REMOVED Requirements\n\n- ### Requirement: First\n* `### Requirement: Second`\n+ ### Requirement: Use `x`\n",
+  });
+  const bulletResult = runScript("check_plugin.ts", [], bulletRoot);
+  assert.equal(bulletResult.code, 0, bulletResult.output);
 });
 
-test("check_plugin rejects partial, mixed, fenced, empty, and archived spec removals", () => {
+test("check_plugin rejects partial, mixed, fenced, empty, archived, unretired, and symlinked spec removals", () => {
   const mainSpec =
     "# alpha\n\n## Requirements\n\n### Requirement: First\n\n### Requirement: Second\n";
 
-  // Partial removal
+  // Partial removal (with retire_capabilities declared)
   const partialRoot = makeTree(fixturePlugin());
   rmSync(join(partialRoot, "skills/alpha"), { recursive: true });
   writeTree(partialRoot, {
     "openspec/specs/skill/alpha/spec.md": mainSpec,
+    "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
     "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
       "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n",
   });
@@ -141,6 +175,7 @@ test("check_plugin rejects partial, mixed, fenced, empty, and archived spec remo
     rmSync(join(mixedRoot, "skills/alpha"), { recursive: true });
     writeTree(mixedRoot, {
       "openspec/specs/skill/alpha/spec.md": mainSpec,
+      "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
       "openspec/changes/drop-alpha/specs/skill/alpha/spec.md": `# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n\n${extra}`,
     });
     const mixed = runScript("check_plugin.ts", [], mixedRoot);
@@ -148,22 +183,29 @@ test("check_plugin rejects partial, mixed, fenced, empty, and archived spec remo
     assertIncludes(mixed.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
   }
 
-  // Requirement inside a fenced code block does not satisfy removal
-  const fencedRoot = makeTree(fixturePlugin());
-  rmSync(join(fencedRoot, "skills/alpha"), { recursive: true });
-  writeTree(fencedRoot, {
-    "openspec/specs/skill/alpha/spec.md": mainSpec,
-    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
-      "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n```markdown\n### Requirement: Second\n```\n",
-  });
-  const fenced = runScript("check_plugin.ts", [], fencedRoot);
-  assert.equal(fenced.code, 1);
-  assertIncludes(fenced.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+  // Requirement inside top-level and list-item fenced code blocks
+  for (const fencedDelta of [
+    "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n```markdown\n### Requirement: Second\n```\n",
+    "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n- ```markdown\n  ### Requirement: Second\n  ```\n",
+    "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n- ```markdown\n  - ### Requirement: Second\n  ```\n",
+  ]) {
+    const fencedRoot = makeTree(fixturePlugin());
+    rmSync(join(fencedRoot, "skills/alpha"), { recursive: true });
+    writeTree(fencedRoot, {
+      "openspec/specs/skill/alpha/spec.md": mainSpec,
+      "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
+      "openspec/changes/drop-alpha/specs/skill/alpha/spec.md": fencedDelta,
+    });
+    const fenced = runScript("check_plugin.ts", [], fencedRoot);
+    assert.equal(fenced.code, 1);
+    assertIncludes(fenced.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+  }
 
   // Requirement-less main spec
   const emptyRoot = makeTree(fixturePlugin());
   rmSync(join(emptyRoot, "skills/alpha"), { recursive: true });
   writeTree(emptyRoot, {
+    "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
     "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
       "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n",
   });
@@ -176,10 +218,86 @@ test("check_plugin rejects partial, mixed, fenced, empty, and archived spec remo
   rmSync(join(archivedRoot, "skills/alpha"), { recursive: true });
   writeTree(archivedRoot, {
     "openspec/specs/skill/alpha/spec.md": mainSpec,
+    "openspec/changes/archive/2026-01-01-drop-alpha/.openspec.yaml": RETIRE_META,
     "openspec/changes/archive/2026-01-01-drop-alpha/specs/skill/alpha/spec.md":
       "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
   });
   const archived = runScript("check_plugin.ts", [], archivedRoot);
   assert.equal(archived.code, 1);
   assertIncludes(archived.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+
+  // Missing, false, string-typed, or schema-less retire_capabilities metadata
+  for (const meta of [
+    null,
+    "schema: spec-driven\nretire_capabilities: false\n",
+    'schema: spec-driven\nretire_capabilities: "true"\n',
+    "retire_capabilities: true\n",
+  ]) {
+    const metaRoot = makeTree(fixturePlugin());
+    rmSync(join(metaRoot, "skills/alpha"), { recursive: true });
+    const files: Record<string, string> = {
+      "openspec/specs/skill/alpha/spec.md": mainSpec,
+      "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+        "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
+    };
+    if (meta !== null) files["openspec/changes/drop-alpha/.openspec.yaml"] = meta;
+    writeTree(metaRoot, files);
+    const metaResult = runScript("check_plugin.ts", [], metaRoot);
+    assert.equal(metaResult.code, 1);
+    assertIncludes(metaResult.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+  }
+
+  // Symlinked files or directories pointing outside the checkout are never read
+  const outside = mkdtempSync(join(tmpdir(), "hmd-outside-"));
+  try {
+    writeFileSync(
+      join(outside, "delta.md"),
+      "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
+    );
+    writeFileSync(join(outside, "meta.yaml"), RETIRE_META);
+    writeTree(outside, {
+      "skill/alpha/spec.md":
+        "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
+    });
+
+    const symlinkDeltaRoot = makeTree(fixturePlugin());
+    rmSync(join(symlinkDeltaRoot, "skills/alpha"), { recursive: true });
+    writeTree(symlinkDeltaRoot, {
+      "openspec/specs/skill/alpha/spec.md": mainSpec,
+      "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
+      "openspec/changes/drop-alpha/specs/skill/alpha/spec.md": {
+        symlink: join(outside, "delta.md"),
+      },
+    });
+    const symlinkDelta = runScript("check_plugin.ts", [], symlinkDeltaRoot);
+    assert.equal(symlinkDelta.code, 1);
+    assertIncludes(symlinkDelta.output, [
+      "openspec/specs/skill/alpha/spec.md: catalog-orphan-spec",
+    ]);
+
+    const symlinkMetaRoot = makeTree(fixturePlugin());
+    rmSync(join(symlinkMetaRoot, "skills/alpha"), { recursive: true });
+    writeTree(symlinkMetaRoot, {
+      "openspec/specs/skill/alpha/spec.md": mainSpec,
+      "openspec/changes/drop-alpha/.openspec.yaml": { symlink: join(outside, "meta.yaml") },
+      "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+        "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
+    });
+    const symlinkMeta = runScript("check_plugin.ts", [], symlinkMetaRoot);
+    assert.equal(symlinkMeta.code, 1);
+    assertIncludes(symlinkMeta.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+
+    const symlinkDirRoot = makeTree(fixturePlugin());
+    rmSync(join(symlinkDirRoot, "skills/alpha"), { recursive: true });
+    writeTree(symlinkDirRoot, {
+      "openspec/specs/skill/alpha/spec.md": mainSpec,
+      "openspec/changes/drop-alpha/.openspec.yaml": RETIRE_META,
+      "openspec/changes/drop-alpha/specs": { symlink: outside },
+    });
+    const symlinkDir = runScript("check_plugin.ts", [], symlinkDirRoot);
+    assert.equal(symlinkDir.code, 1);
+    assertIncludes(symlinkDir.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+  } finally {
+    rmSync(outside, { recursive: true, force: true });
+  }
 });
