@@ -56,13 +56,13 @@
 
 ## 4. Verification
 
-- [ ] 4.1 `just gen --check` passes (nothing to generate).
-- [ ] 4.2 `just skills-check` passes.
-- [ ] 4.3 `just check` passes except the archive gate, which waits
+- [x] 4.1 `just gen --check` passes (nothing to generate).
+- [x] 4.2 `just skills-check` passes.
+- [x] 4.3 `just check` passes except the archive gate, which waits
   for the review (`just spec-archived` names this change).
-- [ ] 4.4 Behavioural tests: none apply, because no skill or agent
+- [x] 4.4 Behavioural tests: none apply, because no skill or agent
   changes behaviour; state this in the pull request.
-- [ ] 4.5 `just clients-validate` passes.
+- [x] 4.5 `just clients-validate` passes.
 
 ## Workflow follow-up
 
