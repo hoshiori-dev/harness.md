@@ -30,14 +30,15 @@ and record the date of the last run as an absolute date.
 
 ## Recommendation
 
-Put it to the user as one decision with two options:
+With Entropy confirmed as thick,
+put the form to the user as one decision with two options:
 
 - a short dated section in a knowledge file
   (the hunt list, the cadence, the event, the last run):
-  recommended when Entropy is confirmed as medium;
+  the default, because the sweep is a linear checklist;
 - a clean-up project skill:
-  recommended only when Entropy is confirmed as thick
-  or the hunt has steps specific to the project.
+  recommended when the harness has many skills or the sweep branches by component.
 
-With Entropy omitted or light, propose no routine;
-say in the closing report that nothing catches what nobody edits.
+With Entropy omitted, light, or medium, propose no routine;
+say in the closing report that nothing catches what nobody edits
+and what would add it.
