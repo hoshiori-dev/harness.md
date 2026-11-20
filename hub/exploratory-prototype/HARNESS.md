@@ -27,8 +27,9 @@ metadata:
 This file is the design of an agent harness:
 everything around a coding agent that decides where it runs, what it reads,
 how it checks its work, what stops a bad change,
-and what it may do without asking. It is a design to build from,
-not a file an agent loads on ordinary tasks.
+and what it may do without asking. It covers a whole harness
+and is a reference: handed to an agent by URL or path, or read by a person.
+It is not a file an agent loads on ordinary tasks.
 
 The design is thin on purpose. A prototype exists to answer a question quickly,
 and every rule that protects code also slows the search.
@@ -59,38 +60,17 @@ These always stay with the person:
 
 ## How to use this file
 
-You are a coding agent that was given this file and a sentence
-about what the project is for. Do this in order.
-
-1. Read the whole file. Then read the repository:
-   what exists, which language and package manager it uses,
-   whether a task runner, a container configuration, or a git remote is present.
-2. Compare the Context section with the real project.
-   Tell the person each assumption that does not hold.
-   If the project already has real users, real data, real credentials,
-   a second developer, or is expected to live past a quarter,
-   say that this design is too thin and stop:
-   the section "Graduation" names what to use instead.
-3. Settle the items in Open Questions:
-   answer from the repository what it shows,
-   ask the person the rest in one message.
-4. Present a build plan: every file you will create or change, by path,
-   with one line on what it will hold, in the order of the sections Environment,
-   Knowledge, Feedback, Gates, Authority, Completion, Entropy.
-   Wait for the person's approval. Write nothing before it.
-5. Build in that order. Where this file says "the project's X",
-   use what the repository already has;
-   where it gives a default,
-   use the default only when the repository has nothing.
-6. Verify: run every command you documented, make one checkpoint commit,
-   and confirm the secret scan runs on it.
-7. Report what was built and what was left for the person,
-   then ask whether this file stays in the repository or is deleted.
-   Either is fine: the harness works without it.
-
-A project that keeps this file
-as its long-term design document first rewrites Context to describe itself,
-then revisits every section whose reasons depended on the old Context.
+This file is a design to weigh against the reader's project,
+not a list of commands. Context states what the design assumes;
+a decision whose premise does not hold for the project should be reconsidered,
+and Graduation names the conditions under which the whole design is too thin.
+A working habit the project already has is kept
+unless it contradicts an invariant.
+Where a file name, a command, or a tool is given as a default or an example,
+the decision beside it is what counts,
+and the project's own equivalent serves as well.
+Nothing in this file authorises an action:
+what an agent may do is settled between the reader and their agent.
 
 ## Context
 
@@ -117,7 +97,8 @@ Five rules hold on every task. They are the whole of the always-on rules;
 keep the list this short.
 
 1. **No secret enters the repository.**
-   Credentials live in `.env`, which git ignores,
+   Credentials live outside version control,
+   by default in a `.env` file that git ignores,
    and code reads them from the environment.
    A secret that was committed is treated as leaked even if the commit
    is later removed.
@@ -153,9 +134,10 @@ The code should be easy to replace, because most of it will be.
   The agent verifies its work by reading this output.
 - **Separate attempts, not flags.**
   Two competing approaches are two branches or two directories
-  under `experiments/`, never one code path with a switch.
+  (under `experiments/` by default), never one code path with a switch.
 - **Small sample inputs in the repository.**
-  A directory `samples/` holds the inputs the smoke check and the person use,
+  One directory, `samples/` by default,
+  holds the inputs the smoke check and the person use,
   so every run is repeatable.
 
 Formatting is left to the editor or the ecosystem's formatter with its defaults.
@@ -163,7 +145,10 @@ No formatting or naming rule is written anywhere.
 
 ## File Structure
 
-The harness needs these files.
+Built with the defaults named in the sections below,
+the harness consists of these files.
+Each name is the default form of a decision its section explains;
+a project that already has an equivalent keeps its own.
 Everything else follows the stack's default project layout.
 
 ```text
@@ -201,8 +186,8 @@ Decide in this order and record the answer in `AGENTS.md` in one line:
    which a `/.dockerenv` file or the workspace's own variables show):
    use it, and still write the permission file below.
 2. Docker or a compatible runtime is available:
-   create `.devcontainer/devcontainer.json` from the official base image
-   for the stack, and run the agent inside it.
+   run the agent inside a container built from the official base image
+   for the stack, declared by default in `.devcontainer/devcontainer.json`.
 3. Neither: run on the host with the client's own sandbox switched on
    (file writes limited to the project directory)
    and the credential directories denied in the permission file.
@@ -256,7 +241,10 @@ or starts a watch mode that never returns.
 
 ## Knowledge
 
-The agent learns the project from two files and from the code itself.
+The agent learns the project from two files and from the code itself:
+an entrypoint, named `AGENTS.md` because that is the file
+the clients assumed in Context read, and a lab notebook,
+`NOTES.md` by default.
 
 **`AGENTS.md`, at most 40 lines.** It is loaded on every task,
 so each line has to change what the agent does.
@@ -264,7 +252,7 @@ Write these parts and nothing else:
 
 1. Two sentences: what the prototype is and the question it is meant to answer.
    The question matters most: it tells the agent which shortcuts are acceptable.
-2. The five invariants from this file, one line each.
+2. The five invariants of this design, one line each.
 3. The commands, by task-runner entry: run, smoke, check, checkpoint, rollback.
 4. Where the agent runs (the one-line answer from Environment).
 5. Documentation links for any library that is new, niche, or changing quickly,
@@ -301,11 +289,15 @@ and its code is small enough to read directly.
 
 The agent proves its work by running the prototype,
 not by rereading its own diff.
+The commands are written here as `just` recipes, the default;
+in a project with its own task runner
+they are entries of the same names there.
 
 - **`just run`** starts the prototype the way the person would use it.
   A long-running process (a server,
   a watcher) is started in the background with its output written
-  to `.logs/run.log`, and the recipe prints how to stop it.
+  to a log file (`.logs/run.log` by default),
+  and the recipe prints how to stop it.
   The agent reads the log file to see what happened.
 - **`just smoke`** exits 0 only when the prototype starts
   and does its one central thing on a sample input:
@@ -333,6 +325,10 @@ and what it could not verify.
 
 A gate is a check that blocks a change automatically.
 This design keeps one, and omits the rest on purpose.
+A gate counts as installed only once it has been seen to work:
+the hook is shown to run on a checkpoint commit and to reject
+a harmless fake secret. A hook that never runs looks the same
+as one that finds nothing.
 
 **Kept: the secret scan on every commit.**
 A pre-commit hook scans the staged files
@@ -418,7 +414,7 @@ so it can be returned to.
   prefix, no squashing, no AI or tool attribution in messages.
 
 **Branches.** Work happens directly on the main branch.
-A competing attempt gets its own branch `try/<idea>`;
+A competing attempt gets its own branch (`try/<idea>`, for example);
 the losing branch is left behind or deleted by the person.
 There are no pull requests and no releases.
 
@@ -450,6 +446,12 @@ or a new invariant-relevant fact appears (a new credential,
 a new external service), `AGENTS.md` is updated in the same commit.
 There is no harness self-check and no periodic cleanup.
 
+The harness does not depend on a design document being kept in the project.
+A project may decide to keep one of its own,
+for example to record why its harness is this thin;
+that document then describes the project itself,
+starting from its own Context.
+
 ## Graduation
 
 This design is for a state that ends.
@@ -463,8 +465,8 @@ Stop and redesign the harness when any of these becomes true:
   or on tasks the person will not read turn by turn;
 - the same regression has happened twice.
 
-What to do then: replace this file with a design that fits the new situation,
-starting from its Context. Add protection in this order,
+What to do then: design the harness again for the new situation,
+starting from a Context that describes it. Add protection in this order,
 since each step buys the most for its cost:
 tests for whatever has broken, with a CI job that runs them;
 a formatter and a linter; a protected main branch with pull requests;
@@ -473,7 +475,7 @@ seeded from the entries in `NOTES.md` that are still true.
 
 ## Open Questions
 
-Settle these with the person before building (step 3 of "How to use this file"):
+Settle these with the person before building:
 
 - Which language, runtime, and package manager,
   if the repository does not show it yet.

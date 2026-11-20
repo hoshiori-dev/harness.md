@@ -30,19 +30,25 @@ This repository holds four things:
 1. Pick a design from the [hub](hub/),
    for example
    [`solo-open-source-library`](hub/solo-open-source-library/HARNESS.md).
-2. Save it as `HARNESS.md` in the root of your project.
-3. Tell your coding agent what the project
-   is for and ask it to build what the file describes.
+2. Give your coding agent the file's address and tell it what the project
+   is for. The file does not have to be in your repository.
+3. Ask the agent to use the file as a reference:
+   to say where its Context does not fit your project,
+   and to show you a plan before it writes anything.
 
-The agent comes back with a plan before it writes anything.
 Expect the plan to list an `AGENTS.md`, a few knowledge files,
 the commands that check its work, hooks and CI jobs, and permission settings.
 The file is written so that an agent with no plugin
-and no knowledge of the format can follow it.
+and no knowledge of the format can read it.
 
-Afterwards you can delete the file,
-or keep it as the project's record of the design and check the harness
-against it later. The format is meant for both.
+A `HARNESS.md` is used in four ways:
+to write down all or part of a project's harness design and hand it on,
+to bring a design in from outside as a reference,
+to capture the design of a project you want to imitate
+without copying its implementation,
+and, if a project chooses to, as the anchor document it keeps in its root
+and checks its harness against.
+A project needs no `HARNESS.md` of its own to have a good harness.
 
 ## The format in one minute
 
@@ -132,7 +138,8 @@ uv run skills/harness-md/scripts/lint_harness_md.py path/to/HARNESS.md
 
 ## Contribute a hub entry
 
-A hub entry is a complete design in `hub/<name>/HARNESS.md`.
+A hub entry is a design, complete or of one stated aspect,
+in `hub/<name>/HARNESS.md`.
 The rules are in [hub/README.md](hub/README.md).
 Entries come in by pull request.
 

@@ -3,9 +3,10 @@
 [中文](README.zh.md)
 
 The hub is a collection of ready-made `HARNESS.md` files.
-Each one is a complete design for an agent harness,
+Each one is a design for an agent harness, or for one part of a harness,
 written for one kind of project.
-You drop it into a repository and a coding agent builds the harness from it.
+You hand it to a coding agent as a reference
+while the two of you work out the harness for your project.
 
 Every entry follows the [HARNESS.md format](../spec/spec.md)
 and can also be browsed and searched
@@ -25,33 +26,30 @@ on the [website](https://hoshiori-dev.github.io/harness.md/).
    The Context is the part to read first:
    it lists what the design takes for granted,
    and a design built on the wrong assumptions will be too heavy or too light.
-2. Copy the file into your repository root as `HARNESS.md`:
-
-   ```sh
-   curl -fsSL -o HARNESS.md \
-     https://raw.githubusercontent.com/hoshiori-dev/harness.md/main/hub/production-engineering/HARNESS.md
-   ```
-
-3. Open your coding agent in the repository and tell it what the project is for,
-   then ask it to build the harness from `HARNESS.md`. For example:
+2. Open your coding agent in your repository, give it the entry's address,
+   and tell it what the project is for. For example:
    "This is a payments API in Go, deployed weekly.
-   Build the agent harness described in HARNESS.md."
+   Read
+   https://raw.githubusercontent.com/hoshiori-dev/harness.md/main/hub/production-engineering/HARNESS.md
+   as a reference and design an agent harness for this project with me.
+   Tell me where its Context does not fit before you propose anything,
+   and show me a plan before you write a file."
+3. Go through what the agent proposes. Keep the decisions whose reasons hold
+   for your project, change the ones that rest on a premise you do not share,
+   and approve the plan before anything is built.
 
-Each entry starts with a section called "How to use this file"
-that tells the agent what to do next:
-check the Context against your project, ask you what it cannot see,
-show you a plan, and build only after you approve. No plugin is needed.
-An agent that has never heard of this format can follow the file.
+The file does not have to be in your repository, and you do not need
+to keep it afterwards: the harness works without it.
+You can give the agent more than one entry, for example a complete design
+and a partial one that covers a single aspect in more depth.
 
-When the harness is built you choose what happens to the file.
-You can delete it; the harness works without it.
-Or you can keep it as your project's design document and check later changes
-to the harness against it. If you keep it,
-rewrite Context so it describes your project
-and not the generic one the entry assumed.
+An entry is a design to weigh, not a list of commands.
+It states its decisions with their reasons so that you and your agent
+can tell which ones fit. No plugin is needed.
+An agent that has never heard of this format can read the file.
 
-Entries are starting points. Edit freely before or after building:
-an entry that is nearly right and adjusted by you
+Entries are starting points.
+An entry that is nearly right and adjusted to your project
 is better than one followed to the letter.
 
 ## Entry rules
@@ -71,11 +69,20 @@ Beyond the format itself, the hub asks for the following.
   so use the words someone looking for this design would type.
 - The body is in English. The validator reports no errors and no warnings,
   so the body has one title and its recommended sections are in order.
-- The entry can be built from the file alone.
-  It names the files to create and what goes in them, the commands,
-  the checks and their limits, and the permission rules,
-  and it gives the reason for each decision,
+- The entry covers a complete harness or a stated part of one.
+  Its `description` and its introduction say which,
+  and a partial entry says what it leaves to the reader's own design.
+- The entry is sufficient within the scope it declares:
+  an agent with no plugin can design and build what it covers,
+  a whole harness or the stated part, from the entry alone.
+  It states each decision with its reason and the premise it rests on,
   including decisions not to do something.
+  File names, commands, tools, and thresholds are given as examples
+  of a decision, never in place of it.
+- The entry can be used from wherever it is read.
+  It does not tell the reader to place it in a project root,
+  and keeping or deleting the file is not a step of using it.
+  Any note on use is short and leaves the procedure to the reader.
 - The entry is generic. It names no private project and contains no secrets.
 - Sources listed under References are ones the author has actually read.
 

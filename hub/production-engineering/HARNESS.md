@@ -31,8 +31,10 @@ metadata:
 This file is the design of an agent harness:
 everything around a coding agent that decides where it runs, what it reads,
 how it checks its work, what stops a bad change,
-and what it may do without asking. It is a design to build from and, once built,
-the document the harness is checked against.
+and what it may do without asking.
+It is a reference design of a complete harness,
+handed to an agent by URL or path, or read by a person,
+when a harness is designed, built, or revised.
 It is not a file an agent loads on ordinary tasks.
 
 The design is stack-neutral. Where a tool depends on the language,
@@ -65,66 +67,23 @@ These always stay with a person:
 
 ## How to use this file
 
-You are a coding agent that was given this file
-and a description of the project. Do this in order.
-
-1. Read the whole file, then the whole repository:
-   layout, stack, build and test commands, task runner, existing checks and CI,
-   hooks, branch and commit habits in `git log`, the remote,
-   every existing agent-facing file (`AGENTS.md`, `CLAUDE.md`, rules files,
-   skills, permission files),
-   and whether the session runs inside an isolated environment.
-2. Compare the Context section with the real project
-   and report every difference. A difference changes the design:
-   note which sections it affects.
-   The person rewrites or confirms Context before anything else.
-3. Settle the Open Questions:
-   answer from the repository what it shows and ask the person the rest
-   in one message, each with the default this file gives.
-4. In a repository with history,
-   existing practice wins over a default here wherever it already does the job:
-   keep the task runner, the linter, the commit convention, the CI system.
-   List what you keep, what you add, and what you propose to change,
-   and treat each proposed change to a working habit as a separate decision
-   for the person.
-5. Present a build plan: every file to create or change, by path,
-   with one line on its content, grouped in the order Environment, Knowledge,
-   Feedback, Gates, Authority, Completion, Entropy,
-   followed by the list of actions only a person can take (remote settings,
-   credentials). Wait for approval. Write nothing before it.
-6. Build layer by layer in that order.
-   After each layer, run what it added, then commit that layer alone.
-   Create only files the plan names;
-   a file the plan missed needs the person's approval first.
-7. Remote changes (labels, branch protection,
-   repository settings) are never applied on your own.
-   Show each as the exact setting or command,
-   apply it only after a separate approval for that item,
-   and read the result back.
-8. Verify the whole: run every documented command;
-   make a throwaway branch and confirm the hook and each gate fail
-   on a planted violation and pass without it;
-   read every file you wrote from the entrypoint outward as an agent
-   that has never seen this project, and fix what is unreachable, contradictory,
-   or undefined.
-9. Report: files created or changed and how each was verified;
-   decisions waiting for the person; settings a person must apply;
-   contradictions found between this design and the repository.
-10. Ask whether this file stays as the project's design document
-    (recommended for this kind of project,
-    since Entropy checks against it) or is deleted.
-
-A project that keeps this file first rewrites Context to describe itself,
-then revisits each section whose reasons depended on the old Context.
-Afterwards, design intent is read from this file and facts
-are read from the code: when the two disagree about what should be,
-fix the artifact or change this file first;
-when they disagree about what is, the code wins.
+This file is a design to weigh against the reader's project,
+not a list of commands to carry out.
+Context states what the design assumes;
+a decision whose premise does not hold for the reader's project
+is reconsidered before anything is built from it.
+A working habit the project already has (its task runner, its linter,
+its commit convention, its CI system) is kept
+unless it contradicts an invariant.
+Nothing in this file authorises an action:
+what an agent may do while designing or building from it is settled
+by the agreement between that agent and the person it works for.
 
 ## Context
 
 The design assumes the following.
-A project keeping this file replaces this section with its own facts.
+A project that differs on one of them reconsiders the decisions
+that rest on it.
 
 - **Cost of a wrong change: high.**
   A defect that reaches the default branch can reach users,
@@ -227,13 +186,16 @@ and nowhere else.
 
 ## File Structure
 
-The design requires this layout.
+The design uses this layout by default.
+Each path stands for the role written beside it,
+and a project that already keeps that role elsewhere keeps its own path.
 Paths marked with a client name are created only when the team uses that client.
 Paths marked with a platform are created for that platform only.
+The path marked optional is created only when the project takes that decision.
 
 ```text
 AGENTS.md                         the entrypoint: loaded on every task, about 100 lines, at most 120
-HARNESS.md                        this design; opened only to build, audit, or change the harness
+HARNESS.md                        (optional) the project's own design document, when it keeps one (Entropy)
 .agents/
   knowledge/                      one concern per file; each opens with "Read this when …"
     architecture.md               modules, boundaries, dependency direction, the reasons behind them
@@ -322,8 +284,8 @@ Outbound traffic is denied by default and opened for a written list:
 the git host, the package registries in use,
 the model API endpoints of each client,
 and the documentation hosts the team names.
-The list lives in `.devcontainer/init-firewall.sh`,
-which runs as root when the container starts and ends by checking
+The list is applied by a script that runs as root when the container starts
+(by default `.devcontainer/init-firewall.sh`) and ends by checking
 that one blocked host is unreachable and one allowed host is reachable.
 The agent's user may run that script through `sudo` and nothing else,
 because a root user with network capabilities could remove the rules.
@@ -394,7 +356,10 @@ They are classified in `.agents/knowledge/environment.md`.
 
 ### Commands never wait for a keyboard
 
-The task runner exports `PAGER=cat`, `GIT_PAGER=cat`, `GIT_TERMINAL_PROMPT=0`,
+An agent cannot answer a prompt or leave a pager,
+so a command that waits for one stalls the session.
+The task runner therefore makes every entry non-interactive,
+for example by exporting `PAGER=cat`, `GIT_PAGER=cat`, `GIT_TERMINAL_PROMPT=0`,
 and `CI=1`. Test entries run once and exit;
 watch modes exist only under separate entries a person starts.
 
@@ -494,6 +459,12 @@ Every claim of "done" in this project rests on something the agent executed.
 
 ### The verification commands
 
+Verification is split by cost,
+so that the agent checks often with a fast loop and fully before it claims
+a result. The entry names below are defaults written for `just`;
+a project with its own task runner or names keeps them.
+The budgets are part of the design.
+
 | Entry | What it runs | Budget | When |
 |---|---|---|---|
 | `just check-fast` | format check, lint, type check, and the unit tests affected by the change | 60 seconds | after every meaningful edit |
@@ -555,6 +526,11 @@ A gate is a deterministic check that blocks a change
 whether or not the agent looked. Feedback is how the agent finds its mistakes;
 gates are what remains when it did not.
 
+A gate counts as installed only once it has been seen to reject
+a violation of the kind it exists for, at commit time and in CI alike.
+A hook that never runs and a job that checks nothing both look green.
+How each gate is shown to fail is left to the project.
+
 ### Tools
 
 Keep what the project uses. Where nothing exists,
@@ -605,10 +581,11 @@ the harness self-check (Entropy), and the dependency audit.
 A separate workflow scans the commits a push or pull request adds for secrets.
 
 **One summary gate.**
-A final job named `gate` depends on all the others
+A final job, named `gate` by default, depends on all the others
 and succeeds only when each of them succeeded.
 It fails when any failed, was cancelled, or was skipped:
-a skipped job is not a pass. Branch protection requires only `gate`,
+a skipped job is not a pass. Branch protection requires only this summary job,
+under whatever name the project gave it,
 so adding a job never requires a settings change,
 and a job cannot drop out of the requirement unnoticed.
 
@@ -760,7 +737,8 @@ because the entry guarantees that uncommitted work was saved first.
 ### Branches and pull requests
 
 - One short-lived branch per unit of work,
-  cut from the default branch and named `<type>/<issue number>-<slug>`.
+  cut from the default branch and named after its issue,
+  by default `<type>/<issue number>-<slug>`.
   No long-lived development or release branches unless the project already ships
   several supported versions.
 - A pull request opens as a draft when its specification is ready for approval.
@@ -782,7 +760,8 @@ On GitHub use a ruleset on the default branch;
 on GitLab a protected branch with merge request approval rules.
 
 - changes only through a pull request;
-- the required status check is `gate`, on the latest commit;
+- the required status check is the summary job (Gates),
+  under the name CI actually reports, on the latest commit;
 - at least one approving review, from a code owner for control-plane files,
   with approvals dismissed when new commits arrive;
 - no force pushes, no deletion, no bypass for administrators;
@@ -985,8 +964,11 @@ and then has no row.
 
 ### The harness self-check
 
-`just harness-check` runs `scripts/check_harness.*`,
-part of `just check` and of the CI gate.
+The harness has a check of its own,
+part of the full check and of the CI gate,
+so that a harness document that stopped matching the repository
+blocks a change like any other defect.
+By default `just harness-check` runs `scripts/check_harness.*`.
 It fails, with a message that names the fix, when:
 
 - a path, link, or heading referenced by `AGENTS.md`, a knowledge file,
@@ -997,7 +979,7 @@ It fails, with a message that names the fix, when:
   or does not open with "Read this when";
 - a project skill lacks a name or description,
   or a client's skills link is broken;
-- a path the File Structure section requires is missing;
+- a path the harness layout requires (File Structure) is missing;
 - a file marked as generated differs from what its generator produces.
 
 It is the project's own code, written in the language the team reads,
@@ -1040,13 +1022,29 @@ the harness is not rewritten automatically from failure history.
 
 ### Changing the design
 
-A change to how the harness should work is made to this file first,
-in a pull request a person approves, and then to the artifacts.
+A change to how the harness should work is made first
+where the design is recorded, in a pull request a person approves,
+and then to the artifacts.
 A change made only to the artifacts is drift.
+
+By default the record is the harness documents themselves:
+the entrypoint and the knowledge files state each rule with its reason,
+and the change starts there before hooks, checks, or permission files follow.
+A project may decide to keep a design document of its own as well,
+for example a `HARNESS.md` in its root
+that states the project's real context and decisions.
+A codebase maintained for years has a reason to:
+the sweep then has one statement of intent to compare the artifacts against.
+A project that takes this decision reads design intent from that document
+and facts from the code: when the two disagree about what should be,
+fix the artifact or change the document first;
+when they disagree about what is, the code wins.
+The document is opened only to build, audit, or change the harness,
+never on an ordinary task.
 
 ## Open Questions
 
-Settle these before building (step 3 of "How to use this file").
+Settle these before building.
 Each default is the one this file states.
 
 - Which language, runtime, package manager, and task runner;
@@ -1070,6 +1068,8 @@ Each default is the one this file states.
   and which metrics or traces exist locally.
 - Who owns the control-plane files (for `CODEOWNERS`)
   and who accepts the remaining environment risks.
+- Whether the project keeps a design document of its own (Entropy).
+  Default: no; the entrypoint and the knowledge files record the design.
 
 ## References
 

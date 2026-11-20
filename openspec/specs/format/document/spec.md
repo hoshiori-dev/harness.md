@@ -24,7 +24,7 @@ and it is no substitute for a method of harness design.
 - **THEN** it names none; it defines the file's structure, metadata, recommended headings, and validation rules
 
 ### Requirement: Which source prevails for an anchor document
-When a `HARNESS.md` is kept as an anchor document,
+When a project has explicitly adopted a `HARNESS.md` as its anchor document,
 design intent SHALL be taken from the file,
 and the state of the system (what a command does, whether a path exists,
 which checks run) SHALL be taken from the code and the actual configuration.
@@ -37,23 +37,12 @@ which checks run) SHALL be taken from the code and the actual configuration.
 - **WHEN** the file says a gate runs before every commit
 - **THEN** no person or agent treats that as in effect without checking the repository
 
-### Requirement: Two uses
-The format SHALL support use as a template (expanded into a harness and then
-optionally deleted) and as an anchor document (kept in the repository and
-changed rarely), and SHALL favour neither.
-
-#### Scenario: Template use
-- **WHEN** a team places an existing `HARNESS.md` in a project root and gives a coding agent the project's background and stack
-- **THEN** the agent turns the design into artifacts for that repository, and the file may be deleted once the harness works
-
-#### Scenario: Anchor use
-- **WHEN** a team keeps the file in the repository root for the long term
-- **THEN** it stays stable like a charter and does not change with everyday feature work
-
 ### Requirement: Not resident context
 A `HARNESS.md` SHALL NOT be an agent entrypoint and SHALL NOT be loaded for
-ordinary tasks; it is opened when a harness is built or rebuilt, checked for
-drift, or deliberately improved.
+ordinary tasks; it is opened when a harness is designed or built
+with the file as a reference, when the file itself is written or revised,
+and, for an anchor document, when the harness is checked for drift
+or deliberately improved.
 The format SHALL place no limit on the length of the file or of a section.
 
 #### Scenario: Long file
@@ -84,9 +73,9 @@ on a different toolchain or host.
 ### Requirement: File layout
 A `HARNESS.md` SHALL be UTF-8 text consisting of YAML frontmatter, which
 starts on the first line with a line containing only `---` and ends at the
-next such line, followed by a Markdown body. A project's file SHALL be named
-`HARNESS.md` and live in the repository root; a reusable design is the same
-kind of file.
+next such line, followed by a Markdown body. An anchor document SHALL be named
+`HARNESS.md` and live in the repository root. The format SHALL prescribe
+neither a name nor a location for any other file.
 
 #### Scenario: Frontmatter not on the first line
 - **WHEN** the first line of the file is not `---`
@@ -95,6 +84,10 @@ kind of file.
 #### Scenario: Frontmatter never closed
 - **WHEN** the opening `---` has no matching closing line
 - **THEN** a validator reports that the frontmatter is invalid and nothing about the body
+
+#### Scenario: File under another name
+- **WHEN** a summary is saved as `gates-design.md` in a temporary directory
+- **THEN** a validator checks it exactly as it would a file named `HARNESS.md`
 
 ### Requirement: Encoding and harmless variations
 A validator SHALL accept a UTF-8 byte order mark at the start of the file,
@@ -134,3 +127,37 @@ or can be built from SHALL be left to engineering review by people or agents.
 #### Scenario: Thin but conforming design
 - **WHEN** a file passes validation and describes no way for the agent to check its work
 - **THEN** the gap is a finding of a design review, not of the validator
+
+### Requirement: Uses of a file
+The format SHALL support four uses and favour none in its syntax:
+a summary of all or part of a harness design, written to be handed on;
+a reference brought in from outside while a harness is designed;
+an abstraction of a harness to imitate, carrying its design
+without its implementation; and an anchor document a project keeps.
+A project SHALL NOT be expected to keep a `HARNESS.md` of its own.
+
+#### Scenario: Summary of part of a harness
+- **WHEN** an author writes a file that describes only how one project gates its changes
+- **THEN** the file conforms, and its description and introduction say what it covers
+
+#### Scenario: Several references
+- **WHEN** a team designing a harness reads three files obtained from elsewhere
+- **THEN** each is weighed against the team's own project, and none has to be placed in that project's repository
+
+#### Scenario: Design to imitate
+- **WHEN** a team wants a harness like another project's
+- **THEN** that project's design is first written as a file, and the team builds from the file's decisions and reasons instead of copying the other project's configuration
+
+#### Scenario: Project without a file
+- **WHEN** a project has a working harness and no `HARNESS.md`
+- **THEN** nothing in the format treats the project as incomplete
+
+### Requirement: Authority of a file that is not the anchor
+A `HARNESS.md` that a project has not adopted as its anchor document
+SHALL have no authority over that project.
+Its statements are material to weigh against the project's own conditions,
+never instructions to carry out and never a record of the project's intent.
+
+#### Scenario: Reference disagrees with the project
+- **WHEN** a reference file calls for a gate the project does not have
+- **THEN** that is not drift; whether to adopt the gate is a design decision for the project

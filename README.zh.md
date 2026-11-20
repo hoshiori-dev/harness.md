@@ -25,15 +25,23 @@ Agent 才会打开它。
 
 1. 在 [hub](hub/) 里挑一份设计，
    比如 [`solo-open-source-library`](hub/solo-open-source-library/HARNESS.md)。
-2. 把它存成项目根目录下的 `HARNESS.md`。
-3. 告诉你的编码 Agent 这个项目要做什么，让它按文件里写的去建。
+2. 把文件的地址交给你的编码 Agent，告诉它这个项目要做什么。
+   文件不必放进你的仓库。
+3. 让 Agent 把这份文件当作参考：
+   先说出它的 Context 有哪些地方和你的项目对不上，
+   动手写任何东西之前先给你一份计划。
 
-Agent 动手之前会先给你一份计划：一个 `AGENTS.md`，几份知识文件，
+计划里通常会有：一个 `AGENTS.md`，几份知识文件，
 用来检查工作的命令，Hook 和 CI 任务，权限配置。
-Agent 没装插件、不了解这个格式，也能照着这份文件做。
+Agent 没装插件、不了解这个格式，也能读懂这份文件。
 
-建好以后，这份文件可以删掉，也可以留下来当作项目的设计记录，
-以后拿它核对 harness。两种用法这个格式都支持。
+`HARNESS.md` 有四种用法：
+把一个项目的全部或部分 harness 设计写下来交给别人；
+从外部拿一份设计来做参考；
+把想要模仿的项目的设计提炼出来，而不照搬它的实现；
+以及，在项目自己决定的情况下，作为锚定文档留在根目录，
+以后拿它核对 harness。
+项目不需要有自己的 `HARNESS.md` 也能有一套好的 harness。
 
 ## 一分钟看懂格式
 
@@ -117,7 +125,8 @@ uv run skills/harness-md/scripts/lint_harness_md.py path/to/HARNESS.md
 
 ## 贡献 hub 条目
 
-一个 hub 条目是放在 `hub/<name>/HARNESS.md` 里的一份完整设计。
+一个 hub 条目是放在 `hub/<name>/HARNESS.md` 里的一份设计，
+可以是完整的，也可以只讲明确说明的某一个方面。
 规则见 [hub/README.zh.md](hub/README.zh.md)。条目通过 pull request 提交。
 
 ## 全部 skill
