@@ -1,6 +1,6 @@
 # Review Pass and Self-Check Steps
 
-Read when the section has a review pass,
+Read when the agreed decisions include a review pass,
 when a rule is handed over that no tool can decide (business-logic consistency,
 a privacy review, a design rule with no linter),
 or when deciding what evidence a finished task carries.
@@ -14,7 +14,7 @@ but compliance is not total. Keep every check a tool can decide in a tool.
 A finished task reports the command that was run and the tail of its output,
 or the path of the screenshot, so a reader can judge without rerunning.
 For a session nobody watched it is the only record.
-The section says where the evidence goes:
+The agreed decisions say where the evidence goes:
 the final message by default,
 the pull or merge request text when agents run unattended or a wrong change
 is costly.
@@ -46,7 +46,7 @@ describe that change in the hand back for whoever maintains project skills.
 A reader that did not write the change is not swayed by the reasoning
 that produced it. It is the same model on the same task,
 so it adds a second look, not a smarter one;
-use it where a second look is worth its tokens (the section's default:
+use it where a second look is worth its tokens (the recommendation:
 a costly wrong change, or unattended agents).
 
 - **Read-only.** It gets tools that read and search, and none that write.

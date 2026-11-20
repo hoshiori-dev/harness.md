@@ -4,7 +4,7 @@ Read when a concern is kept in step by a sync project skill.
 
 One skill per concern:
 a "sync everything" skill has no precise trigger and loads for nothing.
-The section settles, per concern:
+The agreed decisions settle, per concern:
 
 - **the concern**: one document
   (or document part) and the artifacts it describes,

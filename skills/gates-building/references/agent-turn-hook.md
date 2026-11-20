@@ -1,12 +1,12 @@
 # Agent-Turn Hook
 
-Read when the section has an agent-turn hook and it must be registered,
+Read when an agent-turn hook was agreed and it must be registered,
 or when an audit finds one.
 
 Some clients can run a script when the agent tries to end its turn
 and send the agent back to work when the script fails.
 The check then runs whether or not the agent remembered it,
-which is what makes it a gate. Use it only where the section asks for it:
+which is what makes it a gate. Use it only where one was agreed:
 it costs the fast recipe's duration on every turn,
 so the recipe must fit its budget.
 

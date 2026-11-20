@@ -1,6 +1,6 @@
 # Framework Rules
 
-Read when writing the permission entries of a section,
+Read when settling or describing the permission-list decisions,
 when writing or auditing a client permission file,
 when a user asks for an ask entry or for per-command approval,
 or when a client has no generated format.
@@ -26,12 +26,12 @@ The deny list guards against a careless collaborator's mistakes (a hard reset,
 a force push, a bulk delete), not an attacker:
 an agent that runs code can spell around any text pattern.
 The sandbox and scoped tokens are the boundary,
-and they belong to the Environment section.
+and they belong to the layer that owns Environment.
 
 ## Fixed deny list
 
-Present it for acceptance as one block;
-the section states it entry by entry so it can be built without this file:
+Return it as one decision;
+the decision states it entry by entry so it can be built without this file:
 
 | Intent | Why |
 |---|---|
@@ -43,14 +43,14 @@ the section states it entry by entry so it can be built without this file:
 | `rm -rf` at the repository root (`rm -rf .`, `rm -rf ./`, `rm -rf /`, `rm -rf ~`) | unrecoverable; `rm -rf *` cannot be denied on Claude Code, where `*` is the wildcard |
 | edits to the authority policy, the permission files, and the security hooks | self-protection: loosening a rule is outside agent authority |
 
-An Invariant about what an agent may never do adds its own entry
+An agreed invariant about what an agent may never do adds its own entry
 when a command pattern or a path can express it.
 
 ## Allow list
 
 Only from evidence: task-runner recipes, test, lint, build, format,
 and read-only inspection commands observed in the repository,
-each with its file and line. In the section,
+each with its file and line. In the decision,
 either list the entries or state the rule that derives them
 ("every recipe of the task runner except those that push, publish, or release,
 one entry per recipe").
@@ -71,7 +71,8 @@ An ask entry the user kept after one challenge,
 with a reason no allow or deny entry can serve,
 goes into the client's ask mechanism (Claude Code:
 an `ask` array beside `allow` and `deny`; Codex:
-a `prompt` rule) and nowhere else, and the section records it with the reason.
+a `prompt` rule) and nowhere else,
+and it is recorded as the user's decision with the reason.
 
 Per-command approval kept as the user's decision:
 Claude Code gets no `allow` array
@@ -132,7 +133,7 @@ strip every comment when writing the target file.
   `untrusted` is no longer accepted and `on-failure` is deprecated.
   Write only `approval_policy` there:
   `sandbox_mode` and the `[sandbox_workspace_write]` table belong
-  to the Environment section and are left as they are.
+  to the layer that owns Environment and are left as they are.
 - Command rules are `prefix_rule(...)`
   calls in Starlark files under `.codex/rules/`.
   Both files load only once the user trusts the project,
@@ -175,7 +176,7 @@ for where its permissions are configured.
 Ask entries, an allowed push or force push, a runner wildcard,
 an allow entry for a whole MCP server:
 report each with its reason from this file, recommend the fix once,
-and change the file only where the approved section says so.
+and change the file only where an agreed decision says so.
 A developer's `settings.local.json`
 may hold entries the shared file deliberately lacks;
 it is reported, never edited.

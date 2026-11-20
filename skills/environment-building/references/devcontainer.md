@@ -1,7 +1,7 @@
 # Dev Container
 
 Read when a dev container configuration exists or the session runs
-in a container, and when writing one the section names as the base.
+in a container, and when writing one the agreed decisions name as the base.
 
 ## Reading an existing one
 
@@ -27,14 +27,14 @@ which differs from the file when the container predates an edit.
 Report the difference.
 
 An existing container is adopted as it is.
-Changes to it come only from exposures the section cuts
-and enforcement the section states.
+Changes to it come only from exposures the agreed decisions cut
+and enforcement they state.
 
-## Writing one the section names
+## Writing one the agreed decisions name
 
-Write the smallest configuration the section requires:
+Write the smallest configuration the agreed decisions require:
 an image or the project's existing Dockerfile, a non-root `remoteUser`,
-the tools the section lists, and no host credential mount. Shape:
+the tools they list, and no host credential mount. Shape:
 
 ```jsonc
 {
@@ -46,7 +46,7 @@ the tools the section lists, and no host credential mount. Shape:
 ```
 
 Pin the image tag and feature versions.
-Add read-only mounts and the firewall only where the section states them.
-Anything the section does not name
+Add read-only mounts and the firewall only where the agreed decisions state them.
+Anything they do not name
 (language toolchains beyond what the recipes need, editor extensions,
 services) is contributor setup: list it as a suggestion and leave it.

@@ -1,11 +1,14 @@
-# From Context to Defaults
+# From Conditions to Thickness
 
 Read before saying how much a layer should do for a project,
-or when a user disputes a default.
-A layer's amount is set from the project's Context, one layer at a time,
+or when a user disputes a recommendation.
+A layer's amount is one of four thicknesses (omitted, light, medium, thick),
+recommended from the project's conditions, one layer at a time,
 never from a project label and never for the project as a whole.
+Every row below is a recommendation for the stated conditions:
+the user confirms the thickness, and may choose another.
 
-## The Context conditions
+## The project's conditions
 
 | Condition | Typical values | Layers it moves most |
 | --- | --- | --- |
@@ -22,21 +25,38 @@ and it works in the other direction:
 stronger isolation allows a wider allow list and lighter gates,
 because the environment absorbs the mistake.
 
-## Defaults per layer
+## What each thickness is, per layer
 
-Each row gives the default when nothing in the Context pushes the layer,
-then what pushes it up and what lets it shrink.
-"Nothing, because …" is a legitimate design for any layer.
+Each thickness contains the one before it.
+The skill that owns a layer holds the exact content;
+this table is for explaining and comparing.
 
-| Layer | Default | Does more when | Does less when |
+| Layer | Light | Medium | Thick |
 | --- | --- | --- | --- |
-| Environment | Commands never wait for input (`PAGER=cat`, no prompts, no watch mode); credentials limited to scoped tokens; the tools an agent is expected to use are listed with what each can reach | A wrong change is costly or agents are unattended: container or VM isolation, security files the agent cannot edit. Agents read content anyone can write while holding private data and a way to send it out: a network allow list and a restricted token | A person watches every session and nothing sensitive is reachable: the host with scoped tokens |
-| Knowledge | One root entrypoint of about 100 lines: the rules that hold on every task first, then a table of "when doing X, read Y". Only practice that is not standard is written down | Long horizon or many people: knowledge files behind routes, an architecture note for what the tree cannot show, project skills for fragile recurring procedures. Weak models or several clients: critical procedures routed explicitly, one entrypoint all clients read | Short horizon, one person: the entrypoint alone, up to about 200 lines |
-| Feedback | One command that tests a single file or module in seconds, one that runs everything, and a way to start the system and see what it did | Unattended agents or user-facing behaviour: the agent can drive the running system (requests, a browser, a simulator) and read structured logs; a costly change gets a dry run or a staging target | A throwaway: a smoke run that shows it starts |
-| Gates | Formatting and a secret scan before every commit | Costly changes, long horizon, or many people: lint, type check, and fast tests before commit, the full suite in CI behind one required aggregate check, structure checks for boundaries that matter. Every custom check's failure message says how to fix it | Short horizon with cheap mistakes: the secret scan and a smoke check |
-| Authority | Reversible work inside the repository never asks; irreversible or outward actions (push, publish, comment, release, remote settings, deletion) are pre-authorised in the plan or queued for the user. Allow the known safe, deny the known destructive, no "ask" entries. Commits are checkpoints, one per verified task, with no AI attribution. On a hosted project: short-lived branches off the default branch, squash merges, a minimal set of labels and templates | Unattended agents: a written policy, a fixed format for queued decisions, tokens scoped so the platform enforces what the policy says. Many people: a protected default branch with required checks | One watched maintainer: a few allow and deny entries and the client's defaults |
-| Completion | The goal and the non-goals are agreed before work starts; done means the checks pass and the stated acceptance was observed | Unattended or costly work: a spec carrier with scenarios a reader can judge without the code, approval recorded where others can see it. Long horizon: specs kept for the parts under change, never back-filled for code nobody touches | One person, short tasks: a plan agreed in conversation; or the section is left out |
-| Entropy | Sync rules in the entrypoint that name their trigger in both directions, and a place where an agent records a contradiction it finds | Long horizon or many people: a harness self-check in CI (links resolve, documented commands exist, budgets hold), a periodic clean-up, `HARNESS.md` kept in step with the artifacts | Discarded within a quarter: the section is left out, because the project ends before it rots |
+| Environment | The host or the existing environment as it is; each token and its scope named in a sentence; non-interactive defaults exported by the task runner (`PAGER=cat`, `CI=true`, no prompts, no watch mode) | A dev container shared by people and agents; an environment knowledge file listing tools and what each can reach; hard read-only files kept by convention; network open | A restricted container or VM; hard read-only files on read-only mounts; a deny-by-default network allowlist; a token that cannot write to the default branch |
+| Knowledge | One single-file root entrypoint, up to about 200 lines, holding only practice that is not standard, with no knowledge folder | A root entrypoint of about 100 lines, never over 120 (always-on rules first, then a routing table of "when doing X, read Y"), knowledge files behind those routes, project skills for fragile recurring procedures | Medium, plus a machine check failing when a route names a missing path, a knowledge file is unrouted, a documented recipe does not exist, or the entrypoint is over budget |
+| Feedback | Two task-runner entries (fast and full) over existing commands, named in the entrypoint, with one sentence on what a human verifies | Fast and full checks, a command that tests one file or module in seconds, recipes to start, check, stop, and smoke-test the system, and a verification knowledge file | Medium, plus driving the running system (requests, browser screenshots, or queryable logs), a read-only clean-context reviewer whose tools the client restricts, a session-start check when unattended, and evidence in pull or merge requests; still non-blocking |
+| Gates | Formatting and a secret scan before every commit and in CI; lint, typecheck, and tests deliberately not gated | Light, plus lint, type check, and tests in CI and the full recipe (in the commit hook where they fit the budget), and a checks knowledge file | Medium, plus structure checks for boundaries that matter (every custom check's failure message naming how to fix it), one required summary gate, and an agent-turn hook where supported and unattended |
+| Authority | Sentences in the entrypoint's always-on rules: reversible work inside the repository never asks; outward actions are pre-authorised or queued; refusals stop retries; commits are checkpoints, one per verified task, with no AI attribution | Light, plus a written policy with checkpoint rules and a fixed format for queued decisions; on a hosted project also the platform knowledge file, label file, forms, request template, project skill, and convention-kept protections | Medium, plus what a machine refuses: per-client permission files (allow safe, deny destructive, no "ask" entries), refusing checkpoint recipes, a protected default branch with required check and merge method, and a label sync job |
+| Completion | One entrypoint entry: behaviour-changing work is agreed in plan mode with the four answers stated in conversation, and the full check ends every task; no contract file or tool | A specification contract in the knowledge base and a specification tool or per-change `SPEC.md`/`PLAN.md` with checkable scenarios, both approvals given in conversation | Medium, plus approval recorded on the pull or merge request (a label a person adds), machine validation of the carrier, and a check blocking the merge until the record is frozen |
+| Entropy | One drift sentence in the entrypoint: fix drift in the same change or record it where the next agent finds it | Keep-in-sync section (three dispositions, ruling rule, sync table or sync skills) and a non-blocking harness self-check in a recipe, aggregate check, and CI | Medium, plus the required CI gate depending on the self-check, a dated periodic reclamation routine, and keeping an adopted anchor document in step |
+
+## Which thickness to recommend
+
+| Layer | Light when | Medium when | Thick when | Omitted when |
+| --- | --- | --- | --- | --- |
+| Environment | A person watches every session and nothing sensitive is reachable | Several people or agents need the same tools, and mistakes are cheap to undo | A wrong change is costly or agents are unattended; or agents read content anyone can write while holding private data and a way to send it out | A watched throwaway on a machine that holds no credential worth protecting |
+| Knowledge | Short horizon, one person | Long horizon or several people; weak models or several clients (critical procedures routed explicitly, one entrypoint all clients read) | Maintained for years, or many people and outside contributors rely on the routes | No agent works here beyond one-off questions |
+| Feedback | Short horizon, cheap mistakes, a person looks at every result | Anything maintained past a release | Unattended agents, behaviour users see, or a costly wrong change | Nothing can be run; then say what a human verifies |
+| Gates | Short horizon with cheap mistakes | A wrong change costs real work to undo, more than one person commits, or the project outlives a release | A wrong change reaches users, data, or money; many people; unattended agents | No agent commits. While one does, the secret scan stays |
+| Authority | One watched maintainer | A team, or agents checked between tasks | Unattended agents, many people, or a costly publication | A watched session whose client defaults already ask before every outward action |
+| Completion | Anything that outlives a quarter | Unattended or costly work, a long horizon, several people | Approval has to be visible to people outside the conversation | One person, short tasks, discarded within a quarter: a plan agreed in conversation is enough |
+| Entropy | One person, kept longer than a quarter | Maintained past a release, or others rely on the conventions | Maintained for years, a costly wrong change, or unattended agents | Discarded within a quarter: the project ends before it rots |
+
+Environment, Knowledge, Feedback, Gates, and Authority always get a decision;
+"omitted, because …" is a legitimate one for any layer.
+When two conditions point to different thicknesses for one layer,
+recommend the thicker and name both conditions.
 
 ## Two common combinations
 
@@ -59,14 +79,14 @@ Ask of each layer: do the cost of a wrong change, the horizon,
 and the unattended time in this part of the repository match
 the project's overall values? Where one differs,
 set the layer for that area in the direction the condition pushes,
-and say so in the layer's section.
+and say so in the layer's decision.
 
 - A research repository with a data pipeline that must not break:
   Gates and Entropy take the engineering column for the pipeline;
   the rest stays exploratory.
 - An `experiments/` directory inside a production repository: the reverse.
 - A production project with one maintainer who watches every session:
-  Knowledge and Authority shrink; Gates do not.
+  Knowledge and Authority get thinner; Gates do not.
 
 ## Too much is also a defect
 

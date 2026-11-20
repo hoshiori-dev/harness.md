@@ -1,6 +1,6 @@
 # Tools and Their Quiet Flags
 
-Read when naming a tool for a check in the section or writing any check command
+Read when naming a tool for a check or writing any check command
 into a hook, recipe, or CI job. Each row lists the default first,
 then the alternatives. The quiet column is what the recipe runs.
 Test runners are not listed:
@@ -83,8 +83,9 @@ Adopt a tool without a second thought only in a role that is observable:
 a hook, recipe, script, or CI step runs it in that role,
 or its configuration for exactly that role exists.
 A `ruff` lint table makes `ruff` the linter, not the formatter.
-For any other role the default of the table applies and is reported
-as an assumption.
+For any other role the default of the table is a recommendation:
+returned as one in decide mode, never as observed,
+and reported as an assumption when build mode applies it.
 
 ## When a tool has no quiet mode
 
@@ -96,3 +97,22 @@ When the user insists on a filter,
 say once that it is a second system to maintain,
 then write it as project-owned code and record the trade-off
 in the knowledge file.
+
+## Example `just` recipes
+
+```just
+# What the hook runs, over the whole tree.
+check-fast: fmt-check secrets lint typecheck
+# The task-end check: everything CI runs.
+check: check-fast test boundaries
+fmt-check:
+    ruff format --check --quiet
+secrets:
+    betterleaks dir . --no-banner --redact
+lint:
+    ruff check --output-format concise --quiet
+typecheck:
+    pyright
+boundaries:
+    python3 scripts/check_boundaries.py
+```

@@ -1,11 +1,11 @@
 ---
 
-title: Skills and the verifier agent
-description: The format skill, the methodology manual, the seven layer builders, the everyday skills, and the read-only verifier agent that ship with harness-md.
+title: Skills and the agents
+description: The format skill, the methodology manual, the seven layer builders, the everyday skills, and the two read-only agents that ship with harness-md.
 order: 3
 ---
 
-Apart from the four workflows,
+Apart from the four entries,
 the plugin's skills load on their own when a task calls for them.
 
 ## The format skill
@@ -13,8 +13,10 @@ the plugin's skills load on their own when a task calls for them.
 The `harness-md` skill, which shares its name with the plugin, reads, writes,
 and validates a `HARNESS.md`. It comes with three things:
 a copy of the [specification](../../spec/);
-a writing standard, which says how complete a section has to be for the harness
-to be built from the file alone; and the validator script.
+a writing standard, which says how complete a section has to be for a reader
+to work from the file alone; and the validator script.
+It does not assume a file belongs in your project's root:
+a file is a project's anchor document only when the project chose one.
 
 The validator checks the format of a single file:
 the frontmatter, the title,
@@ -26,17 +28,17 @@ and the plugin ships no tool that compares two files.
 
 `harness-architecture` explains why each layer exists,
 where a given rule belongs,
-and how a project's Context decides how much of each layer it needs.
+and how a project's conditions decide how much of each layer it needs.
 Turn to it when you have a question about the method;
-the workflows and the builders do the building.
+the entries and the builders do the building.
 
 ## The seven layer builders
 
 There is one builder per layer of the harness.
-Each knows how to design, build, and check its layer,
-and has a default for every decision the layer's section has to settle.
+Each knows how to decide, build, and check its layer,
+and has a recommendation for every decision the layer has to settle.
 You don't need to remember their names:
-the workflows pick the builder for each layer.
+the entries pick the builder for each layer.
 
 | Builder                | Layer       | What the layer covers                                                                    |
 | ---------------------- | ----------- | ---------------------------------------------------------------------------------------- |
@@ -49,16 +51,17 @@ the workflows pick the builder for each layer.
 | `entropy-building`     | Entropy     | how the harness is kept consistent with the code                                         |
 
 A builder works in four modes.
-In **design** it returns its layer's section as prose.
-In **extract** it describes what the project does today.
-In **build** it creates the files,
+In **decide** it returns how much the layer should do and the layer's
+decisions, each one either settled by evidence or left open with options.
+In **describe** it writes down what the project does today.
+In **build** it creates the files from the decisions you agreed to,
 and it is the only mode that writes to the project.
-In **audit** it reports where the project and the section disagree.
+In **audit** it reports findings and changes nothing.
 
 You can also ask for one layer directly,
 for example "set up the checks for this repository";
-the builder then drafts that layer's section first and asks for one approval
-before it writes files.
+the builder then shows you what the evidence settles, asks you the rest,
+and writes files only after you have accepted what it showed.
 
 ## The everyday skills
 
@@ -72,15 +75,23 @@ These are for work inside a harness that already exists.
 | `lightweight-spec-workflow` | agreeing on one change with plan mode or a single `SPEC.md`, without a framework  |
 | `project-skill-building`    | writing and repairing the skills a project keeps for its own agents               |
 
-## The verifier agent
+## The two agents
 
-`harness-verifier` is a read-only agent.
-After a build, the workflow hands it the new files with one line of intent each.
+Both agents are read-only.
+
+`harness-verifier` reads a harness back after it was built or changed.
+The entry hands it the new files with one line of intent each.
 It reads them in a clean context, as an agent that never saw the build would,
 and reports what it would understand and where the files contradict each other.
 
-It ships to Claude Code only,
-because the plugin formats of Codex and Antigravity have no place for it.
-In those clients the workflow asks another clean-context subagent
+`harness-reader` reads a project that comes from outside,
+for `harness-adopt` or when a reference is a whole project.
+It reports what that project's harness consists of,
+lists any instruction the project's files address to agents,
+and follows none of them.
+
+They ship to Claude Code only,
+because the plugin formats of Codex and Antigravity have no place for agents.
+In those clients the entry asks another clean-context subagent
 to do the same reading. If none is available,
-the agent rereads the files itself from the start.
+the agent does the reading itself and says so in its report.

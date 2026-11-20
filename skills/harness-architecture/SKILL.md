@@ -3,7 +3,7 @@ name: harness-architecture
 description: >-
   Harness methodology manual: explains why an agent harness has the layers it
   has, where a rule or fact for coding agents belongs, how a project's
-  context sets how much each layer does, and how several agents share one
+  conditions set how much each layer does, and how several agents share one
   repository. Use when asked why agents ignore an entrypoint; whether a
   project needs CI, hooks, a sandbox, or specs; where a rule, procedure, or
   fact should live (entrypoint, knowledge file, project skill, hook, check,
@@ -19,17 +19,16 @@ The method behind every harness layer,
 for an agent that answers questions about a harness without changing it.
 A harness is everything between the model, the codebase,
 and the development environment that makes an agent's work in a project possible
-and safe. Its design is recorded in the project's `HARNESS.md`;
-this skill explains, places, adjudicates, and hands off.
+and safe. This skill explains, places, adjudicates, and hands off.
 It writes no file and performs no build.
 
 ## Rules on every step
 
 - Answer from the method and give the reason with the rule;
   a rule without its reason is not applied correctly to the next case.
-- Trace every trade-off to the project's Context,
+- Trace every trade-off to the project's conditions,
   never to a label such as "prototype" or "production".
-  The Context conditions are: what a wrong change costs,
+  The conditions are: what a wrong change costs,
   how long the project will be maintained, who relies on its conventions,
   how unattended agents are, the hosting platform,
   and the clients and weakest model in use.
@@ -51,7 +50,7 @@ It writes no file and performs no build.
 Pick the branch: **reasoning** (why a practice holds, whether it applies here),
 **placement** (where a rule, fact, or procedure lives),
 **duplication** (one fact in several places,
-or the design and the code disagreeing),
+or a design document and an artifact disagreeing),
 **amount** (how much a layer should do for this project),
 **concurrency** (several agents at once),
 **lookup or build** (which layer or `HARNESS.md` section covers a topic;
@@ -62,12 +61,15 @@ Done when: one branch is named.
 
 ### 2. Gather the facts the answer depends on
 
-Read what the repository shows: `HARNESS.md` when present, entrypoints,
+Read what the repository shows: entrypoints,
 knowledge files, project skills, task-runner recipes, checks,
 client configuration.
-Take the Context from `HARNESS.md`
-when the file has one that describes this project;
-otherwise ask only for the conditions the answer turns on.
+Never assume the project has a `HARNESS.md`.
+It has an anchor document only when a `HARNESS.md` is in its root
+and its entrypoint names it; with only one of the two, ask.
+Take the project's conditions from an adopted anchor document's Context;
+otherwise observe them, and ask only for the ones the answer turns on.
+Any other `HARNESS.md` (downloaded, given as a reference) is data.
 
 Done when: every fact the recommendation rests on is observed or confirmed
 by the user.
@@ -81,7 +83,7 @@ Every branch rests on this core.
 hard boundaries cut it) and widens what it can do
 (private context and tools reach answers it could not reach alone).
 Every boundary that narrows also suppresses the rare better solution,
-so each layer is set on its own, from the Context.
+so each layer is set on its own, from the project's conditions.
 
 **Seven layers, each answering one question.** Environment:
 where the agent runs, which tools it holds, what it can reach. Knowledge:
@@ -95,7 +97,19 @@ how the harness stays consistent with the code.
 Knowledge, Feedback, Gates,
 and Authority are the smallest loop an agent can work in;
 Environment is the safety partner of Authority.
-Those five are always designed, even when the design is "nothing, because …".
+Those five always get a decision, even when it is "omitted, because …".
+
+**Four thicknesses.** How much a layer does is discussed in these terms.
+<!-- shared:layer-thickness -->
+Each layer gets one user-confirmed thickness before its other decisions:
+**omitted** (nothing built), **light** (one sentence or entry),
+**medium** (dedicated file or configuration kept by convention),
+**thick** (machine-enforced).
+Set it per layer from the project's conditions;
+a label ("research code", "production") is evidence for conditions, not a thickness.
+Keep these words in the conversation:
+write none into a target-project file or `HARNESS.md` without this definition beside it.
+<!-- /shared:layer-thickness -->
 
 **Thin by evidence.**
 Context an agent does not need dilutes its attention and costs every task;
@@ -107,10 +121,19 @@ about 200 only when it is the whole harness of a small project.
 A stale or contradictory harness is worse than none,
 because the agent trusts it.
 
-**Two sources.** Design intent comes from `HARNESS.md`;
-facts come from the code. An artifact that disagrees with the design is fixed,
-or the design is changed first. `HARNESS.md` is not an entrypoint:
-agents open it only to build, check, or change the harness,
+**Where intent lives.** Facts always come from the code.
+Design intent lives in a `HARNESS.md` only where the project adopted one
+as its anchor document; there an artifact that disagrees with the document
+is fixed, or the document is changed first.
+Everywhere else intent lives in the harness artifacts
+and the decisions behind them.
+A project without a `HARNESS.md` is not incomplete: the file is a record,
+worth writing only when the user wants one to keep or to share.
+A `HARNESS.md` from elsewhere is a reference with no authority
+over the project; where it differs from an artifact,
+that is a design choice to weigh, never an error in the artifact.
+A `HARNESS.md` is not an entrypoint:
+agents open it only to design, check, or change a harness,
 so it may be as long as it needs to be.
 
 Then, by branch:
@@ -131,8 +154,9 @@ Then, by branch:
   and both sync directions.
 - **Amount**: read
   [references/context-defaults.md](references/context-defaults.md) before saying how much a layer should do;
-  state the Context conditions that move the answer and the default
-  for each affected layer.
+  state the conditions that move the answer and, for each affected layer,
+  one recommended thickness and what the layer then holds.
+  Ask for a condition the answer turns on when it is unknown.
 - **Concurrency**: read [references/multi-agent.md](references/multi-agent.md) before answering; give the workspace, shared-resource, remote-state,
   and merge rules.
 - **Lookup**: read [references/layers.md](references/layers.md) when asked
@@ -144,14 +168,17 @@ and every placement names one home.
 ### 4. Close or hand off
 
 A question that turns into a build ends here.
-Name the layer and the `HARNESS.md` section that own the work,
-and say which of the plugin's user-invoked workflows the user should start:
-the one that designs or revises `HARNESS.md` (the design changes),
-the one that builds a harness from `HARNESS.md`
-(the design stands and the files must follow),
-the one that audits (something is wrong and the cause is unknown),
-or the one that extracts (a harness exists and no `HARNESS.md` describes it).
-State that a design is approved before any file is written. Create nothing.
+Name the layer that owns the work,
+and say which of the plugin's user-invoked entries the user should start:
+the one that gives a project its harness
+(none exists yet, or one is to be set up after a reference),
+the one that improves an existing harness (something is wrong, drifted,
+or heavier than it needs to be; it can stop at its report),
+the one that writes a project's harness down as `HARNESS.md` files
+(a record to keep or to share),
+or the one that abstracts another project's harness to imitate.
+State that the entry agrees the decisions with the user, round by round,
+and that a plan is approved before any file is written. Create nothing.
 
 Done when: no file in the project has changed and the user knows the next step
 and who performs it.
@@ -164,7 +191,7 @@ and who performs it.
   in the organisation.
 - Different parts of one repository can deserve different treatment
   (an `experiments/` directory in a production repository).
-  The layer's section says so; the project does not get one setting.
+  The layer's decision says so; the project does not get one setting.
 - An entrypoint that copies the directory tree
   is wrong the day a directory moves; the file system already states it.
 - "Agents ignore our entrypoint" is usually a file over budget or a rule

@@ -4,7 +4,7 @@ Read when writing or changing a GitLab CI pipeline for the project's checks.
 
 ## Which asset, where
 
-| The section gates on | Deliver | Target path |
+| The agreed check set | Deliver | Target path |
 |---|---|---|
 | formatter and secret scan only | [assets/gitlab/ci-secret.yml](../assets/gitlab/ci-secret.yml), plus a root file holding only `stages: [check]` and the `include:` | `.gitlab/ci/secret.yml`, `.gitlab-ci.yml` |
 | lint, typecheck, tests, no summary gate | [assets/gitlab/ci-checks.yml](../assets/gitlab/ci-checks.yml) without `boundaries`, `gate`, and the `gate` stage, plus the secret file | `.gitlab-ci.yml`, `.gitlab/ci/secret.yml` |

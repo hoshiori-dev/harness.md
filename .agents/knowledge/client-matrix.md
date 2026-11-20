@@ -1,6 +1,6 @@
 # Client Matrix
 
-Read when adding or changing a skill or the agent,
+Read when adding or changing a skill or an agent,
 when a client does not load something,
 or before touching `com.anthropic.claude-code/`, a generated manifest,
 or a wiring file. The loading facts below were verified
@@ -16,9 +16,10 @@ this repository carries the same layout and has not re-verified them yet
 |---|---|---|---|
 | Manifest | root `plugin.json` (Agent Plugins 1.0.0) plus its `extensions.com.openai` block | `.claude-plugin/plugin.json`, generated: metadata mirror plus the `agents` pointer | root `plugin.json`, read natively |
 | Skills | root `skills/` | root `skills/` (default scan) | root `skills/` |
-| User-only skills (the four workflows) | each carries `agents/openai.yaml` with `policy.allow_implicit_invocation: false` | `disable-model-invocation: true` in the frontmatter | no switch known: the description is listed like any other |
+| User-only skills (the four entries) | each carries `agents/openai.yaml` with `policy.allow_implicit_invocation: false` | `disable-model-invocation: true` in the frontmatter | no switch known: the description is listed like any other |
 | Agents | none: Codex plugins carry no agents (W9); `just validate` rejects a `com.openai/agents/` directory | `com.anthropic.claude-code/agents/<name>.md`, listed by the generated manifest | none: Antigravity reads plugin agents from the plugin root only, which the spec reserves for portable files (W2); `just validate` rejects a `com.google.antigravity/agents/` directory |
 | MCP | none shipped; `just validate` rejects an `mcp.json` | none shipped | none shipped |
+| Question tools | `request_user_input`: 1 to 3 questions, 2 to 3 options each, single choice plus free text; unavailable outside plan mode unless enabled, in `codex exec`, and in subagents | `AskUserQuestion`: 1 to 4 questions, 2 to 4 options each, single or multiple choice plus free text; unavailable in subagents and non-interactive sessions | `ask_question`: one or more questions, at least 2 options each, optional multiple choice plus client write-in; unavailable in headless runs |
 | Local load | `codex plugin marketplace add .` then `codex plugin add harness-md@harness-md`; marketplace file `.agents/plugins/marketplace.json` (generated); `.codex/config.toml` enables it for this workspace | `claude --plugin-dir .` | `agy plugin install .` (copies the root, skipping dot-directories); `agy plugin uninstall harness-md` to remove |
 | Install from GitHub | `codex plugin marketplace add hoshiori-dev/harness.md` | `/plugin marketplace add hoshiori-dev/harness.md` (through the generated `.claude-plugin/marketplace.json`) | `agy plugin install https://github.com/hoshiori-dev/harness.md` |
 | Validator | `codex plugin marketplace add .` + `codex plugin list` | `claude plugin validate .` | `agy plugin validate .` |
@@ -66,3 +67,4 @@ is one row of `.agents/knowledge/compatibility-watch.md`.
 | 2026-10-27 | harness-builder: a `plugins.json` file under `.agents` with `{"path": "."}` | not picked up by the CLI session; rejected |
 | 2026-11-11 | this repository: `just clients-validate` (Claude Code 2.1.322, Codex CLI 0.167.1, `agy` 1.5.5) | passes: `claude plugin validate` on the root and on the unpacked archive (one directory warning: no icon), `agy plugin validate` (one warning on the root: `AGENTS.md` is never loaded by a plugin), Codex lists `harness-md@harness-md`, `agy plugin install` of the unpacked archive installs 18 skills |
 | 2026-11-11 | `agy plugin install .` from the working tree | did not finish within a minute: it copies the whole directory, `node_modules` and `site/` included; `just clients-validate` installs from the unpacked release archive instead |
+| 2026-11-20 | question tools checked against Claude Code 2.1.322, Codex CLI 0.167.1, `agy` 1.5.5 | `AskUserQuestion` (1–4 questions, 2–4 options, single/multiple choice, write-in), `request_user_input` (1–3 questions, 2–3 options, single choice, free text; plan mode by default), `ask_question` (1+ questions, 2+ options, optional multiple choice, write-in) |

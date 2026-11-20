@@ -2,7 +2,7 @@
 
 Read when a candidate is a procedure, when the user asks for a skill,
 when deciding whether an existing skill needs a routing row,
-or when writing the handoff for a skill the section names.
+or when writing the handoff for a skill the agreed decisions name.
 
 ## The bar
 
@@ -15,7 +15,7 @@ A procedure becomes a project skill only when it is all of:
   **order-sensitive** (steps must run in sequence),
   or **branchy** (the right action depends on conditions).
 
-The section states which condition each candidate passed or failed.
+The decision states which condition each candidate passed or failed.
 
 ## Cheaper carriers
 
@@ -44,7 +44,8 @@ is "we hope the description matches" and a miss causes harm, route it.
 
 ## Handoff definition
 
-Pass one per skill the section names to the skill that writes project skills,
+Pass one per skill the agreed decisions name
+to the skill that writes project skills,
 described by that role. The handoff names no skill:
 not the writer, and not a name for the new skill (the writer chooses it).
 
@@ -60,10 +61,10 @@ Not for: <neighbouring tasks that must not load it>
 Source material: <paths, runbooks, incidents>
 Owned scripts: <operations longer than two lines, to live under the
 skill's scripts/>, or none
-Location: <the skills folder the section names>
+Location: <the skills folder the agreed decisions name>
 Process-critical: <yes: report the chosen name so the routing row
 "When <situation>, load the <name> skill" can be added | no>
-Covered by: <the sentence of the Knowledge section that names it>
+Covered by: <the agreed decision that names it>
 ```
 
 When the skill is not written before this layer hands back,

@@ -1,14 +1,15 @@
 # The Completion Boundary
 
-Read when writing what every spec answers, in the section or in the contract,
+Read when stating what every spec answers,
+in a returned decision, a description, or the contract,
 when the user asks what a spec must contain,
 or when a recorded spec format leaves one of the eight items below out.
 
 Without a finish line an agent ends one of two ways:
 it stops early, taking "the tests ran" for "done", or it keeps adding.
 Whatever the tool, every spec answers four questions and obeys four rules.
-The section and the contract list all eight so a reader who never saw this skill
-can name them.
+The returned decision and the contract list all eight,
+so a reader who never saw this skill can name them.
 
 ## Four answers every spec gives
 
@@ -26,7 +27,7 @@ can name them.
    which branch may be pushed, whether a comment may be posted,
    whether a pull request may be opened.
    Without this answer the agent halts at the first such action.
-   The Authority section defines how such an action is classified;
+   The project's authority rules define how such an action is classified;
    the spec only lists the ones this change may take.
 
 ## Four quality rules
@@ -73,9 +74,9 @@ how far the work goes and how far it may go are the same question.
 - **Other framework kept**: the same as the lightweight list,
   mapped onto the framework's files where they exist.
 
-## When the section is omitted
+## When the layer is omitted
 
-A design without a Completion section still has a finish line:
-the checks the Feedback and Gates sections name.
+A project that builds nothing for this layer still has a finish line:
+the checks its Feedback and Gates layers provide.
 The four answers are then given in the conversation, in plan mode,
 before each task; nothing is deposited.

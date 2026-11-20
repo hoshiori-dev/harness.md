@@ -21,24 +21,28 @@ a weaker one breaks without it.
 - One skill covers one coherent unit of work.
   Too narrow and it collides with its neighbours;
   too broad and it triggers unreliably.
-- **Workflow skills** (`harness-design`, `harness-build`, `harness-extract`,
-  `harness-audit`) are user-invoked: `disable-model-invocation: true`,
+- **Entry skills** (`harness-create`, `harness-improve`, `harness-distill`,
+  `harness-adopt`) are user-invoked: `disable-model-invocation: true`,
   self-contained procedures.
   Every other skill is model-invoked and reached by its description.
 - A **layer builder** states `Owns the <Layer> layer` once in its description,
   with a name from `scripts/lib/layers.ts`.
-  Workflows route by that phrase and name no builder.
+  Entries route by that phrase and name no builder.
 - A skill is self-contained: no link leaves its directory,
   and no other skill library or install command is named.
   Repeated paragraphs are shared blocks (`.agents/knowledge/shared-blocks.md`).
   A skill refers to another skill of this plugin by role
   ("the skill that owns the Gates layer", "the methodology manual skill"),
-  never by name. Two exceptions: workflows dispatch `harness-verifier` by name,
-  and a workflow that tells the user which workflow to run next gives its name,
+  never by name. Two exceptions: entries dispatch the agents
+  (`harness-verifier`, `harness-reader`) by name,
+  and an entry that tells the user which entry to run next gives its name,
   because the user has to type it.
 - A skill may name `HARNESS.md` and its section names freely.
   It may not assume the reader has `spec/spec.md`:
   what a skill needs from the format it states itself.
+  It never assumes the target project has a `HARNESS.md`:
+  a project has an anchor document only when the file is in its root
+  and its entrypoint names it; any other file is a reference.
 
 ## Frontmatter
 
@@ -48,7 +52,7 @@ a weaker one breaks without it.
   gives most of its length to triggers ("Use when …"),
   names the neighbours it is not for ("Not for …") when confusion is likely,
   restates nothing from the body. Limits:
-  a layer builder 240 characters, a workflow 400, any other 700;
+  a layer builder 240 characters, an entry 400, any other 700;
   all descriptions together 8,000.
 - `license: Apache-2.0`. `compatibility` only when the skill ships scripts.
 
@@ -59,15 +63,19 @@ a weaker one breaks without it.
   `Done when:` only where the boundary is checkable and changes how the step
   is executed or judged.
 - A layer builder's workflow steps are fixed: `### 1. Observe`,
-  `### 2. Write the section`, `### 3. Build`, `### 4. Verify`,
-  `### 5. Audit`, `### 6. Hand back`.
+  `### 2. Decide`, `### 3. Describe`, `### 4. Build`, `### 5. Verify`,
+  `### 6. Audit`, `### 7. Hand back`.
+  Modes use them so: decide 1, 2, 7; describe 1, 3, 7; build 1, 4, 5, 7;
+  audit 1, 6, 7.
 - Every pointer to a reference states its load condition: "Read
   `references/x.md` when …", never "see references/".
 - Inline what every branch needs; disclose into `references/` what only some
   branches reach. Co-locate a concept's definition, rules, and caveats.
-- Give one default per decision, with the context that selects it and the
-  reason. A skill that leaves two equal options makes agents choose
-  inconsistently.
+- Give one recommendation per decision, with the condition that selects it
+  and the reason. A skill that leaves two equal options makes agents choose
+  inconsistently. A recommendation is decided without asking only where the
+  evidence makes it clearly better; otherwise the user is asked, through the
+  client's question tool where there is one, and every decision is shown.
 - Assets are raw starting shapes the agent reworks line by line; the
   how-to-use text belongs in `SKILL.md` or a reference, not in the asset.
   Placeholders `{{NAME}}` are allowed only on lines marked `# CONFIGURE:`.

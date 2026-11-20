@@ -21,7 +21,7 @@ that describes them: correct the document. In the mirror pair `README.md` /
 `HARNESS.md` states what this harness is meant to be. When a harness file
 and `HARNESS.md` disagree on intent, fix the harness file, or change
 `HARNESS.md` first and then the file; on a fact (what a command does,
-whether a path exists) the code wins and `HARNESS.md` is corrected. <!-- # CONFIGURE: delete this paragraph when the project keeps no HARNESS.md. -->
+whether a path exists) the code wins and `HARNESS.md` is corrected. <!-- # CONFIGURE: delete this whole paragraph when the project has no anchor document. -->
 
 Before finishing an edit to any harness document,
 run the "Check first" cell of every row naming that document,
@@ -34,6 +34,7 @@ not only the one that prompted the edit.
 | a top-level directory is added, moved, or removed | the layout section of `ARCHITECTURE.md` | list the directories the section names |
 | a file under `.agents/knowledge/` is added, moved, or removed | the when-to-read table of this file | every listed path exists |
 | a section named in the mirror pair changes in `README.md` (an edit made first in `README.zh.md` is copied back to `README.md`) | the same section of `README.zh.md`, in the same change | `just harness-check`; compare the section's links, code, and tables in both files | <!-- # CONFIGURE: one row per mirror pair, its source side in the first cell and the corrected side in the second. -->
-| a path the File Structure section of `HARNESS.md` requires is added, moved, or removed | that section first, then `REQUIRED_PATHS` in `scripts/check_harness.py` | `just harness-check` | <!-- # CONFIGURE: delete this row when the project keeps no HARNESS.md or has no self-check; otherwise the self-check's real path and recipe. -->
+| a path the harness needs to exist is added, moved, or removed | `REQUIRED_PATHS` in `scripts/check_harness.py` | `just harness-check` | <!-- # CONFIGURE: delete this row when the project has no self-check; otherwise the self-check's real path and recipe. -->
+| a path the File Structure section of `HARNESS.md` requires is added, moved, or removed | that section first, then `REQUIRED_PATHS` in `scripts/check_harness.py` | `just harness-check` | <!-- # CONFIGURE: delete this row when the project has no anchor document or no self-check; where it stays, delete the row above and set the self-check's real path and recipe. -->
 
 <!-- # CONFIGURE: one row per concern from the inventory that the table owns; delete rows that do not apply; a concern owned by a sync project skill gets no row. -->

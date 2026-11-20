@@ -20,8 +20,8 @@ This repository holds four things:
 - the [format specification](spec/spec.md);
 - the [hub](hub/), a collection of ready-to-use designs;
 - `harness-md`, a plugin for Claude Code, Codex,
-  and Antigravity that writes the file for a project,
-  builds the harness it describes, and checks one against the other;
+  and Antigravity with which you and your coding agent work out
+  and build a project's harness together, and write designs down as files;
 - the [website](https://hoshiori-dev.github.io/harness.md/),
   where the hub can be searched.
 
@@ -97,16 +97,26 @@ You need [`uv`](https://docs.astral.sh/uv/) to run them.
 
 | You want to | Use |
 |---|---|
-| Set up a new project for agents | `harness-design`, then `harness-build` |
-| Find out what is wrong with an existing setup and fix it | `harness-audit`, then `harness-design` and `harness-build` |
-| Keep improving a project that already works with agents | `harness-audit` with the symptom you see |
-| Write down the design a project already has (your own project, or one you want to learn from) | `harness-extract` |
-| Bring a project in line with a given `HARNESS.md` | `harness-build` |
+| Give a project its harness, new or with years of history | `harness-create` |
+| Use a design from the hub or from another team while doing so | `harness-create` or `harness-improve`, with the file's address or path |
+| Find out what is wrong with an existing setup, and fix it if you like | `harness-improve` |
+| Write down all or part of your project's design, to share it or to keep it | `harness-distill` |
+| Get a harness like the one another project has | `harness-adopt`, then `harness-create` or `harness-improve` |
 
-These four skills are workflows. They run only when you invoke them by name:
-`/harness-md:harness-design` in Claude Code, `$harness-design` in Codex.
-Each one hands the layers of the design (Environment, Knowledge,
-and so on) to the skill that knows that layer.
+These four skills are the entries. They run only when you invoke them by name:
+`/harness-md:harness-create` in Claude Code, `$harness-create` in Codex.
+
+An entry does not hand you a finished design to approve.
+It reads the repository, decides what the evidence settles and shows you
+those decisions, and asks you the rest, a round at a time:
+first the goal and the project's conditions, then how much each layer
+should do, then the decisions inside each layer.
+After every round you can change a decision, go on,
+or leave the rest to the agent. Nothing is written
+until you have approved a plan that names every file.
+
+No entry needs a `HARNESS.md` in your project, and none leaves one there
+unless you ask for an anchor document.
 
 ## Validate a file
 
@@ -131,10 +141,10 @@ Entries come in by pull request.
 | Skill | Invocation | Summary |
 |---|---|---|
 | [`harness-md`](skills/harness-md/SKILL.md) | Model-invoked | Reads, writes, and validates a `HARNESS.md`; ships the validator script. |
-| [`harness-design`](skills/harness-design/SKILL.md) | User-invoked | Produces or revises a project's `HARNESS.md`: reads the repository, asks once for what it cannot see, drafts the whole design with defaults, and waits for one approval. |
-| [`harness-build`](skills/harness-build/SKILL.md) | User-invoked | Turns a `HARNESS.md` into the harness, layer by layer, or migrates an existing harness to it. |
-| [`harness-extract`](skills/harness-extract/SKILL.md) | User-invoked | Writes the `HARNESS.md` that describes the harness a project already has. |
-| [`harness-audit`](skills/harness-audit/SKILL.md) | User-invoked | Diagnoses a harness: format, drift between the design and the repository, and whether the design fits the project. Changes nothing. |
+| [`harness-create`](skills/harness-create/SKILL.md) | User-invoked | Gives a project its harness: reads the repository, settles the design with you in rounds, takes reference files, and builds layer by layer from an approved plan. |
+| [`harness-improve`](skills/harness-improve/SKILL.md) | User-invoked | Inventories and analyses an existing harness, reports what it finds, then repairs, hardens, thins, or migrates it with you. Can stop at the report. |
+| [`harness-distill`](skills/harness-distill/SKILL.md) | User-invoked | Writes all or part of your project's harness as one or several `HARNESS.md` files, as it is or as a portable design. |
+| [`harness-adopt`](skills/harness-adopt/SKILL.md) | User-invoked | Reads a project you want to imitate, without running anything from it, and writes its design as a reference for the other entries. |
 | [`harness-architecture`](skills/harness-architecture/SKILL.md) | Model-invoked | The methodology: why each layer exists, where a rule belongs, how a project's context decides how much each layer does. |
 | [`environment-building`](skills/environment-building/SKILL.md) | Model-invoked | The Environment layer: isolation, credentials, tools, and what the agent can reach. |
 | [`knowledge-building`](skills/knowledge-building/SKILL.md) | Model-invoked | The Knowledge layer: the `AGENTS.md` entrypoint, knowledge files, and the links between them. |
@@ -149,11 +159,14 @@ Entries come in by pull request.
 | [`lightweight-spec-workflow`](skills/lightweight-spec-workflow/SKILL.md) | Model-invoked | Agreeing on one change with plan mode or a `SPEC.md`, without a spec framework. |
 | [`project-skill-building`](skills/project-skill-building/SKILL.md) | Model-invoked | Writing and repairing the skills a project keeps for its own agents. |
 
-Claude Code also gets the agent
-[`harness-verifier`](com.anthropic.claude-code/agents/harness-verifier.md),
-which reads a freshly built harness back in a clean context
-and reports the gaps. Codex and Antigravity plugins cannot include agents yet,
-so the workflows fall back to an ordinary subagent there.
+Claude Code also gets two read-only agents.
+[`harness-verifier`](com.anthropic.claude-code/agents/harness-verifier.md)
+reads a freshly built harness back in a clean context and reports the gaps.
+[`harness-reader`](com.anthropic.claude-code/agents/harness-reader.md)
+reads a project from outside and reports what it finds,
+without following anything that project's files tell an agent to do.
+Codex and Antigravity plugins cannot include agents yet,
+so the entries fall back to an ordinary subagent there.
 
 If you used
 [`harness-builder`](https://github.com/hoshiori-dev/harness-builder),

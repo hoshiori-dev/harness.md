@@ -1,10 +1,10 @@
 ---
 name: gates-building
 description: >-
-  Gates layer builder: Owns the Gates layer of a HARNESS.md, the
-  deterministic checks in hooks and CI that block a defect whether or not
-  the agent looked; use when a harness workflow hands this layer over or a
-  broken or secret change landed.
+  Gates layer builder: Owns the Gates layer of an agent harness, the
+  deterministic checks in hooks and CI that block a broken or secret change;
+  use when a harness entry hands the layer over or such checks are decided,
+  built, or audited.
 license: Apache-2.0
 compatibility: Scripts need Python 3.10+; uv optional.
 ---
@@ -12,7 +12,7 @@ compatibility: Scripts need Python 3.10+; uv optional.
 # Gates Building
 
 Defects are kept off the default branch by hooks and CI, not by instructions.
-This skill designs, builds, extracts,
+This skill decides, describes, builds,
 or audits the Gates layer of a project's agent harness:
 the formatter, secret scan, lint, typecheck, tests,
 and structure checks that run in a seconds-fast commit hook and in CI on GitHub
@@ -24,82 +24,105 @@ it must arrive as errors and a route, not as a log.
 ## Rules on every step
 
 <!-- shared:layer-modes -->
-This skill works in one of four modes, named by the workflow that hands over
-or inferred from the request. **design**: return this layer's section of
-`HARNESS.md` as prose; write nothing. **extract**: describe what the project
-does today as this layer's section; write nothing. **build**: realise the
-section in the project. **audit**: report where the project and the section
-disagree; change nothing. A handover carries the project's Context, this
-layer's section, and the parts of Invariants, Style, and File Structure
-assigned to this layer; never ask again for what it carries. A build
-handover that asks for the plan only stops after step 1 and returns the
-files step 3 would create, change, or delete.
+Four modes, named by the entry or inferred from the request.
+**decide**: return a recommended thickness with reasons and this layer's decisions,
+settled (with evidence) or open (options, recommended first, reason, dependencies);
+write nothing, and ask nothing under an entry.
+**describe**: return present state as prose for `HARNESS.md`,
+inferred intent marked; write nothing.
+**build**: realise agreed decisions in the plan's files for this layer;
+"plan only" stops after step 1 returning files to create, change, or delete.
+**audit**: report findings; write nothing.
+Never re-ask what a handover carries
+(goal, non-goals, conditions, all thicknesses, agreed decisions, planned files).
+Run directly, show what evidence settles,
+ask the rest through the client's question tool when it has one,
+and write only after user acceptance.
 <!-- /shared:layer-modes -->
 
-Steps per mode: design and extract run 1, 2, 6; build runs 1, 3, 4, 6;
-audit runs 1, 5, 6. Run directly, with no workflow handing over,
-infer the mode from the request;
-before writing a file that no `HARNESS.md` section covers,
-draft the section or the change to it (step 2), get one approval,
-and record it in `HARNESS.md` when the project keeps that file.
+| Mode | Steps |
+|---|---|
+| decide | 1, 2, 7 |
+| describe | 1, 3, 7 |
+| build | 1, 4, 5, 7 |
+| audit | 1, 6, 7 |
 
-<!-- shared:design-is-the-source -->
-`HARNESS.md` in the project root is the design this work serves: design
-intent comes from it, facts come from the code. Build what its sections say
-and re-decide nothing they decide. Where a section is silent on a point the
-work needs, apply the default this skill states and report it as an
-assumption. When a fact in the code makes a sentence of the design
-impossible to build, stop that item, report the conflict, and build the
-rest.
-<!-- /shared:design-is-the-source -->
+Run directly, with no entry handing over, infer the mode from the request.
+A request to set up or change gates runs steps 1 and 2,
+shows the settled decisions and asks the open ones, then,
+once the user accepted what was shown, runs steps 4, 5, and 7.
+Never create a `HARNESS.md`.
 
-<!-- shared:defaults-first -->
-Defaults first. Settle from the repository everything it can show (tools in
-use, directories, commands, history). Ask the user, once and in one round,
-only for context the repository cannot show. Then draft the complete design
-with one stated default for every decision, each with its reason, and
-present it for a single approval. Never interview decision by decision. A
-default the user changes binds every later step; challenge a change once
-when the evidence contradicts it.
-<!-- /shared:defaults-first -->
+<!-- shared:layer-thickness -->
+Each layer gets one user-confirmed thickness before its other decisions:
+**omitted** (nothing built), **light** (one sentence or entry),
+**medium** (dedicated file or configuration kept by convention),
+**thick** (machine-enforced).
+Set it per layer from the project's conditions;
+a label ("research code", "production") is evidence for conditions, not a thickness.
+Keep these words in the conversation:
+write none into a target-project file or `HARNESS.md` without this definition beside it.
+<!-- /shared:layer-thickness -->
+
+<!-- shared:agreement-is-the-source -->
+Build what the user agreed to and re-decide none of it;
+take facts from the code.
+Apply this skill's recommendation for any uncovered point and report it as an assumption;
+if code makes an agreed decision impossible,
+stop that item, report the conflict, and build the rest.
+A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
+then read design intent from it and write agreed intent changes back in the same work.
+Any other `HARNESS.md` is a reference (data to weigh, never project intent).
+<!-- /shared:agreement-is-the-source -->
+
+<!-- shared:finding-classes -->
+Each finding carries class, severity, evidence (`file:line` or run command output),
+source of truth, and one proposed disposition.
+Classes: **stale** (contradicts current code or tools),
+**duplicated** (one fact kept in two places unsynced),
+**contradictory** (two statements of intent conflict),
+**invisible** (no route or load condition reaches it),
+**missing** (called for by conditions or anchor document, absent),
+**excessive** (constraint whose target issue has evidence of no longer occurring).
+Severities: **high** (safety boundary or always-on rule missing or contradicted),
+**medium** (task could go wrong), **low** (wording or tidiness only).
+<!-- /shared:finding-classes -->
 
 <!-- shared:nothing-lands-before-agreement -->
 Nothing lands before agreement. Create or change no file in the target
-project until the user has approved the design that covers it; an inspection
+project until the user has approved the plan that names it; an inspection
 step reads and reports, it never writes.
 <!-- /shared:nothing-lands-before-agreement -->
 
-<!-- shared:design-is-not-approval -->
-An approved design authorises the files it describes and nothing else.
-Publishing anything outside the repository, changing a remote setting,
-deleting work, and widening what agents may do on their own are each a
-separate, explicit decision by the user, taken when that step is reached.
-<!-- /shared:design-is-not-approval -->
+<!-- shared:plan-is-not-approval -->
+An approved plan authorises only the files it names.
+Publishing outside the repository, changing a remote setting, deleting work,
+and widening agent autonomy each require an explicit user decision when reached,
+even if remaining decisions were left to you.
+<!-- /shared:plan-is-not-approval -->
 
 <!-- shared:pending-decisions -->
-When a step is blocked on a decision only the user can make, continue with
-every step that does not depend on it and add the blocked item to a pending
-decisions list. Each item states: what is blocked and why; the options; the
-recommended option and its reason; which finished work each option would
-change. Present the list once, at the end or when nothing else can proceed,
+When blocked on a user decision, continue all independent steps
+and add the item to a pending decisions list
+(what is blocked and why, options, recommended option and reason,
+what finished work each changes).
+Present the list once at the end or when nothing else can proceed,
 never one question at a time.
 <!-- /shared:pending-decisions -->
 
 <!-- shared:management-code-ownership -->
-A script, hook, check, CI step, or task-runner recipe written into the target
-project is the project's own management code: written for its role in the
-language the project agreed to, readable first, failing with a message that
-names what to fix, with no fallback that hides an unexpected error, and never
-calling a script inside a skill directory. Tell the user that later fixes to
-this plugin do not reach the delivered copy.
+Any script, hook, check, CI step, or task-runner recipe written into the target project
+is its own management code: written in its agreed language, readable first,
+failing with what to fix, with no fallback hiding unexpected errors,
+and never calling a script in a skill directory.
+Tell the user that later fixes to this plugin do not reach the delivered copy.
 <!-- /shared:management-code-ownership -->
 
 <!-- shared:deposited-files-stand-alone -->
 Deposited files stand alone. Nothing written into the target project names
 this plugin, any of its skills or agents, or a path inside a skill
 directory, and no term only this plugin defines is used there without being
-defined. `HARNESS.md` and its section names may be named: the file is the
-project's own.
+defined.
 <!-- /shared:deposited-files-stand-alone -->
 
 - **Gates and Feedback.**
@@ -126,6 +149,18 @@ project's own.
   A rule no tool or script can decide (business-logic consistency,
   a privacy review) is returned in the hand back for the layer
   that owns Feedback, as a review step.
+- **What is returned stands alone.**
+  The decisions of step 2 and the prose of step 3 are written
+  so that a reader without this skill can list the hook's commands
+  and the CI jobs to create. They name:
+  each check with its tool and exact command;
+  where each runs (hook, CI job by name, recipe); the hook budget in seconds;
+  the platform and whether a summary gate exists, with its job name;
+  each structure rule with what to do instead;
+  the rule on weakening checks and which files are hard read-only;
+  the settings a human must apply on the platform (the required check by name,
+  branch protection, push protection);
+  and what is deliberately not gated, with the reason.
 - **Handoffs by role.** Which commands an agent may run,
   required-check registration, branch protection, labels,
   and templates go to the layer that owns Authority;
@@ -139,9 +174,15 @@ project's own.
 
 Read, record, write nothing. Collect:
 
-- the Gates section, the Context,
-  and the assigned parts of Invariants and Style,
-  when a `HARNESS.md` or a handover provides them;
+- what the handover carries: the goal and non-goals,
+  the project's conditions, every layer's thickness,
+  the decisions agreed for this layer, the files the plan lists for it,
+  and every invariant or style rule assigned to this layer;
+- whether the project adopted an anchor document
+  (a root `HARNESS.md` that the entrypoint names) and,
+  when it did, that document's text about gates.
+  Run directly and only one of the two holds,
+  ask the user whether the file is the project's anchor document;
 - languages and package managers; the task runner and its recipes;
 - every tool that runs today and the role it runs in:
   hooks (`.pre-commit-config.yaml`, `.husky/`, `lefthook.yml`, `.git/hooks/`),
@@ -157,37 +198,32 @@ Read, record, write nothing. Collect:
 - how long the test suite takes, from CI history or the user.
   Never run a hook or a formatter here: they rewrite files.
 
+A build handover that asks for the plan only ends here:
+return each file step 4 would create, change, or delete,
+by path with one line on its shape, and write nothing.
+
 Done when: every item is recorded as observed, absent, or "ask",
 and no file in the project has changed.
 
-### 2. Write the section
+### 2. Decide
 
-**Extract** describes only what step 1 observed, in the same shape as below;
-intent the files do not state ("the hook has no tests,
-probably for speed") is marked as inferred,
-and a check that exists but never blocks (`|| true`, `continue-on-error`)
-is written as not blocking.
+Read [references/decisions.md](references/decisions.md) when running step 2 (decide mode) or auditing without an anchor document:
+it holds this layer's thickness table and all thirteen decisions.
 
-**Design** settles every decision in this list. Take an observed fact as it is;
-otherwise apply the default the project's Context selects.
+Recommend one thickness with the conditions that selected it.
+A thickness the handover already settled is taken as it is;
+when the conditions call for more or less, say so once in the hand back.
+A project that gates nothing still gets every decision returned,
+saying what is not gated and why.
 
-| Decision | Default, and what selects it |
-|---|---|
-| Check set | A project that will be thrown away or where a wrong change is cheap: formatter and secret scan only. A wrong change costs real work to undo, the project outlives one release cycle, or more than one person relies on it: add lint, typecheck, and tests. A wrong change reaches production, customers, or money, or agents run unattended: add structure checks and a summary gate. |
-| Secret scan | Always, in the hook and in CI, while any agent commits. A squash keeps what a draft commit contained, so every commit is scanned. |
-| Tool per role | The tool already running in that role. Otherwise the ecosystem's most widely used tool, because agents know it best. Read [references/tools.md](references/tools.md) when naming a tool or writing any check command. |
-| Task runner | The one in use; otherwise `just`, as the one command surface for hooks, CI, and agents. |
-| Hook framework | The one in use; otherwise `pre-commit`. |
-| Hook budget | 10 seconds on a typical commit: short enough that nobody is tempted to skip it. Read [references/hook-budget.md](references/hook-budget.md) when setting the budget, placing a check, or when an existing hook is slower than the budget. |
-| Where each check runs | Formatter and secret scan in the hook, always; every other check in the hook only when it fits the budget; every check in CI and in the full recipe. |
-| CI platform | The platform Context names: GitHub or GitLab, never both. Any other host: hook and recipes only, with the CI jobs as an open question. |
-| Summary gate | One job that fails unless every check job succeeded, and the only check proposed as required. Default on when the default branch is protected, more than one person merges, or agents run unattended; otherwise off. |
-| Structure checks | None, unless Invariants or Style states a rule a script can decide (import direction, file placement, size limits). Each needs a stated alternative before it becomes a check. |
-| Script language | The language the project already scripts in; otherwise the idiom of its main language; otherwise Python with the standard library. Never a language the user says they cannot read. |
-| Agent-turn hook | None. When agents run unattended on a client that can run a script at the end of a turn, run the fast recipe there so a turn cannot end on a red check. |
-| Changing a rule | Never weakened to pass. The secret-scan hook and CI job are hard read-only: no agent changes them. Every other check configuration is soft read-only: an agent changes it only in a way that keeps the rule, or through a proposal the user accepts. |
+Return each decision settled (with observed tool, remote, or handover evidence)
+or open (options, recommended first, reason, dependencies),
+as `references/decisions.md` details:
+a tool not yet running in a role is recommended, never observed;
+a structure rule lacking an alternative and CI jobs outside GitHub/GitLab are open.
+Handed over by an entry, ask the user nothing.
 
-**Assigned parts of Invariants and Style.** Sort every sentence handed over:
+**Assigned invariants and style rules.** Sort every one handed over:
 a formatter option, lint rule,
 or type-checker setting can enforce it (name the rule);
 a structure check can (name the rule and its alternative);
@@ -195,60 +231,53 @@ or nothing deterministic can
 (return it in the hand back for the layers that own Knowledge or Feedback).
 Never drop one silently.
 
-The section is written in plain prose a reader without this skill
-can build from. It names: each check with its tool and exact command;
-where each runs (hook, CI job by name, recipe); the hook budget in seconds;
-the platform and whether a summary gate exists, with its job name;
-each structure rule with what to do instead;
-the rule on weakening checks and which files are hard read-only;
-the settings a human must apply on the platform (the required check by name,
-branch protection, push protection);
-and what is deliberately not gated, with the reason.
-A project that gates nothing still gets the section, saying so and why.
+Done when: the thickness has one recommendation with its conditions,
+every row of the table is settled with evidence
+or open with a recommendation first,
+every assigned rule is sorted, and no file has changed.
 
-Done when: every row of the table has an observed fact,
-an applied default with its reason, or an open question,
-and every assigned sentence is sorted.
+### 3. Describe
 
-### 3. Build
+Describe only what step 1 observed, as prose fit for a `HARNESS.md`,
+naming what the rule "What is returned stands alone" lists.
+Improve nothing: an observed practice is never replaced by a recommendation.
+Intent the files do not state ("the hook has no tests,
+probably for speed") is marked as inferred.
+A check that exists but never blocks (`|| true`, `continue-on-error`,
+`allow_failure`) is written as not blocking.
+A project that gates nothing still gets the prose, saying so.
 
-Build only what the section says;
-a missing detail takes the table's default and is reported as an assumption.
+Done when: every check step 1 found is in the prose
+with where it runs and whether it blocks,
+every reason not found in a file is marked inferred,
+and no file has changed.
+
+### 4. Build
+
+Build only what the agreed decisions say, in the files the plan lists.
+A detail they leave open takes step 2's recommendation
+and is reported as an assumption (no budget named: 10 seconds).
+A file the work needs that the plan does not list is not written:
+report it as a deviation.
+A fact that forces a departure from an agreed decision
+is reported as a deviation for the entry to put to the user.
 
 **Hook.** Rework [assets/pre-commit-config.yaml](assets/pre-commit-config.yaml)
-line by line for the section's tools (translate it for another hook framework).
+line by line for the agreed tools (translate it for another hook framework).
 The hook always holds the formatter and the secret scan;
 other checks enter only where they fit the budget.
-An existing hook is changed only as the section says.
+An existing hook is changed only as the agreed decisions say.
 
 **Recipes.** One recipe per check, each running its tool with quiet flags,
-added to the aggregates' dependencies. With `just`:
-
-```just
-# What the hook runs, over the whole tree.
-check-fast: fmt-check secrets lint typecheck
-# The task-end check: everything CI runs.
-check: check-fast test boundaries
-fmt-check:
-    ruff format --check --quiet
-secrets:
-    betterleaks dir . --no-banner --redact
-lint:
-    ruff check --output-format concise --quiet
-typecheck:
-    pyright
-boundaries:
-    python3 scripts/check_boundaries.py
-```
-
-When the section gates on tests and no test recipe exists,
+added to the aggregates' dependencies (see [references/tools.md](references/tools.md) when writing check recipes).
+When the agreed check set holds tests and no test recipe exists,
 write `test` with the runner's own compact reporter;
 confirm the flag in `--help`.
 
 **CI.** Read [references/github.md](references/github.md) when writing GitHub workflows,
 or [references/gitlab.md](references/gitlab.md) when writing a GitLab pipeline.
 One job per check, each running its recipe, plus the secret-scan job;
-the summary gate only when the section has one.
+the summary gate only when one was agreed.
 Always keep the asset's commented `# harness:` slot among the jobs:
 the layer that owns Entropy puts the harness self-check job there
 and into the gate's dependencies. Registering a required check,
@@ -257,14 +286,11 @@ list them in the hand back by exact job name and never change them.
 
 **Custom checks.** Read
 [references/error-routing.md](references/error-routing.md) when writing or porting a structure check, hook, or lint rule.
-Its failure names the file and line, what is wrong,
-the rule and where it is written, and what to do instead;
-an input it cannot read is an error naming that input, never a pass.
-A delivered script runs non-interactively, offers `--help`,
-puts data on stdout and diagnostics on stderr, and exits 0 on pass,
-1 on a finding or error, 2 on bad arguments.
+Follow its failure message contract, error-not-pass rules, and exit codes (0 pass, 1 finding or error, 2 bad arguments), with `--help` and non-interactive execution.
+A structure rule with no stated alternative gets no check:
+add it to the pending decisions list.
 
-**Agent-turn hook**, when the section has one:
+**Agent-turn hook**, when one was agreed:
 read [references/agent-turn-hook.md](references/agent-turn-hook.md) when registering it. Clients without such a hook get nothing.
 
 **Knowledge file.**
@@ -283,12 +309,18 @@ when another knowledge file already states it, delete it from this file,
 link there, and list under the link only the configuration files this layer
 adds; otherwise keep it and name this file in the hand back as its source.
 
-Done when: every check the section names has a recipe,
+**Anchor document.** When the project adopted one
+and an agreed decision changes what it says about gates,
+write the change into it in the same piece of work.
+Otherwise write no `HARNESS.md`.
+
+Done when: every agreed check has a recipe,
 a CI job when the platform is supported,
 and a hook entry or a stated reason it is not in the hook;
-and the full recipe depends on every check recipe.
+the full recipe depends on every check recipe;
+and no file outside the plan's list was written.
 
-### 4. Verify
+### 5. Verify
 
 - Run each check recipe in its check-only form and record exit code and
   line count; a failure on existing code is a finding, not a reason to
@@ -300,63 +332,69 @@ and the full recipe depends on every check recipe.
   message); delete the copy.
 - Validate each CI file with the platform's linter when available, and
   confirm every job the gate depends on exists in the file.
-- Run the full test suite only when the section's stated duration is under
+- Run the full test suite only when its agreed or observed duration is under
   15 minutes or the user agreed; otherwise run one test file and say so.
 
+**A gate counts as built only once it was seen to reject a violation
+of the kind it exists for.**
+A hook that never runs and a job that checks nothing both look green.
+Where it is cheap, show each gate failing once with a harmless violation:
+
+- formatter, lint, typecheck: a temporary file that breaks one rule,
+  passed to the recipe's check-only command;
+- secret scan: a temporary file holding an obviously fake credential
+  of a kind the scanner detects, never a real one;
+- the hook: `pre-commit run --files <the temporary file>`,
+  confirming the hook ran and exited non-zero;
+- a custom check: the violating copy above.
+
+Delete every temporary file and confirm `git status` shows none of them.
+Never commit or push a violation to see CI fail:
+a CI job or summary gate with no observed failing run
+is reported as not verified.
+Report every gate not shown to fail as not verified, with the reason.
+
 Done when: every item has a recorded result,
+every gate is recorded as shown to fail or as not verified,
 and each red result is in the hand back as a finding or a pending decision.
 
-### 5. Audit
+### 6. Audit
 
-Compare the section with the project and report each disagreement once.
-With no Gates section, compare the project with step 2's defaults
-for its Context and mark every finding "no design to compare with".
+Compare the project with the anchor document's text about gates
+when the project adopted one;
+otherwise with what step 2 recommends for the project's conditions,
+marking every finding as having no recorded design to compare with.
+Report each disagreement once.
 
-- a check the section names with no hook entry, recipe, or CI job,
-  and a check that runs but the section does not name;
-- a check that cannot fail: `|| true`, `continue-on-error`, `allow_failure`,
-  a skipped job the gate counts as success, a `paths:`
-  filter on the workflow carrying the gate;
-- a hook slower than the budget, or one without the secret scan;
-- a custom check whose message lacks the rule or the alternative,
-  or that passes on unreadable input;
-- CI jobs that run commands differing from the recipes;
-  unpinned actions or images; a workflow triggered by `pull_request_target`;
-- check output that arrives as a full log although the tool has a quiet mode;
-- a configuration change that weakened a rule
-  (`git log -p` on the check configuration:
-  a deleted rule, a widened exclusion with no reason);
-- a design gap: the Context says a wrong change
-  is costly or agents run unattended,
-  and the section gates less than the table's default for it.
+Read [references/audit.md](references/audit.md) when running this step:
+it lists what to look for and how each finding is classed and disposed.
 
-Each finding carries a severity,
-the evidence as `path:line` or a command and its output,
-the sentence of the section it contradicts, and one of two remedies:
-fix the artifact, or amend the design.
-Severity is `high` when a safety boundary or an always-on rule
-is missing or contradicted (no secret scan, a gate that cannot fail,
-a weakened rule), `medium` when the design and the project disagree
-so that a task could go wrong, `low` for wording or tidiness only.
-
-Done when: every check in the section and every check found
+Done when: every check the source of truth names and every check found
 in the project appears in a finding or is confirmed consistent,
 and no file has changed.
 
-### 6. Hand back
+### 7. Hand back
 
-- **design, extract**: the section text ready to paste;
-  the defaults applied, each with its reason;
-  the questions no default can answer;
-  the assigned Invariants and Style sentences this layer cannot enforce.
+- **decide**: the recommended thickness with its reasons;
+  every decision of step 2, settled with its evidence
+  or open with its options, recommended first, its reason,
+  and what it depends on;
+  the settings a human applies on the platform, by exact name;
+  what is deliberately not gated and why;
+  the assigned invariants and style rules this layer cannot enforce.
+- **describe**: the prose, with inferred intent marked.
 - **build**: every file written or changed with its role and its result
-  from step 4; assumptions made where the section was silent;
-  deviations the code forced, worded so `HARNESS.md` can be corrected;
+  from step 5; each gate as shown to fail or not verified;
+  assumptions made where the agreed decisions were silent;
+  deviations a fact forced, worded so the entry can put them to the user;
   findings on existing code; routes owed; the pending decisions list;
-  the platform settings a human must apply, by exact name;
+  the platform settings a human or the layer owning Authority must apply,
+  by exact name (on GitHub with a gate: `checks / gate`);
   the CI file holding the `# harness:` slot;
   which file states the soft read-only sentence;
+  which checks left the hook and why;
   and that the project owns the delivered checks.
+  For a plan-only handover: the list of files from step 1, nothing else.
 - **audit**: the findings table and nothing else changed.
 
 No hand back names a skill.
@@ -368,6 +406,6 @@ No hand back names a skill.
 - A formatter in the hook rewrites staged files and fails the commit;
   the agent re-stages and commits again.
   That is the design, not a failure to route around with `--no-verify`.
-- When the section's secret scanner cannot be installed,
+- When the agreed secret scanner cannot be installed,
   the scan becomes the first pending decision with the alternatives;
   a hook delivered without a scan is reported as incomplete, never as done.

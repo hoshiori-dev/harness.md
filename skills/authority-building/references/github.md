@@ -1,7 +1,7 @@
 # GitHub
 
 Read when the target's platform is GitHub:
-before writing the platform half of a section, before writing the files,
+before settling or describing the platform decisions, before writing the files,
 before any remote write, and before auditing a remote setting.
 
 ## What the plan and visibility allow
@@ -31,8 +31,8 @@ an asset whose condition is not met is not delivered.
 | [issue-template-config.yml](../assets/github/issue-template-config.yml) | `.github/ISSUE_TEMPLATE/config.yml` |
 | [pull-request-template.md](../assets/github/pull-request-template.md) | `.github/pull_request_template.md` |
 | [labels.json](../assets/github/labels.json) | `.github/labels.json` |
-| [workflow-labels-sync.yml](../assets/github/workflow-labels-sync.yml) | `.github/workflows/labels.yml`, only when the section has a workflow run the sync |
-| [codeowners](../assets/github/codeowners) | `.github/CODEOWNERS`, only when the section includes it |
+| [workflow-labels-sync.yml](../assets/github/workflow-labels-sync.yml) | `.github/workflows/labels.yml`, only when the agreed decisions have a workflow run the sync |
+| [codeowners](../assets/github/codeowners) | `.github/CODEOWNERS`, only when the agreed decisions include it |
 | [knowledge-github-workflow.md](../assets/github/knowledge-github-workflow.md) | `github-workflow.md` in the knowledge directory |
 | [platform-settings.md](../assets/github/platform-settings.md) | `platform-settings.md` in the knowledge directory: the settings register |
 | [project-skill.md](../assets/github/project-skill.md) | `github-project-workflow/SKILL.md` in the project skills directory |
@@ -89,7 +89,7 @@ written to a file outside the repository and shown as the delta:
 Apply with `gh api -X POST repos/OWNER/REPO/rulesets --input <file>`
 (an existing ruleset: `-X PUT repos/OWNER/REPO/rulesets/<id>`),
 read back with `gh api repos/OWNER/REPO/rulesets/<id>`.
-The approval count comes from the section; 0 suits a single maintainer.
+The approval count comes from the agreed decisions; 0 suits a single maintainer.
 An empty `bypass_actors` binds admins too;
 legacy branch protection exempts admins unless `enforce_admins` is on.
 

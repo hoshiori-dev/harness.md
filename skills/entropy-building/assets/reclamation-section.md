@@ -1,6 +1,6 @@
 ## Harness Reclamation
 
-Run at every monthly release, before tagging. Last run: never. <!-- # CONFIGURE: the anchor event and cadence the section names; the absolute date of the first sweep (YYYY-MM-DD), "never" only while the user defers it. -->
+Run at every monthly release, before tagging. Last run: never. <!-- # CONFIGURE: the agreed anchor event and cadence; the absolute date of the first sweep (YYYY-MM-DD), "never" only while the user defers it. -->
 
 Walk the entrypoint, every knowledge file, every project skill, and the open
 `type:harness-drift` issues, and hunt: <!-- # CONFIGURE: the drift label, or `.agents/drift.md` without an issue tracker. -->
@@ -16,7 +16,7 @@ Walk the entrypoint, every knowledge file, every project skill, and the open
    blocks no longer occurs": a lint rule for a long-fixed bug that has
    blocked nothing since, a skill for a finished migration, a route to a
    retired module.
-7. Design drift: read `HARNESS.md` section by section against the harness. <!-- # CONFIGURE: delete item 7 when the project keeps no HARNESS.md. -->
+7. Design drift: read `HARNESS.md` section by section against the harness. <!-- # CONFIGURE: delete the whole of item 7 when the project has no anchor document. -->
    Where a harness file departs from what a section intends, fix the file,
    or change `HARNESS.md` first and then the file. Where the code shows a
    sentence of `HARNESS.md` is no longer true as a fact (a command, a
@@ -30,7 +30,7 @@ update, reconnect, merge, thin, or delete, with its evidence.
 Thin only after the user approves the finding and its evidence;
 delete only on current, unambiguous evidence (a path that does not exist,
 a command that fails) or the user's approval; otherwise report it.
-A change to what `HARNESS.md` intends is the user's decision, never the sweep's.
+A change to what `HARNESS.md` intends is the user's decision, never the sweep's. <!-- # CONFIGURE: delete this sentence when the project has no anchor document. -->
 When repeated agent failures on one instruction prompted the run,
 report the pattern and a recommendation and edit nothing on that basis alone.
 

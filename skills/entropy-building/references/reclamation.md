@@ -1,14 +1,15 @@
 # Reclamation
 
-Read when writing the reclamation decision of the section,
+Read when deciding reclamation,
 when installing or filling the routine, or when a long-lived project has none.
 
 Sync rules catch drift at edit time; reclamation catches what nobody edited.
 The default is on for a project maintained for years or one whose harness
 is heavy (many knowledge files, project skills, and checks),
 and off for anything shorter-lived.
-In audit mode, a long-lived project without it is a finding
-with "amend the design" as the fix; install nothing until the section says so.
+In audit mode, a long-lived project without it is a finding of class missing
+with adding the routine as the proposed disposition;
+install nothing until the user agreed to it.
 
 ## What the routine carries
 
@@ -17,7 +18,8 @@ with "amend the design" as the fix; install nothing until the section says so.
   content unreachable from the entrypoint, triggers that cannot fire,
   over-thick constraints,
   the drift issues or drift file the correction-report rule fills, and,
-  when the project keeps `HARNESS.md`, the design read against the harness.
+  where the project adopted an anchor document,
+  that document read against the harness.
 - **The thinning signal**: "what this constraint blocks no longer occurs".
   A lint rule for a bug fixed long ago that has blocked nothing since
   is reported with the disposition "thin" and the evidence (rule, history,
@@ -29,7 +31,7 @@ with "amend the design" as the fix; install nothing until the section says so.
   Thinning needs the user's approval of the finding and its evidence;
   deletion needs current, unambiguous evidence (a path that does not exist,
   a command that fails) or the user's approval.
-  A change to what `HARNESS.md` intends is always the user's.
+  A change to what an anchor document intends is always the user's.
 - **Cadence anchored to a team rhythm**: a release, a retro, a sprint end.
   Monthly for fast-moving projects, quarterly for slower ones;
   the anchor gives the routine a trigger instead of an intention.

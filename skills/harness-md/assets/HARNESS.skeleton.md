@@ -5,7 +5,7 @@ description: "{{DESCRIPTION}}"  # CONFIGURE: what this design is and what kind o
 
 # {{TITLE}} <!-- # CONFIGURE: free text; usually the project or design name. -->
 
-<!-- Introduction, in ordinary paragraphs, with no heading of its own. Who the harness serves, what it is meant to achieve, what it deliberately leaves unmanaged, and which decisions always stay with a human. -->
+<!-- Introduction, in ordinary paragraphs, with no heading of its own. Who the harness serves, what it is meant to achieve, what it deliberately leaves unmanaged, and which decisions always stay with a human. When the file covers only part of a harness, which part. -->
 
 ## Context
 

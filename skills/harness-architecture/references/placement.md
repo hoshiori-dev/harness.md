@@ -52,7 +52,9 @@ A rule a machine can enforce does not belong in prose.
   a line in the root entrypoint that names its trigger;
   a hook or a sync skill only when the project has many such rules.
 - The design of the harness itself (why a layer is the way it is):
-  the project's `HARNESS.md`, which no ordinary task loads.
+  the project's anchor `HARNESS.md` where it adopted one,
+  which no ordinary task loads;
+  otherwise the reason stays beside the rule it explains.
 - An entrypoint or a draft of one: apply the lines above to each block,
   then report the resulting line count against the budget (about 100 lines;
   about 200 when it is the whole harness of a small project).

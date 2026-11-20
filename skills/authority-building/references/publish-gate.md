@@ -55,4 +55,4 @@ Label syncs and setting changes follow the dry-run, go-ahead, apply,
 readback sequence instead: their payload is the delta the user approves.
 Any issue, comment, request, or push the build makes passes this gate first,
 and the go-ahead to make it is a separate decision by the user
-that the approved design does not contain.
+that the approved plan does not contain.

@@ -18,7 +18,7 @@ Agent 才会打开它。
 - [格式规范](spec/spec.zh.md)；
 - [hub](hub/)，一组拿来就能用的设计；
 - `harness-md`，面向 Claude Code、Codex 和 Antigravity 的插件：
-  为项目写出这份文件，按文件把 harness 建起来，再拿两者互相核对；
+  让你和编码 Agent 一起为项目定出并搭好 harness，也能把设计写成文件；
 - [网站](https://hoshiori-dev.github.io/harness.md/zh/)，可以在上面搜索 hub。
 
 ## 不装任何东西，先试一下
@@ -85,16 +85,25 @@ Agent 没装插件、不了解这个格式，也能照着这份文件做。
 
 | 你想 | 用 |
 |---|---|
-| 为新项目做好 Agent 开发的准备 | 先 `harness-design`，再 `harness-build` |
-| 查出现有配置哪里有问题并修好 | 先 `harness-audit`，再 `harness-design` 和 `harness-build` |
-| 持续改进一个已经在用 Agent 的项目 | 运行 `harness-audit`，告诉它你看到了什么问题 |
-| 把一个项目现有的设计写下来（自己的项目，或者想学习的项目） | `harness-extract` |
-| 让项目与一份给定的 `HARNESS.md` 一致 | `harness-build` |
+| 给项目搭一套 harness，不管是新项目还是有多年历史的项目 | `harness-create` |
+| 搭的时候参考 hub 里或别的团队的一份设计 | `harness-create` 或 `harness-improve`，附上文件的地址或路径 |
+| 查出现有配置哪里有问题，需要的话顺手修好 | `harness-improve` |
+| 把自己项目的全部或部分设计写下来，用来分享或留存 | `harness-distill` |
+| 想要一套和另一个项目类似的 harness | 先 `harness-adopt`，再 `harness-create` 或 `harness-improve` |
 
-这四个 skill 是工作流，只在你点名调用时运行：
-在 Claude Code 里输入 `/harness-md:harness-design`，
-在 Codex 里输入 `$harness-design`。
-工作流会把设计的各层（Environment、Knowledge 等）分别交给熟悉那一层的 skill。
+这四个 skill 是入口，只在你点名调用时运行：
+在 Claude Code 里输入 `/harness-md:harness-create`，
+在 Codex 里输入 `$harness-create`。
+
+入口不会直接甩给你一份写好的设计让你批准。
+它先读仓库，证据足以定下来的就直接定，并把这些决定展示给你；
+其余的一轮一轮问你：先是目标和项目的条件，再是每一层做到多厚，
+最后是每一层里面的具体决定。
+每一轮结束，你可以改掉某个决定、继续下一轮，或者把剩下的交给 Agent。
+在你批准一份列出每个文件的计划之前，什么都不会写入。
+
+任何入口都不要求你的项目里有 `HARNESS.md`，
+除非你要一份锚定文档，否则也不会在项目里留下一份。
 
 ## 校验一个文件
 
@@ -116,10 +125,10 @@ uv run skills/harness-md/scripts/lint_harness_md.py path/to/HARNESS.md
 | Skill | 调用方式 | 简介 |
 |---|---|---|
 | [`harness-md`](skills/harness-md/SKILL.md) | 模型调用 | 读、写、校验 `HARNESS.md`；附带校验脚本。 |
-| [`harness-design`](skills/harness-design/SKILL.md) | 用户调用 | 产出或修订项目的 `HARNESS.md`：先读仓库，读不出来的一次问清，每项决定都给出默认值，起草整份设计，你批准一次即可。 |
-| [`harness-build`](skills/harness-build/SKILL.md) | 用户调用 | 按 `HARNESS.md` 一层一层建成 harness，或让现有的 harness 向它看齐。 |
-| [`harness-extract`](skills/harness-extract/SKILL.md) | 用户调用 | 把项目现有的 harness 写成一份 `HARNESS.md`。 |
-| [`harness-audit`](skills/harness-audit/SKILL.md) | 用户调用 | 诊断 harness：格式，设计与仓库之间的漂移，设计是否适合这个项目。不改任何东西。 |
+| [`harness-create`](skills/harness-create/SKILL.md) | 用户调用 | 给项目搭一套 harness：读仓库，和你一轮一轮定下设计，可以带参考文件，按批准的计划一层一层建。 |
+| [`harness-improve`](skills/harness-improve/SKILL.md) | 用户调用 | 盘点并分析现有的 harness，报告发现的问题，再和你一起修复、加固、减薄或迁移。可以只出报告就停。 |
+| [`harness-distill`](skills/harness-distill/SKILL.md) | 用户调用 | 把你项目的全部或部分 harness 写成一份或多份 `HARNESS.md`，可以如实描述，也可以写成可移植的设计。 |
+| [`harness-adopt`](skills/harness-adopt/SKILL.md) | 用户调用 | 读一个你想模仿的项目，不运行其中任何东西，把它的设计写成参考，交给其他入口使用。 |
 | [`harness-architecture`](skills/harness-architecture/SKILL.md) | 模型调用 | 方法论：每一层为什么存在，一条规则该放在哪里，项目背景怎样决定每一层做多少。 |
 | [`environment-building`](skills/environment-building/SKILL.md) | 模型调用 | Environment 层：隔离、凭证、工具，以及 Agent 能碰到什么。 |
 | [`knowledge-building`](skills/knowledge-building/SKILL.md) | 模型调用 | Knowledge 层：`AGENTS.md` 入口、知识文件，以及它们之间的指引。 |
@@ -134,11 +143,13 @@ uv run skills/harness-md/scripts/lint_harness_md.py path/to/HARNESS.md
 | [`lightweight-spec-workflow`](skills/lightweight-spec-workflow/SKILL.md) | 模型调用 | 不用规格框架，靠计划模式或一份 `SPEC.md` 对齐一次变更。 |
 | [`project-skill-building`](skills/project-skill-building/SKILL.md) | 模型调用 | 编写和修复项目留给自己 Agent 用的 skill。 |
 
-Claude Code 版的插件另外带一个 Agent：
-[`harness-verifier`](com.anthropic.claude-code/agents/harness-verifier.md)。
-它在干净的上下文里把刚建好的 harness 重读一遍，报告缺口。
+Claude Code 版的插件另外带两个只读的 Agent。
+[`harness-verifier`](com.anthropic.claude-code/agents/harness-verifier.md)
+在干净的上下文里把刚建好的 harness 重读一遍，报告缺口。
+[`harness-reader`](com.anthropic.claude-code/agents/harness-reader.md)
+读取外部的项目并报告所见，不执行那个项目的文件对 Agent 提出的任何要求。
 Codex 和 Antigravity 的插件目前还不能包含 Agent，在这两个客户端里，
-工作流改用普通的子 Agent。
+入口改用普通的子 Agent。
 
 如果你用过
 [`harness-builder`](https://github.com/hoshiori-dev/harness-builder)，

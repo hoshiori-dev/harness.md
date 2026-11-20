@@ -16,14 +16,14 @@ Decide per concern; a project may mix. One mechanism owns each concern:
 a concern a skill owns has no table row.
 
 A table past about ten rows means the project has enough moving parts
-for skills; say so in the section instead of growing it.
+for skills; say so in the hand back instead of growing it.
 
 ## Rows
 
 Derive rows from the copies observed:
 the task-runner recipes, the directory layout, the knowledge index,
-each mirror pair, each generated file, and, when the project keeps `HARNESS.md`,
-the paths its File Structure section requires. Each row states, in one line:
+each mirror pair, each generated file, and, with a self-check,
+the paths it requires. Each row states, in one line:
 
 - **the change**, concrete: "a recipe is added, renamed, or removed",
   never "the docs change";
@@ -56,7 +56,7 @@ is copied back to the source side in the same change, so the source still wins.
 A populated table or a sync skill already owning a concern stays:
 add no second mechanism for it, do not reopen its choice,
 and report any contradiction between it and the copies observed,
-as a question in design mode and as a finding in audit mode.
+as an open decision in decide mode and as a finding in audit mode.
 Only these two count as existing sync mechanisms;
 a reclamation note or a check script owns no concern.
 An empty reserved heading is not an existing mechanism; fill it.

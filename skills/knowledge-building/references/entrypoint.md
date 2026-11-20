@@ -10,7 +10,7 @@ or when the user asks why a line is or is not in the entrypoint.
 1. **Title and purpose**: the project name and one or two sentences.
 2. **Always**: rules whose breach harms whatever the task is. They are few,
    and they come first because attention decays with position. The section
-   ends with the directory map when the design keeps one: the long-lived
+   ends with the directory map when the agreed decisions keep one: the long-lived
    top-level directories, one line each. A map that changes when a file is
    added is too detailed; leave the map out when the names explain
    themselves or an architecture document carries it, and route to that
@@ -18,8 +18,9 @@ or when the user asks why a line is or is not in the entrypoint.
 3. **When To Read What**: one row per situation, naming the file (and the
    section, when only part applies) or the skill to load.
 4. **Validation**: one row per check, naming the recipe.
-5. **Keep In Sync**: only when the design has an Entropy section; then the
-   heading and the marker `<!-- harness: keep-in-sync -->`, nothing else.
+5. **Keep In Sync**: only when the handover says the Entropy layer's
+   thickness is not omitted; then the heading
+   and the marker `<!-- harness: keep-in-sync -->`, nothing else.
    The layer that owns Entropy fills it.
 
 ## The task-type test
@@ -34,9 +35,11 @@ Yes → Always. Only on some tasks → a routing row.
 | Read the schema notes before touching the ORM | Routing row | only ORM work needs it |
 | Release steps and rollback | Routing row to a skill or file | only release tasks |
 
-Invariants handed over from the design pass this test by definition:
-each is one Always line. When an Invariant plainly concerns one kind of task,
-keep the line and report the mismatch as a question for the design.
+Invariants the agreed decisions assign to this layer
+pass this test by definition: each is one Always line.
+When an invariant plainly concerns one kind of task,
+keep the line and report the mismatch in the hand back
+as a question for the user.
 
 ## Routing rows
 
@@ -79,7 +82,7 @@ but only when the directory has no `CLAUDE.md`. So:
 |---|---|
 | No `CLAUDE.md`, every supported Claude Code is v2.1.277 or newer | create none |
 | The project must support an older Claude Code | `CLAUDE.md` whose whole content is `@AGENTS.md` |
-| An existing `CLAUDE.md` holds only rules for all agents | move each rule to Always or a routing row by the task-type test; then remove the file, once the section names the removal and the user gives the go-ahead at that step |
+| An existing `CLAUDE.md` holds only rules for all agents | move each rule to Always or a routing row by the task-type test; then remove the file, once an agreed decision names the removal and the user gives the go-ahead at that step |
 | An existing `CLAUDE.md` holds content for Claude Code alone | first line `@AGENTS.md`, then only that content; everything else moves to `AGENTS.md` |
 
 Claude Code expands the `@AGENTS.md` import, so both files read as one source.
@@ -90,7 +93,7 @@ Never copy a rule into both files.
 The default is none:
 clients disagree on whether and when they load a subdirectory file
 and which file wins, so a rule placed there may never load.
-When the design names one (`packages/api/AGENTS.md`),
+When the agreed decisions name one (`packages/api/AGENTS.md`),
 write it with local orientation only (what the directory holds,
 its local commands by recipe name), open it with "The root `AGENTS.md` governs;
 this file adds local orientation only.", and put no safety, commit,
@@ -101,9 +104,9 @@ or publishing rule in it and nothing that contradicts the root.
 1. Number every line block and classify it:
    Always, routing row plus file, inline, stated by the code (drop),
    stale (drop), duplicate (keep the current copy).
-2. Write the classification into the section,
-   with the four answers for each new file, so one approval covers it.
-3. Move content only as the approved section says;
+2. Return the classification in decide mode, each move as a decision,
+   with the four answers for each new file.
+3. Move content only as the agreed decisions say;
    each moved block leaves a routing row in the same change.
 4. When content moves into an existing architecture document,
    the row names the file and the target heading exactly,
