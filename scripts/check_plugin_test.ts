@@ -101,3 +101,85 @@ test("check_plugin accepts an entry whose spec an unarchived change proposes", (
   assert.equal(archivedOnly.code, 1);
   assertIncludes(archivedOnly.output, ["openspec/specs/skill/alpha/spec.md: catalog-missing-spec"]);
 });
+
+test("check_plugin accepts an entry whose spec an unarchived change removes completely", () => {
+  const root = makeTree(fixturePlugin());
+  rmSync(join(root, "skills/alpha"), { recursive: true });
+  writeTree(root, {
+    "openspec/specs/skill/alpha/spec.md":
+      "# alpha\n\n## Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
+    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
+  });
+  const full = runScript("check_plugin.ts", [], root);
+  assert.equal(full.code, 0, full.output);
+});
+
+test("check_plugin rejects partial, mixed, fenced, empty, and archived spec removals", () => {
+  const mainSpec =
+    "# alpha\n\n## Requirements\n\n### Requirement: First\n\n### Requirement: Second\n";
+
+  // Partial removal
+  const partialRoot = makeTree(fixturePlugin());
+  rmSync(join(partialRoot, "skills/alpha"), { recursive: true });
+  writeTree(partialRoot, {
+    "openspec/specs/skill/alpha/spec.md": mainSpec,
+    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n",
+  });
+  const partial = runScript("check_plugin.ts", [], partialRoot);
+  assert.equal(partial.code, 1);
+  assertIncludes(partial.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+
+  // Mixed delta with ADDED, MODIFIED, or RENAMED
+  for (const extra of [
+    "## ADDED Requirements\n\n### Requirement: Third\n",
+    "## MODIFIED Requirements\n\n### Requirement: Second\n",
+    "## RENAMED Requirements\n- FROM: ### Requirement: A\n- TO: ### Requirement: B\n",
+  ]) {
+    const mixedRoot = makeTree(fixturePlugin());
+    rmSync(join(mixedRoot, "skills/alpha"), { recursive: true });
+    writeTree(mixedRoot, {
+      "openspec/specs/skill/alpha/spec.md": mainSpec,
+      "openspec/changes/drop-alpha/specs/skill/alpha/spec.md": `# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n\n${extra}`,
+    });
+    const mixed = runScript("check_plugin.ts", [], mixedRoot);
+    assert.equal(mixed.code, 1);
+    assertIncludes(mixed.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+  }
+
+  // Requirement inside a fenced code block does not satisfy removal
+  const fencedRoot = makeTree(fixturePlugin());
+  rmSync(join(fencedRoot, "skills/alpha"), { recursive: true });
+  writeTree(fencedRoot, {
+    "openspec/specs/skill/alpha/spec.md": mainSpec,
+    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n```markdown\n### Requirement: Second\n```\n",
+  });
+  const fenced = runScript("check_plugin.ts", [], fencedRoot);
+  assert.equal(fenced.code, 1);
+  assertIncludes(fenced.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+
+  // Requirement-less main spec
+  const emptyRoot = makeTree(fixturePlugin());
+  rmSync(join(emptyRoot, "skills/alpha"), { recursive: true });
+  writeTree(emptyRoot, {
+    "openspec/changes/drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n",
+  });
+  const empty = runScript("check_plugin.ts", [], emptyRoot);
+  assert.equal(empty.code, 1);
+  assertIncludes(empty.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+
+  // Archived removal only
+  const archivedRoot = makeTree(fixturePlugin());
+  rmSync(join(archivedRoot, "skills/alpha"), { recursive: true });
+  writeTree(archivedRoot, {
+    "openspec/specs/skill/alpha/spec.md": mainSpec,
+    "openspec/changes/archive/2026-01-01-drop-alpha/specs/skill/alpha/spec.md":
+      "# Spec Delta\n\n## REMOVED Requirements\n\n### Requirement: First\n\n### Requirement: Second\n",
+  });
+  const archived = runScript("check_plugin.ts", [], archivedRoot);
+  assert.equal(archived.code, 1);
+  assertIncludes(archived.output, ["openspec/specs/skill/alpha/spec.md: catalog-orphan-spec"]);
+});

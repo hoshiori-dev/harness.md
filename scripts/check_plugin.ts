@@ -19,6 +19,10 @@ import {
   SKILL_NAME_RE,
 } from "./lib/plugin.ts";
 
+const FENCE = /^ {0,3}(`{3,}|~{3,})/;
+const H2 = /^ {0,3}##(?!#)[ \t]+(.*)$/;
+const REQUIREMENT = /^ {0,3}###(?!#)[ \t]+Requirement:[ \t]*(.+)$/;
+
 const root = process.cwd();
 const args = process.argv.slice(2);
 
@@ -365,6 +369,7 @@ function checkCatalogs(skills: string[], agents: Map<string, AgentFile[]>) {
       });
     }
     const proposed = proposedSpecs(catalog);
+    const removed = removedSpecs(catalog, dir, specNames);
     for (const name of implemented) {
       if (!specNames.includes(name) && !proposed.has(name)) {
         findings.add({
@@ -378,12 +383,14 @@ function checkCatalogs(skills: string[], agents: Map<string, AgentFile[]>) {
       }
     }
     for (const name of specNames) {
-      if (!implemented.includes(name)) {
+      if (!implemented.includes(name) && !removed.has(name)) {
         findings.add({
           file: `openspec/specs/${catalog}/${name}/spec.md`,
           rule: "catalog-orphan-spec",
-          problem: `spec exists but ${where.replace("<name>", name)} is not implemented.`,
-          fix: "implement it, or archive a change that removes the spec.",
+          problem:
+            `spec exists but ${where.replace("<name>", name)} is not implemented, ` +
+            "and no unarchived change removes every requirement of the spec.",
+          fix: "implement it, or remove the spec through an OpenSpec change.",
         });
       }
     }
@@ -404,6 +411,88 @@ function proposedSpecs(catalog: string): Set<string> {
     if (!isDirectory(dir)) continue;
     for (const entry of listDir(dir)) {
       if (entry.isDirectory && exists(join(dir, entry.name, "spec.md"))) names.add(entry.name);
+    }
+  }
+  return names;
+}
+
+function specSections(text: string): Map<string, Set<string>> {
+  const sections = new Map<string, Set<string>>();
+  let current: Set<string> | undefined;
+  let fence: { char: string; length: number } | undefined;
+  for (const line of text
+    .replace(/^\uFEFF/, "")
+    .replace(/\r\n?/g, "\n")
+    .split("\n")) {
+    const fenceMatch = FENCE.exec(line);
+    if (fence) {
+      const marker = fenceMatch?.[1];
+      if (
+        marker?.startsWith(fence.char) &&
+        marker.length >= fence.length &&
+        line.trim() === marker
+      ) {
+        fence = undefined;
+      }
+      continue;
+    }
+    if (fenceMatch?.[1]) {
+      fence = { char: fenceMatch[1].charAt(0), length: fenceMatch[1].length };
+      continue;
+    }
+    const h2 = H2.exec(line);
+    if (h2) {
+      const heading = (h2[1] ?? "").replace(/[ \t]+#+[ \t]*$/, "").trim();
+      let set = sections.get(heading);
+      if (!set) {
+        set = new Set();
+        sections.set(heading, set);
+      }
+      current = set;
+      continue;
+    }
+    const req = REQUIREMENT.exec(line);
+    if (req && current) {
+      const name = (req[1] ?? "").replace(/[ \t]+#+[ \t]*$/, "").trim();
+      if (name) current.add(name);
+    }
+  }
+  return sections;
+}
+
+function removesAllRequirements(deltaText: string, mainReqs: Set<string>): boolean {
+  if (mainReqs.size === 0) return false;
+  const sections = specSections(deltaText);
+  if (sections.size !== 1) return false;
+  const removed = sections.get("REMOVED Requirements");
+  if (!removed) return false;
+  return [...mainReqs].every((req) => removed.has(req));
+}
+
+// Entries whose main spec an unarchived change deletes completely: `openspec validate --all
+// --strict` requires the main spec to stay until archive when a delta uses `## REMOVED
+// Requirements`, while `checks / spec-archived` keeps the branch from merging before then.
+function removedSpecs(catalog: string, mainDir: string, specNames: string[]): Set<string> {
+  const changes = join(root, "openspec/changes");
+  const names = new Set<string>();
+  if (!isDirectory(changes)) return names;
+  const mainByName = new Map<string, Set<string>>();
+  for (const name of specNames) {
+    const reqs = specSections(readText(join(mainDir, name, "spec.md"))).get("Requirements");
+    if (reqs && reqs.size > 0) mainByName.set(name, reqs);
+  }
+  if (mainByName.size === 0) return names;
+  for (const change of listDir(changes)) {
+    if (!change.isDirectory || change.name === "archive") continue;
+    const dir = join(changes, change.name, "specs", catalog);
+    if (!isDirectory(dir)) continue;
+    for (const entry of listDir(dir)) {
+      if (!entry.isDirectory) continue;
+      const mainReqs = mainByName.get(entry.name);
+      if (!mainReqs) continue;
+      const deltaFile = join(dir, entry.name, "spec.md");
+      if (!exists(deltaFile)) continue;
+      if (removesAllRequirements(readText(deltaFile), mainReqs)) names.add(entry.name);
     }
   }
   return names;
