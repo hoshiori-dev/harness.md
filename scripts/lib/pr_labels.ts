@@ -7,7 +7,9 @@
 //   spec:pending   the head holds an unarchived change without a valid approval
 //   spec:approved  a write-permission account added it while an unarchived
 //                   change was at the head, and the approval package (every
-//                   blob under the unarchived changes) still hashes the same
+//                   blob under the unarchived changes except each change's
+//                   tasks.md, which is written after approval) still hashes
+//                   the same
 //   spec:archived  no unarchived change remains and this PR adds an archived one
 //
 // The approval is recorded in one comment (marker, status, commit, account,
@@ -114,11 +116,19 @@ export function unarchivedChanges(entries: TreeEntry[]): string[] {
   return [...names].sort();
 }
 
-/** sha256 over "path blob-sha" lines of every blob under the unarchived changes, sorted. */
+/**
+ * sha256 over "path blob-sha" lines of every blob under the unarchived changes, sorted.
+ * A change's own `tasks.md` is left out: tasks are written and ticked after the approval.
+ */
 export async function packageHash(entries: TreeEntry[], changes: string[]): Promise<string> {
   const lines = entries
     .filter(
-      (e) => e.type === "blob" && changes.some((c) => e.path.startsWith(`${CHANGES_DIR}${c}/`)),
+      (e) =>
+        e.type === "blob" &&
+        changes.some(
+          (c) =>
+            e.path.startsWith(`${CHANGES_DIR}${c}/`) && e.path !== `${CHANGES_DIR}${c}/tasks.md`,
+        ),
     )
     .map((e) => `${e.path} ${e.sha}`)
     .sort();
@@ -135,7 +145,7 @@ export function recordBody(
 ): string {
   const tail =
     status === "approved"
-      ? `A maintainer approved the OpenSpec change(s) of this pull request at ${commit}. The pr-labels workflow keeps \`${APPROVED}\` while the files under \`${CHANGES_DIR}\` at the head hash to the same package; a change to them puts \`${PENDING}\` back and marks this record withdrawn.`
+      ? `A maintainer approved the OpenSpec change(s) of this pull request at ${commit}. The pr-labels workflow keeps \`${APPROVED}\` while the files under \`${CHANGES_DIR}\` at the head, each change's \`tasks.md\` aside, hash to the same package; a change to them puts \`${PENDING}\` back and marks this record withdrawn.`
       : `This approval was withdrawn: ${note}. A maintainer re-adds \`${APPROVED}\` to approve the current package.`;
   return [
     RECORD_MARKER,

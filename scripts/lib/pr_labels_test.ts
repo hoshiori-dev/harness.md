@@ -168,6 +168,37 @@ test("a standing approval survives unrelated pushes and dies when the package ch
   );
 });
 
+test("writing and ticking tasks.md keeps a standing approval", async () => {
+  const hash = await packageHash([...ARCHIVE, ...CHANGE], ["add-thing"]);
+  const record: Comment = {
+    id: 7,
+    body: recordBody("approved", HEAD, "maintainer", hash),
+    author: RECORD_AUTHOR,
+  };
+  for (const sha of ["4".repeat(40), "5".repeat(40)]) {
+    const withTasks = await decide(
+      fake({
+        events: [approvedBy("maintainer")],
+        comments: [record],
+        entries: [...ARCHIVE, ...CHANGE, blob("openspec/changes/add-thing/tasks.md", sha)],
+      }),
+      null,
+    );
+    assert.deepEqual(withTasks.state, APPROVED);
+    assert.deepEqual(withTasks.record, undefined);
+  }
+  // Only the change's own task list is left out, not a file of that name deeper in the package.
+  const nested = await decide(
+    fake({
+      events: [approvedBy("maintainer")],
+      comments: [record],
+      entries: [...ARCHIVE, ...CHANGE, blob("openspec/changes/add-thing/specs/tasks.md")],
+    }),
+    null,
+  );
+  assert.deepEqual(nested.state, PENDING);
+});
+
 test("a record approves only the person whose adding of the label stands", async () => {
   const hash = await packageHash([...ARCHIVE, ...CHANGE], ["add-thing"]);
   const record: Comment = {
