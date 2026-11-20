@@ -2,16 +2,16 @@
 
 ## 1. Specification
 
-- [ ] 1.1 Apply edits 1 to 6 of the design to `spec/spec.md`.
+- [x] 1.1 Apply edits 1 to 6 of the design to `spec/spec.md`.
   Verify: `git diff main -- spec/spec.md` touches sections 3 and 4.1 only;
   `grep -n "^### 3\." spec/spec.md` still lists 3.1 to 3.4;
   the "Version:" line reads `1.0.0`;
   `grep -n "repository root\|root directory" spec/spec.md` finds only
   sentences about an anchor document.
-- [ ] 1.2 Mirror the same edits in `spec/spec.zh.md`, section for section.
+- [x] 1.2 Mirror the same edits in `spec/spec.zh.md`, section for section.
   Verify: `just harness-check` passes (mirror heading structure)
   and each edited English paragraph has its Chinese counterpart.
-- [ ] 1.3 Copy `spec/spec.md` over
+- [x] 1.3 Copy `spec/spec.md` over
   `skills/harness-md/references/specification.md`.
   Verify: `cmp` reports no difference and `just skills-check` passes.
 
