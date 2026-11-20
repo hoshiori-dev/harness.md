@@ -71,7 +71,7 @@
   and the four daily spec skills (`openspec-workflow`, `spec-kit-workflow`,
   `lightweight-spec-workflow`, `spec-driven-development`) for anchor-document wording.
   Verify: `just skills-check` and `just test` pass.
-- [ ] 5.2 Merge `main` after PR #15 merges, then copy `spec/spec.md` over
+- [x] 5.2 Merge `main` after PR #15 merges, then copy `spec/spec.md` over
   `skills/harness-md/references/specification.md`.
   Verify: `cmp spec/spec.md skills/harness-md/references/specification.md`
   and `just skills-check` pass.
@@ -83,7 +83,7 @@
   (`en` and `zh` for `index.md`, `skills.md`, `workflows.md`), and run `just gen`.
   Verify: `just gen --check`, `just harness-check`, `just harness-md-lint`,
   `just site-check`, and `just site-build` pass.
-- [ ] 6.2 Reconcile `README.md` and `README.zh.md` after merging `main` (PR #15).
+- [x] 6.2 Reconcile `README.md` and `README.zh.md` after merging `main` (PR #15).
   Verify: `just harness-check` passes.
 
 ## 7. Verification and handoff
@@ -91,7 +91,7 @@
 - [x] 7.1 Verify the package in all three clients (`just clients-validate`).
   Verify: `claude plugin validate`, `agy plugin validate` / `install`,
   and `codex plugin marketplace` pass.
-- [ ] 7.2 Run `just check` after resolving items 1.4, 4.2, 5.2, and 6.2
+- [ ] 7.2 Run `just check` after resolving items 1.4 and 4.2
   (excluding `spec-archived`, which waits for review).
   Verify: `just check-fast`, `just spec-check`, `just site-check`,
   `just site-build`, and `just secrets` exit 0.
