@@ -526,6 +526,11 @@ A gate is a deterministic check that blocks a change
 whether or not the agent looked. Feedback is how the agent finds its mistakes;
 gates are what remains when it did not.
 
+A gate counts as installed only once it has been seen to reject
+a violation of the kind it exists for, at commit time and in CI alike.
+A hook that never runs and a job that checks nothing both look green.
+How each gate is shown to fail is left to the project.
+
 ### Tools
 
 Keep what the project uses. Where nothing exists,
@@ -579,7 +584,8 @@ A separate workflow scans the commits a push or pull request adds for secrets.
 A final job, named `gate` by default, depends on all the others
 and succeeds only when each of them succeeded.
 It fails when any failed, was cancelled, or was skipped:
-a skipped job is not a pass. Branch protection requires only `gate`,
+a skipped job is not a pass. Branch protection requires only this summary job,
+under whatever name the project gave it,
 so adding a job never requires a settings change,
 and a job cannot drop out of the requirement unnoticed.
 
@@ -754,7 +760,8 @@ On GitHub use a ruleset on the default branch;
 on GitLab a protected branch with merge request approval rules.
 
 - changes only through a pull request;
-- the required status check is `gate`, on the latest commit;
+- the required status check is the summary job (Gates),
+  under the name CI actually reports, on the latest commit;
 - at least one approving review, from a code owner for control-plane files,
   with approvals dismissed when new commits arrive;
 - no force pushes, no deletion, no bypass for administrators;

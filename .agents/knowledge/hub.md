@@ -35,8 +35,9 @@ The contract is `openspec/specs/hub/spec.md`; `hub/README.md` (mirror:
 The checks cannot tell whether an entry is good.
 A reviewer, and an agent preparing an entry, asks:
 
-- **Sufficient on its own?**
-  An agent with no skill installed could design and build a harness from it.
+- **Sufficient within its declared scope?**
+  An agent with no skill installed could design and build what the entry
+  covers from it; a partial entry is not faulted for the parts it leaves out.
   Each decision is stated with its reason and the premise it rests on;
   file names, commands, tools, and thresholds appear as examples
   of a decision, never in place of it.

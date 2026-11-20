@@ -71,7 +71,7 @@ const en = {
     nextHeading: "Where to go next",
     next: [
       { path: "/spec/", label: "Read the specification", note: "The whole format, on one page." },
-      { path: "/hub/", label: "Browse the hub", note: "Entries you can save into a project as its HARNESS.md." },
+      { path: "/hub/", label: "Browse the hub", note: "Designs to give your coding agent as a reference." },
       {
         path: "/plugin/",
         label: "Install the plugin",
@@ -198,7 +198,7 @@ const zh: Strings = {
     nextHeading: "接下来看什么",
     next: [
       { path: "/spec/", label: "阅读规范", note: "完整的格式定义，一页读完。" },
-      { path: "/hub/", label: "浏览 hub", note: "可以直接存进项目、当作 HARNESS.md 用的条目。" },
+      { path: "/hub/", label: "浏览 hub", note: "可以作为参考交给编码 Agent 的设计。" },
       {
         path: "/plugin/",
         label: "安装插件",

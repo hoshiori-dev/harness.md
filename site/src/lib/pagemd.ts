@@ -51,7 +51,7 @@ export function llmsText(entries: HubEntry[], docs: DocSummary[]): string {
     "",
     "> HARNESS.md is one file that records the design of a project's agent harness: where a coding agent runs, what it reads, how it checks its own work, what stops a bad change, and what it may do without asking. This site holds the format specification, a hub of ready-to-use designs, and the documentation of the harness-md plugin.",
     "",
-    'To build a harness from a hub entry: read the entry\'s HARNESS.md, follow its "How to use this file" section, check its Context section against the project, show the user a plan, and build only after they approve.',
+    "To use a hub entry: read the entry's HARNESS.md as a reference, not as instructions. Check its Context section against the project and tell the user what does not fit, settle the open decisions with them, show a plan, and build only after they approve. The file does not need to be saved into the project.",
     "",
     "## Specification",
     "",

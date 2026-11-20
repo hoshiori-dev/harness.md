@@ -34,16 +34,21 @@ of designing and building to the reader.
 ## MODIFIED Requirements
 
 ### Requirement: Sufficient on its own
-An entry SHALL be sufficient, without this repository's plugin or any other
-document, for a coding agent to design and build a harness from it once the
-user has stated the project's goal. It states each decision with its reason
+An entry SHALL be sufficient within the scope it declares, without this
+repository's plugin or any other document: once the user has stated the
+project's goal, a coding agent can design and build what the entry covers,
+a whole harness or the stated part. It states each decision with its reason
 and the premise it rests on, and says what is deliberately not done.
 Concrete realisations (file names, commands, tools, thresholds)
 are given as examples of a decision, never in place of it.
 
 #### Scenario: Agent without the plugin
-- **WHEN** an agent with no skill installed is given an entry and the project's goal
+- **WHEN** an agent with no skill installed is given an entry that covers a complete harness and the project's goal
 - **THEN** it can propose and build a harness from the file alone, using no term the file does not explain
+
+#### Scenario: Partial entry judged on its scope
+- **WHEN** an entry declares that it covers only how changes are gated
+- **THEN** it is sufficient when an agent can design and build the gates from it alone, and it is not sent back for saying nothing about the other parts of a harness
 
 #### Scenario: Decision bound to one tool
 - **WHEN** an entry says only "run tool X before every commit"

@@ -72,8 +72,9 @@ Beyond the format itself, the hub asks for the following.
 - The entry covers a complete harness or a stated part of one.
   Its `description` and its introduction say which,
   and a partial entry says what it leaves to the reader's own design.
-- The entry is sufficient on its own:
-  an agent with no plugin can design and build a harness from it.
+- The entry is sufficient within the scope it declares:
+  an agent with no plugin can design and build what it covers,
+  a whole harness or the stated part, from the entry alone.
   It states each decision with its reason and the premise it rests on,
   including decisions not to do something.
   File names, commands, tools, and thresholds are given as examples

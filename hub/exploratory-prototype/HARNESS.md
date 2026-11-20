@@ -325,6 +325,10 @@ and what it could not verify.
 
 A gate is a check that blocks a change automatically.
 This design keeps one, and omits the rest on purpose.
+A gate counts as installed only once it has been seen to work:
+the hook is shown to run on a checkpoint commit and to reject
+a harmless fake secret. A hook that never runs looks the same
+as one that finds nothing.
 
 **Kept: the secret scan on every commit.**
 A pre-commit hook scans the staged files

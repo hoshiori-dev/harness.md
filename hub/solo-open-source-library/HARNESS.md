@@ -431,6 +431,12 @@ For this project the binding gate is CI on the pull request.
 Nothing local can be required of a contributor,
 so local hooks are a convenience and CI is the boundary.
 
+A gate counts as installed only once it has been seen to reject
+a violation of the kind it exists for.
+A job that has never failed may be checking nothing,
+and a green run cannot tell the two apart.
+How each gate is shown to fail is left to the project.
+
 ### In CI
 
 Tools follow the project; where none exists,
