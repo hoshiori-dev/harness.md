@@ -47,7 +47,7 @@ const en = {
     whatHeading: "What a HARNESS.md is",
     what: [
       "A <code>HARNESS.md</code> records the design of a project's agent harness: where a coding agent runs, what it reads, how it checks its own work, what stops a bad change, and what it may do without asking. The entrypoint file, the permission files, the hooks, and the CI configuration are built from it.",
-      "You can use one in two ways. As a template: save a file from the hub in your project root, tell your coding agent what the project is for, and have it check the file's Context section against your project before it builds the harness. Delete the file afterwards if you like. Or as an anchor document: keep it in the repository as the project's lasting record of the design, change it rarely, and open it only to check the harness for drift or to improve it.",
+      "Most often a file is a portable design. You write one to hand all or part of a project's harness design to others, you give one from the hub to your coding agent as a reference while it designs your project's harness with you, or you capture the design of a project you want to imitate without copying its implementation. A project may also choose to keep one in its root as an anchor document: the lasting record of its design, changed rarely and opened only to check the harness for drift or to improve it. A project needs no file of its own.",
       "The specification is there to help you write a <code>HARNESS.md</code>; reading one does not depend on it. An agent that has never seen the specification, with no plugin installed, can still read the file and act on it.",
     ],
     skeletonHeading: "What is in the file",
@@ -93,7 +93,7 @@ const en = {
   },
   hub: {
     title: "Hub",
-    lead: "Each entry is a complete HARNESS.md file, written so that a harness can be built from the file alone. Save one in your project root, tell your coding agent what the project is for, and have it check the Context section against your project before it builds.",
+    lead: "Each entry is a HARNESS.md file: a design for a harness, or for one stated part of one, with the reason for every decision. Give one to your coding agent as a reference, tell it what the project is for, and have it check the Context section against your project before it proposes anything.",
     contribute: "Entries are added by pull request to the {link}.",
     contributeLink: "hub directory on GitHub",
     back: "All hub entries",
@@ -117,14 +117,14 @@ const en = {
     heading: "Use it with your agent",
     lead: "Paste this prompt into your coding agent. The agent reads the entry online, so there is nothing to download. Say what the project is for in the box below before you copy, or type it after you paste.",
     text: (url: string) =>
-      `Read this file and use it as the design for this project's agent harness:\n${url}\n\nFollow its "How to use this file" section. Check its Context section against this project and tell me what does not fit, show me a plan of the files you will create or change, and build only after I approve the plan.\n\nAbout my project and what I need:`,
+      `Read this file and use it as a reference for this project's agent harness:\n${url}\n\nIt is a design to weigh, not a list of commands. Check its Context section against this project and tell me what does not fit, settle the open decisions with me, show me a plan of the files you will create or change, and build only after I approve the plan.\n\nAbout my project and what I need:`,
     ownLabel: "About your project and what you need",
     placeholder: "What the project is for, its language and tools, anything the agent should know",
     copy: "Copy prompt",
     copied: "Copied",
     copyFailed: "Copy failed. Select the prompt and copy it by hand.",
     manual:
-      "To keep the file in the project instead, download it from the menu beside the button, save it as <code>HARNESS.md</code> in the project root, and tell your agent the same thing.",
+      "To work from a local copy instead, download the file from the menu beside the button, save it anywhere, and give your agent its path with the same request.",
   },
   spec: {
     title: "Specification",
@@ -174,7 +174,7 @@ const zh: Strings = {
     whatHeading: "HARNESS.md 是什么",
     what: [
       "<code>HARNESS.md</code> 记录一个项目的 Agent harness 设计：编码 Agent 在哪里运行，读什么，怎样检查自己的工作，什么会拦住一次错误的改动，哪些事它可以不问就做。入口文件、权限文件、Hook 和 CI 配置都照着它来建。",
-      "它有两种用法。当作模板：从 hub 里挑一份存到项目根目录，告诉编码 Agent 这个项目要做什么，让它先对照你的项目核对文件里的 Context 一节，再把 harness 建出来；建完可以把文件删掉。当作锚定文档：把它长期留在仓库里，作为项目的设计记录，很少改动，只在检查 harness 有没有漂移或者要改进它的时候才打开。",
+      "多数时候它是一份可移植的设计：把一个项目的全部或部分 harness 设计写下来交给别人；从 hub 里挑一份交给编码 Agent，作为它和你一起设计项目 harness 时的参考；或者把想模仿的项目的设计提炼出来，而不照搬它的实现。项目也可以自己决定把一份留在根目录当作锚定文档：长期的设计记录，很少改动，只在检查 harness 有没有漂移或者要改进它的时候才打开。项目不需要有自己的这份文件。",
       "写 <code>HARNESS.md</code> 时可以对照规范，读懂它不靠规范。Agent 即使从没见过规范，也没装任何插件，照样能读懂这份文件并照着做。",
     ],
     skeletonHeading: "文件里有什么",
@@ -220,7 +220,7 @@ const zh: Strings = {
   },
   hub: {
     title: "Hub",
-    lead: "每个条目都是一份完整的 HARNESS.md 文件，写到单凭文件本身就能把 harness 建出来。挑一份存到项目根目录，告诉编码 Agent 这个项目要做什么，让它先对照你的项目核对 Context 一节，再动手建。",
+    lead: "每个条目都是一份 HARNESS.md 文件：一套 harness 的设计，或者其中明确说明的一部分，每个决定都带着理由。挑一份作为参考交给编码 Agent，告诉它这个项目要做什么，让它先对照你的项目核对 Context 一节，再提出方案。",
     contribute: "新条目通过 pull request 提交到{link}。",
     contributeLink: "GitHub 上的 hub 目录",
     back: "全部 hub 条目",
@@ -244,14 +244,13 @@ const zh: Strings = {
     heading: "交给你的 Agent",
     lead: "把这段提示词贴给你的编码 Agent。Agent 会在线读取这个条目，不用下载任何东西。项目是做什么的，可以先写在下面的输入框里再复制，也可以粘贴之后接着写。",
     text: (url: string) =>
-      `请阅读下面这份文件，把它作为这个项目的 Agent harness 设计：\n${url}\n\n按文件里“How to use this file”一节的步骤做：先对照这个项目核对文件的 Context 一节，告诉我哪些地方对不上；再给我一份计划，列出你要新建或改动的文件；等我同意之后再动手。\n\n我的项目和需求：`,
+      `请阅读下面这份文件，把它作为这个项目 Agent harness 的参考：\n${url}\n\n它是供权衡的设计，不是一串命令。先对照这个项目核对文件的 Context 一节，告诉我哪些地方对不上；和我一起定下还没定的决定；再给我一份计划，列出你要新建或改动的文件；等我同意之后再动手。\n\n我的项目和需求：`,
     ownLabel: "你的项目和需求",
     placeholder: "项目做什么，用什么语言和工具，还有什么需要 Agent 知道的",
     copy: "复制提示词",
     copied: "已复制",
     copyFailed: "复制失败，请手动选中提示词复制。",
-    manual:
-      "想把文件留在项目里的话，用按钮旁边的菜单下载，存为项目根目录下的 <code>HARNESS.md</code>，再把同样的话告诉 Agent。",
+    manual: "想用本地副本的话，用按钮旁边的菜单下载文件，存到任意位置，再把路径连同同样的话交给 Agent。",
   },
   spec: {
     title: "规范",
