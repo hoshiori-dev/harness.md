@@ -3,10 +3,11 @@
 Read when adding, changing, or reviewing an entry under `hub/`.
 
 The hub is the official collection of ready-to-use `HARNESS.md` designs.
-Its main use: someone copies an entry into their project root,
-tells a coding agent what the project is for,
-and the agent builds the harness from that file,
-possibly with no plugin installed. The website lists, searches, shows, copies,
+Its main use: someone gives a coding agent an entry's address or path
+as a reference, tells it what the project is for,
+and the two work out the project's harness from it,
+possibly with no plugin installed.
+An entry is never something to place in a project root. The website lists, searches, shows, copies,
 and downloads entries straight from `hub/`.
 
 ## Rules of an entry
@@ -24,6 +25,8 @@ The contract is `openspec/specs/hub/spec.md`; `hub/README.md` (mirror:
   No other hub metadata.
 - English, generic (no private project, no secret),
   Context describing the kind of project the design assumes.
+- A complete harness or a stated part of one;
+  the `description` and the introduction say which.
 
 `just hub-check` enforces the mechanical rules.
 
@@ -32,11 +35,18 @@ The contract is `openspec/specs/hub/spec.md`; `hub/README.md` (mirror:
 The checks cannot tell whether an entry is good.
 A reviewer, and an agent preparing an entry, asks:
 
-- **Buildable from the file alone?**
-  It names the files to create and what each holds, the commands,
-  the checks with thresholds and time budgets, the permission entries,
-  the commit, branch, and merge rules.
-  An agent with no skill installed could follow it.
+- **Sufficient within its declared scope?**
+  An agent with no skill installed could design and build what the entry
+  covers from it; a partial entry is not faulted for the parts it leaves out.
+  Each decision is stated with its reason and the premise it rests on;
+  file names, commands, tools, and thresholds appear as examples
+  of a decision, never in place of it.
+- **Usable from where it is read?**
+  It does not tell the reader to place it in a project root,
+  makes no step of keeping or deleting the file,
+  and any note on use is short and prescribes no procedure.
+- **Scope stated?**
+  A partial entry says what it covers and what it leaves to the reader.
 - **Reasons and omissions stated?** Each decision has its reason;
   what is deliberately not done is said, with why.
 - **No outside vocabulary?**

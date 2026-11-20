@@ -202,56 +202,82 @@ A project team may decide how to use and dispose of the file
 according to its own needs;
 the format stays neutral towards the different ways of use
 and does not favour any one mode in its syntax.
-The two most common basic uses are as a **template**
-or as an **anchor document**.
+Most often a file is a **portable design**, used in one of three ways:
+as a summary written to be handed on, as a reference brought in from outside,
+or as the abstraction of a harness a team wants to imitate.
+A project may also keep one as its **anchor document**.
+No project needs a `HARNESS.md` of its own;
+keeping one is a decision a project takes explicitly.
 
-In either mode, an agent does **not need** to load `HARNESS.md` automatically
-for everyday business coding, bug fixing, or writing routine tests.
+In any of these uses, an agent does **not need** to load `HARNESS.md`
+automatically for everyday business coding, bug fixing,
+or writing routine tests.
 It is not the entrypoint file for everyday tasks.
-Usually a person or an agent needs to open and read the file
-on demand only in the following three kinds of situation:
+Usually a person or an agent needs to read or write a `HARNESS.md` file
+on demand only in the following kinds of situation:
 
-1. **Building the harness for the first time, or reinstalling it**:
-   generating or completing the repository's configuration, documents,
-   and script artifacts from scratch according to what the document describes.
+1. **Writing or revising a file**:
+   drafting a harness design or updating an existing one,
+   including summarising the harness of an existing project
+   so that it can be handed on.
 
-2. **Checking the harness for drift**:
+2. **Designing or building a harness with one or more files as a reference**:
+   weighing the design decisions set out in those files
+   against the target project's conditions,
+   and generating or completing the repository's configuration, documents,
+   and scripts from what is adopted.
+
+3. **Checking the harness for drift**
+   (only where a project keeps an anchor document):
    after the project has gone through several rounds of evolution,
    checking whether the repository's existing entrypoint file, scripts,
-   permission settings, and gates have departed from the original design intent,
+   permission settings, and gates have departed from the design intent
+   recorded in the anchor `HARNESS.md`,
    or whether there are mechanisms the design requires
    that were never put in place.
 
-3. **Improving the harness deliberately**:
+4. **Improving the harness deliberately**
+   (only where a project keeps an anchor document):
    when engineering conditions change (for example, a new tool is introduced,
    the boundary of autonomy is adjusted,
    or a recurring collaboration defect is found),
-   first assessing and revising the design in `HARNESS.md`,
+   first assessing and revising the design in the anchor `HARNESS.md`,
    and then updating the implementation artifacts in the repository to match.
 
-### 3.1 Use as a template
+### 3.1 Use as a portable design
 
-When a new project starts,
-or an existing project introduces coding agents for the first time,
-the team may obtain a ready-made `HARNESS.md` from a public design repository
-(a hub) or from another project inside the organisation,
-and put it in the root directory of the target project.
-A developer then gives the coding agent the specific business background
-and technology stack of the target project,
-and the agent reads this `HARNESS.md`,
-understands the design structure and the protective thinking set out in it,
-and turns it into actual artifacts of the current repository (for example,
-generating an `AGENTS.md`, configuring check scripts,
-and setting up permission rules and CI gates).
-When the whole harness has been built and verified to work,
-the team may delete this `HARNESS.md` if it does not need
-to maintain a design document in the repository for the long term.
+A team may write down all or part of a project's harness design as a summary
+so that it can be handed to others.
+A design may be written as one file or as several;
+when a file covers only part of a harness,
+its `description` field and its general introduction state what it covers.
+
+When a project designs or reworks its own harness,
+the people and agents doing so may read one or more files
+obtained from a public design repository (a hub) or from other projects.
+Such a reference is read wherever it is;
+it does not have to be placed in the target project.
+Its decisions are weighed against the target project's own conditions
+(the reference's `Context` records what it assumes).
+The agent then turns what is adopted into actual artifacts
+of the current repository (for example, generating an `AGENTS.md`,
+configuring check scripts, and setting up permission rules and CI gates).
+
+When a team wants a harness like that of another project,
+the other project's design is first written as a file,
+so that the team inherits the decisions and the reasons for them
+rather than the incidental details of that project's implementation.
+This is the case section 1 already describes,
+where copying configuration files between repositories
+carries mismatched dependencies, outdated rules,
+and irrelevant complexity along.
 
 ### 3.2 Use as an anchor document
 
-The second way is to keep `HARNESS.md`
-in the root directory of the code repository for the long term,
+A project may decide to keep a `HARNESS.md`
+in the root directory of its code repository for the long term,
 as the authoritative basis of the project's harness design.
+This is a deliberate choice, not the default.
 In this mode the file normally stays stable, like an engineering charter,
 and is not changed frequently
 along with everyday business feature development.
@@ -312,6 +338,12 @@ between it and the project's code and configuration files:
   take a design description in `HARNESS.md` directly as a runtime fact
   that is already in effect in the system.
 
+A file that a project has not adopted as its anchor document
+has no authority over that project.
+Its statements are material to weigh,
+not instructions to carry out and not a record of the project's intent;
+a difference between such a file and the repository is not design drift.
+
 ## 4. File format and metadata
 
 So that a design document can be read directly as ordinary text by people
@@ -342,14 +374,13 @@ When writing a file, however,
 it is recommended to use UTF-8 encoding without a BOM
 and clean `---` delimiter lines.
 
-When `HARNESS.md` is used for a specific software project,
-the file should be placed in the repository root,
-and the file name is fixed as `HARNESS.md`.
-When a design is stored as an independent,
-reusable entry in a design repository (such as a public or internal hub),
-it is still a file of exactly the same `HARNESS.md` format,
-only not attached to a specific business codebase;
-its directory structure is organised by the platform that hosts it.
+When a project keeps a file as its anchor document,
+the file should be placed in the repository root under the name `HARNESS.md`.
+For any other document
+(a summary, a reference obtained from elsewhere,
+or an entry in a design repository such as a public or internal hub),
+this specification prescribes neither a file name nor a location;
+such a document is still a file of exactly the same format.
 
 ### 4.2 Frontmatter field definitions
 

@@ -30,8 +30,10 @@ metadata:
 This file is the design of an agent harness:
 everything around a coding agent that decides where it runs, what it reads,
 how it checks its work, what stops a bad change,
-and what it may do without asking. It is a design to build from and, once built,
-the document the harness is checked against.
+and what it may do without asking.
+It is a reference design for a complete harness,
+handed to an agent by URL or path, or read by a person,
+when a library of this kind designs or reworks its own.
 It is not a file an agent loads on ordinary tasks.
 
 Two facts shape it. The library has one maintainer,
@@ -77,56 +79,20 @@ These always stay with the maintainer:
 
 ## How to use this file
 
-You are a coding agent that was given this file
-and a description of the library. Do this in order.
-
-1. Read the whole file, then the repository:
-   language and package manager, how it is built, tested, and released today,
-   the task runner, CI, hooks, `README`, `CONTRIBUTING`, `SECURITY`,
-   the changelog, the commit and tag history, the remote,
-   and every existing agent-facing file.
-2. Compare the Context section with the real project and report each difference,
-   naming the sections it affects.
-   The maintainer rewrites or confirms Context before anything else.
-3. Settle the Open Questions: answer from the repository what it shows,
-   and ask the maintainer the rest in one message
-   with the defaults this file gives.
-4. Keep what works. An existing task runner, linter, test runner,
-   commit convention, changelog format,
-   or release process stays unless it contradicts an invariant here;
-   each change you propose to a working habit
-   is a separate decision for the maintainer.
-5. Present a build plan: every file to create or change, by path,
-   with one line on its content, in the order Environment, Knowledge, Feedback,
-   Gates, Authority, Completion, Entropy,
-   then the settings only the maintainer can apply on the hosting platform.
-   Wait for approval. Write nothing before it.
-6. Build in that order, running what each layer added
-   and committing each layer separately.
-7. Apply nothing on the remote yourself.
-   Show each remote setting as the exact value or command
-   and let the maintainer apply it or approve it item by item.
-8. Verify: run every documented command
-   from a fresh clone inside the documented environment, as a contributor would;
-   plant a violation of each gate on a throwaway branch
-   and confirm the gate fails;
-   read `AGENTS.md` as a stranger's agent and fix whatever it could not act on.
-9. Report what was built, how each part was verified,
-   what waits for the maintainer,
-   and any contradiction between this design and `README`, `CONTRIBUTING`,
-   or `SECURITY` as a suggested edit.
-   Do not rewrite those files unless the plan named the change.
-10. Ask whether this file stays as the project's design document (recommended:
-    Entropy checks against it) or is deleted.
-
-A project that keeps this file first rewrites Context to describe itself,
-then revisits each section whose reasons depended on the old Context.
-Afterwards, design intent is read from this file and facts from the code.
+This is a design to weigh against the project at hand,
+not a list of commands to carry out.
+The Context section states what the design assumes;
+a decision whose premise does not hold for the project is reconsidered,
+not copied. A working habit the project already has (a task runner, a linter,
+a test runner, a commit convention, a changelog format,
+a release process) stays unless it contradicts an invariant here.
+Nothing in this file authorises an action:
+what an agent may do in a project is settled between that agent
+and the person it works for.
 
 ## Context
 
 The design assumes the following.
-A project keeping this file replaces this section with its own facts.
 
 - **Cost of a wrong change: moderate inside the repository,
   high once released.** A bad commit on the default branch is reverted.
@@ -216,9 +182,17 @@ Formatting and naming rules live in the formatter and linter configuration only.
 
 ## File Structure
 
+This is the default layout.
+Each path realises a decision made in a later section,
+and a project that already has a file serving the same purpose
+keeps its own name and place.
+In the same way, commands in this file are written for `just`,
+the default task runner;
+under another runner the same entries exist in its own syntax.
+
 ```text
 AGENTS.md                      the entrypoint for every agent, the maintainer's and contributors'; about 80 lines
-HARNESS.md                     this design; opened only to build, audit, or change the harness
+HARNESS.md                     optional: the project's own design document, when the maintainer decides to keep one (see Entropy)
 CONTRIBUTING.md                for people: how to contribute; names the same commands as AGENTS.md
 SECURITY.md                    for people: the private channel for vulnerability reports
 CHANGELOG.md                   user-visible changes, newest first, with an Unreleased section
@@ -252,7 +226,8 @@ for contributors the boundary is CI and review.
 
 ### One environment for everybody
 
-`.devcontainer/devcontainer.json` defines the toolchain:
+The toolchain is defined once, in a committed file that everybody uses,
+by default a dev container (`.devcontainer/devcontainer.json`):
 the runtime versions of the support range, the package manager, the task runner,
 the formatter, linter, type checker, API snapshot tool, and secret scanner.
 It serves three purposes at once:
@@ -331,7 +306,10 @@ and MCP servers that write outside the repository.
 
 ### Commands never wait for a keyboard
 
-The task runner exports `PAGER=cat`, `GIT_PAGER=cat`, `GIT_TERMINAL_PROMPT=0`,
+An agent cannot answer a prompt or leave a pager,
+and a command that waits for one stalls the task.
+So the task runner makes every command non-interactive,
+for example by exporting `PAGER=cat`, `GIT_PAGER=cat`, `GIT_TERMINAL_PROMPT=0`,
 and `CI=1`; test entries run once and exit.
 
 ## Knowledge
@@ -368,11 +346,13 @@ Its parts:
    editing a harness file (`maintenance.md`).
 7. **Keep in sync.** The short list described under Entropy.
 
+The rules exist once.
+A client that does not read `AGENTS.md` gets a file that imports it,
+never a second copy of the rules. For example,
 Claude Code reads `AGENTS.md` directly
-from version 2.1.277 when the repository has no `CLAUDE.md`.
-Because contributors may run older versions,
-add a `CLAUDE.md` containing only `@AGENTS.md`;
-never a second copy of the rules.
+from version 2.1.277 when the repository has no `CLAUDE.md`;
+because contributors may run older versions,
+the repository carries a `CLAUDE.md` containing only `@AGENTS.md`.
 
 ### For people
 
@@ -451,6 +431,12 @@ For this project the binding gate is CI on the pull request.
 Nothing local can be required of a contributor,
 so local hooks are a convenience and CI is the boundary.
 
+A gate counts as installed only once it has been seen to reject
+a violation of the kind it exists for.
+A job that has never failed may be checking nothing,
+and a green run cannot tell the two apart.
+How each gate is shown to fail is left to the project.
+
 ### In CI
 
 Tools follow the project; where none exists,
@@ -504,8 +490,9 @@ it makes it impossible to change the surface unnoticed.
 
 ### Locally
 
-`.pre-commit-config.yaml` offers the formatter, the lint on staged files,
-and the secret scan, within 10 seconds on a typical commit.
+A commit hook offers the formatter, the lint on staged files,
+and the secret scan, within 10 seconds on a typical commit;
+by default it is configured in `.pre-commit-config.yaml`.
 Contributors may install it; the maintainer's agent always does,
 and never commits with `--no-verify`.
 
@@ -732,11 +719,20 @@ The harness's own files are few.
 - **Drift found during other work** is fixed in the same pull request
   when it is in scope, and otherwise listed for the maintainer.
   It is never only mentioned.
-- **A change to the design** is made to this file first, then to the artifacts.
+- **A change to the design** is decided as a design first
+  and made to the artifacts second,
+  so that the entrypoint, the checks,
+  and the permission file do not drift apart one edit at a time.
+  A project may keep a design document of its own for this.
+  That is the maintainer's choice, not a default:
+  it gives later changes a statement of intent to compare against,
+  and it is one more file to keep true.
+  Where one is kept, the change is made there first, then to the artifacts.
 
 ## Open Questions
 
-Settle these before building (step 3 of "How to use this file").
+The design leaves these to the project, and they are settled before building:
+the repository answers some of them and the maintainer answers the rest.
 
 - Language, package manager, registry, and task runner. Default:
   what the repository uses; otherwise `just`.
@@ -754,6 +750,8 @@ Settle these before building (step 3 of "How to use this file").
   If not, triage mode is documented but no routine is set up.
 - Where security reports go: the platform's private reporting,
   or an address in `SECURITY.md`.
+- Whether the project keeps a design document of its own (see Entropy).
+  Nothing in the harness depends on one.
 
 ## References
 
