@@ -24,7 +24,7 @@ Classify every action before taking it:
   Otherwise add it to the pending decisions list below and continue
   with the work that does not depend on it.
 
-Standing pre-authorisation, on every task: {{STANDING_ACTIONS}} <!-- # CONFIGURE: {{STANDING_ACTIONS}}: the outward actions the design lets agents take on every task, as this project's commands (for example "`just push-one` on the task branch, and `gh pr create --draft` / `gh pr edit` on that branch's own pull request"), or "none; every outward action is named by the task's plan". -->
+Standing pre-authorisation, on every task: {{STANDING_ACTIONS}} <!-- # CONFIGURE: {{STANDING_ACTIONS}}: the outward actions the agreed decisions let agents take on every task, as this project's commands (for example "`just push-one` on the task branch, and `gh pr create --draft` / `gh pr edit` on that branch's own pull request"), or "none; every outward action is named by the task's plan". -->
 Never standing: marking a request ready, merging, pushing a tag, releasing,
 changing a remote setting, force pushing, deleting anything this task did
 not create.
@@ -36,7 +36,7 @@ The two are different classes.
 
 ### Irreversible actions in this project
 
-{{IRREVERSIBLE_ACTIONS}} <!-- # CONFIGURE: {{IRREVERSIBLE_ACTIONS}}: only when the design lists them (a wrong change is costly, or agents run unattended). List this project's irreversible actions as its platform's operations (for example `gh pr ready`, `gh pr comment`, `gh release create`, `just publish`); otherwise delete this section. -->
+{{IRREVERSIBLE_ACTIONS}} <!-- # CONFIGURE: {{IRREVERSIBLE_ACTIONS}}: only when the agreed decisions list them (a wrong change is costly, or agents run unattended). List this project's irreversible actions as its platform's operations (for example `gh pr ready`, `gh pr comment`, `gh release create`, `just publish`); otherwise delete this section. -->
 
 {{SPEC_SENTENCE}} <!-- # CONFIGURE: {{SPEC_SENTENCE}}: keep when a specification workflow exists, delete otherwise: "Each spec carries a list of the irreversible actions pre-authorised for that task; an action on that list proceeds without a prompt, every other outward action is deferred." -->
 

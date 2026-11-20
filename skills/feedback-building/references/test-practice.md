@@ -1,7 +1,7 @@
 # Tests an Agent Can Trust
 
-Read when the section covers test granularity, fixtures, seed data,
-or golden files, when Style hands over sentences about tests,
+Read when a decision covers test granularity, fixtures, seed data,
+or golden files, when the handover carries rules about tests,
 or when an audit finds tests that fail on a second run.
 
 A test suite is the nearest thing an agent has to a definition of right.
@@ -10,7 +10,7 @@ the agent solves the wrong problem with confidence.
 
 ## Granularity
 
-Take the level from Style when it states one. Otherwise:
+Take the level from the handover when it states one. Otherwise:
 
 - Pure logic gets unit tests beside the code.
 - Each boundary the system has (HTTP handler, command-line entry,

@@ -240,7 +240,7 @@ each opening with the situation in which to read it:
 
 | File | Read when |
 |---|---|
-| `plugin-architecture.md` | adding, removing, or re-scoping a skill or the agent; touching how workflows hand work to layer builders |
+| `plugin-architecture.md` | adding, removing, or re-scoping a skill or an agent; touching how the entry skills hand work to layer builders |
 | `skill-quality.md` | writing or editing anything under `skills/` |
 | `shared-blocks.md` | editing a `<!-- shared:… -->` block in a skill |
 | `format-changes.md` | changing the format, the prose specification, a validator, or a fixture |
@@ -465,7 +465,7 @@ for that one action, and then read back.
 ## Completion
 
 The goal of a change is agreed before work starts.
-For a change to the format, a shipped skill, the agent, the hub's entry rules,
+For a change to the format, a shipped skill, an agent, the hub's entry rules,
 or the site's behaviour, the carrier is an OpenSpec change in the pull request:
 proposal, spec deltas, and design first.
 The maintainer approves by adding `spec:approved` to the pull request;
@@ -529,7 +529,7 @@ the artifact is fixed or this file is changed first, in its own pull request.
   Loading through a client's own skill discovery has not been tested.
 - Antigravity loads plugin agents only from the plugin root
   and Codex plugins carry no agents,
-  so the verifier agent ships to Claude Code only.
+  so the plugin's agents ship to Claude Code only.
   Revisit when either client changes.
 - The website's visual direction was chosen without the maintainer's review.
 

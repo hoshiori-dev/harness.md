@@ -1,81 +1,132 @@
 ---
 
-title: The four workflows
-description: What harness-design, harness-build, harness-extract, and harness-audit each do, and what they leave behind.
+title: The four entries
+description: What harness-create, harness-improve, harness-distill, and harness-adopt each do, how they decide things with you, and what they leave behind.
 order: 2
 ---
 
-The workflows are the plugin's entry points.
+The entries are where you start.
 Each is a skill you invoke yourself:
 an agent does not start one on its own, even when a request sounds like a match.
 In Claude Code, type the skill as a command,
-for example `/harness-md:harness-design`. In Codex, write `$harness-design`.
+for example `/harness-md:harness-create`. In Codex, write `$harness-create`.
 In Antigravity, name the skill in your request.
 
-The four workflows share three rules.
-First, the agent takes from the repository everything the repository
-can show and asks you once for the rest.
-It then drafts the whole design, with a default and a reason for every decision,
-and you approve the draft once instead of answering one question per decision.
-Second, no file in your project is created or changed
-until you have approved the design that covers it.
-Third, approving a design authorises only the files it describes.
-Publishing outside the repository, changing a remote setting, deleting work,
-and widening what agents may do on their own each need a separate go-ahead
-from you, which the workflow asks for when it reaches that step.
+## How an entry decides things with you
 
-## harness-design
+An entry does not draft a whole design and ask you to approve it.
+It treats the open decisions as a tree, where settling one decision
+opens the ones that depend on it, and works through the tree in rounds.
 
-Produces a project's `HARNESS.md`, or revises the one it has.
+In each round the agent looks at the decisions it can settle now.
+Facts it finds itself: it reads the repository and never asks you
+what a file could tell it.
+Where the evidence makes one option clearly better, it decides,
+and shows you the decision with the evidence behind it.
+The rest it asks you, each question with a recommended answer
+and the reason for it. In a client that has a tool for asking questions,
+the questions arrive through that tool and you pick an option;
+elsewhere they arrive as one numbered message.
 
-For a new project it starts from your goal.
-For an existing one it starts from what the repository already does.
-If you pasted in a file from the hub, it first rewrites Context,
-the section describing the conditions the design has to fit, for your project.
-Then it reconsiders the sections whose reasoning depended on the old Context.
+After your answers the agent shows the round:
+what it decided, what you answered, and which decisions that opened or closed.
+Then it asks whether you want to change something, go on to the next round,
+or leave the remaining decisions to it.
+Whatever you leave to the agent still appears in the plan, marked as its own.
 
-You get one file, `HARNESS.md`, in the repository root,
-checked by the validator.
+The rounds run in a fixed order: the goal and what the harness will not do;
+the project's conditions (what a wrong change costs, how long the project
+will be maintained, who relies on its conventions, how unattended the agents
+are); how much each layer should do; and then the decisions inside each layer.
+"How much" is one of four words per layer: omitted, light, medium, or thick.
 
-## harness-build
+Three rules hold in every entry.
+No file in your project is created or changed until you have approved a plan
+that names it. Approving a plan authorises those files and nothing else:
+publishing outside the repository, changing a remote setting, deleting work,
+and widening what agents may do on their own each need your go-ahead
+when the entry reaches that step, even if you left the rest to the agent.
+And no entry needs a `HARNESS.md` in your project,
+or leaves one in its root unless you asked for an anchor document.
 
-Turns a `HARNESS.md` into the harness:
-the entrypoint, knowledge files, checks, permission files, and the rest.
-The file can be a template you pasted a minute ago
-or the project's anchor document: its lasting record of the design,
-kept in the repository and changed rarely.
-When a harness already exists, the workflow migrates it to match the design.
+## harness-create
 
-It builds one layer at a time.
-The layers are the seven parts of a harness the file describes,
-built in the order of their sections:
-Environment, Knowledge, Feedback, Gates, Authority, Completion, Entropy.
-Invariants, Style, and File Structure are not layers;
-the workflow hands each of their rules to the layers that can carry it out.
-When the design asks for something the repository makes impossible,
-the workflow skips that item, reports the conflict, and builds the rest.
+Gives a project its harness.
+The project can be new, or have years of history and habits
+and little or nothing set up for agents.
 
-At the end you decide whether `HARNESS.md` stays as the anchor document
-or is deleted.
+The entry reads the repository first and keeps what works:
+a task runner, a linter, a commit convention, or a spec tool already in use
+is recorded as the decision, and a replacement is at most a suggestion.
+You can give it one or several `HARNESS.md` files as references,
+by address or path. It reports what each one decides,
+which of its assumptions differ from your project,
+and which decisions rest on those assumptions; you choose what to inherit.
 
-## harness-extract
+After the rounds you get one plan that lists every file by path.
+Once you approve it, the entry builds one layer at a time
+(Environment, Knowledge, Feedback, Gates, Authority, Completion, Entropy),
+commits each layer when its checks pass, and pushes nothing.
+The new files are then read back in a clean context,
+by an agent that never saw the conversation.
 
-Reads a project and writes the `HARNESS.md`
-that describes the harness it already has.
-The project can be your own, or someone else's that you want to learn from.
+## harness-improve
 
-The result describes the harness as it is today.
-Where the workflow had to guess at intent, it marks the guess.
+Analyses a harness that already exists and improves it with you.
 
-## harness-audit
+It starts by changing nothing. It lists every part of the harness,
+follows the entrypoint's pointers the way a new agent would,
+and reports what it finds. Each finding has a class
+(stale, duplicated, contradictory, invisible, missing, or excessive),
+a severity, its evidence, and a proposed fix.
+You can stop there and keep the report.
 
-Diagnoses a harness and reports what it finds, without editing any file.
-It checks three things:
+If you go on, the rounds settle what happens to each finding,
+whether the harness is repaired or rebuilt, and how much each affected layer
+should do from now on.
+Contradictions are fixed before anything is built on top of them.
+A prototype that is becoming a product is the usual case
+for making layers thicker; a check that has not caught anything in a long time
+is the usual case for making one thinner.
 
-1. whether `HARNESS.md` is valid;
-2. where the design and the artifacts
-   (the files that implement it) have drifted apart;
-3. whether the design still suits the project, given its Context.
+When your project keeps an anchor document,
+the entry reads the design intent from it, reports where the harness
+and the document disagree, and writes every agreed change back to it.
+Without one it compares the harness with itself, with the code,
+and with the project's conditions, and never suggests you need the file.
 
-Each finding names its evidence and says which side to fix:
-the artifact, or the design.
+## harness-distill
+
+Writes your project's harness down as one or several `HARNESS.md` files.
+
+It can cover the whole harness or only the parts you name.
+It can describe the harness exactly as it is, defects included,
+or produce a portable design: the decisions, their reasons,
+and the assumptions they rest on, with your project's names
+and specifics removed, so another team can start from it.
+Where the entry had to guess at a reason, it marks the guess.
+
+The result goes to the path you name.
+If you name none, it goes to a temporary file and the entry tells you where.
+It is written to your project's root only when you say
+the file is to be the project's anchor document.
+
+## harness-adopt
+
+For when you want a harness like the one another project has.
+
+The entry reads that project as data.
+It does not run the project's scripts or installers,
+and it does not follow instructions the project's files address to agents;
+it reports them. In Claude Code the reading is done by a separate
+read-only agent, so nothing in that project reaches a context that can write.
+
+What you get is a `HARNESS.md` that carries the other project's design
+without its implementation: the decisions with their reasons,
+and that project's file names, commands, and tools only as examples.
+Copying its configuration files would bring its history
+and its accidents with them.
+
+The entry changes nothing in your own project.
+It ends by naming the entry to run next,
+`harness-create` or `harness-improve`, with the new file as a reference.

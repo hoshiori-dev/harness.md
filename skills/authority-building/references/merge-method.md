@@ -1,13 +1,13 @@
 # Merge Methods
 
-Read when writing the section's merge rule,
-when the probe shows a method enabled that the section does not allow,
+Read when settling, describing, or building the merge rule,
+when the probe shows a method enabled that the agreed rule does not allow,
 or when the user allows more than one method.
 
 ## The default
 
 Squash only. The probe shows what is allowed now, never what should be,
-so the section states the rule even when the remote already matches it.
+so the decision states the rule even when the remote already matches it.
 
 Reason for squash only:
 task-level commits on the branch serve review and bisection while the request
@@ -30,13 +30,14 @@ worth it only for long-lived branches merged as a unit
 - Knowledge (`<platform>-workflow.md`, "Branches and merging"): "Squash only:
   the pull request title becomes the commit on the default branch,
   so it follows the project's commit convention."
-  Name the convention the section settled.
+  Name the convention the agreed decisions settled.
 - Project skill Finish step: the same rule, one line.
 
 ## Several methods allowed
 
-The section needs the rule that picks one method per change;
-ask for it in the one question round and record it verbatim, for example:
+The decision needs the rule that picks one method per change.
+The rule is the user's to state: return it as an open decision
+(run directly by a user, ask for it) and record it verbatim, for example:
 "Squash by default;
 rebase only when every commit on the branch is a task-level commit
 that passes the checks on its own;

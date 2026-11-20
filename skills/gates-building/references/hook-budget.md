@@ -1,6 +1,6 @@
 # Hook Budget
 
-Read when setting the commit-hook budget in the section,
+Read when recommending or applying the commit-hook budget,
 when deciding whether a check goes in the hook,
 or when an existing hook runs longer than the budget.
 
@@ -19,7 +19,8 @@ Default 10 seconds for a typical commit (a handful of staged files):
 short enough that neither a person nor an agent is tempted to skip it.
 Use 5 seconds when agents commit a checkpoint after every small step;
 30 seconds when the typecheck cannot be scoped
-and the project wants it local anyway. The section states the number.
+and the project wants it local anyway.
+The returned decision states the number.
 
 ## Placing each check
 
@@ -34,7 +35,7 @@ and the project wants it local anyway. The section states the number.
 
 A check that does not fit goes to CI and to the full recipe,
 never into the hook.
-The section and the hand back say which checks left the hook and why.
+The hand back says which checks left the hook and why.
 
 Whenever tests leave the hook,
 the project needs a scoped test command that returns in seconds (one file,
@@ -55,10 +56,11 @@ and report the number.
 
 ## An existing hook over budget
 
-In design mode, write the move into the section:
+In decide mode, recommend the move:
 the slow checks go to CI and a scoped recipe,
 with the measured or reported time as the reason.
-In audit mode it is a finding with the same remedy.
-In build mode change the hook only when the section says so;
+In describe mode, state the hook and its time as they are.
+In audit mode it is a finding with the move as its proposed disposition.
+In build mode change the hook only when an agreed decision says so;
 otherwise leave it and add the move to the pending decisions list
 with the time it costs per commit.

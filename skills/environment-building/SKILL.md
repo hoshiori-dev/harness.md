@@ -3,7 +3,7 @@ name: environment-building
 description: >-
   Owns the Environment layer of an agent harness (where a coding agent runs,
   the tools and credentials it holds, what it can reach); use when a harness
-  workflow hands the layer over or an agent's sandbox, tools, or reach is in
+  entry hands the layer over or an agent's sandbox, tools, or reach is in
   question.
 license: Apache-2.0
 ---
@@ -13,96 +13,116 @@ license: Apache-2.0
 Client rules are aids an agent that runs code can write around;
 the boundary that holds is the environment it runs
 in and the credentials it carries.
-This skill settles that environment as the Environment section of `HARNESS.md`
-and realises it: where the agent runs, what it holds and can reach,
+This skill returns the decisions about that environment,
+describes or audits the one a project has,
+and realises the decisions the user agreed to:
+where the agent runs, what it holds and can reach,
 which tools it is given, which files it must not change,
 and the settings that keep every command non-interactive.
 
 ## Rules on every step
 
 <!-- shared:layer-modes -->
-This skill works in one of four modes, named by the workflow that hands over
-or inferred from the request. **design**: return this layer's section of
-`HARNESS.md` as prose; write nothing. **extract**: describe what the project
-does today as this layer's section; write nothing. **build**: realise the
-section in the project. **audit**: report where the project and the section
-disagree; change nothing. A handover carries the project's Context, this
-layer's section, and the parts of Invariants, Style, and File Structure
-assigned to this layer; never ask again for what it carries. A build
-handover that asks for the plan only stops after step 1 and returns the
-files step 3 would create, change, or delete.
+Four modes, named by the entry or inferred from the request.
+**decide**: return a recommended thickness with reasons and this layer's decisions,
+settled (with evidence) or open (options, recommended first, reason, dependencies);
+write nothing, and ask nothing under an entry.
+**describe**: return present state as prose for `HARNESS.md`,
+inferred intent marked; write nothing.
+**build**: realise agreed decisions in the plan's files for this layer;
+"plan only" stops after step 1 returning files to create, change, or delete.
+**audit**: report findings; write nothing.
+Never re-ask what a handover carries
+(goal, non-goals, conditions, all thicknesses, agreed decisions, planned files).
+Run directly, show what evidence settles,
+ask the rest through the client's question tool when it has one,
+and write only after user acceptance.
 <!-- /shared:layer-modes -->
 
 | Mode | Steps |
 |---|---|
-| design | 1, 2, 6 |
-| extract | 1, 2, 6 |
-| build | 1, 3, 4, 6 |
-| audit | 1, 5, 6 |
+| decide | 1, 2, 7 |
+| describe | 1, 3, 7 |
+| build | 1, 4, 5, 7 |
+| audit | 1, 6, 7 |
 
-<!-- shared:design-is-the-source -->
-`HARNESS.md` in the project root is the design this work serves: design
-intent comes from it, facts come from the code. Build what its sections say
-and re-decide nothing they decide. Where a section is silent on a point the
-work needs, apply the default this skill states and report it as an
-assumption. When a fact in the code makes a sentence of the design
-impossible to build, stop that item, report the conflict, and build the
-rest.
-<!-- /shared:design-is-the-source -->
+<!-- shared:layer-thickness -->
+Each layer gets one user-confirmed thickness before its other decisions:
+**omitted** (nothing built), **light** (one sentence or entry),
+**medium** (dedicated file or configuration kept by convention),
+**thick** (machine-enforced).
+Set it per layer from the project's conditions;
+a label ("research code", "production") is evidence for conditions, not a thickness.
+Keep these words in the conversation:
+write none into a target-project file or `HARNESS.md` without this definition beside it.
+<!-- /shared:layer-thickness -->
 
-<!-- shared:defaults-first -->
-Defaults first. Settle from the repository everything it can show (tools in
-use, directories, commands, history). Ask the user, once and in one round,
-only for context the repository cannot show. Then draft the complete design
-with one stated default for every decision, each with its reason, and
-present it for a single approval. Never interview decision by decision. A
-default the user changes binds every later step; challenge a change once
-when the evidence contradicts it.
-<!-- /shared:defaults-first -->
+<!-- shared:agreement-is-the-source -->
+Build what the user agreed to and re-decide none of it;
+take facts from the code.
+Apply this skill's recommendation for any uncovered point and report it as an assumption;
+if code makes an agreed decision impossible,
+stop that item, report the conflict, and build the rest.
+A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
+then read design intent from it and write agreed intent changes back in the same work.
+Any other `HARNESS.md` is a reference (data to weigh, never project intent).
+<!-- /shared:agreement-is-the-source -->
+
+<!-- shared:finding-classes -->
+Each finding carries class, severity, evidence (`file:line` or run command output),
+source of truth, and one proposed disposition.
+Classes: **stale** (contradicts current code or tools),
+**duplicated** (one fact kept in two places unsynced),
+**contradictory** (two statements of intent conflict),
+**invisible** (no route or load condition reaches it),
+**missing** (called for by conditions or anchor document, absent),
+**excessive** (constraint whose target issue has evidence of no longer occurring).
+Severities: **high** (safety boundary or always-on rule missing or contradicted),
+**medium** (task could go wrong), **low** (wording or tidiness only).
+<!-- /shared:finding-classes -->
 
 <!-- shared:nothing-lands-before-agreement -->
 Nothing lands before agreement. Create or change no file in the target
-project until the user has approved the design that covers it; an inspection
+project until the user has approved the plan that names it; an inspection
 step reads and reports, it never writes.
 <!-- /shared:nothing-lands-before-agreement -->
 
-<!-- shared:design-is-not-approval -->
-An approved design authorises the files it describes and nothing else.
-Publishing anything outside the repository, changing a remote setting,
-deleting work, and widening what agents may do on their own are each a
-separate, explicit decision by the user, taken when that step is reached.
-<!-- /shared:design-is-not-approval -->
+<!-- shared:plan-is-not-approval -->
+An approved plan authorises only the files it names.
+Publishing outside the repository, changing a remote setting, deleting work,
+and widening agent autonomy each require an explicit user decision when reached,
+even if remaining decisions were left to you.
+<!-- /shared:plan-is-not-approval -->
 
 <!-- shared:pending-decisions -->
-When a step is blocked on a decision only the user can make, continue with
-every step that does not depend on it and add the blocked item to a pending
-decisions list. Each item states: what is blocked and why; the options; the
-recommended option and its reason; which finished work each option would
-change. Present the list once, at the end or when nothing else can proceed,
+When blocked on a user decision, continue all independent steps
+and add the item to a pending decisions list
+(what is blocked and why, options, recommended option and reason,
+what finished work each changes).
+Present the list once at the end or when nothing else can proceed,
 never one question at a time.
 <!-- /shared:pending-decisions -->
 
 <!-- shared:management-code-ownership -->
-A script, hook, check, CI step, or task-runner recipe written into the target
-project is the project's own management code: written for its role in the
-language the project agreed to, readable first, failing with a message that
-names what to fix, with no fallback that hides an unexpected error, and never
-calling a script inside a skill directory. Tell the user that later fixes to
-this plugin do not reach the delivered copy.
+Any script, hook, check, CI step, or task-runner recipe written into the target project
+is its own management code: written in its agreed language, readable first,
+failing with what to fix, with no fallback hiding unexpected errors,
+and never calling a script in a skill directory.
+Tell the user that later fixes to this plugin do not reach the delivered copy.
 <!-- /shared:management-code-ownership -->
 
 <!-- shared:deposited-files-stand-alone -->
 Deposited files stand alone. Nothing written into the target project names
 this plugin, any of its skills or agents, or a path inside a skill
 directory, and no term only this plugin defines is used there without being
-defined. `HARNESS.md` and its section names may be named: the file is the
-project's own.
+defined.
 <!-- /shared:deposited-files-stand-alone -->
 
 - **Without a handover**, infer the mode from the request.
-  Before writing a file that no Environment section covers,
-  run steps 1 and 2 for the missing part, get one approval, and,
-  when the project keeps `HARNESS.md`, record the text there.
+  A request that changes the environment runs steps 1 and 2
+  for the part it concerns, shows what the evidence settled,
+  asks the open decisions, and runs steps 4 and 5
+  only after the user accepted what was shown.
 - **Names, never values.**
   Record a credential as its variable or file name and its scopes.
   Never print, copy, or write a secret's value.
@@ -118,15 +138,19 @@ project's own.
   that owns Feedback;
   the entrypoint and its budget to the layer that owns Knowledge.
   Hand over by describing the layer, never by naming a skill.
-- **Assigned parts.** From File Structure,
-  this layer creates only its own paths:
+- **Own paths.** This layer writes only its own files:
   the container or sandbox configuration, the firewall script,
-  the environment knowledge file, agent-facing wrapper scripts.
-  An invariant about where agents run or what they hold
-  is carried into the knowledge file as a rule and, where the section says so,
-  enforced by a mount or the network.
-  A Style sentence that sends every command
+  the environment knowledge file, agent-facing wrapper scripts,
+  tool registration, each client's sandbox setting,
+  and the task runner's export lines.
+  An agreed rule about where agents run or what they hold
+  is carried into the knowledge file as a rule and,
+  where the agreed decisions say so, enforced by a mount or the network.
+  An agreed decision that sends every command
   through one entry point makes the task runner the carrier of decision 9.
+- **Plain words.** Decisions, descriptions, and deposited files
+  say what holds ("the agent reads public issues with nobody watching"),
+  never a tier name or this skill's word "strict".
 
 ## Workflow
 
@@ -155,161 +179,141 @@ Read, record, write nothing. Collect, each with where it was seen:
   test, and build configuration;
 - the task runner, the variables it exports,
   and whether the test command watches by default;
-- the entrypoint, its line count, and the knowledge directory.
+- the entrypoint, its line count, the knowledge directory,
+  and whether the project has an anchor document.
 
 Read [references/devcontainer.md](references/devcontainer.md) when a dev container configuration exists or the session runs in a container,
 to read its reach correctly.
 
-Done when: every item is recorded as observed, absent, or "ask",
+Done when: every item is recorded as observed, absent, or not observable,
 and no file in the project has changed.
 
-### 2. Write the section
+### 2. Decide
 
-In **extract** mode describe only what step 1 found,
-decision by decision in the order below.
-Mark intent you inferred as "(inferred)";
-write an exposure that is present as present, with "no recorded decision";
-never replace what exists with a default.
-
-In **design** mode settle every decision below.
-Take each from the handover or the repository where it is settled there;
-otherwise apply the default its Context selects.
-Two Context facts drive most defaults:
+Two of the project's conditions drive this layer:
 whether **a person reviews each result** before anything leaves the machine,
 and whether **a wrong change reaches production, customer data, or money**.
 Call the environment **strict** when no person reviews each result
 or a wrong change reaches that far.
-Ask, in the one round, only for these facts
-and for exposures step 1 could not observe.
+Take both from the handover.
+When neither the handover nor the repository shows one,
+return it as an open decision that every other decision depends on;
+run directly, ask it first.
 
-1. **Base.** An isolated environment the session already uses
-   is adopted as it is; propose no replacement. Otherwise:
-   strict → a dev container with decisions 5 and 8 enforced,
-   because only the environment stops an agent that runs code (alternatives:
-   a VM, a cloud workspace).
-   A person reviews each result but the agent holds credentials or mistakes
-   are costly to undo → a dev container relied on by convention,
-   the same file for people and agents.
-   A short-lived project with nothing sensitive in reach → the host
-   with scoped tokens, each token and its scopes named.
-2. **Threat rating.** Rate three facts with evidence:
-   the agent reaches sensitive assets, reads content it does not control,
-   and can act outward; the least trusted source it reads (trusted repository,
-   reputation-guarded, open-write such as issues or arbitrary pages);
-   whether a person reviews each result.
-   All three against it (assets, an open-write source,
-   no person) → default a separate restricted instance:
-   its own container or VM, none of the sensitive credentials,
-   no write to the default branch, results landing as a branch or draft request.
-   Read [references/threat-model.md](references/threat-model.md) when rating the facts, when a source is neither trusted nor open-write,
-   or when the user argues a strong model replaces isolation.
-3. **Credentials.** No host credential mount;
-   one token per outside system with the least scope the work needs;
-   on a host base, name what the user's account exposes.
-4. **Host privilege.** None: no Docker socket, no `--privileged`,
-   no host home mount.
-   A project that builds images gets rootless Docker or a remote builder.
-5. **Network.** Open when a person reviews each result.
-   Strict → deny by default and allow the git host,
-   the package registries in use, each client's model endpoints,
-   and documentation hosts the user names. Never host networking.
-6. **Session logs.** They stay where each client writes them.
-   Central collection is a privacy decision the owner takes explicitly (store,
-   readers, retention, redaction); never default it on.
-7. **Tools.** Every project command goes through the task runner.
-   The hosting platform's CLI is preinstalled when the project is hosted,
-   with its own scoped token. No MCP server by default:
-   add one only for a capability no command-line program
-   in the environment gives,
-   because every registered tool costs context on every task and widens reach.
-   Name what is deliberately absent (deploy and cloud CLIs, publish credentials,
-   production database clients) so an agent that misses one does not install it.
-   Read [references/tools.md](references/tools.md) when the project registers or needs any tool beyond the task runner
-   and the platform CLI, or when writing the tools paragraph.
-8. **Control plane.** Hard read-only (an agent never changes them):
-   security rules, sandbox and container configuration, secret-scanning hooks,
-   permission files. Soft read-only
-   (changed only under the rule the Gates layer states):
-   linter, type-check, test, and build configuration.
-   Strict → enforce hard read-only by read-only mounts;
-   otherwise by convention, saying so.
-   Read [references/control-plane.md](references/control-plane.md) when classifying files,
-   when writing mount enforcement or the network allowlist,
-   or when a client has its own sandbox setting.
-9. **Non-interactive defaults.** The task runner exports `CI=true`, `PAGER=cat`,
-   `GIT_PAGER=cat`, `GIT_TERMINAL_PROMPT=0`,
-   and any variable the project's own tools read;
-   name every command that still needs a run-once flag.
-10. **Client sandbox settings.**
-    Each client's own sandbox is set consistently
-    with decisions 1 and 5 and described as an aid, never as the boundary.
+Read [references/decisions.md](references/decisions.md) when running step 2 (decide mode) or auditing without an anchor document:
+it holds this layer's thickness table and all ten decisions.
 
-Read [references/sandbox-exposures.md](references/sandbox-exposures.md) when step 1 found a credential, a privileged interface, host networking,
-or log collection, or when deciding whether an exposure is cut or kept.
+Return a recommended thickness with the conditions that selected it,
+and all ten decisions (one removed by thickness is settled as "not built",
+except an exposure step 1 observed, which is always returned).
+Each decision is returned in one of two states:
 
-Write the section so the environment can be built from it alone,
-in plain prose a reader without this skill understands
-(say "the agent reads public issues with nobody watching", not a tier name).
-It must name: the base and the file that defines it;
+- **settled**, with its evidence, when the handover settles it,
+  the repository shows it (an environment already in use, a file, a scope),
+  or the conditions make the recommendation clearly better
+  and it changes nothing that exists;
+- **open**, with its options (the recommendation first),
+  the reason, and the decisions it depends on, in every other case:
+  always when the recommendation cuts or replaces something that exists,
+  needs a by-hand step from the user, or rests on a condition not shown.
+
+An exposure the user was never shown is always open, with cutting it
+recommended; never return it as settled, kept, or accepted.
+Handed over by an entry, ask the user nothing.
+
+Word the decisions so the environment can be built from them alone.
+Together they name: the base and the file that defines it;
 every credential by name and scope;
 the network rule, host by host when restricted;
 every tool with its purpose, what it reaches, the credential it uses,
-and when it is available; the tools deliberately not provided;
+and when it is available; the tools deliberately not provided,
+and that an agent needing one stops and asks;
 every hard and soft read-only file by path with how each is enforced;
 the variables and where they are set;
 and each thing deliberately not done, with its reason.
-Every exposure that remains is written as kept, with the reason.
-Approval of the design is the owner's risk decision,
-so an exposure the user was never shown is never written as accepted.
+Every exposure that remains is stated as kept, with the owner's reason.
+Accepting the decisions is the owner's risk decision,
+which is why an unseen exposure cannot be settled for them.
 
-Done when: every decision has text in the section,
-each default applied is listed with the Context fact that selected it,
+Done when: a thickness is recommended with its reasons,
+each of the ten decisions is settled with evidence or open with options,
 and nothing was written to the project.
 
-### 3. Build
+### 3. Describe
 
-Write only what the section describes;
-change only the lines it requires in a file that exists.
+Describe only what step 1 found,
+decision by decision in the order of step 2,
+as prose fit for a `HARNESS.md`:
+plain sentences a reader without this skill understands,
+naming the same items the decisions of step 2 name.
+Mark intent you inferred as "(inferred)".
+Write an exposure that is present as present, with what it gives
+(a mounted Docker socket gives host root) and "no decision about it is
+recorded"; never write it as a decision or as accepted.
+Never replace what exists with a recommendation, and improve nothing.
+
+Done when: every decision of step 2 has a sentence saying what exists
+or that nothing does, and no file in the project has changed.
+
+### 4. Build
+
+Write only the files the plan lists for this layer;
+change only the lines the agreed decisions require in a file that exists.
+A build handover that asks for the plan only writes nothing:
+return each file this step would create, change, or delete,
+by path with one line on its shape.
+
+Apply a change that widens agent autonomy only after a separate go-ahead
+for that operation. When run directly, ask for it here.
 
 1. The environment knowledge file,
    reworked line by line
    from [assets/knowledge-environment.md](assets/knowledge-environment.md)
-   when the section gives agents anything to know while working,
+   when the agreed decisions give agents anything to know while working,
    into the project's knowledge directory
    (`.agents/knowledge/environment.md` when none exists).
    It holds what an agent at work needs:
    what it must not touch, what a refusal means,
    which tools exist and which are absent on purpose.
-   Reasons and history stay in `HARNESS.md`.
+   Reasons and history stay out of it:
+   they go to the anchor document when the project adopted one,
+   and to the hand back otherwise.
 2. The task-runner lines
    from [assets/justfile-env-snippet.just](assets/justfile-env-snippet.just)
-   when the section sets non-interactive defaults,
+   when non-interactive defaults were agreed,
    translated when the runner is not `just`;
-   keep variables the file already exports.
+   keep variables the file already exports and add only the missing ones.
    With no task runner agreed, install none:
    write the variables into the knowledge file and hand the runner choice
    to the layer that owns Gates.
 3. The base: a dev container configuration, read-only mounts, and the firewall,
-   each only where the section says so and as `references/devcontainer.md`
+   each only where the agreed decisions say so
+   and as `references/devcontainer.md`
    and `references/control-plane.md` describe.
-4. Tool registration and wrapper scripts the section names,
+   The allowlist holds exactly the agreed hosts.
+4. Tool registration and wrapper scripts the agreed decisions name,
    as `references/tools.md` describes.
-5. Each client sandbox setting the section states, in the file it names.
-6. The route. With an entrypoint present,
+5. Each client sandbox setting agreed, in the file the decision names.
+6. The route. With an entrypoint present and listed in the plan,
    add one routing row naming the knowledge file and its load condition
    when the entrypoint stays at or under 120 lines;
    otherwise, or with no entrypoint yet,
-   hand the row (situation and file) to the layer
-   that owns Knowledge as a route owed.
+   leave the entrypoint unchanged and hand the row (situation and file)
+   to the layer that owns Knowledge as a route owed.
 
 A recipe that still prompts or watches is named in the knowledge file and handed
 to the layer that owns Gates; do not edit the recipe.
+A credential wider than agreed is not changed:
+list rescoping it as a by-hand step and report the gap.
+A departure a fact forced (a path that differs, a tool that is absent,
+a decision that cannot be built) is recorded as a deviation
+with the agreed decision it departs from.
 
-Done when: every file the section describes exists
+Done when: every file the plan lists for the layer exists
 or is on the pending decisions list,
-and no file outside the section was touched.
+and no file outside the plan was touched.
 
-### 4. Verify
+### 5. Verify
 
 Run each check that applies and record its output;
 record a check you could not run as "not verified"
@@ -318,67 +322,70 @@ with the command the user runs later.
 - A search for `{{` and `# CONFIGURE:` over the written files finds nothing.
 - The task runner prints the exported variables with the values written.
 - The container configuration parses, and its mounts, capabilities, and
-  user match the section.
-- Every command-line tool the section names answers `command -v`; every
-  tool it lists as absent does not.
-- Every tool registration file parses and names only tools in the section.
+  user match the agreed decisions.
+- Every command-line tool the agreed decisions name answers `command -v`;
+  every tool they list as absent does not.
+- Every tool registration file parses and names only agreed tools.
 - With an allowlist: an allowed host answers and a blocked host does not.
 - With read-only mounts: `/proc/self/mountinfo` shows each as `ro`. Mounts
   and firewall rules take effect at the next container rebuild; when the
   session predates the change, mark them "not verified".
 - The knowledge file opens with its "Read this when" line and is reachable
   from the entrypoint, or its route is recorded as owed.
+- No written file holds a credential's value.
 
 Done when: every applicable check is recorded as passed, failed and fixed,
 or not verified.
 
-### 5. Audit
+### 6. Audit
 
-Compare the section, sentence by sentence, with what step 1 observed.
-With no section in the handover,
-compare with the defaults of step 2 for the project's Context
-and mark each finding "no design to compare with". Report as findings:
+When the project adopted an anchor document,
+compare its text for this layer, sentence by sentence,
+with what step 1 observed; the sentence is the source of truth.
+Otherwise compare what step 1 observed
+with the recommendations of step 2 for the project's conditions;
+the source of truth is the condition that calls for the recommendation,
+and each finding is marked "no recorded design to compare with".
+Report both directions: what is stated or called for and absent,
+and what is present and nothing accounts for.
+Every finding takes the form of the finding-classes rule above.
+Read [references/audit-findings.md](references/audit-findings.md) when classifying a finding or choosing its disposition.
+Evidence is the configuration line as `path:line`
+or the output of a command that was run.
 
-- an exposure the section does not mention (a credential mount, a Docker socket,
-  host networking, a token wider than stated): **high**;
-- a boundary the section states that the project lacks or contradicts
-  (no firewall, a writable hard read-only file,
-  a base the session is not running in): **high**;
-- a tool registered but absent from the section,
-  or named in the section and missing from the environment: **medium**;
-- missing non-interactive variables, a recipe that watches or prompts,
-  a client sandbox setting that differs: **medium**;
-- a knowledge file that disagrees with the section or that no route reaches:
-  **medium**;
-- wording that is stale but changes no behaviour: **low**.
-
-For each finding recommend one side:
-fix the artifact when the section still states what the project wants;
-amend the design when the project's practice
-is the better answer or the section never decided.
-
-Done when: every sentence of the section is matched to evidence or to a finding,
+Done when: every sentence of the anchor document's text for the layer,
+or every decision of step 2 when there is none,
+is matched to evidence or to a finding,
+every exposure and tool step 1 observed is accounted for or is a finding,
 and no file has changed.
 
-### 6. Hand back
+### 7. Hand back
 
-- **design, extract**: the section text ready to paste;
-  the defaults applied, each with the Context fact
-  that selected it (design) or the inferences made (extract);
-  the questions no default can answer.
+- **decide**: the recommended thickness with the conditions that selected it;
+  the ten decisions, each marked settled with its evidence,
+  or open with its options (recommended first), the reason,
+  and the decisions it depends on;
+  the exposures observed that the user has not been shown;
+  the next step to take if the conditions change
+  (mount enforcement when agents become unattended).
+- **describe**: the prose, ready to paste; the inferences made;
+  the exposures present with no recorded decision.
 - **build**: every file written or changed with its role
-  and verification result;
-  deviations where a fact forced a departure from the section,
-  each with the sentence to reconcile in `HARNESS.md`; routes owed;
-  work handed to another layer, the layer described;
+  and verification result, checks not run marked "not verified"
+  with their command;
+  deviations, each with the agreed decision it departs from,
+  for the entry to put to the user (run directly, put them to the user);
+  assumptions applied where no agreed decision covered a point;
+  routes owed; work handed to another layer, the layer described;
   by-hand steps for the user (token changes, a container rebuild);
   the pending decisions list; the ownership notice for delivered code.
+  For a plan only: the files by path, each with one line on its shape.
 - **audit**: one row per finding:
-  severity, evidence as `path:line` or command output,
-  the sentence of the section,
-  and "fix the artifact" or "amend the design" with the change.
+  class, severity, evidence as `path:line` or command output,
+  the source of truth, and the proposed disposition with the change.
 
-Done when: every item for the mode is in the hand back and it names no skill.
+Done when: every item for the mode is in the hand back, it names no skill,
+and it holds no credential value.
 
 ## Gotchas
 
@@ -389,7 +396,7 @@ Done when: every item for the mode is in the hand back and it names no skill.
   no update prompt). Name each recipe it changes in the knowledge file.
 - A read-only file mount makes any git operation that rewrites that file
   (checkout, pull, rebase) fail with "Device or resource busy".
-  Say so in the section:
+  Say so in the control-plane decision:
   changes to those files then go through a person outside the container,
   which is the intent.
 - `/proc/self/mountinfo` shows what is mounted now;

@@ -4,7 +4,7 @@ Read when writing or changing GitHub Actions workflows for the project's checks.
 
 ## Which asset, where
 
-| The section gates on | Deliver | Target path |
+| The agreed check set | Deliver | Target path |
 |---|---|---|
 | formatter and secret scan only | [assets/github/workflow-secret.yml](../assets/github/workflow-secret.yml) | `.github/workflows/secrets.yml` |
 | lint, typecheck, tests, no summary gate | [assets/github/workflow-checks.yml](../assets/github/workflow-checks.yml) without `boundaries` and `gate` | `.github/workflows/checks.yml` |
@@ -12,8 +12,8 @@ Read when writing or changing GitHub Actions workflows for the project's checks.
 
 The checks workflow carries its own secret-scan job;
 do not deliver the secrets workflow beside it.
-Rework each job to run the recipe of the section's tool and delete jobs
-for checks the section does not name. Keep the commented `# harness:` slot:
+Rework each job to run the recipe of the agreed tool and delete jobs
+for checks the agreed decisions do not name. Keep the commented `# harness:` slot:
 the harness self-check job is added there later,
 and into the gate's `needs` when a gate exists.
 

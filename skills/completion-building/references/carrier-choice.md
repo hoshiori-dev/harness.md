@@ -2,7 +2,7 @@
 
 Read when the tool already in use does not fit the project's shape,
 when the user asks to change tools,
-when presenting the alternatives to the default,
+when presenting the alternatives to the recommendation,
 or when the project keeps a framework that is neither OpenSpec, Spec-Kit,
 nor hand-written per-change documents.
 
@@ -14,9 +14,9 @@ a one-file script change a plan agreed in plan mode.
 
 ## The order
 
-Apply in order; the first match is the default.
+Apply in order; the first match is the recommendation.
 
-| # | Fact observed or given in Context | Default | Reason to give |
+| # | Fact observed or given in the project's conditions | Recommendation | Reason to give |
 |---|---|---|---|
 | 1 | A tool is already in use (the inventory lists it) | Keep it | Migration costs more than any fit gained; changes in flight live in it |
 | 2 | One maintainer, small repository, with or without code | Lightweight: a `SPEC.md`/`PLAN.md` committed with each change, or plan mode for a one-file change | Approval happens in conversation; a framework adds files nobody else reads |
@@ -26,7 +26,7 @@ Apply in order; the first match is the default.
 No row matches (no code yet, a library or infrastructure project, a team):
 OpenSpec, because a library's contract is per capability, not per feature.
 
-Give the matching row's fact as the reason in the section:
+Give the matching row's fact as the reason beside the decision:
 "existing code", "one maintainer and a small repository", "already in use".
 
 ## Alternatives, one sentence each
@@ -39,8 +39,8 @@ Give the matching row's fact as the reason in the section:
   or plan mode for the smallest changes;
   fits a solo maintainer who approves in conversation.
 
-Name only the ones not chosen, beside the default,
-so the user can change it at the one approval.
+Return the ones not chosen as the decision's other options,
+after the recommendation, so the user can choose one of them.
 
 ## A kept tool that does not fit
 
@@ -55,7 +55,7 @@ changes in flight would move under a layout nobody approved.
 
 Kiro specs, an IDE's native spec files,
 or a custom layout the user keeps have no skill for their tool here.
-The section and the contract then state:
+The decisions returned and the contract then state:
 
 - the implementer as the person who closes every approval
   (approval noted in the conversation or on the pull or merge request,

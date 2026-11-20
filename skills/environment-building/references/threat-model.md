@@ -35,7 +35,8 @@ the configuration line, the token scope, or the user's answer.
 
 The agent reaches sensitive assets, reads an open-write source,
 and no person reviews each result:
-the default is a separate restricted instance that removes one of the three.
+the recommendation is a separate restricted instance
+that removes one of the three.
 
 - Its own container or VM, not the developer's environment.
 - None of the sensitive credentials;
@@ -44,9 +45,9 @@ the default is a separate restricted instance that removes one of the three.
 - No write to the default branch and no change to configuration;
   results land as a branch or a draft request a person reviews.
 
-Write it into the section as the default with this reason.
+Return it as the recommended option with this reason.
 A user who changes it keeps the ordinary environment as their recorded decision,
-with their reason, and the section still says which three facts hold.
+with their reason, and the threat rating still says which three facts hold.
 
 ## In between
 
@@ -62,16 +63,16 @@ to restrict sources or clean input:
   (only allowlisted documentation hosts,
   or fetched pages reduced to text before the main agent reads them).
 
-Take resistance per model named in the Context
+Take resistance per model named in the project's conditions
 (the exact model the environment runs, and each sub-agent model),
 never per vendor. When the model is unknown,
-write the stricter setting as the default and list the question
-as one no default can answer.
+recommend the stricter setting and return the model
+as an open decision.
 Sources limited to the trusted repository need no restriction.
 
 ## When the user argues a strong model replaces isolation
 
-Keep the restricted instance as the default and say why once:
+Keep the restricted instance as the recommendation and say why once:
 resistance lowers the chance of a hijack; isolation lowers the loss after one.
 An agent that runs code can bypass every client-side defence once hijacked,
 so the two are not substitutes. If the user still removes the instance,

@@ -1,7 +1,7 @@
 {
   "name": "harness-md",
   "version": "0.1.0",
-  "description": "Designs, builds, extracts, and audits a project's agent harness around one HARNESS.md file: the design is written once, then built layer by layer — environment, knowledge, feedback, gates, authority, completion, entropy — with spec-driven development skills for daily work.",
+  "description": "Helps a developer and their coding agent work out and build a project's agent harness together: create one, improve one, write a design down as HARNESS.md files, or adopt the design of another project. Decisions are settled in rounds, layer by layer — environment, knowledge, feedback, gates, authority, completion, entropy — with spec-driven development skills for daily work.",
   "author": {
     "name": "hoshiori-dev",
     "url": "https://github.com/hoshiori-dev"
@@ -22,6 +22,7 @@
     "antigravity"
   ],
   "agents": [
+    "./com.anthropic.claude-code/agents/harness-reader.md",
     "./com.anthropic.claude-code/agents/harness-verifier.md"
   ]
 }

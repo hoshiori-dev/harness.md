@@ -14,7 +14,7 @@ Every failure follows
 the location, what is wrong, the rule and where it is written,
 and what to do instead.
 A rule with no stated alternative is not ready to be a check:
-in design mode it becomes an open question;
+in decide mode it is returned as an open decision;
 in build mode it becomes a pending decision and the check is not written.
 
 ## The reference implementation
@@ -25,7 +25,7 @@ is a working import-direction check
 with its tests
 beside it in
 [assets/check_boundaries_test.py](../assets/check_boundaries_test.py).
-Use it when the section states an import-direction rule:
+Use it when an agreed decision states an import-direction rule:
 
 - **The script language is Python**:
   copy both files into the project's scripts directory, set the `# CONFIGURE:`
