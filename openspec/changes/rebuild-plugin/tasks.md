@@ -106,7 +106,7 @@
 ## Workflow follow-up
 
 - After the maintainer's review: archive `openspec/changes/rebuild-plugin/`
-  on the branch (`openspec-archive-change`), manually delete the four empty spec
-  directories left by removed skills (`openspec/specs/skill/harness-{audit,build,design,extract}`),
+  on the branch (`openspec-archive-change`), which retires and deletes the four
+  removed skill specs automatically via `retire_capabilities: true`,
   and update the Purpose paragraphs of `openspec/specs/skill/spec.md`
   and `openspec/specs/agent/spec.md` by hand in the archive commit.

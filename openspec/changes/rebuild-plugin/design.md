@@ -251,10 +251,10 @@ changes, both README skill tables, `plugin.json`'s description,
 ### Specs of removed entries
 
 The deltas remove every requirement of `skill/harness-design`,
-`skill/harness-build`, `skill/harness-audit`, and `skill/harness-extract`.
-OpenSpec leaves an empty spec file behind on archive;
-the four directories are deleted by hand in the archive commit
-so that `just validate` (one spec per entry) passes.
+`skill/harness-build`, `skill/harness-audit`, and `skill/harness-extract`,
+and `.openspec.yaml` declares `retire_capabilities: true`
+so OpenSpec deletes the four emptied specs and prunes their directories on archive,
+leaving `just validate` (one spec per entry) passing.
 Purpose paragraphs of the modified specs (the two catalogs included),
 which deltas cannot carry, are edited by hand in the same commit.
 A MODIFIED requirement keeps every scenario name it had, because OpenSpec
