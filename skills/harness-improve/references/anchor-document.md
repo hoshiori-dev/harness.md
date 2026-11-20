@@ -64,8 +64,9 @@ is not.
 
 ## 5. Writing intent back
 
-Each agreed change of intent is written to the file
+Write each realised change of intent to the file
 in the same checkpoint commit as the layer it concerns.
+Keep deferred changes of intent in the pending decisions list.
 
 - Change only the sentences the agreed decision touches;
   leave the rest exactly as written.

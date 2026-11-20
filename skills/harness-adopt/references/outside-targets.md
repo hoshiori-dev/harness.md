@@ -13,9 +13,9 @@ and its scripts can do anything.
 - **A repository address**: make a new, empty directory
   in the same temporary location the result would go to,
   outside the current project, and clone into it:
-  `GIT_LFS_SKIP_SMUDGE=1 git clone --depth 50 --no-recurse-submodules <address> <new empty directory>`.
+  `GIT_LFS_SKIP_SMUDGE=1 git -c core.hooksPath=/dev/null clone --depth 50 --no-recurse-submodules -- <address> <new empty directory>`.
   Depth 50 keeps enough history to read the commit conventions;
-  no submodule and no large-file content is fetched.
+  clone hooks are disabled, and submodules and Git LFS content are skipped.
   Tell the user the directory's complete path
   and that they may delete it afterwards. Do not delete it yourself.
 - Put nothing of the user's into the request:

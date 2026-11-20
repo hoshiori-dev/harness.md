@@ -23,8 +23,9 @@ before it is recorded as passed.
       (for example a list of decisions waiting for the user)
       is defined in a project file.
 - [ ] No placeholder (`{{NAME}}`) or fill instruction is left in any file.
-- [ ] The project root holds no `HARNESS.md` this work wrote,
-      no reference was copied into the project,
+- [ ] A root `HARNESS.md` created in this work was explicitly requested
+      as an anchor document and the entrypoint names it.
+      No reference was copied into the project,
       and no built file routes tasks to a reference.
 
 ## The agreement is realised
@@ -47,11 +48,14 @@ before it is recorded as passed.
       and its routes are organised by when an agent needs to read what.
 - [ ] Every rule and knowledge file is reachable from the entrypoint;
       the entrypoint is within the size the Knowledge decisions state
-      (when they state none: about 100 lines, at most 120);
-      a client-specific file only imports it.
+      (when they state none: about 100 lines, at most 120).
+      A client-specific file imports the shared entrypoint
+      and keeps only agreed client-specific instructions alongside it.
 - [ ] Every link and path in a built file resolves.
-- [ ] Every command a built file documents exists in the task runner
-      and was run; the scoped test command returns in seconds.
+- [ ] Every documented command resolves and the approved verification
+      commands were run. Record commands that need a human to run them.
+      Each promised recipe is in the task runner, and the scoped test
+      returns in seconds when the plan includes one.
 - [ ] Commands never wait for input: no pager, no prompt, no watch mode.
 - [ ] Every custom check's failure message says how to fix what it found.
 - [ ] Each fact lives in one place; where a sync rule exists,

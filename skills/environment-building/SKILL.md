@@ -263,6 +263,9 @@ A build handover that asks for the plan only writes nothing:
 return each file this step would create, change, or delete,
 by path with one line on its shape.
 
+Apply a change that widens agent autonomy only after a separate go-ahead
+for that operation. When run directly, ask for it here.
+
 1. The environment knowledge file,
    reworked line by line
    from [assets/knowledge-environment.md](assets/knowledge-environment.md)

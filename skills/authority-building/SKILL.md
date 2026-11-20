@@ -292,6 +292,8 @@ line resolved, guidance and inapplicable sections deleted.
 2. **Permission files**: rework [assets/claude-settings.jsonc](assets/claude-settings.jsonc) into
    strict JSON, and [assets/codex-config.toml](assets/codex-config.toml) plus
    [assets/codex-authority.rules](assets/codex-authority.rules), holding exactly the agreed entries.
+   Apply a change that widens agent autonomy only after a separate go-ahead
+   for that operation. When run directly, ask for it here.
    An existing file loses an entry only where an agreed decision says so.
 3. **Checkpoint recipes**: rework [assets/checkpoint-recipes.just](assets/checkpoint-recipes.just) into
    the project's task runner. Exercise them only in a temporary clone

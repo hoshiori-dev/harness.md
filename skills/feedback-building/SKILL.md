@@ -249,8 +249,8 @@ by path with one line on its shape.
 
 **Recipes.** Rework [assets/feedback-recipes.just](assets/feedback-recipes.just)
 line by line into the project's task runner (translate it for another runner):
-the fast and full aggregates, the test recipes, and the recipes that start,
-check, stop, seed, and smoke-test the system. Every recipe is non-interactive:
+the agreed fast and full aggregates, test recipes, and system recipes.
+Every recipe is non-interactive:
 no watch mode, no pager, no prompt.
 Keep an existing recipe's name when it already does the job.
 
@@ -261,6 +261,11 @@ A tool that is missing is not installed here:
 list it in the hand back for the layer that owns Environment.
 
 **Review pass.** Read [references/review-pass.md](references/review-pass.md) when the decisions include a review pass, and build what it describes.
+
+**Light Feedback.** Name the fast and full commands in the entrypoint
+with one sentence on what a human verifies. Use the planned entrypoint
+and its budget, or hand back the lines for the Knowledge layer to place.
+Then go to Verify.
 
 **Knowledge file.**
 Rework [assets/knowledge-verification.md](assets/knowledge-verification.md)
@@ -285,13 +290,14 @@ and no file outside the plan's list was written.
   and the number of lines printed.
   Over budget, record the measured time as a deviation
   for the user to decide; remove no check to meet the budget.
-- Run the scoped test on one existing test file.
+- When a scoped test was built, run it on one existing test file.
   Then add a temporary test that fails on purpose, run the scoped test on it,
   confirm the output names the file and the assertion and stays bounded,
   and delete it.
 - Run the full check when its agreed duration
   is under 15 minutes or the user agreed; otherwise say it was not run.
-- Start the system, wait for readiness, run the smoke test, stop it,
+- When system recipes were built, start the system, wait for readiness,
+  run the smoke test, stop it,
   and confirm no process or port is left behind.
   A process or port left behind is a failed verification:
   fix the recipe and run this item again before handing back.

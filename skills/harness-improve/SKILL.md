@@ -128,7 +128,8 @@ defined.
   when they still decline, add the contradiction to the pending decisions
   list and leave every file it touches out of the remaining work.
 - **Keep what works.** The task runner, lint configuration, branching habit,
-  commit convention, and spec carrier in use stay as they are.
+  commit convention, and spec carrier in use stay as they are
+  unless replacing one is part of a migration the user requests and approves.
   A tool replacement the analysis suggests is a separate recommendation
   in the closing report; no plan item depends on it.
 - **A symptom is a lead, not the scope.**
@@ -195,7 +196,9 @@ Read [references/inventory.md](references/inventory.md) before recording the fir
    when it loads, what it must agree with, what keeps it current.
 2. Run the project's own harness self-check when one exists
    and quote its output; add by hand only what it does not cover.
-3. Follow the entrypoint's pointers as a new agent would:
+3. Record supplied references and unconfirmed anchor candidates by path.
+   Read their contents only through the reference procedure.
+   Follow the other entrypoint pointers as a new agent would:
    open every path, check every documented command against the task runner,
    compare every rule with the code and with the other files.
 4. Record the project's conditions as the repository shows them,
@@ -240,18 +243,24 @@ every layer has a verdict, and every complaint is traced or unexplained.
 
 ### 4. Report
 
-Rework [assets/findings-report.md](assets/findings-report.md) into one report and show it in the conversation;
-write it to a file only when the user names a path.
+Rework [assets/findings-report.md](assets/findings-report.md) into one report
+and show it in the conversation.
+If the user names a path for a saved report, include it in the plan
+and write it only after approval.
 Findings are grouped by layer, most severe first, each in the form
 the findings rule gives.
 The report makes no decision about the work:
 every disposition in it is proposed.
 
-Then offer to stop here. When the user stops,
-or step 1 noted "report only", end with the output of `git status`.
+For a report-only request with a named output path outside the project,
+ask for approval of a plan naming just that report file before saving.
+For a path inside the project, keep the report in the conversation
+unless the user chooses to continue to plan a write.
+Then offer to stop here. When the user stops, or the request is still
+report-only, end with the output of `git status`.
 
 Done when: the report holds every finding, every layer's verdict,
-and every complaint's explanation; no file has changed;
+and every complaint's explanation; no project file has changed;
 and the user chose to go on, or the work ended here.
 
 ### 5. Decide in rounds
@@ -322,22 +331,23 @@ Done when: the user approved the plan and no file has changed.
 
 Run the project's existing checks before the first change
 and record the result, so that a later failure is known to be new.
+Save the findings report only if the approved plan names its path.
 
-Work in plan order, drift items first. For each touched layer,
-hand over to its builder in **build** mode: the goal and non-goals,
+Work in plan order, drift items first. For each touched layer, first ask
+for the separate go-ahead for any deletion, widening of agent autonomy,
+publication, or remote setting change it entails.
+Show a dry run where the tool has one. Put unapproved actions and dependent
+edits on the pending decisions list and leave them out of the handover.
+
+Hand over to the builder in **build** mode: the goal and non-goals,
 the conditions, every layer's thickness, the layer's agreed decisions,
 its findings with their dispositions, and the plan's files for it.
 A file the builder wants beyond the plan is a plan amendment
 the user approves first.
 
-A step that needs its own decision is asked when it is reached,
-shown as a dry run where the tool has one;
-or it is added to the pending decisions list
-while every step that does not depend on it proceeds.
-
-Where the project has an anchor document, write every agreed change
-of intent back to it in the same checkpoint as the layer it concerns,
-as anchor-document.md states.
+Where the project has an anchor document, write realised changes of intent
+back to it in the same checkpoint as the layer they concern,
+as anchor-document.md states. Deferred changes stay in the pending decisions list.
 
 After each layer: run the project's checks; when they pass,
 commit that layer's files in the project's commit convention,

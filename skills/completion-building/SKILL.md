@@ -265,33 +265,38 @@ A departure a fact forces is reported as a deviation.
    project's knowledge directory), the entrypoint pointer line, the
    `.gitignore` line, each marker file, and each restating document or spec
    an agreed decision says to change. At a thickness of light the list is
-   the entrypoint entry and, when agreed, the `.gitignore` line; skip
-   items 2, 6, and 7. Under an entry this list is checked against
+   the entrypoint entry and, when agreed, the `.gitignore` line.
+   Under an entry this list is checked against
    the plan's files: report a difference and write only what the plan
    lists. A handover that asks for the plan only gets this list
    (create, change, delete) and nothing is written.
-2. **Deposit the contract.** Rework
+2. **Light Completion.** Write the agreed entrypoint rule for agreeing
+   behaviour changes in plan mode with the four answers,
+   and name the agreed full check for finishing a task.
+   Read [references/completion-boundary.md](references/completion-boundary.md) when stating the four answers.
+   Apply the handoff step below when agreed, then go to Verify.
+3. **Deposit the contract.** Rework
    [assets/knowledge-spec-workflow.md](assets/knowledge-spec-workflow.md)
    line by line: resolve every `# CONFIGURE:` line from the agreed decisions
    and delete every part that does not apply.
    Read [references/contract-design.md](references/contract-design.md) when reworking it.
    Read [references/completion-boundary.md](references/completion-boundary.md) when writing what every spec answers.
-3. **Check commands.** Run the scoped check once on one file before writing
+4. **Check commands.** Run the scoped check once on one file before writing
    it down. A command that fails or does not exist is not written: report
    the deviation and name the gap to the layer that owns Feedback, or add
    it to the pending decisions list when that layer is already built.
-4. **Point the entrypoint at the contract** with one routing row whose
+5. **Point the entrypoint at the contract** with one routing row whose
    condition is "before starting a change that alters behaviour, and before
    writing or approving a spec". Add the row only when the entrypoint exists
    and stays within its line budget; otherwise hand back a route owed (that
    condition and the contract's path) for the layer that owns Knowledge.
    Replace each behaviour sentence an agreed decision says to move
    with a pointer to the spec.
-5. **Handoff directory.** Append
+6. **Handoff directory.** Append
    [assets/gitignore-handoff.txt](assets/gitignore-handoff.txt) to
    `.gitignore` when the handoff location is a directory in the repository
    and the line is not there yet.
-6. **Fill the markers.** For each file holding
+7. **Fill the markers.** For each file holding
    `<!-- harness: spec-workflow -->`, write that file's block between the
    marker and an end marker `<!-- /harness: spec-workflow -->` on its own
    line; when an end marker already follows, replace only the lines between
@@ -299,7 +304,7 @@ A departure a fact forces is reported as a deviation.
    [references/approval-gates.md](references/approval-gates.md) when writing
    a block. With no marker in the project, record "no marker to fill" and
    name it to the layer that owns Authority.
-7. **Hand off the tool.** Describe the need to the skill for the chosen
+8. **Hand off the tool.** Describe the need to the skill for the chosen
    tool by what it owns: OpenSpec changes, archiving, and status labels;
    Spec-Kit features and their task completion; per-change
    `SPEC.md`/`PLAN.md` and plan-mode alignment. Pass it the agreed
@@ -307,7 +312,7 @@ A departure a fact forces is reported as a deviation.
    contract. For any other framework, record the implementer as the person
    who closes every approval and list the framework's automation as
    remaining work.
-8. **Apply the agreed decisions on restating documents and contradicting
+9. **Apply the agreed decisions on restating documents and contradicting
    specs.** One left open goes to the pending decisions list, and the
    contract names that spec as not yet authoritative.
 
@@ -315,6 +320,13 @@ Done when: every file on the list is written or its blocker
 is on the pending decisions list, and nothing outside the list changed.
 
 ### 5. Verify
+
+- For light Completion, read back the agreed entrypoint rule,
+  run the full check it names, and verify the handoff path is ignored
+  when one was agreed in the repository.
+  Check `git status` against the planned files and skip the contract checks.
+
+For a build with a contract:
 
 - `grep -n '{{' <contract>` returns nothing.
 - The contract contains no specification-tool command, no path into a skill

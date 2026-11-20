@@ -68,8 +68,8 @@ is the Entropy layer's verdict in the fitness reference.
   The binding is the finding; the fix gives the project its own copy.
 - The entrypoint's length against the budget the project states,
   else about 100 lines and at most 120.
-- A client-specific entrypoint that copies the shared one
-  instead of importing it, or that holds rules the shared one lacks.
+- A client-specific entrypoint that copies or contradicts shared rules.
+  Rules specific to that client can follow the shared import.
 - A document that restates what the code states
   (a directory listing, a command's flags).
 - A subdirectory entrypoint that carries a rule that must always hold,

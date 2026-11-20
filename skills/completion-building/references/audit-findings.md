@@ -13,8 +13,9 @@ Report a finding when:
 - the contract, the tool's files, or recent pull or merge requests
   contradict the source of truth, or a marker block disagrees with the contract:
   **contradictory**, **medium** (**high** when an approval gate is bypassed);
-- the contract is missing: **missing**, **medium**;
-  unreachable from the entrypoint: **invisible**, **medium**;
+- the contract is absent when the anchor document or conditions-based
+  baseline calls for one: **missing**, **medium**;
+  an existing contract is unreachable from the entrypoint: **invisible**, **medium**;
   states something the anchor document does not mention:
   **stale**, **low** (propose amending the anchor document or removing the clause);
 - a check command the source of truth or the contract names does not exist:

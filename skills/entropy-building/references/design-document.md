@@ -39,10 +39,9 @@ decisions say the document is kept in step:
    When the handover carries no list, configure none and report the gap;
    in a run without an entry, list the paths with the user
    before they accept the decisions.
-   The sync table gets the anchor row of the keep-in-sync shape
-   in place of the plain required-path row:
-   a change to a required path edits the File Structure section first,
-   then the list.
+   The required-path row in the sync table covers the full list.
+   For a path its File Structure section covers,
+   update that section first, then the list.
 2. **The file itself.** Set `DESIGN_DOC = "HARNESS.md"`;
    the check then reports a missing file as a finding.
    Set `DESIGN_VALIDATOR` only when the project holds its own copy of a format
@@ -68,7 +67,7 @@ Set `DESIGN_DOC = None` and `DESIGN_VALIDATOR = None`;
 `REQUIRED_PATHS` still takes the handed-over list.
 In the deposited shapes, every mention of `HARNESS.md` sits on a line
 whose `# CONFIGURE:` comment says to delete it without an anchor document:
-the intent paragraph and the anchor row of the keep-in-sync shape,
+the intent paragraph of the keep-in-sync shape,
 and the seventh hunt item and the sentence on changing intent
 in both reclamation shapes. Delete each, whole.
 The harness is then kept true to the code only.

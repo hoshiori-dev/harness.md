@@ -40,8 +40,10 @@ before it is recorded as passed.
       the entrypoint is within the budget the project states
       (when it states none: about 100 lines, at most 120).
 - [ ] Every link and path in a changed file resolves.
-- [ ] Every command a changed file documents exists in the task runner
-      and runs; the fast, scoped test command returns in seconds.
+- [ ] Every documented command resolves and the approved verification
+      commands were run. Record commands that need a human to run them.
+      Each promised recipe is in the task runner, and the scoped test
+      returns in seconds when the plan includes one.
 - [ ] Commands never wait for input: no pager, no prompt, no watch mode.
 - [ ] Every custom check's failure message says how to fix what it found.
 - [ ] Each fact lives in one place; where a sync rule exists,
@@ -61,17 +63,18 @@ before it is recorded as passed.
 
 ## Thickness
 
-- [ ] Each touched layer does what its confirmed thickness says:
-      nothing built for omitted, nothing machine-enforced added
-      below thick, nothing agreed left unbuilt.
-- [ ] Each untouched layer's files are unchanged.
+- [ ] Each touched layer matches the agreed mechanisms for its confirmed
+      thickness, including the checks and enforcement agreed for that layer.
+      Nothing was built for an omitted layer.
+- [ ] Each untouched layer's rules are unchanged, including in shared files.
 
 ## Anchor document
 
 Only when the project has one; otherwise mark the group not applicable.
 
 - [ ] It validates.
-- [ ] Every agreed change of intent is in it.
+- [ ] Every realised change of intent is in it.
+      Deferred changes of intent are in the pending decisions list.
 - [ ] Each fact it names matches the code after this work
       (command names, paths).
 - [ ] No changed file routes ordinary tasks to it.
