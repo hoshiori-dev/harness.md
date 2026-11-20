@@ -18,7 +18,7 @@
   Verify: `just harness-check` passes.
 - [ ] 1.4 Resolve the four `catalog-orphan-spec` findings from
   `scripts/check_plugin.ts` for removed unarchived skills
-  (separate PR or direct fix per maintainer decision).
+  (companion PR #21 / issue #20 awaiting merge into `main`, then merge back here).
   Verify: `just validate` exits 0.
 
 ## 2. Read-only agents
@@ -58,7 +58,7 @@
   aligning thickness definitions and audit finding classes across builders and entries,
   and updating references and assets where they assumed a root `HARNESS.md`.
   Verify: `just skills-check` and `just test` pass with zero warnings.
-- [ ] 4.2 Rewrite `skills/gates-building/SKILL.md` the same way, and apply the
+- [x] 4.2 Rewrite `skills/gates-building/SKILL.md` the same way, and apply the
   maintainer's decision on keeping (with a delta spec update) or removing
   the Verify rule requiring gates to be seen rejecting a violation.
   Verify: `just skills-check` and `just spec-check` pass, and the implementation

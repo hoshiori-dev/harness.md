@@ -205,3 +205,14 @@ In describe mode the agent SHALL describe the gates the project has today as pro
 #### Scenario: Check that never blocks
 - **WHEN** describe mode finds a CI lint job carrying `continue-on-error: true`
 - **THEN** the description describes that job as not blocking
+
+### Requirement: Built gates are verified against a violation
+In build mode the agent SHALL verify each cheap local gate against a temporary harmless violation, delete every temporary file afterward, never commit or push a violation to test CI, and report every gate in the hand back as shown to fail or as not verified with the reason.
+
+#### Scenario: Local formatter and secret-scan gates
+- **WHEN** build mode installs a pre-commit hook running a formatter and a secret scanner
+- **THEN** the agent runs each against a temporary file carrying one formatting violation or an obviously fake credential, confirms a non-zero exit, deletes the temporary files so `git status` is clean, and reports those gates as shown to fail
+
+#### Scenario: CI job with no observed failing run
+- **WHEN** build mode writes a GitHub Actions checks workflow and summary gate
+- **THEN** the agent commits or pushes no violation to trigger CI and reports the CI jobs and summary gate in the hand back as not verified with the reason
