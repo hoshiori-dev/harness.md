@@ -6,7 +6,10 @@
 //
 //   check_plugin.ts                  run every rule
 //   check_plugin.ts --footprint <id> print the files that belong to one client
-import { join } from "node:path";
+import { lstatSync, readFileSync, realpathSync } from "node:fs";
+import { join, sep } from "node:path";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { parse as parseYaml } from "yaml";
 import type { ClientSpec } from "./lib/clients.ts";
 import { CLIENTS, clientById, footprint } from "./lib/clients.ts";
 import { exists, Findings, fail, isDirectory, listDir, readText } from "./lib/findings.ts";
@@ -19,7 +22,16 @@ import {
   SKILL_NAME_RE,
 } from "./lib/plugin.ts";
 
+const FENCE_OPEN = /^\s*(`{3,}|~{3,})(.*)/;
+const FENCE_CLOSE = /^\s*(`{3,}|~{3,})\s*$/;
+const H2 = /^##\s+(.+)$/;
+const REQUIREMENT = /^###\s*Requirement:\s*(.+)\s*$/i;
+const REMOVED_BULLET = /^\s*[-*+]\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
+const KEBAB_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 const root = process.cwd();
+const realRoot = realpathSync(root);
+const realPrefix = realRoot.endsWith(sep) ? realRoot : `${realRoot}${sep}`;
 const args = process.argv.slice(2);
 
 if (args[0] === "--footprint") {
@@ -365,6 +377,7 @@ function checkCatalogs(skills: string[], agents: Map<string, AgentFile[]>) {
       });
     }
     const proposed = proposedSpecs(catalog);
+    const removed = removedSpecs(catalog, dir, specNames);
     for (const name of implemented) {
       if (!specNames.includes(name) && !proposed.has(name)) {
         findings.add({
@@ -378,12 +391,14 @@ function checkCatalogs(skills: string[], agents: Map<string, AgentFile[]>) {
       }
     }
     for (const name of specNames) {
-      if (!implemented.includes(name)) {
+      if (!implemented.includes(name) && !removed.has(name)) {
         findings.add({
           file: `openspec/specs/${catalog}/${name}/spec.md`,
           rule: "catalog-orphan-spec",
-          problem: `spec exists but ${where.replace("<name>", name)} is not implemented.`,
-          fix: "implement it, or archive a change that removes the spec.",
+          problem:
+            `spec exists but ${where.replace("<name>", name)} is not implemented, ` +
+            "and no unarchived change retires the capability and removes every requirement of the spec.",
+          fix: "implement it, or remove the spec through an OpenSpec change.",
         });
       }
     }
@@ -404,6 +419,177 @@ function proposedSpecs(catalog: string): Set<string> {
     if (!isDirectory(dir)) continue;
     for (const entry of listDir(dir)) {
       if (entry.isDirectory && exists(join(dir, entry.name, "spec.md"))) names.add(entry.name);
+    }
+  }
+  return names;
+}
+
+function stripClosingHashes(text: string): string {
+  return text.replace(/[ \t]+#+[ \t]*$/, "").trim();
+}
+
+function readRepoFile(path: string): string | null {
+  try {
+    if (!lstatSync(path).isFile()) return null;
+    const realPath = realpathSync(path);
+    if (!realPath.startsWith(realPrefix)) return null;
+    return readFileSync(realPath, "utf8");
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === "ENOENT" || code === "ENOTDIR") return null;
+    throw error;
+  }
+}
+
+function* specLines(text: string, isDelta: boolean): Iterable<string> {
+  const normalized = text.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
+  const codeLines = new Set<number>();
+  if (isDelta) {
+    // OpenSpec's line parser does not track Markdown containers. A removal must
+    // also be outside rendered code blocks, including list and quote examples.
+    const nodes = [...fromMarkdown(normalized).children];
+    while (nodes.length > 0) {
+      const node = nodes.pop();
+      if (!node) break;
+      if (node.type === "code" && node.position) {
+        for (let line = node.position.start.line; line <= node.position.end.line; line++) {
+          codeLines.add(line);
+        }
+      } else if (node.type === "blockquote") {
+        nodes.push(...node.children);
+      } else if (node.type === "list") {
+        for (const item of node.children) nodes.push(...item.children);
+      }
+    }
+  }
+
+  // Track the raw-line fence interpretation used by OpenSpec 1.17 as well.
+  // A container-prefixed fence marker cannot open or close one of these.
+  let fence: string | undefined;
+  for (const [index, line] of normalized.split("\n").entries()) {
+    if (fence) {
+      const close = FENCE_CLOSE.exec(line)?.[1];
+      if (close?.startsWith(fence)) fence = undefined;
+      continue;
+    }
+    const open = FENCE_OPEN.exec(line);
+    const marker = open?.[1];
+    if (marker && !(marker.startsWith("`") && open?.[2]?.includes("`"))) {
+      fence = marker;
+      continue;
+    }
+    if (!codeLines.has(index + 1)) yield line;
+  }
+}
+
+function specSections(text: string, isDelta: boolean): Map<string, Set<string>> | null {
+  const sections = new Map<string, Set<string>>();
+  let current: Set<string> | undefined;
+  let currentName: string | undefined;
+  for (const line of specLines(text, isDelta)) {
+    const h2 = H2.exec(line);
+    if (h2) {
+      const heading = stripClosingHashes(h2[1] ?? "").toLowerCase();
+      let set = sections.get(heading);
+      if (!isDelta && heading === "requirements" && set) return null;
+      if (!set) {
+        set = new Set();
+        sections.set(heading, set);
+      }
+      current = set;
+      currentName = heading;
+      continue;
+    }
+    if (!current || currentName !== (isDelta ? "removed requirements" : "requirements")) continue;
+    const req = REQUIREMENT.exec(line) ?? (isDelta ? REMOVED_BULLET.exec(line) : null);
+    if (!req) {
+      if (!isDelta && /^###\s+/.test(line)) return null;
+      continue;
+    }
+    const name = stripClosingHashes(req[1] ?? "");
+    if (!name || current.has(name)) return null;
+    current.add(name);
+  }
+  return sections;
+}
+
+function removesAllRequirements(deltaText: string, mainReqs: Set<string>): boolean {
+  if (mainReqs.size === 0) return false;
+  const sections = specSections(deltaText, true);
+  if (sections?.size !== 1) return false;
+  const removed = sections.get("removed requirements");
+  if (!removed) return false;
+  return [...mainReqs].every((req) => removed.has(req));
+}
+
+function declaresCapabilityRetirement(changeDir: string): boolean {
+  const text = readRepoFile(join(changeDir, ".openspec.yaml"));
+  if (text === null) return false;
+  let doc: unknown;
+  try {
+    doc = parseYaml(text);
+  } catch {
+    return false;
+  }
+  if (typeof doc !== "object" || doc === null || Array.isArray(doc)) return false;
+  const { schema, retire_capabilities, created, goal, affected_areas, initiative, skip_specs } =
+    doc as Record<string, unknown>;
+  // The repository uses OpenSpec 1.17's built-in spec-driven workflow.
+  // Validate its marker's known metadata fields before treating it as authorization.
+  return (
+    schema === "spec-driven" &&
+    retire_capabilities === true &&
+    (created === undefined ||
+      (typeof created === "string" && /^\d{4}-\d{2}-\d{2}$/.test(created))) &&
+    (goal === undefined || (typeof goal === "string" && goal.length > 0)) &&
+    (affected_areas === undefined ||
+      (Array.isArray(affected_areas) &&
+        affected_areas.every((area) => typeof area === "string" && area.length > 0))) &&
+    (initiative === undefined || isInitiativeLink(initiative)) &&
+    (skip_specs === undefined || skip_specs === false)
+  );
+}
+
+function isInitiativeLink(value: unknown): boolean {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const { id, store } = value as Record<string, unknown>;
+  return (
+    Object.keys(value).length === 2 &&
+    typeof id === "string" &&
+    KEBAB_ID.test(id) &&
+    typeof store === "string" &&
+    KEBAB_ID.test(store)
+  );
+}
+
+// Entries whose main spec an unarchived change deletes completely: `openspec validate --all
+// --strict` requires the main spec to stay until archive when a delta uses `## REMOVED
+// Requirements`, archive deletes the emptied spec when `.openspec.yaml` declares
+// `retire_capabilities: true`, and `checks / spec-archived` keeps the branch from merging first.
+function removedSpecs(catalog: string, mainDir: string, specNames: string[]): Set<string> {
+  const changes = join(root, "openspec/changes");
+  const names = new Set<string>();
+  if (!isDirectory(changes)) return names;
+  const mainByName = new Map<string, Set<string>>();
+  for (const name of specNames) {
+    const mainText = readRepoFile(join(mainDir, name, "spec.md"));
+    if (mainText === null) continue;
+    const reqs = specSections(mainText, false)?.get("requirements");
+    if (reqs && reqs.size > 0) mainByName.set(name, reqs);
+  }
+  if (mainByName.size === 0) return names;
+  for (const change of listDir(changes)) {
+    if (!change.isDirectory || change.name === "archive") continue;
+    const changeDir = join(changes, change.name);
+    if (!declaresCapabilityRetirement(changeDir)) continue;
+    const dir = join(changeDir, "specs", catalog);
+    if (!isDirectory(dir)) continue;
+    for (const entry of listDir(dir)) {
+      if (!entry.isDirectory) continue;
+      const mainReqs = mainByName.get(entry.name);
+      if (!mainReqs) continue;
+      const deltaText = readRepoFile(join(dir, entry.name, "spec.md"));
+      if (deltaText !== null && removesAllRequirements(deltaText, mainReqs)) names.add(entry.name);
     }
   }
   return names;
