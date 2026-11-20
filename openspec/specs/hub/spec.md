@@ -4,8 +4,9 @@
 The rules an entry of the official hub follows. The hub is the directory
 `hub/` of this repository: a growing collection of ready-to-use `HARNESS.md`
 designs that the website lists, searches, displays, and offers for copying and
-download. An entry is meant to be pasted into a project root and expanded into
-a harness by a coding agent that may have no plugin installed. These are rules
+download. An entry is a reference design, of a complete harness or a stated
+part of one, handed to a coding agent that may have no plugin installed, or
+read by a person, while a project's own harness is designed. These are rules
 of the hub, not of the format: the format leaves `metadata` undefined, and the
 hub defines what it keeps there. Non-goals: hosting designs outside this
 repository, ranking entries, versioning an entry separately from the
@@ -45,15 +46,25 @@ sources it was derived from. The hub SHALL define no other metadata key.
 - **THEN** `just hub-check` fails naming the value
 
 ### Requirement: Sufficient on its own
-An entry SHALL be sufficient, without this repository's plugin or any other
-document, for a coding agent to build the harness it describes once the user
-has stated the project's goal: it names the files, commands, checks, and
-permissions to create, gives the reason for each decision, and says what is
-deliberately not done.
+An entry SHALL be sufficient within the scope it declares, without this
+repository's plugin or any other document: once the user has stated the
+project's goal, a coding agent can design and build what the entry covers,
+a whole harness or the stated part. It states each decision with its reason
+and the premise it rests on, and says what is deliberately not done.
+Concrete realisations (file names, commands, tools, thresholds)
+are given as examples of a decision, never in place of it.
 
 #### Scenario: Agent without the plugin
-- **WHEN** an agent with no skill installed is given an entry in a project root and the project's goal
+- **WHEN** an agent with no skill installed is given an entry that covers a complete harness and the project's goal
 - **THEN** it can propose and build a harness from the file alone, using no term the file does not explain
+
+#### Scenario: Partial entry judged on its scope
+- **WHEN** an entry declares that it covers only how changes are gated
+- **THEN** it is sufficient when an agent can design and build the gates from it alone, and it is not sent back for saying nothing about the other parts of a harness
+
+#### Scenario: Decision bound to one tool
+- **WHEN** an entry says only "run tool X before every commit"
+- **THEN** review sends it back to state what the check is for and when another tool would serve
 
 ### Requirement: Generic and in English
 An entry SHALL be written in English, its Context SHALL describe the kind of
@@ -72,3 +83,32 @@ for the substance of the design.
 #### Scenario: New entry proposed by a contributor
 - **WHEN** a pull request adds `hub/<name>/HARNESS.md`
 - **THEN** CI runs the hub check, and the entry is merged only after a maintainer's review
+
+### Requirement: Whole or partial designs
+An entry SHALL describe either a complete harness or a stated part of one.
+Its `description` and its introduction SHALL say which,
+and a partial entry SHALL say what it leaves to the reader's own design.
+
+#### Scenario: Entry covering one aspect
+- **WHEN** a pull request adds an entry that describes only how a public repository guards its agent against text written by strangers
+- **THEN** the entry is acceptable, provided its description and introduction say that it covers that aspect alone
+
+#### Scenario: Partial entry that reads as complete
+- **WHEN** an entry covers two layers and its description presents it as a harness for a kind of project
+- **THEN** review sends it back to state what it covers
+
+### Requirement: Used as a reference
+An entry SHALL be usable from wherever it is read: handed to an agent
+by URL or path, or opened by a person.
+It SHALL NOT tell its reader to place it in a project root,
+and SHALL NOT make keeping or deleting the file a step of using it.
+Any note on use SHALL be short and SHALL leave the procedure
+of designing and building to the reader.
+
+#### Scenario: Entry read from its URL
+- **WHEN** a user gives an agent an entry's URL and says what their project is for
+- **THEN** the agent can use the entry without the file existing in the user's repository
+
+#### Scenario: Entry that prescribes placement
+- **WHEN** an entry says to save it as `HARNESS.md` in the repository root before anything else
+- **THEN** review sends it back
