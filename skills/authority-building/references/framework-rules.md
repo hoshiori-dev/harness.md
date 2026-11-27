@@ -65,6 +65,16 @@ one entry per recipe").
   deletion of others' work, whether as a raw command or wrapped in a recipe,
   however often history shows them.
 
+## What counts as widening
+
+A change widens agent autonomy when the agent may afterwards do,
+without asking, something it had to ask for before.
+The forms differ by client: a new `allow` entry (Claude Code),
+an `allow` rule or an approval mode that asks less (Codex),
+whatever another client uses to stop asking.
+A deny entry, and an entry removed from an allow list, widen nothing.
+The go-ahead lists the commands, not a client's syntax.
+
 ## Ask entries and per-command approval
 
 An ask entry the user kept after one challenge,

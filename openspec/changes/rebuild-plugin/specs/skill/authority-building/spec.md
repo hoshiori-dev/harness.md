@@ -57,6 +57,10 @@ for that step.
 - **WHEN** the skill is handed a build task with the agreed Authority decisions and the plan's files for that project
 - **THEN** the project holds a policy file, a strict-JSON `.claude/settings.json` and Codex files with exactly the agreed entries, the four checkpoint recipes in the task runner, the entrypoint core with a route to the policy, the platform files, and a settings register; the recipes were exercised only in a temporary clone that no longer exists; no delivered file contains an unresolved placeholder or names the plugin; no file outside the plan's list was written; and each remote change was shown as a delta and applied only after the user approved that delta, or is listed as declined or pending with its exact command
 
+#### Scenario: First grant in a project that left the rest to the agent
+- **WHEN** a build task carries agreed allow entries for a project that has no permission file, and the user left the remaining decisions to the agent
+- **THEN** the agent lists every command that would stop being asked about and writes the entries only after the user's go-ahead on that list
+
 #### Scenario: Audit of a drifted project
 - **WHEN** the skill is handed an audit task and the project's `.claude/settings.json` holds `Bash(just *)` in its allow list and an `ask` array while the project's adopted anchor document states one entry per recipe and no ask entries
 - **THEN** it changes nothing and reports each disagreement as a finding with a class (stale, duplicated, contradictory, invisible, missing, or excessive), a severity of high, medium, or low, the file and line as evidence, the anchor document's sentence as the source of truth, and a proposed disposition: fix the artifact or amend the document

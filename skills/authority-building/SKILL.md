@@ -211,6 +211,8 @@ and every file the probe lists under `label_files`.
 
 Plan only: return each file by path with one line on its shape,
 and propose no remote change.
+With a permission file, also return every command that would stop
+being asked about, as a step that needs its own go-ahead.
 
 Done when: every item is observed, absent, or open;
 the probe ran or its failure is recorded; no file changed.
@@ -295,8 +297,15 @@ line resolved, guidance and inapplicable sections deleted.
 2. **Permission files**: rework [assets/claude-settings.jsonc](assets/claude-settings.jsonc) into
    strict JSON, and [assets/codex-config.toml](assets/codex-config.toml) plus
    [assets/codex-authority.rules](assets/codex-authority.rules), holding exactly the agreed entries.
-   Apply a change that widens agent autonomy only after a separate go-ahead
-   for that operation. When run directly, ask for it here.
+   A change widens agent autonomy when the agent may afterwards do,
+   without asking, something it had to ask for before,
+   in whatever form the client expresses it;
+   the first such grant in a project counts.
+   Apply it only after a separate go-ahead
+   on the list of every command that stops being asked about;
+   one go-ahead covers the list.
+   Under an entry the handover carries the go-ahead;
+   when run directly, ask for it here.
    An existing file loses an entry only where an agreed decision says so.
 3. **Checkpoint recipes**: rework [assets/checkpoint-recipes.just](assets/checkpoint-recipes.just) into
    the project's task runner. Exercise them only in a temporary clone
