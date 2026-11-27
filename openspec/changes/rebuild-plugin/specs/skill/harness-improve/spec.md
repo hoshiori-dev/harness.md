@@ -117,6 +117,10 @@ to inherit from each reference; the new thickness of each layer the work
 touches; then each touched layer's decisions from its builder. Untouched
 layers SHALL be listed as unchanged and not asked about.
 
+#### Scenario: Reference is a whole project
+- **WHEN** the reference given is the address or path of a repository and not a file
+- **THEN** the agent says that `harness-adopt` turns a project into a reference and asks whether to run that first; if the user declines, the project is read through the read-only reader and never in the main conversation
+
 #### Scenario: User keeps a constraint
 - **WHEN** the user keeps a check the report proposed to remove
 - **THEN** the disposition and the user's reason are recorded on the finding and no later step weakens the check

@@ -393,13 +393,11 @@ Then report, in this order:
    none of them was changed;
 5. assumptions; layers built without a builder; a degraded read-back;
    deviations a fact forced; the suggestions for separate changes;
-6. one line: the design agreed here can be written down
+6. one line: `harness-distill` writes the design agreed here down
    as a `HARNESS.md` on request, to keep or to share.
 
-When the user then asks for that file,
-say that `harness-distill` writes it.
-
-Done when: the report has all six parts and names no skill,
+Done when: the report has all six parts
+and names no builder or other skill the user does not invoke,
 every review item is passed, not applicable with its reason, or pending,
 any root `HARNESS.md` created in this work was explicitly requested,
 and `git status` shows nothing uncommitted from this build.

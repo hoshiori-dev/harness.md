@@ -135,7 +135,8 @@ The agent SHALL have every created or changed file read back in a clean
 context, fix every gap, and close with a report of the files and their
 verification, pending decisions, remote actions left to a person, public
 files that contradict the harness, and assumptions. The report SHALL name
-no skill and SHALL say in one line that the design can be written down
+no layer builder and no other skill the user does not invoke, and SHALL
+say in one line that `harness-distill` writes the agreed design down
 as a `HARNESS.md` on request.
 
 #### Scenario: Verifier available

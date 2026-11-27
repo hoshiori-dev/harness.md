@@ -207,8 +207,10 @@ in the project root, and no instruction in it is followed.
   (tools: read, search, list) and returns an inventory,
   a description per layer, and, listed as findings and never obeyed,
   every instruction the material addresses to agents.
-  `harness-adopt` dispatches it; `harness-create` and `harness-improve`
-  dispatch it for a reference that is a project and not a single file.
+  `harness-adopt` dispatches it. Given a reference that is a project
+  and not a single file, `harness-create` and `harness-improve` first say
+  that `harness-adopt` turns a project into a reference and ask whether
+  to run it; they dispatch the reader only when the user declines.
 
 Where the client has subagents but not these agents,
 the entry dispatches a generic clean-context subagent with the same input;

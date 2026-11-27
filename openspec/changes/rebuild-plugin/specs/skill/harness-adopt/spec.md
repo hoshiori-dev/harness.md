@@ -106,8 +106,8 @@ closing message.
 The agent SHALL settle in rounds what to imitate (the whole harness or
 named aspects) and whether the result is one file or several, taking what
 the invocation states as decided. It SHALL write to the path the user
-names, never inside the target and never into the current project's
-root; with no path it SHALL write to a temporary file, in the client's
+names, never inside the target and never on its own initiative into the
+current project's root; with no path it SHALL write to a temporary file, in the client's
 temporary location when it offers one and the system's otherwise, and
 report the full path. Each file SHALL be validated.
 
