@@ -158,25 +158,21 @@ The agent SHALL work in the mode the handover names (decide, describe, build, au
 ### Requirement: Decide returns the layer's decisions
 In decide mode the agent SHALL return a recommended thickness with its reasons and each Knowledge decision (the entrypoint file, the `CLAUDE.md` decision, the harness shape and budget, the folders, and a carrier for every candidate piece of content) either as settled, with the evidence that settles it, or as open, with its options, the recommended one first, its reason, and the decisions it depends on. Handed over by an entry it SHALL ask the user nothing itself.
 
-#### Scenario: Claude Code on a current version
-- **WHEN** the project's clients include Claude Code at v2.1.277 or newer and no `CLAUDE.md` exists
+#### Scenario: Project without a CLAUDE.md
+- **WHEN** the project's clients include Claude Code and no `CLAUDE.md` exists
 - **THEN** the hand back settles that no `CLAUDE.md` is created, with the evidence that Claude Code reads `AGENTS.md` by itself when none exists
 
 #### Scenario: Existing CLAUDE.md with shared rules
 - **WHEN** an existing `CLAUDE.md` holds rules that apply to every agent and nothing specific to Claude Code
 - **THEN** the hand back recommends moving each rule into `AGENTS.md` and names the removal of `CLAUDE.md`
 
-#### Scenario: Older Claude Code must be supported
-- **WHEN** the conditions say some contributors run a Claude Code older than v2.1.277
-- **THEN** the hand back keeps a `CLAUDE.md` whose whole content is the import of `AGENTS.md`
-
 #### Scenario: Short-lived single-maintainer project
 - **WHEN** the conditions describe a prototype one person maintains for a few weeks
 - **THEN** the hand back recommends a single-file harness with no knowledge folder, states the budget of about 200 lines, and gives the project's short life among the reasons for the thickness it recommends
 
 #### Scenario: Fact the repository cannot show
-- **WHEN** nothing in the repository or the handover shows which Claude Code versions the contributors run
-- **THEN** the `CLAUDE.md` decision is returned as open with its options, the recommended one first, and the agent does not ask the user itself
+- **WHEN** nothing in the repository or the handover shows which clients the contributors run
+- **THEN** the folders decision that depends on it is returned as open with its options, the recommended one first, and the agent does not ask the user itself
 
 ### Requirement: Describe states what exists
 In describe mode the agent SHALL describe the entrypoint, knowledge files, skills, and routes the project has today as prose fit for a `HARNESS.md`, classifying each artifact (current, invisible, duplicated, contradicting the code, stale, restating the code) with evidence, SHALL mark inferred intent as inferred, and SHALL NOT present a recommendation as the project's practice.

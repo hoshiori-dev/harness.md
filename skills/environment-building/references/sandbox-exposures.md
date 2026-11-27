@@ -52,8 +52,8 @@ the allowlist covers this exposure.
 ## 4. Session logs
 
 Where each client writes its session logs
-(for example `~/.claude/projects/` for Claude Code and `~/.codex/sessions/`
-for Codex), and whether anyone collects them.
+(usually a directory of its own under the home directory),
+and whether anyone collects them.
 Logs carry every file the agent read and every command's output,
 so they leak credentials and personal data more easily than any file
 in the repository.

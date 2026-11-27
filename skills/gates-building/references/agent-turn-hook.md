@@ -22,8 +22,7 @@ a turn that waits minutes to end gets interrupted by the user instead.
 
 | Client | Registration |
 |---|---|
-| Claude Code | a `Stop` hook in `.claude/settings.json`: under `hooks`, the key `Stop` holds a list with one object whose `hooks` list has `{"type": "command", "command": "<script path>"}`. A script that exits with code 2 keeps the agent working and its stderr is shown to the agent. The client stops honouring the block after a limit of consecutive blocks; read the client's hook documentation for the current number. |
-| Any other client | only when its documentation describes an end-of-turn hook that can send the agent back; register it in that client's form |
+| A client with an end-of-turn hook that can send the agent back | register the script in that client's form, with the exit code its documentation gives for "keep working"; a client may stop honouring the block after a number of consecutive blocks, which the same documentation states |
 | A client without one | nothing; say so in the knowledge file |
 
 Confirm the hook format against the client's current documentation

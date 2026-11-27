@@ -37,6 +37,17 @@ a weaker one breaks without it.
   (`harness-verifier`, `harness-reader`) by name,
   and an entry that tells the user which entry to run next gives its name,
   because the user has to type it.
+- No step depends on a client's tool name, configuration key, or version,
+  in `SKILL.md`, a reference, or an asset: the skill describes the property
+  it needs (a tool that asks the user, a subagent that can only read)
+  and the agent finds the match among its own tools.
+  Those names drift when a client updates, and nobody watches them here.
+  A skill may name the files and directories clients are known to read
+  (`CLAUDE.md`, a client's skill directory), to find or handle them
+  in a project: many projects hold them.
+  The one exception is the Authority builder's permission-file steps,
+  reference, and templates; the packaging files a client needs
+  to load the plugin are not skill content.
 - A skill may name `HARNESS.md` and its section names freely.
   It may not assume the reader has `spec/spec.md`:
   what a skill needs from the format it states itself.

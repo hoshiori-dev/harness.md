@@ -163,6 +163,23 @@ phrase and name none.
 - **WHEN** no skill claims the Feedback layer
 - **THEN** `just skills-check` fails naming the layer
 
+### Requirement: Client-independent instructions
+A skill SHALL describe what a step needs from a client by its properties
+(a tool that asks the user, a subagent that can only read, a hook at the
+end of a turn) and SHALL NOT make a step depend on a client's tool name,
+configuration key, or version. A skill MAY name the files and directories
+clients are known to read, to find or handle them in a project. The
+Authority builder's permission-file steps, reference, and templates are
+the one exception, and they are organised by client.
+
+#### Scenario: Skill read in a client it does not name
+- **WHEN** an Agent Plugins client the plugin was never tested in loads a skill
+- **THEN** no step of its `SKILL.md` or references depends on a tool or key that only a named client has
+
+#### Scenario: Asking the user
+- **WHEN** an entry reaches its first round of questions
+- **THEN** its instructions describe the question tool by what it does and send the agent to the tool's own description for its limits, naming no client
+
 ## REMOVED Requirements
 
 ### Requirement: Builders share four modes and six steps

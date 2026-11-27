@@ -71,8 +71,7 @@ Where it lives depends on the client:
 
 | Client | Form |
 |---|---|
-| Claude Code | a file `.claude/agents/<name>.md` whose frontmatter holds `name`, `description`, and `tools: Read, Grep, Glob`, with the instructions as its body |
-| Any client with subagents | that client's own subagent format, with the same instructions and read-only tools |
+| A client with subagents | that client's own subagent definition, holding the instructions and only tools that read, search, and list; confirm the format in the client's current documentation |
 | No subagents | a second session given the instructions and the diff by a person; or the self-check step alone |
 
 With no subagent support,

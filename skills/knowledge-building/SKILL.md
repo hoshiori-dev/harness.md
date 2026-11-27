@@ -192,8 +192,7 @@ Read, record, write nothing. Collect:
 - project skills: `.agents/skills/`, `.claude/skills/` (real directory or link,
   and its target), each skill's name and description;
 - the task runner and its recipe names; the management-script directory;
-- the clients in use (`.claude/`, `.codex/`, other client settings) and,
-  for Claude Code, the oldest version the project must support;
+- the clients in use (`.claude/`, `.codex/`, other client settings);
 - an architecture document and human docs (README, CONTRIBUTING);
 - a `HARNESS.md` in the root, and whether an entrypoint names it;
 - routes owed: knowledge files other layers wrote or announced
@@ -218,7 +217,7 @@ when the repository or the handover settles it
 or the evidence makes one option clearly better;
 otherwise as **open**, with its options (the recommendation first),
 the reason, and the decisions it depends on.
-A fact the repository cannot show (which Claude Code versions the
+A fact the repository cannot show (which clients the
 contributors run) makes its decision open.
 Handed over by an entry, ask the user nothing.
 

@@ -34,8 +34,7 @@ or leave the rest to you (decided on evidence and shown in the plan).
 A user change binds later steps; challenge it once when evidence contradicts it.
 <!-- /shared:decision-rounds -->
 
-Read [references/question-tools.md](references/question-tools.md) when unsure which tool asks the user in this client;
-without one, number the round's questions in one message.
+Read [references/question-tools.md](references/question-tools.md) before asking the first round's questions.
 
 <!-- shared:layer-thickness -->
 Each layer gets one user-confirmed thickness before its other decisions:

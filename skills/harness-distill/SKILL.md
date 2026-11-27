@@ -38,7 +38,7 @@ or leave the rest to you (decided on evidence and shown in the plan).
 A user change binds later steps; challenge it once when evidence contradicts it.
 <!-- /shared:decision-rounds -->
 
-Read [references/question-tools.md](references/question-tools.md) when unsure which tool asks the user in this client.
+Read [references/question-tools.md](references/question-tools.md) before asking the first round's questions.
 
 <!-- shared:format-in-brief -->
 **The format in brief.** A `HARNESS.md` is YAML frontmatter followed by a

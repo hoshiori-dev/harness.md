@@ -68,8 +68,8 @@ the floor is still the sandbox and the tokens.
 
 ## Client sandbox settings
 
-A client's own sandbox (for example Codex `sandbox_mode`
-and its network access setting) is an aid, not the boundary.
+A client's own sandbox and its network access setting
+are an aid, not the boundary.
 Set it consistently with the base and the network decision,
 state the value and the file that holds it in the decision,
 and write it only into that file.

@@ -56,12 +56,9 @@ that owns Feedback. Hand both over by describing the layer.
 ## Registering a tool
 
 Register in the client's project-scoped configuration,
-tracked in the repository, so every session gets the same set. Known carriers:
-Claude Code reads MCP servers from `.mcp.json` in the repository root;
-Codex reads `[mcp_servers.<name>]` tables from its `config.toml`.
-Clients change these locations:
-confirm the file and key in the client's current documentation before writing,
-and for any other client look it up instead of guessing.
+tracked in the repository, so every session gets the same set.
+Each client has its own file and key for this, and they change:
+confirm both in the client's current documentation before writing.
 
 - Pin the server's version;
   never register one that runs unpinned code from a registry at start.

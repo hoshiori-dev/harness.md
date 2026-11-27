@@ -75,13 +75,12 @@ Write plain sentences; never compress with private abbreviations or symbols.
 
 ## CLAUDE.md
 
-Claude Code reads `AGENTS.md` by itself from v2.1.277 on,
+Claude Code reads `AGENTS.md` by itself,
 but only when the directory has no `CLAUDE.md`. So:
 
 | Situation | Result |
 |---|---|
-| No `CLAUDE.md`, every supported Claude Code is v2.1.277 or newer | create none |
-| The project must support an older Claude Code | `CLAUDE.md` whose whole content is `@AGENTS.md` |
+| No `CLAUDE.md` | create none |
 | An existing `CLAUDE.md` holds only rules for all agents | move each rule to Always or a routing row by the task-type test; then remove the file, once an agreed decision names the removal and the user gives the go-ahead at that step |
 | An existing `CLAUDE.md` holds content for Claude Code alone | first line `@AGENTS.md`, then only that content; everything else moves to `AGENTS.md` |
 

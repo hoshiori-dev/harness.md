@@ -33,14 +33,12 @@ and return only the decisions that exist at that thickness.
 1. **Entrypoint.** Recommend `AGENTS.md` as the only rule-bearing file,
    for every project: each client reads it or can be pointed at it.
    No subdirectory entry files: clients disagree on when they load one.
-2. **`CLAUDE.md`.** Recommend none, when every supported Claude Code
-   is v2.1.277 or newer: from that version Claude Code reads `AGENTS.md`
+2. **`CLAUDE.md`.** Create none: Claude Code reads `AGENTS.md`
    by itself when no `CLAUDE.md` exists, and a second file is a second copy.
    An existing `CLAUDE.md` holding only rules for all agents:
    move each rule to `AGENTS.md` and name the removal of the file.
-   Keep or add a `CLAUDE.md` whose first line
-   is `@AGENTS.md` only when the project must support an older Claude Code,
-   or already has content meant for Claude Code alone;
+   Keep an existing one, with `@AGENTS.md` as its first line,
+   only when it has content meant for Claude Code alone;
    that content stays below the import,
    and every rule for all agents moves to `AGENTS.md`.
 3. **Shape and budget.** Depends on the thickness.

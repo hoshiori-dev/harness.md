@@ -47,7 +47,8 @@ A fact is found, never asked.
 Where the evidence makes one option clearly better the agent decides
 and shows the decision with its evidence; the rest is asked,
 through the client's question tool where there is one
-(`references/question-tools.md` in each entry, the same file in all four).
+(`references/question-tools.md` in each entry, the same file in all four,
+naming no client).
 After each round the user changes a decision, continues,
 or leaves the rest to the agent.
 Nothing is written before the user approved a plan that names every file,
