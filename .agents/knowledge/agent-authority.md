@@ -129,7 +129,9 @@ In a client without such a list the same rules hold by this policy alone.
 
 Ready means the pull request is worth a human reviewer's time.
 With `just check` green and the checklist ticked,
-read the whole diff once against the issue and the spec and ask:
+read the whole diff once against the issue and the spec,
+in the scenarios `.agents/knowledge/review.md` gives for what it touches,
+and ask:
 does it do all of what was asked and nothing else;
 is anything wrong (a bug, a false sentence, a hand-edited generated file,
 a loosened check, a secret, a mirror left behind);
