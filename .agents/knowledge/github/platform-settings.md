@@ -34,4 +34,5 @@ The release and site workflows use the workflow's own `GITHUB_TOKEN`.
 Update trigger: when a setting is applied or its intended value changes,
 edit its row in the same pull request or,
 for a setting applied outside a pull request, in the next one.
-The intended values follow the Authority section of `HARNESS.md`.
+The intended values follow the Authority section of
+`.agents/knowledge/project-harness/SKILL.md`.

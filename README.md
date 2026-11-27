@@ -29,7 +29,7 @@ This repository holds four things:
 
 1. Pick a design from the [hub](hub/),
    for example
-   [`solo-open-source-library`](hub/solo-open-source-library/HARNESS.md).
+   [`solo-open-source-library`](hub/solo-open-source-library/SKILL.md).
 2. Give your coding agent the file's address and tell it what the project
    is for. The file does not have to be in your repository.
 3. Ask the agent to use the file as a reference:
@@ -183,7 +183,7 @@ this plugin replaces it.
 
 Open the dev container and run `just check`.
 The repository applies its own method:
-[HARNESS.md](HARNESS.md) is the design of its harness,
+[HARNESS.md](.agents/knowledge/project-harness/SKILL.md) is the design of its harness,
 and [AGENTS.md](AGENTS.md) is where an agent starts.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how changes
 are proposed and reviewed.

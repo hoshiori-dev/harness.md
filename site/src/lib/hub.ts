@@ -7,24 +7,41 @@ export interface HubEntry {
   /** Directory name under `hub/`; the URL segment. */
   id: string;
   name: string;
+  /** The description as the site shows it: without the type marker. */
   description: string;
+  /** `metadata.version`. */
   version?: string;
   license?: string;
   tags: string[];
   basedOn: string[];
-  /** The file exactly as it is in the repository. */
+  /** `SKILL.md` exactly as it is in the repository. */
   raw: string;
   html: string;
   headings: MarkdownHeading[];
 }
 
-function stringList(value: unknown): string[] {
-  if (typeof value === "string") return [value];
-  if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === "string");
+/** The type marker every `HARNESS.md` opens its description with. */
+const MARKER = /^\[HARNESS\.md\]\s*/;
+
+/**
+ * The description without its `[HARNESS.md]` marker, on one line. Everything
+ * in the hub is a `HARNESS.md`, so on a card, a page, or in `llms.txt` the
+ * marker would only repeat itself; the raw file keeps it.
+ */
+function displayDescription(description: string): string {
+  return description.trim().replace(MARKER, "").replace(/\s+/g, " ");
 }
 
-/** Every `hub/<name>/HARNESS.md`, sorted by name. An empty hub is not an error. */
+/** A comma-separated metadata value (`tags`, `based-on`): split at commas, each item trimmed. */
+function commaList(value: unknown): string[] {
+  if (typeof value !== "string") return [];
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter((item) => item !== "");
+}
+
+/** Every `hub/<name>/SKILL.md`, sorted by name. An empty hub is not an error. */
 export async function hubEntries(): Promise<HubEntry[]> {
   const entries = await getCollection("hub");
   const loaded = await Promise.all(
@@ -35,11 +52,11 @@ export async function hubEntries(): Promise<HubEntry[]> {
       return {
         id: entry.id,
         name: entry.data.name,
-        description: entry.data.description,
-        version: entry.data.version,
+        description: displayDescription(entry.data.description),
+        version: typeof metadata.version === "string" ? metadata.version : undefined,
         license: entry.data.license,
-        tags: stringList(metadata.tags),
-        basedOn: stringList(metadata["based-on"]),
+        tags: commaList(metadata.tags),
+        basedOn: commaList(metadata["based-on"]),
         raw,
         html: prepare(entry.rendered?.html ?? "", `hub/${entry.id}`),
         headings: (entry.rendered?.metadata?.headings ?? []) as MarkdownHeading[],

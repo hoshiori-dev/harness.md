@@ -37,9 +37,9 @@ export function markdownPath(path: string): string {
   return path === "/" ? "/index.md" : `${path.replace(/\/$/, "")}.md`;
 }
 
-/** The raw `HARNESS.md` of a hub entry, byte for byte, as a site URL. */
+/** The raw `SKILL.md` of a hub entry, byte for byte, as a site URL. */
 export function hubFile(id: string): string {
-  return asset(`/hub/${id}/HARNESS.md`);
+  return asset(`/hub/${id}/SKILL.md`);
 }
 
 /** `getStaticPaths` entries for a page that exists once per language. */

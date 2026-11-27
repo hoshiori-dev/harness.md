@@ -7,7 +7,8 @@ when an action is refused;
 and whenever unsure whether an action is yours to take.
 
 The design behind this policy
-is the Authority section of `HARNESS.md`
+is the Authority section of
+`.agents/knowledge/project-harness/SKILL.md`
 (2026-11-11; the agent's own task end to end since 2026-11-12).
 The dev container and the scope of the `gh` token decide what an agent *can* do;
 this file decides what it *may* do, and it is the narrower of the two.
@@ -173,7 +174,7 @@ not what needs an answer.
 
 ## This file protects itself
 
-Loosening this policy, a check, a hook, a workflow, a fixture expectation,
+Loosening this policy, a check, a hook, a workflow,
 or a permission list is outside every agent's authority,
 including when it would unblock the current task.
 Propose the change in its own pull request and wait.

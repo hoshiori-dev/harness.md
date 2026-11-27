@@ -15,11 +15,17 @@ function readme(lang: "zh" | "en", rows: string[]): string {
   return `# Fixture\n\n${other}\n\n${heading}\n\n| Skill | Purpose |\n|---|---|\n${table}\n`;
 }
 
+const DESIGN = ".agents/knowledge/project-harness/SKILL.md";
+
+/** The SKILL.md of a HARNESS.md named `name`, with both marker halves unless told otherwise. */
+function design(name: string, description = "[HARNESS.md] Fixture.", type = "harness-design") {
+  return `---\nname: ${name}\ndescription: >-\n  ${description}\nmetadata:\n  type: ${type}\n---\n\n# Fixture\n`;
+}
+
 function harness(): Record<string, FileSpec> {
   return {
-    "AGENTS.md":
-      "# Fixture\n\nRead [the guide](.agents/knowledge/guide.md). Run `just check`.\nScripts live in `scripts/tool.ts`; build output goes to `scripts/out/`; entries are `scripts/<name>.ts`.\n",
-    "HARNESS.md": "---\nname: fixture\ndescription: Fixture.\n---\n\n# Fixture\n",
+    "AGENTS.md": `# Fixture\n\nRead [the guide](.agents/knowledge/guide.md). Run \`just check\`.\nScripts live in \`scripts/tool.ts\`; build output goes to \`scripts/out/\`; entries are \`scripts/<name>.ts\`.\nThe design is \`${DESIGN}\`.\n`,
+    [DESIGN]: design("project-harness"),
     justfile: "check:\n    echo ok\n",
     ".gitignore": "scripts/out/\n",
     "scripts/tool.ts": "// tool\n",
@@ -56,7 +62,7 @@ test("check_harness reports broken links, paths, recipes, unreachable knowledge,
   files[".claude/skills/helper"] = "not a link\n";
   files[".agents/skills/Bad/SKILL.md"] = "---\nname: bad\ndescription: x\n---\n";
   files.dangling = { symlink: "nowhere" };
-  delete files["HARNESS.md"];
+  delete files[DESIGN];
   const root = makeTree(files);
   gitInit(root);
   writeTree(root, { "AGENTS.md": files["AGENTS.md"] + Array(130).fill("line").join("\n") });
@@ -68,13 +74,102 @@ test("check_harness reports broken links, paths, recipes, unreachable knowledge,
     "AGENTS.md:4: doc-path: names `scripts/gone.ts`",
     "AGENTS.md: entrypoint-budget",
     "CLAUDE.md: claude-import",
-    "HARNESS.md: design",
+    `${DESIGN}: design: file is missing`,
     ".agents/knowledge/orphan.md: knowledge-reachable",
     ".agents/skills/Bad/SKILL.md: skill-name",
     ".claude/skills/helper: claude-skill-link",
     "dangling: dangling-symlink",
   ]);
   assert.equal(result.output.includes("guide.md`, which does not exist"), false, result.output);
+});
+
+test("check_harness requires the design to carry both markers and to be named by AGENTS.md", () => {
+  const files = harness();
+  files["AGENTS.md"] = "# Fixture\n\nRead [the guide](.agents/knowledge/guide.md).\n";
+  files[DESIGN] = design("project-harness", "Fixture.");
+  const root = makeTree(files);
+  gitInit(root);
+  const unnamed = runScript("check_harness.ts", [], root);
+  assert.equal(unnamed.code, 1, unnamed.output);
+  assertIncludes(unnamed.output, [
+    `${DESIGN}: design-marker: the description does not start with \`[HARNESS.md]\``,
+    `${DESIGN}: design-named: not named in AGENTS.md`,
+    "check_harness: 2 finding(s)",
+  ]);
+
+  // Without the type marker the directory is no unit: only the marker is
+  // missing here, because AGENTS.md names the file.
+  writeTree(root, {
+    "AGENTS.md": harness()["AGENTS.md"] as string,
+    [DESIGN]: design("project-harness", "[HARNESS.md] Fixture.", "skill"),
+  });
+  const untyped = runScript("check_harness.ts", [], root);
+  assert.equal(untyped.code, 1, untyped.output);
+  assertIncludes(untyped.output, [
+    `${DESIGN}: design-marker: the frontmatter lacks \`metadata.type: harness-design\``,
+    "check_harness: 1 finding(s)",
+  ]);
+});
+
+test("check_harness treats a type-marked directory in the knowledge folder as one unit", () => {
+  const files = harness();
+  // Files inside the design's directory: not named by AGENTS.md, and naming a
+  // path that does not exist, which a knowledge file may not do.
+  files[".agents/knowledge/project-harness/references/gates.md"] =
+    "# Gates\n\nAn example layout keeps `scripts/gone.ts` beside the checks.\n";
+  files[".agents/knowledge/project-harness/scripts/check.sh"] = "#!/bin/sh\n";
+  const root = makeTree(files);
+  gitInit(root);
+  const clean = runScript("check_harness.ts", [], root);
+  assert.equal(clean.code, 0, clean.output);
+
+  // A second marked directory: its SKILL.md has to be named, its other files do not.
+  // An unmarked directory is ordinary knowledge files, each held to the rules.
+  writeTree(root, {
+    ".agents/knowledge/reference-design/SKILL.md": design("reference-design"),
+    ".agents/knowledge/reference-design/notes.md": "# Notes\n\nSee `scripts/gone.ts`.\n",
+    ".agents/knowledge/plain/SKILL.md": "---\nname: plain\ndescription: Plain.\n---\n\n# Plain\n",
+    ".agents/knowledge/plain/notes.md": "# Notes\n\nSee `scripts/gone.ts`.\n",
+  });
+  gitInit(root);
+  const result = runScript("check_harness.ts", [], root);
+  assert.equal(result.code, 1, result.output);
+  assertIncludes(result.output, [
+    ".agents/knowledge/reference-design/SKILL.md: knowledge-reachable",
+    ".agents/knowledge/plain/SKILL.md: knowledge-reachable",
+    ".agents/knowledge/plain/notes.md: knowledge-reachable",
+    ".agents/knowledge/plain/notes.md:3: doc-path: names `scripts/gone.ts`",
+    "check_harness: 4 finding(s)",
+  ]);
+});
+
+test("check_harness does not take a marked SKILL.md at the knowledge root for a unit", () => {
+  const files = harness();
+  // A marked SKILL.md directly in the knowledge folder must not exempt the
+  // knowledge files beside it.
+  files[".agents/knowledge/SKILL.md"] = design("knowledge");
+  files[".agents/knowledge/orphan.md"] = "# Orphan\n";
+  const root = makeTree(files);
+  gitInit(root);
+  const result = runScript("check_harness.ts", [], root);
+  assert.equal(result.code, 1, result.output);
+  assertIncludes(result.output, [
+    ".agents/knowledge/SKILL.md: knowledge-reachable",
+    ".agents/knowledge/orphan.md: knowledge-reachable",
+  ]);
+});
+
+test("check_harness still checks links and recipes inside a marked directory", () => {
+  const files = harness();
+  files[DESIGN] = `${design("project-harness")}\nRun \`just nope\`; see [the gates](gates.md).\n`;
+  const root = makeTree(files);
+  gitInit(root);
+  const result = runScript("check_harness.ts", [], root);
+  assert.equal(result.code, 1, result.output);
+  assertIncludes(result.output, [
+    `${DESIGN}:11: doc-link: link target gates.md does not exist`,
+    `${DESIGN}:11: doc-recipe: mentions \`just nope\``,
+  ]);
 });
 
 test("check_harness mirrors the READMEs and the specification", () => {

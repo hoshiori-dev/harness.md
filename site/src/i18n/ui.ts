@@ -19,7 +19,7 @@ export const SECTIONS = [
 
 const en = {
   siteDescription:
-    "HARNESS.md is a single Markdown file that records the design of a project's agent harness. Find a ready-made entry in the hub, read the format specification, or install the plugin.",
+    "A HARNESS.md records the design of a project's agent harness. Find a ready-made entry in the hub, read the format specification, or install the plugin.",
   nav: { spec: "Specification", hub: "Hub", plugin: "Plugin" },
   navLabel: "Main",
   skip: "Skip to content",
@@ -35,7 +35,7 @@ const en = {
     copyAs: "Copy as Markdown",
     viewAs: "View as Markdown",
     newTab: "opens in a new tab",
-    download: "Download HARNESS.md",
+    download: "Download SKILL.md",
     github: "View on GitHub",
     source: "View source on GitHub",
     copyFailed: "Copy failed. Open “View as Markdown” and copy the text from there.",
@@ -47,7 +47,7 @@ const en = {
     whatHeading: "What a HARNESS.md is",
     what: [
       "A <code>HARNESS.md</code> records the design of a project's agent harness: where a coding agent runs, what it reads, how it checks its own work, what stops a bad change, and what it may do without asking. The entrypoint file, the permission files, the hooks, and the CI configuration are built from it.",
-      "Most often a file is a portable design. You write one to hand all or part of a project's harness design to others, you give one from the hub to your coding agent as a reference while it designs your project's harness with you, or you capture the design of a project you want to imitate without copying its implementation. A project may also choose to keep one in its root as an anchor document: the lasting record of its design, changed rarely and opened only to check the harness for drift or to improve it. A project needs no file of its own.",
+      "Most often a HARNESS.md is a portable design. You write one to hand all or part of a project's harness design to others, you give one from the hub to your coding agent as a reference while it designs your project's harness with you, or you capture the design of a project you want to imitate without copying its implementation. A project may also choose to keep one as an anchor document, named in its entrypoint file: the lasting record of its design, changed rarely and opened only to check the harness for drift or to improve it. A project needs none of its own.",
       "The specification is there to help you write a <code>HARNESS.md</code>; reading one does not depend on it. An agent that has never seen the specification, with no plugin installed, can still read the file and act on it.",
     ],
     skeletonHeading: "What is in the file",
@@ -93,17 +93,17 @@ const en = {
   },
   hub: {
     title: "Hub",
-    lead: "Each entry is a HARNESS.md file: a design for a harness, or for one stated part of one, with the reason for every decision. Give one to your coding agent as a reference, tell it what the project is for, and have it check the Context section against your project before it proposes anything.",
+    lead: "Each entry is a HARNESS.md: a design for a harness, or for one stated part of one, with the reason for every decision. Give one to your coding agent as a reference, tell it what the project is for, and have it check the Context section against your project before it proposes anything.",
     contribute: "Entries are added by pull request to the {link}.",
     contributeLink: "hub directory on GitHub",
     back: "All hub entries",
-    copyFailed: "Copy failed. Use “Download HARNESS.md” instead.",
+    copyFailed: "Copy failed. Use “Download SKILL.md” instead.",
     file: {
-      copy: "Copy HARNESS.md",
-      copyAs: "Copy HARNESS.md",
-      viewAs: "View HARNESS.md",
-      more: "More actions for HARNESS.md",
-      menu: "HARNESS.md actions",
+      copy: "Copy SKILL.md",
+      copyAs: "Copy SKILL.md",
+      viewAs: "View SKILL.md",
+      more: "More actions for SKILL.md",
+      menu: "SKILL.md actions",
     },
     tags: "Tags",
     tagLink: "Hub entries tagged {tag}",
@@ -147,7 +147,7 @@ type Strings = typeof en;
 
 const zh: Strings = {
   siteDescription:
-    "HARNESS.md 是一份 Markdown 文件，记录一个项目的 Agent harness 设计。在这里可以从 hub 里找一份现成的条目，阅读格式规范，或者安装插件。",
+    "HARNESS.md 记录一个项目的 Agent harness 设计。在这里可以从 hub 里找一份现成的条目，阅读格式规范，或者安装插件。",
   nav: { spec: "规范", hub: "Hub", plugin: "插件" },
   navLabel: "主导航",
   skip: "跳到正文",
@@ -162,7 +162,7 @@ const zh: Strings = {
     copyAs: "复制为 Markdown",
     viewAs: "查看 Markdown 版本",
     newTab: "在新标签页打开",
-    download: "下载 HARNESS.md",
+    download: "下载 SKILL.md",
     github: "在 GitHub 上查看",
     source: "在 GitHub 上查看源文件",
     copyFailed: "复制失败。请打开“查看 Markdown 版本”，从那里复制全文。",
@@ -174,7 +174,7 @@ const zh: Strings = {
     whatHeading: "HARNESS.md 是什么",
     what: [
       "<code>HARNESS.md</code> 记录一个项目的 Agent harness 设计：编码 Agent 在哪里运行，读什么，怎样检查自己的工作，什么会拦住一次错误的改动，哪些事它可以不问就做。入口文件、权限文件、Hook 和 CI 配置都照着它来建。",
-      "多数时候它是一份可移植的设计：把一个项目的全部或部分 harness 设计写下来交给别人；从 hub 里挑一份交给编码 Agent，作为它和你一起设计项目 harness 时的参考；或者把想模仿的项目的设计提炼出来，而不照搬它的实现。项目也可以自己决定把一份留在根目录当作锚定文档：长期的设计记录，很少改动，只在检查 harness 有没有漂移或者要改进它的时候才打开。项目不需要有自己的这份文件。",
+      "多数时候它是一份可移植的设计：把一个项目的全部或部分 harness 设计写下来交给别人；从 hub 里挑一份交给编码 Agent，作为它和你一起设计项目 harness 时的参考；或者把想模仿的项目的设计提炼出来，而不照搬它的实现。项目也可以自己决定留一份当作锚定文档，并在入口文件里点名：长期的设计记录，很少改动，只在检查 harness 有没有漂移或者要改进它的时候才打开。项目不需要有自己的一份。",
       "写 <code>HARNESS.md</code> 时可以对照规范，读懂它不靠规范。Agent 即使从没见过规范，也没装任何插件，照样能读懂这份文件并照着做。",
     ],
     skeletonHeading: "文件里有什么",
@@ -220,17 +220,17 @@ const zh: Strings = {
   },
   hub: {
     title: "Hub",
-    lead: "每个条目都是一份 HARNESS.md 文件：一套 harness 的设计，或者其中明确说明的一部分，每个决定都带着理由。挑一份作为参考交给编码 Agent，告诉它这个项目要做什么，让它先对照你的项目核对 Context 一节，再提出方案。",
+    lead: "每个条目都是一份 HARNESS.md：一套 harness 的设计，或者其中明确说明的一部分，每个决定都带着理由。挑一份作为参考交给编码 Agent，告诉它这个项目要做什么，让它先对照你的项目核对 Context 一节，再提出方案。",
     contribute: "新条目通过 pull request 提交到{link}。",
     contributeLink: "GitHub 上的 hub 目录",
     back: "全部 hub 条目",
-    copyFailed: "复制失败，请改用“下载 HARNESS.md”。",
+    copyFailed: "复制失败，请改用“下载 SKILL.md”。",
     file: {
-      copy: "复制 HARNESS.md",
-      copyAs: "复制 HARNESS.md",
-      viewAs: "查看 HARNESS.md",
-      more: "HARNESS.md 的更多操作",
-      menu: "HARNESS.md 操作",
+      copy: "复制 SKILL.md",
+      copyAs: "复制 SKILL.md",
+      viewAs: "查看 SKILL.md",
+      more: "SKILL.md 的更多操作",
+      menu: "SKILL.md 操作",
     },
     tags: "标签",
     tagLink: "带有 {tag} 标签的 hub 条目",

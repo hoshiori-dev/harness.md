@@ -6,7 +6,7 @@ body:
     id: name
     attributes:
       label: Entry name
-      description: The directory under hub/ and the `name` in the file's frontmatter (lowercase letters, digits, hyphens).
+      description: The directory under hub/ and the `name` in the frontmatter of its SKILL.md (lowercase letters, digits, hyphens).
       placeholder: solo-open-source-library
     validations:
       required: true
@@ -28,6 +28,6 @@ body:
     id: sources
     attributes:
       label: What the design is based on
-      description: A project where this harness is in use, or the published material it draws on (these become `metadata.based-on` and References). Do not paste private repository content.
+      description: A project where this harness is in use, or the published material it draws on (URLs become `metadata.based-on`, a comma-separated string, and References). Do not paste private repository content.
     validations:
       required: true

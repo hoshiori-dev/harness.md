@@ -96,7 +96,7 @@ and no OpenSpec change is left unarchived after review.
 Red check → read `.agents/knowledge/github/checks.md` for the recipe,
 run it locally (`just <recipe>`), fix at the source.
 `gh run view <id> --log-failed` shows the failing step.
-Never edit a workflow, a hook, or a fixture expectation to pass.
+Never edit a workflow, a hook, or a test expectation to pass.
 
 ## Publishing gate
 

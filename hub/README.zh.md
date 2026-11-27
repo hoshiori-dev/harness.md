@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-Hub 收集现成的 `HARNESS.md` 文件。
+Hub 收集现成的 `HARNESS.md` 文档。
 每一份都是为某一类项目写好的 Agent harness 设计，
 可以是完整的一套，也可以只讲其中一个方面。
 把它作为参考交给编码 Agent，和它一起定出你项目的 harness。
@@ -14,65 +14,84 @@ Hub 收集现成的 `HARNESS.md` 文件。
 
 | 条目 | 适用于 |
 | --- | --- |
-| [exploratory-prototype](exploratory-prototype/HARNESS.md) | 原型、演示或实验：一个人，Agent 每一轮都有人看着，代码一个季度内就会丢弃。有意做得很薄。 |
-| [production-engineering](production-engineering/HARNESS.md) | 团队维护多年的生产代码库，改错了会影响用户、数据或资金。harness 的每一层都写全了，并由机器强制执行。 |
-| [solo-open-source-library](solo-open-source-library/HARNESS.md) | 一位维护者、接受外部贡献的公开库。守住公开 API 和发布，其余地方流程从简。 |
+| [exploratory-prototype](exploratory-prototype/SKILL.md) | 原型、演示或实验：一个人，Agent 每一轮都有人看着，代码一个季度内就会丢弃。有意做得很薄。 |
+| [production-engineering](production-engineering/SKILL.md) | 团队维护多年的生产代码库，改错了会影响用户、数据或资金。harness 的每一层都写全了，并由机器强制执行。 |
+| [solo-open-source-library](solo-open-source-library/SKILL.md) | 一位维护者、接受外部贡献的公开库。守住公开 API 和发布，其余地方流程从简。 |
 
 ## 使用条目
 
 1. 挑一份 Context 章节最接近你项目的条目。先读 Context：
    它列出了这份设计默认成立的条件，建立在错误前提上的设计不是太重就是太轻。
-2. 在你的仓库里打开编码 Agent，把条目的地址给它，
+2. 在你的仓库里打开编码 Agent，把条目的 `SKILL.md` 的地址给它，
    并告诉它这个项目是做什么的。例如：
    “这是一个用 Go 写的支付 API，每周部署一次。请阅读
-   https://raw.githubusercontent.com/hoshiori-dev/harness.md/main/hub/production-engineering/HARNESS.md
+   https://raw.githubusercontent.com/hoshiori-dev/harness.md/main/hub/production-engineering/SKILL.md
    作为参考，和我一起为这个项目设计 Agent harness。
    在提出任何方案之前，先告诉我它的 Context 有哪些地方对不上；
    在写任何文件之前，先给我看计划。”
 3. 逐项看 Agent 提出的方案。理由在你的项目里成立的决定就保留，
    前提与你不同的决定就改掉，计划经你同意之后再动手搭建。
 
-文件不必放进你的仓库，用完也不需要留着：harness 不依赖它。
+条目是一个目录。`SKILL.md` 是它的主文件，
+条目带的其他文件都从这里通过相对链接找到。
+条目不必放进你的仓库，用完也不需要留着：harness 不依赖它。
+条目带的脚本或模板是参考副本：
+Agent 按你同意的计划把它改写进你的项目，不会原地运行它。
 可以同时给 Agent 不止一个条目，比如一份完整的设计，
 再加一份把某个方面讲得更深的部分设计。
 
 条目是供权衡的设计，不是一串命令。
 它把每个决定和理由写出来，让你和 Agent 能判断哪些合用。
-不需要安装任何插件，从没听说过这个格式的 Agent 也能读懂文件。
+不需要安装任何插件，从没听说过这个格式的 Agent 也能读懂条目。
 
 条目只是起点。
 一份大体合适、按你的项目调整过的条目，比原样照搬的更好。
 
 ## 条目规则
 
-条目放在 `hub/<name>/HARNESS.md`。除格式本身之外，hub 还有以下要求。
+条目是一个目录 `hub/<name>/`，它本身就是一份 `HARNESS.md`：
+主文件是 `SKILL.md`，旁边可以有其他文件。
+除格式本身之外，hub 还有以下要求。
 
-- 目录名与 frontmatter 里的 `name` 相同。
-- frontmatter 包含 `name`、`description`、
-  `license: Apache-2.0` 和 `metadata.tags`。
-  `tags` 是一个非空列表，由小写、连字符连接的词组成，用于筛选。
-  可以有 `metadata.based-on`，列出这份条目所依据的设计或资料的 URL。
-  不得有其他顶层键。
-- `description` 说明这份设计是什么、适合哪一类项目，不超过 1024 个字符。
+- frontmatter 包含 `name`、`description`、`license: Apache-2.0`，
+  以及带有 `type: harness-design` 和 `tags` 的 `metadata`。
+  格式要求 `name` 与目录名相同，`metadata` 下的每个值都是字符串，
+  所以 `tags` 是一个字符串，由小写、连字符连接的词组成，用逗号分隔，
+  例如 `tags: open-source, library, solo`。筛选会读它。
+  可以有 `metadata.based-on`，一个字符串，写一个或多个用逗号分隔的 URL，
+  指明这份条目所依据的设计或资料。
+  不得有格式没有定义的顶层键，也不得有 `allowed-tools`：两者都会引出警告。
+- `description` 按格式的要求以 `[HARNESS.md]` 开头，
+  接着说明这份设计是什么、适合哪一类项目，不超过 1024 个字符。
   搜索会读它，所以要用找这类设计的人会输入的词。
-- 正文用英文。校验器不报错误，也不报警告，也就是说正文有且只有一个标题，
-  推荐章节的顺序正确。
+- 每个文件都用英文。
+  校验器不报错误，也不报警告，也就是说 `SKILL.md` 有且只有一个标题，
+  推荐章节的顺序正确，每个相对链接都能找到目标，
+  条目里的每个文件都有链接指到。
+- 任何文件都不用相对路径链接到条目目录之外。
+  别处的资料，包括本仓库里的，写完整的 URL，或者只用文字提到。
+- 条目在说明文字之外带的文件，比如脚本或模板，遵循格式对资产的写作建议：
+  它讲的是条目的主题，不含某一个项目的内容，不会很快过时；
+  实在避不开项目信息的地方，`SKILL.md` 要写明替换什么、怎么替换。
+  脚本用什么语言都可以。
+  没有检查会读资产的内容，由评审判断。
 - 条目覆盖一套完整的 harness，或者明确说明的其中一部分。
   `description` 和导言要写明是哪一种，
   部分条目还要说明哪些内容留给读者自己设计。
 - 条目在它声明的范围内是充分的：
-  没装插件的 Agent 单凭它就能设计并搭建它所覆盖的内容，
+  没装插件的 Agent 单凭条目里的文件就能设计并搭建它所覆盖的内容，
   无论是整套 harness 还是说明的那一部分。
   它写明每个决定、理由和所依据的前提，决定不做的事也一样。
   文件名、命令、工具和阈值只作为决定的示例给出，不能代替决定本身。
-- 条目在哪里读到就能在哪里用。
-  它不要求读者把它放到项目根目录，保留或删除文件也不是使用它的步骤。
+- 条目从它的 `SKILL.md` 的地址就能用，在哪里读到都一样。
+  它不告诉读者该把它放在哪里，保留或删除它也不是使用它的步骤。
   关于用法的说明要简短，具体怎么设计和搭建留给读者。
 - 条目是通用的，不提任何私有项目，不含机密。
 - References 里列出的资料，作者都确实读过。
 
 `tags` 和 `based-on` 是这个 hub 自己的约定，不属于 HARNESS.md 格式；
-格式不理会 `metadata` 下的任何内容。
+格式在 `metadata` 下只读 `type` 和 `version`，
+对其他键只要求值是字符串。
 
 ## 贡献条目
 
