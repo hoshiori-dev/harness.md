@@ -268,7 +268,7 @@ A file step 1 found that neither the decisions nor the plan mention
 3. `CLAUDE.md` as decided: absent (an existing one is removed
    under the removal rule above, after its rules have landed in
    `AGENTS.md`), or first line `@AGENTS.md` from [assets/claude-md.md](assets/claude-md.md) when the decisions keep one, followed only by the Claude-only content they list.
-4. Each knowledge file, reworked from [assets/knowledge-file.md](assets/knowledge-file.md) when the decisions name it: the first line is "Read this when …" naming the same situation as its routing row; one concern; facts first.
+4. Each knowledge file, reworked from [assets/knowledge-file.md](assets/knowledge-file.md) when the decisions name it: the first line is "Read this when …" naming the same situation as its routing row; one concern; facts first. Never copy raw task-runner recipe bodies or self-evident directory trees into a knowledge file; name only the recipe or non-obvious rule.
 5. A routing row for every route owed, worded as the owing layer gave it.
 6. The skills folder the decisions name. For the shared layout:
    `mkdir -p .agents/skills .claude`, an empty tracked

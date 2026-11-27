@@ -23,7 +23,9 @@ Compare what the file says about the project (platform, stack, people,
 how agents run) with the remote, the manifests, and the history.
 A context that names a platform or a team the repository does not show
 is a finding of severity high, because every decision in the file
-rests on it. Ask whether the file is the project's anchor document
+rests on it. Report that finding in the report whatever the answer turns
+out to be; the question does not hold it back.
+Ask whether the file is the project's anchor document
 or a reference someone placed there, and treat it as a reference
 until answered.
 

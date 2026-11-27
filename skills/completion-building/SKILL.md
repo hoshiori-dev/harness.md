@@ -2,9 +2,8 @@
 name: completion-building
 description: >-
   Owns the Completion layer of an agent harness (how a project agrees a goal
-  before work and when a task counts as done); use when a harness entry hands
-  the layer over or a project's spec workflow is being decided, built, or
-  audited.
+  and when a task is done); use when a harness entry hands it over or a
+  project's spec workflow or approval is decided, built, or audited.
 license: Apache-2.0
 compatibility: The inventory script needs Python 3.10+; run it with uv or plain python3.
 ---

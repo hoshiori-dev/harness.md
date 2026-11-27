@@ -95,7 +95,7 @@
   (excluding `spec-archived`, which waits for review).
   Verify: `just check-fast`, `just spec-check`, `just site-check`,
   `just site-build`, and `just secrets` exit 0.
-- [ ] 7.3 Run clean-context behavioural tests for every new and changed scenario
+- [x] 7.3 Run clean-context behavioural tests for every new and changed scenario
   under `openspec/changes/rebuild-plugin/specs/`, on the least capable model tier
   available, and record pass/fail per scenario in the pull request.
   Verify: every trigger, near-miss, and outcome scenario is recorded.

@@ -394,8 +394,10 @@ and the report holds every part named above.
 - A file nothing links to may still load: client settings, hooks,
   and subdirectory entrypoints load by location.
   Check how it loads before calling it invisible.
-- "Nobody remembers why it exists" is not evidence for an excessive finding;
-  "has not failed in the available history" is.
+- "Nobody remembers why it exists" is not evidence for an excessive finding.
+  "Has not failed in the available history" is evidence
+  that the problem no longer occurs, and the finding still names
+  the constraint and what it was written to catch.
 - A check that passes is not a check that runs.
   Confirm that a hook is installed and that CI invokes the recipe
   before recording a gate as present.

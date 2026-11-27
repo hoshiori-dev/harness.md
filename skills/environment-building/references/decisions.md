@@ -83,9 +83,10 @@ except an exposure step 1 observed, which is always returned.
    beyond the task runner and the platform CLI,
    or when writing the tools decision.
 8. **Control plane** (depends on 1, 2).
-   Hard read-only (an agent never changes them):
+   Hard read-only (an agent doing an ordinary task never changes them):
    security rules, sandbox and container configuration, secret-scanning hooks,
-   permission files. Soft read-only
+   permission files. This layer's build step still writes the ones
+   the approved plan lists; the rule binds every task after that. Soft read-only
    (changed only under the rule the Gates layer states):
    linter, type-check, test, and build configuration.
    Strict → enforce hard read-only by read-only mounts;
