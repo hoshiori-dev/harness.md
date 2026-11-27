@@ -65,6 +65,29 @@ introduce uv as a project dependency only when the agreed decisions name it.
    add that job to the gate's dependencies (`needs` on GitHub,
    the gate's job list on GitLab),
    so the required gate fails when the self-check fails.
+   Otherwise wire it as advisory, below.
+
+### Advisory wiring
+
+Where the gate does not depend on the self-check,
+a failing self-check must stay visible and block no merge:
+
+- Keep the job out of the gate's dependencies,
+  and never name it among the checks the platform requires.
+  On GitHub that is enough.
+- On GitLab, when "Pipelines must succeed" is set or the setting is unknown,
+  any failed job blocks the merge:
+  give the job `allow_failure: true`
+  and a comment saying it is the advisory harness self-check by agreement.
+  The pipeline then shows the failure as a warning.
+  This is the one job that carries the flag; it hides nothing,
+  because no gate counts it.
+- When a required CI job or a commit or push hook runs the aggregate recipe,
+  step 2 would block through it:
+  leave the self-check out of the aggregate
+  and report that as a deviation with the fact behind it.
+
+Say in the hand back which form was wired and what a failure does.
 
 When the workflow has no slot,
 add the job beside the other check jobs and report that the slot was missing.

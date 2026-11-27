@@ -7,6 +7,8 @@ Report a finding when:
 - a mechanism the baseline calls for is absent,
   is not wired where it should be (recipe, aggregate check, CI, gate),
   or no longer runs (missing);
+- a self-check the baseline keeps advisory fails the gate,
+  a required job, or a hook (contradictory);
 - the layer is too thin for the conditions: no self-check on a harness
   several people and unattended agents depend on (missing);
 - the layer is too thick for them: a monthly sweep and a gated self-check

@@ -15,6 +15,8 @@ otherwise what the decide step recommends for the project's conditions.
 - a check that cannot fail (`|| true`, `continue-on-error`, `allow_failure`,
   a skipped job the gate counts as success, a `paths:`
   filter on the workflow carrying the gate): **contradictory**, **high**;
+  not a job outside the gate that an agreed decision
+  or the anchor document names as advisory;
 - a hook slower than the budget (such as running the full test suite before commits):
   **excessive**, **medium**;
 - a hook without the secret scan: **missing**, **high**;

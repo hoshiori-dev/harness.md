@@ -89,6 +89,10 @@ In audit mode the agent SHALL compare the project with the anchor document's tex
 - **WHEN** audit mode runs on a repository with a CI workflow that has adopted no anchor document
 - **THEN** the project is compared with what its conditions call for and every finding is marked as having no recorded design to compare with
 
+#### Scenario: Advisory job outside the gate
+- **WHEN** a GitLab job outside the gate's job list is allowed to fail and the anchor document names it as the advisory harness self-check
+- **THEN** no finding reports it as a check that cannot fail
+
 #### Scenario: Check outside the section
 - **WHEN** the project adopted an anchor document and CI runs a typecheck job that the document's text for the layer does not mention
 - **THEN** a finding names the job, cites the workflow line, and proposes amending the document as its disposition

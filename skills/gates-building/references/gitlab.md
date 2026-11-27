@@ -25,6 +25,8 @@ and into the gate's `needs` and `GATE_JOBS` when a gate exists.
   (`image: python:3.12-slim@sha256:<digest>`);
   the knowledge file says who updates it.
 - **No hidden failures.** No `allow_failure: true` on a check, no `|| true`.
+  The one exception is a job outside the gate
+  that the agreed decisions name as advisory, with a comment saying so.
 - **Recipes, not inline logic**:
   each job runs the recipe that also runs locally.
 

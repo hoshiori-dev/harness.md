@@ -52,6 +52,10 @@ In build mode the agent SHALL fill the entrypoint's one keep-in-sync section, SH
 - **WHEN** the deposited self-check reports stale paths on its first run
 - **THEN** the agent hands back each finding as printed for a per-finding decision and does not edit the check's logic to make it pass
 
+#### Scenario: Self-check agreed as advisory on GitLab
+- **WHEN** the agreed decisions keep the gate independent of the self-check and the project's GitLab pipelines must succeed before a merge
+- **THEN** the self-check job is absent from the gate's job list and is allowed to fail with a comment naming it the agreed advisory job, and the hand back says a failing self-check stays visible and blocks no merge
+
 #### Scenario: Project scripts in another language
 - **WHEN** the agreed decisions name TypeScript as the project's management language
 - **THEN** the deposited check is a port with the same settings, rule ids, messages, JSON shape, and exit codes

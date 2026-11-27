@@ -278,7 +278,9 @@ and every unstated intent is marked as inferred.
    with no list, leave it empty and report the gap.
    The design document settings stay `None` without an anchor document.
    Add the recipe, add it to the aggregate check recipe,
-   and fill the CI slot.
+   and fill the CI slot, wired as the reference says:
+   blocking where the decisions make the gate depend on the self-check,
+   advisory otherwise.
 5. **Install reclamation.** Rework
    [assets/reclamation-section.md](assets/reclamation-section.md) into the
    knowledge file the decisions name. Add its row to the entrypoint's
@@ -313,6 +315,8 @@ is on the pending decisions list, and nothing outside the list changed.
   and every table row has all three cells.
 - The aggregate check recipe runs the self-check; the CI job runs the recipe;
   the gate depends on it where the decisions say so.
+  Where they do not, a failing self-check fails neither the gate
+  nor a job or hook a merge requires.
 - The script and the CI job call nothing inside a skill directory.
 - Every deposited mechanism is reachable from the entrypoint,
   or its route is handed back as owed.
