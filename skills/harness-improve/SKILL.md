@@ -129,7 +129,7 @@ defined.
   when they still decline, add the contradiction to the pending decisions
   list and leave every file it touches out of the remaining work.
 - **Keep what works.** The task runner, lint configuration, branching habit,
-  commit convention, and spec carrier in use stay as they are
+  commit convention, and spec carrier in use stay
   unless replacing one is part of a migration the user requests and approves.
   A tool replacement the analysis suggests is a separate recommendation
   in the closing report; no plan item depends on it.
@@ -336,13 +336,13 @@ Done when: the user approved the plan and no file has changed.
 
 ### 7. Execute layer by layer
 
-Run the project's existing checks before the first change
-and record the result, so that a later failure is known to be new.
+Read [references/checkpoints.md](references/checkpoints.md) before the first change and after each layer.
+Bypass no hook, attribute no commit to an AI or a tool, and push nothing.
 Save the findings report only if the approved plan names its path.
 
 Work in plan order, drift items first. For each touched layer, first ask
-for the separate go-ahead for any deletion, widening of agent autonomy,
-publication, or remote setting change it entails.
+for the separate go-ahead each deletion, widening of agent autonomy,
+publication, or remote setting change needs.
 Show a dry run where the tool has one. Put unapproved actions and dependent
 edits on the pending decisions list and leave them out of the handover.
 
@@ -352,25 +352,12 @@ for its deletions, wider permissions, and remote changes.
 A file the builder wants beyond the plan is a plan amendment
 the user approves first.
 
-Where the project has an anchor document, write realised changes of intent
-back to it in the same checkpoint as the layer they concern,
-as anchor-document.md states. Deferred changes stay in the pending decisions list.
-
-After each layer: run the project's checks.
-Commit that layer's files when no check fails that passed before
-the first change, in the project's commit convention,
-with no attribution to an AI or a tool. Push nothing.
-A check that already failed before the first change does not hold
-a checkpoint back: name it in the commit message
-with the plan item that repairs it,
-or keep it in the pending decisions list when no item does.
-When a layer's checks can pass only together with a later layer's change,
-build both and commit them as one checkpoint.
-When a hook rejects the commit, fix what it flagged and retry;
-never bypass the hook.
+With an anchor document, write realised changes of intent back to it
+in the layer's own checkpoint, as anchor-document.md states.
+Deferred changes stay in the pending decisions list.
 
 Done when: every plan item is done or in the pending decisions list,
-each touched layer is in a checkpoint commit made with no new failing check,
+each touched layer is committed with no new failing check,
 and nothing was pushed.
 
 ### 8. Read back, review, and close

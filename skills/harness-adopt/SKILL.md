@@ -228,6 +228,7 @@ Having left the rest to you does not give it.
 When a file already exists at a named path, inside the current project or not,
 ask whether to replace it, write beside it under a name the user gives,
 or write to a temporary file instead; until answered, leave it unchanged.
+Check a path given in answer the same way before writing.
 
 Read [references/portable.md](references/portable.md) before writing the first decision:
 it turns what was read into decisions, reasons, and premises.

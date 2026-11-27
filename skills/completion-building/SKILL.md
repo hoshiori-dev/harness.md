@@ -16,7 +16,7 @@ or never stops. This skill handles how a project agrees a goal
 before work starts and decides a task is done:
 it returns the decisions that settle it, describes what a project already does,
 turns the agreed decisions into a specification contract
-in the project's own words, or reports where the project has drifted.
+in the project's words, or reports where it has drifted.
 Running the specification tool itself belongs to the skill for that tool.
 
 ## Rules on every step
@@ -107,14 +107,13 @@ defined.
 - **A thickness of omitted means nothing is built.**
   The layer is omitted when the handover gives its thickness as omitted,
   or when the project's anchor document covers the subject nowhere
-  (not in the introduction, a Completion section, another section,
-  or a custom heading).
+  (in no section, introduction, or custom heading).
   In build mode report "Completion: omitted by agreement", write nothing,
   and go to step 7. In audit mode do the same,
-  plus one finding when step 1 shows the project nevertheless runs
+  plus one finding when step 1 shows the project runs
   a specification tool or keeps a specification contract:
-  class contradictory, the project does what the agreement or the document leaves out;
-  the proposed disposition is to amend the anchor document when there is one,
+  class contradictory (the project does what the agreement or document leaves out);
+  disposition: amend the anchor document when there is one,
   otherwise to settle the thickness again.
 - **Run directly by a user.** Infer the mode from the request.
   When the request is to set something up, run steps 1 and 2,
@@ -123,10 +122,10 @@ defined.
   show the settled decisions with their evidence, ask the open ones together,
   and show the file list of step 4.1.
   Build only after the user accepted what was shown,
-  and ask separately before deleting a spec or any other file.
+  and ask separately before deleting any file.
   When the project has an anchor document
   and an accepted decision changes what it says about this layer,
-  write the change into that document in the same piece of work.
+  write the change into that document in the same work.
   Never create a `HARNESS.md` in a project that has none.
 - **Never touch the tool.** Do not initialise, install, configure,
   or run the specification tool, and print no install command.

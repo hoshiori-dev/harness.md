@@ -62,7 +62,7 @@ In build mode the agent SHALL fill the entrypoint's one keep-in-sync section, SH
 
 #### Scenario: Anchor document written after the layer
 - **WHEN** the handover lists a new anchor `HARNESS.md` among the required paths and says the entry writes it after this layer
-- **THEN** the first self-check output is handed back verbatim with the missing anchor named as expected, and no setting is changed to hide it
+- **THEN** the self-check's design document settings name that path, the first self-check output is handed back verbatim with the missing anchor named as expected, and no setting is changed to hide it
 
 #### Scenario: Project scripts in another language
 - **WHEN** the agreed decisions name TypeScript as the project's management language

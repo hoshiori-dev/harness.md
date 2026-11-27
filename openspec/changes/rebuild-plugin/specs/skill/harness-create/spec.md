@@ -124,7 +124,7 @@ verified layer without pushing.
 
 #### Scenario: New anchor required by the self-check
 - **WHEN** the plan creates a root `HARNESS.md` as the anchor document and an Entropy self-check that requires that file
-- **THEN** Entropy is built last, the anchor and its entrypoint route are written before Entropy is committed, the self-check passes on a rerun, and the three are committed together
+- **THEN** Entropy is built last, the anchor and its entrypoint route are written before Entropy is committed, the self-check is configured for the anchor's path and passes on a rerun, and the three are committed together
 
 #### Scenario: Empty project
 - **WHEN** the project has no code

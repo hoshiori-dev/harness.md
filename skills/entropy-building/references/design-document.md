@@ -12,7 +12,9 @@ Agents do not load it for ordinary tasks,
 so the entrypoint routes to it only as "read
 before changing the harness itself".
 
-Everything below applies only to such a project.
+Everything below applies only to such a project,
+and to one whose handover names a new anchor document
+that the entry writes after this layer.
 A `HARNESS.md` anywhere else, or one the entrypoint does not name,
 is a reference: nothing is configured, deposited, or audited for it.
 Never create a `HARNESS.md` or recommend creating one.

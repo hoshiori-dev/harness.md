@@ -146,6 +146,10 @@ commands and results, and one pending decisions list.
 - **WHEN** the project's lint fails before the first change, the plan repairs it in the Gates layer, and the Knowledge layer comes first
 - **THEN** the Knowledge layer is committed with no new failing check, the commit names the known lint failure and the plan item that repairs it, and no check is weakened to make it pass
 
+#### Scenario: New failure behind a known one
+- **WHEN** the aggregate check already failed on lint before the first change, and after a layer a test that passed before fails while the aggregate's exit status is unchanged
+- **THEN** the layer is not committed until that test passes, and the unchanged exit status is not taken as no new failure
+
 #### Scenario: Deletion in the plan
 - **WHEN** the approved plan deletes an old client-specific entrypoint
 - **THEN** the deletion still asks for its own go-ahead when reached, or is queued as a pending decision while the rest proceeds

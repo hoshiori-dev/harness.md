@@ -138,6 +138,8 @@ defined.
   and return no decision about one. A `HARNESS.md` in the root
   that the entrypoint does not name is not an anchor document:
   report it and treat the project as having none.
+  A new anchor document the handover says the entry writes after this layer
+  counts as adopted: configure the layer for its path.
   In the deposited shapes every mention of `HARNESS.md`
   sits on a line, paragraph, row, or list item whose `# CONFIGURE:` comment
   says to delete it without an anchor document: delete each one then.
@@ -309,6 +311,7 @@ is on the pending decisions list, and nothing outside the list changed.
   A required path the handover says is written after this layer
   (a new anchor document) is reported as expected, not as a failure:
   the entry writes the file and runs the recipe again.
+  Hand back which design document settings name that path.
 - The marker no longer appears in the entrypoint,
   the entrypoint has exactly one sync section,
   and the entrypoint is within its line budget.

@@ -286,6 +286,7 @@ For every other file that is not an anchor document:
    and ask whether to replace it, write the draft beside it
    under a name the user gives, or stop.
    Stopping leaves the draft in its temporary file.
+   A path given in answer goes through steps 1 and 2 again.
 3. Write each file to its path and validate the file on disk.
 
 For an anchor document:
@@ -294,11 +295,15 @@ For an anchor document:
 2. When the root already holds a `HARNESS.md`,
    show how the draft differs from it,
    and ask whether to replace it, write the draft beside it
-   under a name the user gives, or stop. Stopping leaves the draft
-   in its temporary file.
-3. After approval, write `HARNESS.md` to the root
+   under a name the user gives, or stop.
+3. Follow the answer.
+   Approved or replace: write `HARNESS.md` to the root
    and validate the file on disk.
-4. Say that the project has adopted the file only once
+   Beside: that file is not an anchor document;
+   take its path through the three steps above.
+   Stop: the draft stays in its temporary file.
+4. Only for a file written to the root:
+   say that the project has adopted it only once
    its entrypoint names it, and give the sentence to add.
    Do not edit the entrypoint.
 

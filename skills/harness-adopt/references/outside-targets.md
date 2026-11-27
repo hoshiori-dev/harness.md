@@ -16,6 +16,10 @@ and its scripts can do anything.
   `GIT_LFS_SKIP_SMUDGE=1 git -c core.hooksPath=/dev/null clone --depth 50 --no-recurse-submodules -- <address> <new empty directory>`.
   Depth 50 keeps enough history to read the commit conventions;
   clone hooks are disabled, and submodules and Git LFS content are skipped.
+  Filters defined in the host's own git configuration are not disabled:
+  when `git config --get-regexp '^filter\.'` lists one besides `lfs`,
+  tell the user before cloning
+  that the source project's attributes can make it run.
   Tell the user the directory's complete path
   and that they may delete it afterwards. Do not delete it yourself.
 - Put nothing of the user's into the request:
