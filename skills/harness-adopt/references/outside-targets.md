@@ -32,8 +32,8 @@ Reading files, through the reader, and these git commands,
 which you run yourself on the copy.
 Use `git --no-pager -C <copy>` in front of each
 and never change into the directory.
-On a local path, run `rev-parse --show-toplevel` first.
-When it fails or names another directory than the path,
+On a local path, run `rev-parse --show-prefix` first.
+When it fails or prints a path,
 run none of the others: git would answer for a repository around the path.
 Record "no commit: the path is not a repository root" and say so.
 

@@ -344,7 +344,7 @@ Save the findings report only if the approved plan names its path.
 Work in plan order, drift items first. For each touched layer, first ask
 for the separate go-ahead each deletion, widening of agent autonomy,
 publication, or remote setting change needs.
-Show a dry run where the tool has one. Put unapproved actions and dependent
+Show the exact value, or the tool's dry run. Put unapproved actions and dependent
 edits on the pending decisions list and leave them out of the handover.
 
 Hand over to the builder in **build** mode: the handover of step 6,

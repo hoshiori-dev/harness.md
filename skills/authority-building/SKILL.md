@@ -211,8 +211,9 @@ and every file the probe lists under `label_files`.
 
 Plan only: return each file by path with one line on its shape,
 and propose no remote change.
-With a permission file, also return every command that would stop
-being asked about, as a step that needs its own go-ahead.
+When those files include a permission file, new or existing,
+also return every command that would stop being asked about,
+as a step that needs its own go-ahead.
 
 Done when: every item is observed, absent, or open;
 the probe ran or its failure is recorded; no file changed.
