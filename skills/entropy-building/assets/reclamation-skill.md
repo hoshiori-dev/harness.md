@@ -10,7 +10,7 @@ description: >-  # CONFIGURE: the confirmed anchor event and cadence in the trig
 
 # Harness Reclamation
 
-Runs at every monthly release, before tagging. Last run: never. <!-- # CONFIGURE: the anchor event and cadence the section names; the absolute date of the first sweep (YYYY-MM-DD), "never" only while the user defers it. -->
+Runs at every monthly release, before tagging. Last run: never. <!-- # CONFIGURE: the agreed anchor event and cadence; the absolute date of the first sweep (YYYY-MM-DD), "never" only while the user defers it. -->
 
 ## Sweep
 
@@ -24,7 +24,7 @@ Walk the entrypoint, every knowledge file, every project skill, and the open
 4. Find content no pointer from the entrypoint reaches.
 5. Find triggers whose subject moved or vanished.
 6. Find over-thick constraints: what the constraint blocks no longer occurs.
-7. Read `HARNESS.md` section by section against the harness: a harness file <!-- # CONFIGURE: delete item 7 when the project keeps no HARNESS.md. -->
+7. Read `HARNESS.md` section by section against the harness: a harness file <!-- # CONFIGURE: delete the whole of item 7 when the project has no anchor document. -->
    that departs from a section's intent is fixed, or `HARNESS.md` is changed
    first; a sentence of `HARNESS.md` the code shows to be false as a fact is
    corrected; its Context section is rewritten when the project's situation
@@ -37,7 +37,7 @@ with its evidence. Thin only after the user approves the finding
 and its evidence; delete only on current,
 unambiguous evidence (a path that does not exist,
 a command that fails) or the user's approval; otherwise report.
-A change to what `HARNESS.md` intends is the user's decision.
+A change to what `HARNESS.md` intends is the user's decision. <!-- # CONFIGURE: delete this sentence when the project has no anchor document. -->
 A run prompted by repeated agent failures reports the pattern
 and a recommendation and edits nothing on that basis alone.
 

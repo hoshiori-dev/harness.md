@@ -1,7 +1,7 @@
 ---
 name: plugin-development
 description: >-
-  Adds, changes, or removes a skill or the agent shipped by the harness-md
+  Adds, changes, or removes a skill or an agent shipped by the harness-md
   plugin, end to end: OpenSpec change with behavioural test scenarios,
   implementation to the skill quality bar and the plugin's contract, client
   file generation, checks, behavioural tests through subagents, and
@@ -23,13 +23,13 @@ as the entry's behavioural tests.
 
 - Read `.agents/knowledge/plugin-architecture.md` before deciding what to add:
   every skill produces, reads, or builds from a project's `HARNESS.md`,
-  and a new skill has to fit one of the kinds there (format, workflow, manual,
+  and a new skill has to fit one of the kinds there (format, entry, manual,
   layer builder, daily).
 - Read `.agents/knowledge/skill-quality.md`
   before writing any file under `skills/`.
 - A skill is self-contained: it links to nothing outside its directory,
   names other shipped skills by role only
-  (`harness-verifier` is the one name allowed),
+  (`harness-verifier` and `harness-reader`, plus next-entry names shown to the user, are the exceptions),
   and deposits nothing in a target project that names the plugin.
 - Fix findings at their source; never edit a generated file or relax a check.
 
@@ -38,7 +38,7 @@ as the entry's behavioural tests.
 1. **Define.** Write down the task the skill covers (one coherent unit of work),
    its kind, its triggers including indirect phrasings,
    what the agent lacks without it,
-   and its invocation mode (user-invoked only for the four workflows).
+   and its invocation mode (user-invoked only for the four entries).
    If a bare agent already does the task well, stop: the skill adds nothing.
    A new layer is a format change first (`.agents/knowledge/format-changes.md`);
    a new builder without a new layer cannot exist,
@@ -66,12 +66,12 @@ as the entry's behavioural tests.
      and a `_test.py` each.
    - *layer builder*: one sentence of description containing
      `Owns the <Layer> layer` with a name from `scripts/lib/layers.ts`;
-     the four modes (design, extract, build, audit);
-     the six fixed steps (Observe, Write the section, Build, Verify, Audit,
+     the four modes (decide, describe, build, audit);
+     the seven fixed steps (Observe, Decide, Describe, Build, Verify, Audit,
      Hand back); a default with its reason for every decision in step 2;
      the shared conventions of `plugin-architecture.md` (severity scale,
-     routes owed, audit with no section).
-   - *workflow*: `disable-model-invocation: true` and an `agents/openai.yaml`
+     routes owed, audit with no anchor document).
+   - *entry*: `disable-model-invocation: true` and an `agents/openai.yaml`
      with `policy.allow_implicit_invocation: false`;
      it finds builders by the ownership phrase and names none.
    - *format skill* (`skills/harness-md/`):

@@ -35,7 +35,7 @@ or the harness itself.
 
 #### Scenario: Building from a file
 - **WHEN** the user says "here is a HARNESS.md, set the project up accordingly"
-- **THEN** the skill does not load as the main procedure; the build workflow owns that work
+- **THEN** the skill does not load as the main procedure; it says that the entry which gives a project its harness takes the file as a reference
 
 #### Scenario: Another design format
 - **WHEN** the user asks for help writing a DESIGN.md for a website's visual design
@@ -70,3 +70,18 @@ The copy of the specification inside the skill SHALL be byte-identical to
 #### Scenario: Specification changes without the copy
 - **WHEN** `spec/spec.md` is edited and the skill's copy is not
 - **THEN** `just skills-check` fails naming both files
+
+### Requirement: A file's use is not assumed
+The skill SHALL NOT assume that a `HARNESS.md` belongs in a project root
+or governs the project it is found in. It SHALL treat a file as the
+project's anchor document only when the user says so or the project's
+entrypoint names it, and SHALL treat any other file as a summary or a
+reference.
+
+#### Scenario: Asked where to save a new file
+- **WHEN** the user asks the skill to write a `HARNESS.md` summarising their gates and names no location
+- **THEN** the skill does not write it to the repository root by default; it asks, or uses a temporary location and reports the path
+
+#### Scenario: Downloaded file in a working directory
+- **WHEN** the user asks whether their permission file "violates" a `HARNESS.md` they downloaded yesterday
+- **THEN** the skill says the file is a reference with no authority over the project unless the project adopted it, and compares the two as designs

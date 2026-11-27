@@ -2,11 +2,11 @@
 
 Read this when changing a check, a hook, or a CI file, or when a check fails.
 
-Commit-hook budget: {{BUDGET}} seconds on a typical commit. <!-- # CONFIGURE: {{BUDGET}}: the number the design states. -->
+Commit-hook budget: {{BUDGET}} seconds on a typical commit. <!-- # CONFIGURE: {{BUDGET}}: the agreed number. -->
 
 ## Where each check runs
 
-<!-- # CONFIGURE: keep only the rows of checks the design names; the CI job column uses the platform's job names (GitLab: `format`, `lint`, ..., `secret-scan`). -->
+<!-- # CONFIGURE: keep only the rows of the agreed checks; the CI job column uses the platform's job names (GitLab: `format`, `lint`, ..., `secret-scan`). -->
 
 | Check | Tool | Hook | Recipe | CI job |
 |---|---|---|---|---|

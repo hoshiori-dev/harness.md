@@ -54,11 +54,11 @@ and deleting work are each a separate, explicit decision by the user.
 With "none" there, work stops at a local commit.
 
 <!-- shared:pending-decisions -->
-When a step is blocked on a decision only the user can make, continue with
-every step that does not depend on it and add the blocked item to a pending
-decisions list. Each item states: what is blocked and why; the options; the
-recommended option and its reason; which finished work each option would
-change. Present the list once, at the end or when nothing else can proceed,
+When blocked on a user decision, continue all independent steps
+and add the item to a pending decisions list
+(what is blocked and why, options, recommended option and reason,
+what finished work each changes).
+Present the list once at the end or when nothing else can proceed,
 never one question at a time.
 <!-- /shared:pending-decisions -->
 
@@ -93,8 +93,8 @@ Record:
   on specifications — its level (spec-first or spec-anchored), carrier rule,
   location for per-change files, living specification, and freeze executor,
   each with the file that states it
-  (a `HARNESS.md` the project keeps holds the design behind the contract
-  and is not opened here);
+  (where the project adopted a `HARNESS.md` as its anchor document,
+  that file holds the design behind the contract and is not opened here);
 - the task runner's test or check recipe (`justfile`, `Makefile`,
   `package.json` scripts) — the done-check command;
 - a squash or checkpoint recipe, the base branch, and the change branch.

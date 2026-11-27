@@ -47,11 +47,11 @@ Challenge a choice once when the evidence contradicts it;
 after that the choice binds every later step.
 
 <!-- shared:pending-decisions -->
-When a step is blocked on a decision only the user can make, continue with
-every step that does not depend on it and add the blocked item to a pending
-decisions list. Each item states: what is blocked and why; the options; the
-recommended option and its reason; which finished work each option would
-change. Present the list once, at the end or when nothing else can proceed,
+When blocked on a user decision, continue all independent steps
+and add the item to a pending decisions list
+(what is blocked and why, options, recommended option and reason,
+what finished work each changes).
+Present the list once at the end or when nothing else can proceed,
 never one question at a time.
 <!-- /shared:pending-decisions -->
 
@@ -84,8 +84,8 @@ then the project's specification contract
 (the file the agent entrypoint routes specification work to,
 commonly `.agents/knowledge/spec-workflow.md`), then the defaults below.
 The contract is the working copy of these rules;
-a `HARNESS.md` the project keeps holds the design behind it and is not opened
-for a change.
+where the project adopted a `HARNESS.md` as its anchor document,
+that file holds the design behind it and is not opened for a change.
 
 - Contract present: apply its facts, say which file stated them, re-ask none.
 - Contract silent on a point that changes the work:

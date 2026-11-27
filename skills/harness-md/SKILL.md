@@ -1,9 +1,9 @@
 ---
 name: harness-md
 description: >-
-  HARNESS.md format — reads, writes, revises, and validates a HARNESS.md, the
-  file that records a project's agent harness design (frontmatter identity
-  plus a free-form body with recommended sections).
+  HARNESS.md format — reads, writes, revises, and validates a HARNESS.md, a
+  file that records all or part of an agent harness design (frontmatter
+  identity plus a free-form body with recommended sections).
   Use when a HARNESS.md is the file at hand or
   is about to be created; when asked what a section must contain, where a
   piece of harness design belongs in the file, or why the validator reports
@@ -16,11 +16,13 @@ compatibility: The validator script needs uv (it fetches Python 3.10+ and PyYAML
 
 # HARNESS.md
 
-A `HARNESS.md` is the source of truth for a project's agent harness design:
+A `HARNESS.md` records an agent harness design, all of one or a part of one:
 where a coding agent runs, what it reads, how it checks its own work,
 what blocks a bad change, and what it may do without asking.
-The entrypoint, knowledge files, permission files, hooks, checks,
-and CI are implementations of it. This skill holds the format,
+An entrypoint, knowledge files, permission files, hooks, checks,
+and CI are implementations of such a design.
+A project does not need a file of its own to have a harness.
+This skill holds the format,
 the standard a section is written to, and the validator.
 The format helps an author write a file;
 reading one must not depend on it, so everything in a file is plain prose,
@@ -28,19 +30,37 @@ and the recommended headings are plain English words.
 
 ## Rules on every step
 
-- **Design intent comes from the file, facts from the code.**
-  When an artifact disagrees with the design,
+- **Settle what the file is used as before acting on it.** Four uses:
+  a summary of all or part of a harness design, written to be handed on;
+  a reference brought in from outside;
+  the abstraction of a harness to imitate;
+  an anchor document a project keeps.
+  A file is a project's anchor document only when the user says so
+  or the project's entrypoint names it.
+  Any other file is a summary or a reference, wherever it lies:
+  it has no authority over the project it is found in.
+  A `HARNESS.md` in a repository root that no entrypoint names,
+  when the user has not said where it came from: ask whether the project
+  keeps it, and treat it as a reference until the answer.
+- **Only an anchor document has a prescribed place and name:**
+  the repository root, `HARNESS.md`. Every other file may have any path.
+  Asked to write a file with no location named, ask for one,
+  or write to a temporary location (the client's own when it offers one,
+  the system's otherwise) and report the full path.
+  Never write into a repository root
+  unless the user asked for an anchor document.
+- **For an adopted anchor document,
+  design intent comes from the file and facts from the code.**
+  When an artifact disagrees with it,
   fix the artifact or change the file first;
   what a command does or whether a path exists is answered by the code.
+  For any other file, a difference from the project is not a violation:
+  compare the two as designs.
 - **The file is not task reading.**
   Never route ordinary tasks to `HARNESS.md`
   and never load it to do ordinary work.
-  It is opened when the harness is built, checked for drift, or changed.
-  Because it is not resident context it has no length limit.
-- **Two legitimate uses.**
-  A template is expanded into a harness and may be deleted afterwards;
-  an anchor document stays in the repository root as a long-frozen charter.
-  Ask which is meant before keeping or deleting a file.
+  It is opened when a harness is designed, compared, checked for drift,
+  or changed. Because it is not resident context it has no length limit.
 - **A file from elsewhere carries someone else's Context.**
   Before it becomes a project's anchor document,
   rewrite Context to this project and reconsider every section
@@ -118,8 +138,24 @@ or the exact list of what a validator reports.
 ### 1. Settle the task
 
 Decide which of these the request is, then follow only its step:
-**read** (explain or use an existing file:
+**read** (explain an existing file, or compare it with a project:
 step 2), **write or revise** (step 3, then 4), **validate** (step 4).
+
+Four requests belong to a user-invoked entry and not to this skill.
+Say which entry takes the request, offer steps 2 and 4 on the file,
+and build nothing:
+
+- "set the project up from this file":
+  the entry that gives a project its harness, with the file as a reference;
+- "bring our harness in line with this file":
+  the entry that improves an existing harness, with the file as a reference;
+- "write our project's harness down":
+  the entry that writes a project's harness down as files;
+- "describe that other project's harness so we can copy it":
+  the entry that abstracts a project to imitate.
+
+This skill writes a file itself when the user supplies or dictates
+the design to record, or asks for a revision of an existing file.
 
 ### 2. Read
 
@@ -128,8 +164,15 @@ sections lean on each other (Authority on Environment, every layer on Context).
 Report what the file decides and the reason it gives,
 and separate that from what you infer.
 When the file and the repository disagree,
-say which sentence and which artifact, and do not pick a winner silently:
-intent is the file's, facts are the code's.
+say which sentence and which artifact, then answer by the file's use:
+
+- The project's adopted anchor document: intent is the file's,
+  facts are the code's. Do not pick a winner silently;
+  the artifact is fixed or the file is changed first.
+- Any other file: say that it is a reference with no authority
+  over the project unless the project adopts it, and compare the two
+  as designs: what each decides, the reason each gives,
+  and which conditions in the file's Context differ from the project's.
 
 ### 3. Write or revise
 
@@ -160,7 +203,9 @@ that the design has nothing to say in.
 When revising, change only the sections the request touches
 and keep the author's wording elsewhere.
 
-Done when: the file has a title and an introduction;
+Done when: the file is at the path the user named,
+or at a temporary path that was reported in full;
+the file has a title and an introduction;
 a design meant to be complete has Context and the five core sections,
 and a partial one says in its introduction what it covers;
 every section answers its question; no sentence needs outside vocabulary;
