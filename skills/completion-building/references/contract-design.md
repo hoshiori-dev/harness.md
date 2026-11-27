@@ -17,7 +17,7 @@ the contract says what to do. It repeats no reasoning and adds no decision.
 | Acceptance of one change | That change's scenarios | The request body, the issue |
 | Engineering principles the tool reads (constitution, steering) | The tool's file | The entrypoint |
 | How specs are written, approved, and frozen | The contract | Entrypoint, request template, project workflow skill |
-| Why the workflow is shaped this way | The project's anchor document (a root `HARNESS.md` its entrypoint names), when it has adopted one; otherwise nowhere in the project | The contract never restates the reasons |
+| Why the workflow is shaped this way | The project's anchor document, when it has adopted one; otherwise nowhere in the project | The contract never restates the reasons |
 | Conventions and mechanics | The knowledge base | Specs never restate them |
 
 A pointing file may summarise in one line and must link.

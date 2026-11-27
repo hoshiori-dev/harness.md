@@ -1,6 +1,7 @@
 # Checkpoints
 
-Read before the first change of step 7, and after each layer.
+Read before the first change of step 7, after each layer,
+and before committing the review's fixes in step 8.
 
 ## Before the first change
 
@@ -26,6 +27,15 @@ Never weaken a check to make a checkpoint pass.
 
 When a layer's checks can pass only together with a later layer's change,
 build both and commit them as one checkpoint.
+
+## After the final review
+
+The commit of the review's fixes is a checkpoint under the same rule:
+run the project's checks, the harness self-check among them,
+and commit when no check fails that passed before the first change
+and every check this work added passes.
+
+## A rejected commit
 
 When a hook rejects the commit, fix what it flagged and retry;
 never bypass the hook.

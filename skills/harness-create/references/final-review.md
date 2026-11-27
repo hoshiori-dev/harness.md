@@ -6,8 +6,9 @@ as the plan records them, never against memory.
 Each item ends as **passed**,
 **not applicable** (with the agreed decision that leaves it out,
 for example "Entropy: nothing is built"), or a pending decision.
-A failing item is fixed, read back, and committed
-before it is recorded as passed.
+A failing item is fixed and read back.
+It is recorded as passed once the fix is committed,
+and step 8 runs the project's checks before that commit.
 
 ## Self-containment
 

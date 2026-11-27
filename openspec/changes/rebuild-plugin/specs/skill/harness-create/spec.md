@@ -126,6 +126,10 @@ verified layer without pushing.
 - **WHEN** the plan creates a root `HARNESS.md` as the anchor document and an Entropy self-check that requires that file
 - **THEN** Entropy is built last, the anchor and its entrypoint route are written before Entropy is committed, the self-check is configured for the anchor's path and passes on a rerun, and the three are committed together
 
+#### Scenario: Anchor asked for before the layers decide
+- **WHEN** the user asked for an anchor document in the first round
+- **THEN** every builder's handover from the decide step on says so, and the Entropy builder's decisions and planned files cover keeping the document in step
+
 #### Scenario: Empty project
 - **WHEN** the project has no code
 - **THEN** the build creates what the planned commands need in order to run (a manifest, tool configuration, the smallest passing test) and no product feature
@@ -142,6 +146,10 @@ files that contradict the harness, and assumptions. The report SHALL name
 no layer builder and no other skill the user does not invoke, and SHALL
 say in one line that `harness-distill` writes the agreed design down
 as a `HARNESS.md` on request.
+
+#### Scenario: Review fix breaks a check
+- **WHEN** a fix made in the final review makes a check fail that passed before the fix
+- **THEN** the fix is not committed until that check passes again
 
 #### Scenario: Verifier available
 - **WHEN** the client can dispatch the plugin's verifier agent

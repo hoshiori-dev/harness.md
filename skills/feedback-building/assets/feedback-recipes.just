@@ -17,7 +17,7 @@ test-unit:
 
 # One file or directory, seconds: `just test-fast tests/test_parser.py`.
 test-fast path:
-    pytest -q --tb=short --no-header -x {{ path }} # CONFIGURE: the scoped form of the test command
+    pytest -q --tb=short --no-header -x {{ quote(path) }} # CONFIGURE: the scoped form of the test command
 
 # Start the system in the background and wait until it answers.
 up:
@@ -81,4 +81,4 @@ seed:
 
 # The last lines of the system's log.
 logs lines="80":
-    @tail -n {{ lines }} .run/app.log
+    @tail -n {{ quote(lines) }} .run/app.log

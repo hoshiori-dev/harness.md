@@ -64,7 +64,8 @@ take facts from the code.
 Apply this skill's recommendation for any uncovered point and report it as an assumption;
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
-A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
+A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint,
+or a handover names one the user chose:
 then read design intent from it; agreed intent changes are written back in the same work,
 by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
@@ -267,6 +268,9 @@ A file step 1 found that neither the decisions nor the plan mention
 1. `AGENTS.md`, reworked line by line from [assets/agents-md.md](assets/agents-md.md) when the entrypoint is created or restructured, in this order: purpose, Always (ending with the directory map when the decisions keep one), When To Read What, Validation. Validation rows name recipes read from the task runner, never raw commands. Only when the handover says the Entropy layer's thickness is not omitted, end with `## Keep In Sync` holding only the marker `<!-- harness: keep-in-sync -->`; the layer that owns Entropy fills it. Otherwise write no such section and no marker; a sync section the project already has is left as it is.
 2. The `HARNESS.md` line of the Always block only when the decisions
    say the project adopted an anchor document; otherwise delete it.
+   While the file does not exist yet, leave the line out
+   and hand it back as a route owed;
+   when it comes back, write this Always line, not a routing row.
 3. `CLAUDE.md` as decided: absent (an existing one is removed
    under the removal rule above, after its rules have landed in
    `AGENTS.md`), or first line `@AGENTS.md` from [assets/claude-md.md](assets/claude-md.md) when the decisions keep one, followed only by the Claude-only content they list.
@@ -376,5 +380,5 @@ Done when: every item for the mode is in the hand back and it names no skill.
 - Count lines with `wc -l` on the written file:
   blank lines, table rows, and code fences count toward the budget.
 - A `HARNESS.md` in the root is an anchor document
-  only when the entrypoint names it.
+  only when the entrypoint or the handover names it.
   Any other one is a reference: never route to it, name it, or build from it.

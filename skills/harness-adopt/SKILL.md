@@ -220,7 +220,9 @@ and it is recorded whether the reading was isolated or degraded.
 
 ### 4. Write the design
 
-Before writing, check each output's path.
+Before writing, check each output's path as it resolves,
+symbolic links followed.
+Refuse one inside the source project and ask for another.
 When any is inside the current project, list those files,
 each by path and as new or replacing an existing file,
 and wait for the go-ahead. One go-ahead covers the list.

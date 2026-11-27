@@ -84,8 +84,10 @@ That rule holds for every file this skill writes, wherever it is written.
   A decision with no visible reason says "reason not recorded".
   Never present an inference as the project's stated intent.
 - **No secrets.** A credential, token, or private address seen in a file
-  is never copied into a file, a message, or a handover;
-  say only that one is present and in which file.
+  or in a command's output is never copied into a file, a message,
+  or a handover; say only that one is present and where.
+  Write a role for a person, no email address,
+  and paths relative to the project.
 - **Route by role.** The text of a covered layer
   (Environment, Knowledge, Feedback, Gates, Authority, Completion, Entropy)
   comes from the installed skill whose description contains
@@ -277,7 +279,8 @@ for the closing message.
 A file whose destination is a temporary file is already there.
 For every other file that is not an anchor document:
 
-1. When any path is inside the project, list those files,
+1. When any path, as it resolves with symbolic links followed,
+   is inside the project, list those files,
    each by path and as new or replacing an existing file,
    and wait for the go-ahead. One go-ahead covers the list.
    Having left the rest to you does not give it.

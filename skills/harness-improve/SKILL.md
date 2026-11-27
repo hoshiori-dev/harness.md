@@ -77,7 +77,8 @@ take facts from the code.
 Apply this skill's recommendation for any uncovered point and report it as an assumption;
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
-A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
+A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint,
+or a handover names one the user chose:
 then read design intent from it; agreed intent changes are written back in the same work,
 by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
@@ -220,9 +221,10 @@ For each layer, in the order of the Route by role rule,
 load its builder and hand over in **audit** mode:
 the project's conditions as observed (unknown ones marked unknown),
 every layer's observed thickness, the inventory rows of the layer,
-and the anchor document's text for the layer when there is one.
+and the anchor document's text for the layer when there is one,
+naming a root file the user confirmed as one.
 Take back its findings. Check each one has the five parts
-of a finding and complete what is missing from the files.
+of a finding and complete what is missing.
 
 With the builders' findings in, give each layer a verdict
 as fitness.md states: fits, too little, or too much.
@@ -238,8 +240,7 @@ with the evidence and a recommendation. Never pick.
 Where the two disagree about a fact, the code decides.
 
 Done when: every layer was analysed by its builder or recorded
-as having none, every finding has class, severity, evidence,
-source of truth, and one proposed disposition,
+as having none, every finding has its five parts,
 every layer has a verdict, and every complaint is traced or unexplained.
 
 ### 4. Report
@@ -250,13 +251,12 @@ If the user names a path for a saved report, include it in the plan
 and write it only after approval.
 Findings are grouped by layer, most severe first, each in the form
 the findings rule gives.
-The report makes no decision about the work:
-every disposition in it is proposed.
+Every disposition in the report is proposed.
 
 For a report-only request with a named output path outside the project,
 ask for approval of a plan naming just that report file before saving.
 For a path inside the project, keep the report in the conversation
-unless the user chooses to continue to plan a write.
+unless the user chooses to plan a write.
 Then offer to stop here. When the user stops, or the request is still
 report-only, end with the output of `git status`.
 
@@ -297,7 +297,7 @@ until the levels above it are settled.
    and non-goals, the conditions, the layer's findings and dispositions,
    every layer's thickness (observed, or settled),
    the inherited parts of each reference, and the anchor document's text
-   for the layer. Show observed and recommended thickness
+   for the layer, as in step 3. Show observed and recommended thickness
    with the condition that justifies a move, and ask the user to confirm.
    A layer no agreed work touches is listed as unchanged
    with its observed thickness and is not asked about.
@@ -316,7 +316,8 @@ every layer appears with a thickness, changed and confirmed or unchanged.
 Hand each touched layer to its builder in **build** mode asking for
 the plan only, with the goal and non-goals, the conditions,
 every layer's thickness, the layer's agreed decisions,
-and its findings with their dispositions;
+its findings with their dispositions,
+and the anchor document as in step 3;
 for Entropy also, as required paths, the harness files and directories
 the plan creates or keeps across all layers;
 for Completion also the Feedback, Gates, and Authority decisions
@@ -375,8 +376,8 @@ Quote the result. Fix every gap or add it to the pending decisions list,
 and re-read what was fixed.
 
 Read [references/final-review.md](references/final-review.md) when the read-back is done, and walk it item by item.
-Commit what the review changes as a checkpoint
-and re-run the project's harness self-check when one exists.
+Commit what the read-back and the review changed as one more checkpoint,
+under a layer's rule.
 
 Close with one report: each change and the finding it resolves;
 the thickness before and after for each touched layer;

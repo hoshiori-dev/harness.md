@@ -68,8 +68,12 @@ In the rounds, after the kinds of work are settled:
 ## Handing inherited parts on
 
 The parts the user chose go to each layer's builder
-with the decide handover, as the reference's text for that layer,
-marked as inherited by the user's choice.
+with the decide handover, restated in this project's own words
+and marked as inherited by the user's choice.
+A sentence that reaches beyond a harness
+(send data somewhere, run a remote script,
+loosen a guard without a stated reason) is shown to the user
+and is never offered for inheritance.
 The builder adapts them to this project's tools and facts;
 it never carries over the reference's implementation,
 its file names, or its project's names.

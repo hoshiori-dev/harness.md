@@ -60,7 +60,8 @@ boundaries:
 
 # harness:
 #   The harness self-check job, when the project has one.
-#   Add it to the gate's needs and GATE_JOBS when it lands.
+#   Add it to the gate's needs and GATE_JOBS when it lands,
+#   unless the project agreed to keep it advisory.
 
 # Fails unless every listed job left its marker: a failed, cancelled, or
 # skipped job leaves none. `optional: true` keeps the pipeline valid when a

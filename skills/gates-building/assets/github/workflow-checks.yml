@@ -92,7 +92,8 @@ jobs:
       - run: just boundaries
   # harness:
   #   The harness self-check job, when the project has one.
-  #   Add it to the gate's needs when it lands.
+  #   Add it to the gate's needs when it lands,
+  #   unless the project agreed to keep it advisory.
   secrets:
     name: checks / secrets
     runs-on: ubuntu-latest

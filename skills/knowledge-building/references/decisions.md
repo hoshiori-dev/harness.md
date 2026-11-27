@@ -93,7 +93,8 @@ and return only the decisions that exist at that thickness.
    when the project adopted the file as its anchor document,
    one Always line names it as the design to open when the harness
    is checked or changed; otherwise no mention.
-   A root `HARNESS.md` no entrypoint names is returned as open,
+   A root `HARNESS.md` that no entrypoint and no handover names
+   is returned as open,
    "no mention" first: nothing shows the project treats it as its design.
 
 Read [entrypoint.md](entrypoint.md) when sorting rules between Always and routing rows,

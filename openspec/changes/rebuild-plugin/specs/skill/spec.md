@@ -92,7 +92,8 @@ An entry SHALL NOT require a `HARNESS.md` in the target project and SHALL
 NOT write one into its root unless the user asked for an anchor document.
 A project SHALL be treated as having an anchor document only when a
 `HARNESS.md` is in its root and its entrypoint names it; with one of the
-two, the entry asks.
+two, the entry asks. A file the user asked for or confirmed counts from
+then on, and the entry names it in every handover.
 
 #### Scenario: Project with no design file
 - **WHEN** an entry builds a harness in a repository that has no `HARNESS.md`

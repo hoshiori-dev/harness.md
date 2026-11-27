@@ -14,7 +14,8 @@ An existing `.gitlab-ci.yml` keeps its other jobs and stages;
 merge the check jobs into it and list the merged file in the hand back.
 Keep the commented `# harness:` slot:
 the harness self-check job is added there later,
-and into the gate's `needs` and `GATE_JOBS` when a gate exists.
+and into the gate's `needs` and `GATE_JOBS`
+when a gate exists and the agreed decisions make it depend on the job.
 
 ## Rules every pipeline keeps
 

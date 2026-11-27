@@ -42,7 +42,8 @@ a weaker one breaks without it.
   what a skill needs from the format it states itself.
   It never assumes the target project has a `HARNESS.md`:
   a project has an anchor document only when the file is in its root
-  and its entrypoint names it; any other file is a reference.
+  and its entrypoint names it, or a handover names one the user chose;
+  any other file is a reference.
 
 ## Frontmatter
 

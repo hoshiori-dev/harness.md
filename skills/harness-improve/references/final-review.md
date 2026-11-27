@@ -5,8 +5,9 @@ Check every item against the files on disk,
 never against the plan or memory.
 Each item ends as **passed**, **passed after a fix** (name the fix),
 **not applicable** (with the reason), or a pending decision.
-A failing item is fixed, read back, and committed
-before it is recorded as passed.
+A failing item is fixed and read back.
+It is recorded as passed once the fix is committed,
+and step 8 runs the project's checks before that commit.
 
 ## Traceability
 
@@ -72,7 +73,7 @@ before it is recorded as passed.
 
 Only when the project has one; otherwise mark the group not applicable.
 
-- [ ] It validates.
+- [ ] It validates, and the entrypoint names it.
 - [ ] Every realised change of intent is in it.
       Deferred changes of intent are in the pending decisions list.
 - [ ] Each fact it names matches the code after this work

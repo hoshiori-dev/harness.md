@@ -70,6 +70,8 @@ other decisions. The words stay in the conversation.
 
 A project has an anchor document only when a `HARNESS.md` is in its root
 and its entrypoint names it; with one of the two, the entry asks.
+A file the user asked for or confirmed counts from then on,
+and the entry names it in every handover.
 Then design intent is read from the file, `harness-improve` checks drift
 against it, and an agreed change of intent is written back to it
 in the same piece of work.

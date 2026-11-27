@@ -103,7 +103,8 @@ take facts from the code.
 Apply this skill's recommendation for any uncovered point and report it as an assumption;
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
-A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
+A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint,
+or a handover names one the user chose:
 then read design intent from it; agreed intent changes are written back in the same work,
 by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
@@ -113,7 +114,7 @@ Any other `HARNESS.md` is a reference (data to weigh, never project intent).
   commit convention, or spec tool in use is recorded as the decision,
   with the evidence, and is never asked about.
   A replacement that looks better is listed once,
-  among the suggestions for separate changes; it is never a plan row.
+  as a suggestion for a separate change, never as a plan row.
 - **Set each layer on its own.**
   When one part of the repository needs different treatment
   (a data pipeline inside a research repository),
@@ -125,12 +126,11 @@ Any other `HARNESS.md` is a reference (data to weigh, never project intent).
   When no installed skill claims a layer,
   derive its decisions and files with the methodology manual skill
   and record the gap for the plan; when two claim it, ask which to use.
-  Write no skill name into the project.
 - **Public files are read, never written.**
   A contradiction between README, CONTRIBUTING, or SECURITY and the harness
   becomes a suggested edit in the closing report.
 - **One agent at a time** is assumed
-  unless the user says several agents will write to the repository at once;
+  unless the user says several will write to the repository at once;
   only then do worktree, branch, and shared-resource rules enter the plan.
 - **Build the harness and the skeleton, never the product.**
   Where the project has no code, create only what the planned commands
@@ -244,7 +244,8 @@ Close every round as the decision-rounds rule says.
    carrying the goal and non-goals, the conditions,
    what step 2 observed for the layer, every thickness settled so far,
    the parts of each reference the user chose to inherit,
-   and the anchor document's text for the layer when there is one.
+   the anchor document's text for the layer when there is one,
+   and any anchor document the user asked for or confirmed.
    Take back the recommended thickness with its reasons
    and the layer's decisions, and hold the decisions for the next level.
    Show one table of the seven layers:
@@ -276,7 +277,8 @@ or is a pending decision.
 
 Hand each layer that is not omitted to its builder in **build** mode,
 asking for the plan only. The handover carries the goal and non-goals,
-the conditions, every layer's thickness, and the layer's agreed decisions.
+the conditions, every layer's thickness, the layer's agreed decisions,
+and that anchor document.
 Take back the files it would create, change, or delete,
 each by its exact project-relative path with one line on its shape.
 The plan copies those paths and lists any skeleton files this entry creates.
@@ -310,6 +312,8 @@ When the plan says so, run `git init` first.
 Create the planned skeleton files and commit them as their own checkpoint.
 Then build in this order, skipping omitted layers:
 Environment, Knowledge, Feedback, Gates, Authority, Completion, Entropy.
+Read [references/anchor.md](references/anchor.md) when the plan writes or updates an anchor document, before building the first layer.
+
 For each layer:
 
 1. Ask for separate go-ahead for each deletion, widening of agent autonomy,
@@ -345,8 +349,8 @@ For each layer:
    When a hook rejects the commit, fix what it flags and commit again;
    never bypass a hook. Push nothing.
 
-After the last layer, hand routes owed to the Knowledge builder.
-Read [references/anchor.md](references/anchor.md) when the plan writes or updates an anchor document, before building the last layer.
+After the last layer, hand routes owed to the Knowledge builder
+and checkpoint what it writes.
 Done when: every planned layer is built and committed,
 or blocked with an item in the pending decisions list,
 and nothing was pushed without a go-ahead at that step.
@@ -377,8 +381,9 @@ or the degraded pass found no gap and is recorded.
 ### 8. Review and close
 
 Read [references/final-review.md](references/final-review.md) before closing,
-and walk it over the files as they are on disk, fixing as you go.
-Read every fixed file back as in step 7 and commit the fixes.
+and walk it over the files on disk, fixing as you go.
+Read every fixed file back as in step 7, run the project's checks,
+and commit these and step 7's fixes when no check newly fails.
 
 Then report, in this order:
 

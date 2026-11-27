@@ -62,6 +62,14 @@ submodules, and the user told where the copy is.
 - **WHEN** a configuration file in the target contains a token
 - **THEN** the result says a credential is present in that file and does not copy its value
 
+#### Scenario: Host defines a git filter
+- **WHEN** the session's git configuration defines a filter and the target's attributes name it
+- **THEN** the files are checked out without the session's global and system git configuration, so the filter does not run
+
+#### Scenario: Cloned target holds a symbolic link out of itself
+- **WHEN** a file of a cloned target is a symbolic link to a file outside it
+- **THEN** the link is checked out as a plain file holding its target, and the file outside is not read
+
 #### Scenario: Target cannot be fetched
 - **WHEN** the address cannot be cloned
 - **THEN** the agent reports the failure with the command's message, writes no file, and does not describe the target from memory
@@ -128,6 +136,10 @@ a named path only by the user's decision on that file.
 #### Scenario: Named path inside the current project
 - **WHEN** the user named `docs/reference-harness.md` in the current project as the path, left the remaining decisions to the agent, and a file already exists there
 - **THEN** the agent asks whether to replace it, write beside it, or use a temporary file, and the existing file is unchanged until the user answers
+
+#### Scenario: Named path resolves somewhere else
+- **WHEN** the user names a path whose parent directory is a symbolic link into the current project or into the target
+- **THEN** the agent judges the path as it resolves: it waits for the go-ahead for the current project, and refuses a path inside the target
 
 ### Requirement: Hand-over to building
 The agent SHALL change nothing in the current project. It SHALL close by

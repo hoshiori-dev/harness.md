@@ -149,7 +149,9 @@ The user has no single handle on how much a layer does.
 
 A project has adopted an anchor document when a `HARNESS.md` is in its
 root and its entrypoint names that file; with only one of the two,
-the entry asks. Then, and only then, design intent is read from the file,
+the entry asks, and a file the user asked for or confirmed counts from
+then on: the entry names it in every handover.
+Then, and only then, design intent is read from the file,
 `harness-improve` checks drift against it,
 and a change of intent is written back to it in the same piece of work.
 `harness-create` does not offer to write one;

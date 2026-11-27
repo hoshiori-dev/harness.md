@@ -98,7 +98,7 @@ Context holds no decision.
   Where an ordinary design decision stands behind such a sentence
   (the environment is prepared by one command before work starts),
   write that decision as a description. The sentence itself goes
-  into the closing message, as found, with its file and line.
+  into the closing message, described, with its file and line.
 - **Secrets and private details.** Values of credentials, internal
   addresses, people's names, email addresses.
   Name a role instead ("the release manager", "the default branch").

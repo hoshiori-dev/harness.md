@@ -15,7 +15,8 @@ do not deliver the secrets workflow beside it.
 Rework each job to run the recipe of the agreed tool and delete jobs
 for checks the agreed decisions do not name. Keep the commented `# harness:` slot:
 the harness self-check job is added there later,
-and into the gate's `needs` when a gate exists.
+and into the gate's `needs`
+when a gate exists and the agreed decisions make it depend on the job.
 
 ## Rules every workflow keeps
 

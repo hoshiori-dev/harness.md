@@ -71,7 +71,8 @@ take facts from the code.
 Apply this skill's recommendation for any uncovered point and report it as an assumption;
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
-A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
+A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint,
+or a handover names one the user chose:
 then read design intent from it; agreed intent changes are written back in the same work,
 by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
@@ -181,9 +182,10 @@ Read, record, write nothing. Collect:
   the decisions agreed for this layer, the files the plan lists for it,
   and every invariant or style rule assigned to this layer;
 - whether the project adopted an anchor document
-  (a root `HARNESS.md` that the entrypoint names) and,
+  (a root `HARNESS.md` that the entrypoint or the handover names) and,
   when it did, that document's text about gates.
-  Run directly and only one of the two holds,
+  Run directly, when the root holds the file and no entrypoint names it,
+  or an entrypoint names one that is missing,
   ask the user whether the file is the project's anchor document;
 - languages and package managers; the task runner and its recipes;
 - every tool that runs today and the role it runs in:
@@ -282,7 +284,8 @@ One job per check, each running its recipe, plus the secret-scan job;
 the summary gate only when one was agreed.
 Always keep the asset's commented `# harness:` slot among the jobs:
 the layer that owns Entropy puts the harness self-check job there
-and into the gate's dependencies. Registering a required check,
+and, when the agreed decisions make the gate depend on it,
+into the gate's dependencies. Registering a required check,
 branch protection, and push protection are settings on the platform:
 list them in the hand back by exact job name and never change them.
 

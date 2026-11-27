@@ -69,7 +69,8 @@ take facts from the code.
 Apply this skill's recommendation for any uncovered point and report it as an assumption;
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
-A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
+A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint,
+or a handover names one the user chose:
 then read design intent from it; agreed intent changes are written back in the same work,
 by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).

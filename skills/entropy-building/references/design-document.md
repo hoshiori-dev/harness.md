@@ -4,7 +4,8 @@ Read when the project adopted an anchor document,
 and when configuring `DESIGN_DOC` or `DESIGN_VALIDATOR`.
 
 A project has an anchor document
-only when a `HARNESS.md` is in its root and its entrypoint names it.
+when a `HARNESS.md` is in its root and its entrypoint names it,
+or under the handover rule below.
 The file is then the long-lived statement of what the harness is meant to be.
 It is opened rarely:
 to check the harness for drift and to improve it on purpose.
@@ -13,9 +14,12 @@ so the entrypoint routes to it only as "read
 before changing the harness itself".
 
 Everything below applies only to such a project,
-and to one whose handover names a new anchor document
-that the entry writes after this layer.
-A `HARNESS.md` anywhere else, or one the entrypoint does not name,
+and to one whose handover names a root `HARNESS.md` as the anchor document
+the user asked for or confirmed.
+That handover decides, also when the entry writes the file
+or its entrypoint route only after this layer.
+Any other `HARNESS.md`, in the root without an entrypoint naming it
+or anywhere else,
 is a reference: nothing is configured, deposited, or audited for it.
 Never create a `HARNESS.md` or recommend creating one.
 

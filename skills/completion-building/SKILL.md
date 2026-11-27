@@ -63,7 +63,8 @@ take facts from the code.
 Apply this skill's recommendation for any uncovered point and report it as an assumption;
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
-A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
+A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint,
+or a handover names one the user chose:
 then read design intent from it; agreed intent changes are written back in the same work,
 by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
@@ -123,8 +124,8 @@ defined.
   and show the file list of step 4.1.
   Build only after the user accepted what was shown,
   and ask separately before deleting any file.
-  When the project has an anchor document
-  and an accepted decision changes what it says about this layer,
+  When an accepted decision changes
+  what the anchor document says about this layer,
   write the change into that document in the same work.
   Never create a `HARNESS.md` in a project that has none.
 - **Never touch the tool.** Do not initialise, install, configure,
@@ -177,11 +178,10 @@ Then read in full:
   every layer's thickness, this layer's agreed decisions, the plan's files,
   and what the agreed decisions of the Feedback, Gates, and Authority layers
   say about check commands and who merges.
-- The anchor document, only when the project has adopted one
-  (a root `HARNESS.md` that the entrypoint names):
+- The anchor document, when the project adopted one:
   what it says about this layer, about check commands, and about who merges.
-  A root `HARNESS.md` the entrypoint does not name is a reference;
-  record that and take no intent from it.
+  A root `HARNESS.md` that neither the entrypoint nor the handover names
+  is a reference; record that and take no intent from it.
 - The agent entrypoint and every knowledge file: each sentence that states
   what the system does or restates acceptance, approval, or gate rules. The
   script cannot see a plain sentence such as "five failed logins lock the
@@ -385,4 +385,4 @@ and record every degradation (inventory by hand, read-back not clean-context).
 - The inventory script never lists a root `HARNESS.md` as a restating document,
   however many requirement words it holds, and reports only that the file
   exists: whether it is the project's anchor document depends on the
-  entrypoint naming it.
+  entrypoint or the handover naming it.

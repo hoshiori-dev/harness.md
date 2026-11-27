@@ -1,11 +1,17 @@
 # When the Project Has an Anchor Document
 
 Read when a `HARNESS.md` is in the project's root and an entrypoint names it,
+or the user confirmed a root file as the anchor document,
 before the analysis and again before writing to the file.
 Then, and only then, the file holds the project's design intent.
 Without one, analyse the harness against its own consistency, the code,
 and the project's conditions; skip this file,
 and never propose creating a `HARNESS.md`.
+
+A root file the user confirmed that no entrypoint names is one finding
+in the group "anchor document": invisible, medium,
+disposed by the Knowledge builder adding the entrypoint's line for it.
+That makes Knowledge a touched layer.
 
 ## 1. Validate
 

@@ -5,7 +5,7 @@ and when asked what this environment can reach.
 
 # Agent Environment
 
-The design behind these rules is the Environment section of `HARNESS.md`; change that first, never this file alone. <!-- # CONFIGURE: keep this sentence only when `HARNESS.md` is in the project root and the entrypoint names it; otherwise delete it. -->
+The design behind these rules is the Environment section of `HARNESS.md`; change that first, never this file alone. <!-- # CONFIGURE: keep this sentence only when the project adopted `HARNESS.md` as its anchor document and the file exists; otherwise delete it. -->
 
 ## Where you run
 

@@ -119,7 +119,7 @@ layers SHALL be listed as unchanged and not asked about.
 
 #### Scenario: Reference is a whole project
 - **WHEN** the reference given is the address or path of a repository and not a file
-- **THEN** the agent says that `harness-adopt` turns a project into a reference and asks whether to run that first; if the user declines, the project is read through the read-only reader and never in the main conversation
+- **THEN** the agent says that `harness-adopt` turns a project into a reference and asks whether to run that first; if the user declines, the project is read through the read-only reader and not in the main conversation, or under the same limits with the read recorded as degraded when no reader can be dispatched
 
 #### Scenario: User keeps a constraint
 - **WHEN** the user keeps a check the report proposed to remove
@@ -149,6 +149,10 @@ commands and results, and one pending decisions list.
 #### Scenario: New failure behind a known one
 - **WHEN** the aggregate check already failed on lint before the first change, and after a layer a test that passed before fails while the aggregate's exit status is unchanged
 - **THEN** the layer is not committed until that test passes, and the unchanged exit status is not taken as no new failure
+
+#### Scenario: Review fix breaks a check
+- **WHEN** a fix made in the final review makes a check fail that passed before the work
+- **THEN** the fix is not committed until that check passes again
 
 #### Scenario: Deletion in the plan
 - **WHEN** the approved plan deletes an old client-specific entrypoint
