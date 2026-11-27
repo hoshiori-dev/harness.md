@@ -281,7 +281,7 @@ def test_required_paths(repo, capsys, monkeypatch):
         "scripts/check.py",
         "AGENTS.md/",
     ]
-    assert "amend the design first" in err
+    assert "remove it from REQUIRED_PATHS" in err
 
 
 def validator(root: Path, body: str) -> list[str]:

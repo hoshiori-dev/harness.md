@@ -5,7 +5,7 @@ or when the running system must be inspected.
 
 ## Commands
 
-<!-- # CONFIGURE: keep only the rows the design names; durations are the measured ones. -->
+<!-- # CONFIGURE: keep only the rows the agreed decisions name; durations are the measured ones. -->
 
 | When | Command | Takes | Prints |
 |---|---|---|---|
@@ -26,7 +26,7 @@ or a threshold to make it green.
 
 ## Tests
 
-{{TESTS}} <!-- # CONFIGURE: {{TESTS}}: the level tests are written at, where fixtures live, the seed and reset command, the command that updates golden files, and the quarantine marker; delete what the design does not name. -->
+{{TESTS}} <!-- # CONFIGURE: {{TESTS}}: the level tests are written at, where fixtures live, the seed and reset command, the command that updates golden files, and the quarantine marker; delete what was not agreed. -->
 
 A bug fix starts with a test or a script that fails for the reported reason.
 
@@ -37,7 +37,7 @@ output, or the path of the screenshot. {{EVIDENCE_PLACE}} <!-- # CONFIGURE: {{EV
 
 ## Review
 
-{{REVIEW}} <!-- # CONFIGURE: {{REVIEW}}: when the reviewer runs, how it is started, and that its result is part of the evidence; each self-check step with its numbered questions; or the sentence recording that the client has no subagents; delete the heading when the design has no review. -->
+{{REVIEW}} <!-- # CONFIGURE: {{REVIEW}}: when the reviewer runs, how it is started, and that its result is part of the evidence; each self-check step with its numbered questions; or the sentence recording that the client has no subagents; delete the heading when no review was agreed. -->
 
 ## A human verifies
 

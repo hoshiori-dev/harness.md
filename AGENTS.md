@@ -2,8 +2,8 @@
 
 Home of the `HARNESS.md` format (one file that records a project's agent
 harness design), the official hub of ready-to-use designs, the website, and
-`harness-md`, an Agent Plugins v1.0.0 plugin that designs, builds, extracts,
-and audits harnesses around that file. The repository root is the plugin.
+`harness-md`, an Agent Plugins v1.0.0 plugin that creates, improves,
+distills, and adopts harness designs with the user. The repository root is the plugin.
 This repository's own design is `HARNESS.md`: open it only when the harness
 itself is checked or changed, never for an ordinary task.
 
@@ -12,7 +12,7 @@ itself is checked or changed, never for an ordinary task.
 - English is authoritative. A Chinese mirror (`README.zh.md`,
   `spec/spec.zh.md`, `hub/README.zh.md`, the site's `/zh/` pages) changes in
   the same change as its English source. Talk to the user in their language.
-- A change to the format, a shipped skill, the agent, the hub's entry rules,
+- A change to the format, a shipped skill, an agent, the hub's entry rules,
   or the site's behaviour starts as an OpenSpec change and waits for the
   `spec:approved` label; harness, scripts, CI, docs, a hub entry, and site
   styling or copy go straight to a pull request.
@@ -54,7 +54,7 @@ site/  DESIGN.md               <- the website (Astro, Pagefind; own pnpm package
 
 | Situation | Read |
 |---|---|
-| Adding, changing, or removing a shipped skill or the agent | the `plugin-development` skill, then `.agents/knowledge/plugin-architecture.md` |
+| Adding, changing, or removing a shipped skill or an agent | the `plugin-development` skill, then `.agents/knowledge/plugin-architecture.md` |
 | Writing or editing any file under `skills/`; a skill misbehaves | `.agents/knowledge/skill-quality.md` |
 | Editing a `<!-- shared:… -->` block in a skill | `.agents/knowledge/shared-blocks.md` |
 | Changing the format, the prose specification, a validator, or a fixture | `.agents/knowledge/format-changes.md` |
@@ -108,7 +108,7 @@ archive on the branch → maintainer squash-merges → version bump, `v*` tag re
 | When this changes | Update |
 |---|---|
 | `plugin.json` or an agent file | `just gen`; commit the generated files |
-| A skill or the agent is added, renamed, or removed | its spec under `openspec/specs/`, both README skill tables, the site's plugin pages, `just gen` |
+| A skill or an agent is added, renamed, or removed | its spec under `openspec/specs/`, both README skill tables, the site's plugin pages, `just gen` |
 | A shared block's canon | every skill using that id, same change |
 | `spec/spec.md` | `spec/spec.zh.md`, `skills/harness-md/references/specification.md`, the format specs |
 | A validator rule | the other validator, `spec/fixtures/`, `openspec/specs/cli/lint/spec.md` |

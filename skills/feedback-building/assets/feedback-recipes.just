@@ -1,7 +1,7 @@
 # Verification recipes. Every recipe is non-interactive: no watch mode, no
 # pager, no prompt. Hooks, CI, and agents call these same recipes.
 
-# Fast check, after every small change. Budget: 10 seconds. # CONFIGURE: the design's budget
+# Fast check, after every small change. Budget: 10 seconds. # CONFIGURE: the agreed budget
 check-fast: test-unit # CONFIGURE: every existing check recipe that fits the budget, and the tests that do
 
 # Full check, before calling a task done: everything CI runs.
@@ -17,7 +17,7 @@ test-unit:
 
 # One file or directory, seconds: `just test-fast tests/test_parser.py`.
 test-fast path:
-    pytest -q --tb=short --no-header -x {{ path }} # CONFIGURE: the scoped form of the test command
+    pytest -q --tb=short --no-header -x {{ quote(path) }} # CONFIGURE: the scoped form of the test command
 
 # Start the system in the background and wait until it answers.
 up:
@@ -81,4 +81,4 @@ seed:
 
 # The last lines of the system's log.
 logs lines="80":
-    @tail -n {{ lines }} .run/app.log
+    @tail -n {{ quote(lines) }} .run/app.log

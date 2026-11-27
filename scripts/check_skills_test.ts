@@ -23,16 +23,17 @@ const LAYERS = [
 ];
 const STEPS = [
   "### 1. Observe",
-  "### 2. Write the section",
-  "### 3. Build",
-  "### 4. Verify",
-  "### 5. Audit",
-  "### 6. Hand back",
+  "### 2. Decide",
+  "### 3. Describe",
+  "### 4. Build",
+  "### 5. Verify",
+  "### 6. Audit",
+  "### 7. Hand back",
 ]
   .map((s) => `${s}\n\nDo it.\n`)
   .join("\n");
 const SHARED =
-  "<!-- shared:design-is-not-approval -->\nA design is not approval.\n<!-- /shared:design-is-not-approval -->\n";
+  "<!-- shared:plan-is-not-approval -->\nA plan is not approval.\n<!-- /shared:plan-is-not-approval -->\n";
 
 function skill(name: string, description: string, extra = ""): string {
   return `---\nname: ${name}\ndescription: ${description}\nlicense: Apache-2.0\n${extra}---\n# ${name}\n\nBody.\n`;
@@ -58,8 +59,8 @@ function fixture(): Record<string, FileSpec> {
     "skills/harness-md/scripts/lint.py": `${PY}print('ok')\n`,
     "skills/harness-md/scripts/lint_test.py": "def test_ok():\n    assert True\n",
     "skills/harness-md/agents/openai.yaml": "interface:\n  display_name: HARNESS.md\n",
-    "skills/harness-build/SKILL.md": `${skill(
-      "harness-build",
+    "skills/harness-create/SKILL.md": `${skill(
+      "harness-create",
       "Builds a harness. Use when the user invokes it.",
       "disable-model-invocation: true\n",
     )}Route to the skill whose description says \`Owns the <Layer> layer\`.\n${SHARED}`,
@@ -106,7 +107,7 @@ test("check_skills passes on a consistent fixture and prints the description bud
   const result = runScript("check_skills.ts", [], root);
   assert.equal(result.code, 0, result.output);
   assert.match(result.output, /gates-building\s+builder\s+\d+ \/ 240/);
-  assert.match(result.output, /harness-build\s+workflow\s+\d+ \/ 400/);
+  assert.match(result.output, /harness-create\s+workflow\s+\d+ \/ 400/);
   assert.match(result.output, /harness-md\s+other\s+\d+ \/ 700/);
   assert.match(result.output, /total\s+\d+ \/ 8000/);
   assert.equal(result.output.includes("WARN"), false, result.output);
@@ -118,7 +119,7 @@ test("check_skills reports every repository rule", () => {
   files["skills/authority-building/SKILL.md"] = `${skill(
     "authority-building",
     "Authority rules. Use when asked.",
-  )}\n## Workflow\n\n${STEPS.replace("### 4. Verify", "### 4. Check")}See [notes](references/notes.md) when unsure.\n<!-- shared:nothing-lands -->\ntext\n<!-- /shared:nothing-lands -->\n`;
+  )}\n## Workflow\n\n${STEPS.replace("### 5. Verify", "### 5. Check")}See [notes](references/notes.md) when unsure.\n<!-- shared:nothing-lands -->\ntext\n<!-- /shared:nothing-lands -->\n`;
   files["skills/authority-building/references/notes.md"] = "# Notes\n";
   files["skills/authority-building/references/orphan.md"] = "# Orphan\n";
   files["skills/authority-building/references/pending-decisions.md"] = "A\n";
@@ -126,7 +127,7 @@ test("check_skills reports every repository rule", () => {
   files["skills/gates-building/SKILL.md"] = `${skill(
     "gates-building",
     "Owns the Entropy layer. Use when handed over.",
-  )}\n## Workflow\n\n### 2. Write the section\n\n### 1. Observe\n\n### 3. Build\n\n### 4. Verify\n\n### 5. Audit\n\n### 6. Hand back\n`;
+  )}\n## Workflow\n\n### 2. Decide\n\n### 1. Observe\n\n### 3. Describe\n\n### 4. Build\n\n### 5. Verify\n\n### 6. Audit\n\n### 7. Hand back\n`;
   // a builder naming a layer that does not exist (lowercase)
   files["skills/feedback-building/SKILL.md"] = builder("Feedback").replace(
     "Owns the Feedback layer",
@@ -138,9 +139,9 @@ test("check_skills reports every repository rule", () => {
     `Use when ${"x".repeat(240)}.`,
   );
   // a workflow without the flag, with an ownership phrase, an install command, and bad links
-  files["skills/harness-build/SKILL.md"] =
-    `${skill("harness-build", "Builds a harness. Owns the Gates layer. Use when invoked.")}Install with \`npx skills add someone/skills\`.\nEscape [up](../harness-md/SKILL.md) when needed.\nMissing [file](references/none.md) when needed.\nRead [pending](references/pending-decisions.md) when blocked.\n`;
-  files["skills/harness-build/references/pending-decisions.md"] = "B\n";
+  files["skills/harness-create/SKILL.md"] =
+    `${skill("harness-create", "Builds a harness. Owns the Gates layer. Use when invoked.")}Install with \`npx skills add someone/skills\`.\nEscape [up](../harness-md/SKILL.md) when needed.\nMissing [file](references/none.md) when needed.\nRead [pending](references/pending-decisions.md) when blocked.\n`;
+  files["skills/harness-create/references/pending-decisions.md"] = "B\n";
   // a non-workflow with the flag; script and asset hygiene; stray files
   files["skills/entropy-building/SKILL.md"] = `${skill(
     "entropy-building",
@@ -164,25 +165,25 @@ test("check_skills reports every repository rule", () => {
   const root = makeTree(files);
   gitInit(root);
   writeTree(root, {
-    "skills/environment-building/SKILL.md": `${builder("Environment", "\nRead [threat model](references/threat-model.md) when rating isolation.\n")}<!-- shared:design-is-not-approval -->\nA design is approval.\n<!-- /shared:design-is-not-approval -->\n`,
+    "skills/environment-building/SKILL.md": `${builder("Environment", "\nRead [threat model](references/threat-model.md) when rating isolation.\n")}<!-- shared:plan-is-not-approval -->\nA design is approval.\n<!-- /shared:plan-is-not-approval -->\n`,
   });
   const result = runScript("check_skills.ts", [], root);
   assert.equal(result.code, 1, result.output);
   assertIncludes(result.output, [
     "skills/authority-building/SKILL.md: layer-ownership: description carries 0 ownership phrases",
-    'skills/authority-building/SKILL.md: builder-steps: the fixed step heading "### 4. Verify" is missing',
+    'skills/authority-building/SKILL.md: builder-steps: the fixed step heading "### 5. Verify" is missing',
     'shared block "nothing-lands" has no canon',
     "skills/authority-building/references/orphan.md: skill-file-reachable",
     "skills/gates-building/SKILL.md: layer-ownership: claims the Entropy layer",
-    'skills/gates-building/SKILL.md: builder-steps: the step heading "### 2. Write the section" is out of order',
+    'skills/gates-building/SKILL.md: builder-steps: the step heading "### 2. Decide" is out of order',
     'skills/feedback-building/SKILL.md: layer-ownership: "feedback" is not a layer',
     "skills/completion-building/SKILL.md: skill-description: description has",
     "limit 240 for a layer builder",
-    "skills/harness-build/SKILL.md: workflow-invocation",
-    "skills/harness-build/SKILL.md: layer-ownership: carries an ownership phrase",
-    "skills/harness-build/SKILL.md:9: skill-no-install-cmd",
-    "skills/harness-build/SKILL.md:10: skill-link-escape",
-    "skills/harness-build/SKILL.md:11: skill-link",
+    "skills/harness-create/SKILL.md: workflow-invocation",
+    "skills/harness-create/SKILL.md: layer-ownership: carries an ownership phrase",
+    "skills/harness-create/SKILL.md:9: skill-no-install-cmd",
+    "skills/harness-create/SKILL.md:10: skill-link-escape",
+    "skills/harness-create/SKILL.md:11: skill-link",
     "skills/entropy-building/SKILL.md: workflow-invocation",
     "skills/entropy-building/assets/check_harness.py:1: script-shebang",
     "skills/entropy-building/assets/check_harness.py: script-pep723",

@@ -5,7 +5,7 @@ and when asked what this environment can reach.
 
 # Agent Environment
 
-The design behind these rules is the Environment section of `HARNESS.md`; change that first, never this file alone. <!-- # CONFIGURE: delete this sentence when the project does not keep `HARNESS.md`. -->
+The design behind these rules is the Environment section of `HARNESS.md`; change that first, never this file alone. <!-- # CONFIGURE: keep this sentence only when the project adopted `HARNESS.md` as its anchor document and the file exists; otherwise delete it. -->
 
 ## Where you run
 
@@ -22,9 +22,9 @@ Never widen a token or add a credential; ask the owner.
 
 | Tool | Use it for | Reaches |
 |---|---|---|
-| {{TOOL}} | {{PURPOSE}} | {{REACH}} | <!-- # CONFIGURE: one row per tool the section lists beyond the task runner: registered tools and servers, preinstalled CLIs, wrapper recipes; reach says read-only or what it changes, and where. -->
+| {{TOOL}} | {{PURPOSE}} | {{REACH}} | <!-- # CONFIGURE: one row per agreed tool beyond the task runner: registered tools and servers, preinstalled CLIs, wrapper recipes; reach says read-only or what it changes, and where. -->
 
-Not provided on purpose: {{ABSENT_TOOLS}}. When a task needs one, stop and report; do not install it. <!-- # CONFIGURE: {{ABSENT_TOOLS}}: the tools the section withholds; delete the paragraph when it withholds none. -->
+Not provided on purpose: {{ABSENT_TOOLS}}. When a task needs one, stop and report; do not install it. <!-- # CONFIGURE: {{ABSENT_TOOLS}}: the tools deliberately withheld; delete the paragraph when none is. -->
 
 ## Files you must not change
 

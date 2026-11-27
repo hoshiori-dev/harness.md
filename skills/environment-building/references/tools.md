@@ -2,7 +2,7 @@
 
 Read when the project registers or needs any tool beyond the task runner
 and the hosting platform's CLI,
-or when writing the tools paragraph of the section.
+or when writing the tools decision.
 
 A tool is any capability the agent is given beyond reading and writing files
 and running ordinary commands. Three kinds,
@@ -14,7 +14,7 @@ checked in this order because each later kind costs more:
 | Command-line programs preinstalled in the environment | an install line; models already know the common ones | the work touches an outside system that has a CLI (hosting platform, cloud, database) |
 | Tools and MCP servers registered with the client | their descriptions load into context on every task; a server is a process with its own reach and credential | no command-line program gives the capability (driving a browser, a service with no CLI) |
 
-## What the section says about each tool
+## What the tools decision says about each tool
 
 One entry per tool, in prose or a table:
 
@@ -29,13 +29,13 @@ One entry per tool, in prose or a table:
 Then one sentence listing the tools deliberately not provided, with the reason,
 and what an agent does when it needs one (stop and ask; never install it).
 
-A tool the section lists says only that the agent can reach it.
+A tool the decision lists says only that the agent can reach it.
 Whether an action with it needs a person belongs to the layer
 that owns Authority; using it to start, drive,
 and observe the system under development belongs to the layer
 that owns Feedback. Hand both over by describing the layer.
 
-## Defaults by Context
+## Recommendations by the project's conditions
 
 - **Hosted project**: preinstall the platform's CLI.
   Give it a token scoped to this repository.
@@ -56,12 +56,9 @@ that owns Feedback. Hand both over by describing the layer.
 ## Registering a tool
 
 Register in the client's project-scoped configuration,
-tracked in the repository, so every session gets the same set. Known carriers:
-Claude Code reads MCP servers from `.mcp.json` in the repository root;
-Codex reads `[mcp_servers.<name>]` tables from its `config.toml`.
-Clients change these locations:
-confirm the file and key in the client's current documentation before writing,
-and for any other client look it up instead of guessing.
+tracked in the repository, so every session gets the same set.
+Each client has its own file and key for this, and they change:
+confirm both in the client's current documentation before writing.
 
 - Pin the server's version;
   never register one that runs unpinned code from a registry at start.
@@ -70,7 +67,7 @@ and for any other client look it up instead of guessing.
   add it to that list.
 - An MCP server's tool descriptions are content the agent did not write.
   Register only servers whose source the user trusts as much as a dependency,
-  and say so in the section.
+  and say so in the tools decision.
 
 ## Wrapper scripts and recipes
 

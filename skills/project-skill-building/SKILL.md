@@ -43,21 +43,20 @@ Create or change no file in the project until the user has approved the set
 that names it (step 3); an inspection step reads and reports, it never writes.
 
 <!-- shared:pending-decisions -->
-When a step is blocked on a decision only the user can make, continue with
-every step that does not depend on it and add the blocked item to a pending
-decisions list. Each item states: what is blocked and why; the options; the
-recommended option and its reason; which finished work each option would
-change. Present the list once, at the end or when nothing else can proceed,
+When blocked on a user decision, continue all independent steps
+and add the item to a pending decisions list
+(what is blocked and why, options, recommended option and reason,
+what finished work each changes).
+Present the list once at the end or when nothing else can proceed,
 never one question at a time.
 <!-- /shared:pending-decisions -->
 
 <!-- shared:management-code-ownership -->
-A script, hook, check, CI step, or task-runner recipe written into the target
-project is the project's own management code: written for its role in the
-language the project agreed to, readable first, failing with a message that
-names what to fix, with no fallback that hides an unexpected error, and never
-calling a script inside a skill directory. Tell the user that later fixes to
-this plugin do not reach the delivered copy.
+Any script, hook, check, CI step, or task-runner recipe written into the target project
+is its own management code: written in its agreed language, readable first,
+failing with what to fix, with no fallback hiding unexpected errors,
+and never calling a script in a skill directory.
+Tell the user that later fixes to this plugin do not reach the delivered copy.
 <!-- /shared:management-code-ownership -->
 
 Hand work off by role, never by skill name.

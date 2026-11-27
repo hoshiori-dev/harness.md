@@ -65,8 +65,8 @@ finding or error, bad arguments).
 An agent has no sense of elapsed time;
 it will wait an hour for a suite without noticing.
 
-- Every command the agent is told to run has a stated duration in the section
-  and in the knowledge file.
+- Every command the agent is told to run has a stated duration
+  in the agreed decisions and in the knowledge file.
 - The fast check fits its budget (default 10 seconds).
   What does not fit moves to the full check.
 - A full check over 15 minutes gets a middle tier:

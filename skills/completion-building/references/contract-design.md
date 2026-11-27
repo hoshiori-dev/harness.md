@@ -2,11 +2,11 @@
 
 Read when reworking the contract asset
 into the project's specification workflow knowledge file,
-when the section changes one value a deposited contract records,
+when an agreed decision changes one value a deposited contract records,
 and when a later run fills an item the contract left pending.
 
-The contract is the Completion section turned into the file agents read
-before a behaviour change. The section says what was decided and why;
+The contract is the agreed decisions turned into the file agents read
+before a behaviour change. The decisions say what was chosen and why;
 the contract says what to do. It repeats no reasoning and adds no decision.
 
 ## One source of truth per fact
@@ -17,7 +17,7 @@ the contract says what to do. It repeats no reasoning and adds no decision.
 | Acceptance of one change | That change's scenarios | The request body, the issue |
 | Engineering principles the tool reads (constitution, steering) | The tool's file | The entrypoint |
 | How specs are written, approved, and frozen | The contract | Entrypoint, request template, project workflow skill |
-| Why the workflow is shaped this way | The Completion section of `HARNESS.md`, when the project keeps the file | The contract never restates the reasons |
+| Why the workflow is shaped this way | The project's anchor document, when it has adopted one; otherwise nowhere in the project | The contract never restates the reasons |
 | Conventions and mechanics | The knowledge base | Specs never restate them |
 
 A pointing file may summarise in one line and must link.
@@ -79,7 +79,7 @@ they are facts of the project.
 
 ## Changing one recorded value
 
-When the section changes a value,
+When an agreed decision changes a value,
 update every passage of the contract that depends on it,
 then refresh every marker block that states it (`approval-gates.md`,
 Marker text). For a change in how approval is recorded
@@ -97,3 +97,15 @@ When an observed fact settles an item the contract left pending
 write it into its part (Scope, Checks) as the first deposit would have,
 refresh any marker block it affects, and drop it from the pending list.
 Ask nothing.
+
+## Read-back questions
+
+These questions must be answerable from the project's files alone:
+
+- Where does a new spec go?
+- What must it contain?
+- Who approves the spec, who approves the finished work, and where is each recorded?
+- When may the task list be written?
+- Who freezes the record, and what does a later commit mean?
+- Does a change to CI need a spec?
+- Which check runs after every edit?

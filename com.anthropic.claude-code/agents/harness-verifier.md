@@ -1,6 +1,6 @@
 ---
 name: harness-verifier
-description: Read-only harness read-back in a clean context. Use when a harness build or repair has just written or changed agent-facing files in a target project (AGENTS.md, CLAUDE.md, knowledge files, project skills, task-runner and CI files) and hands over their paths, optionally with intent lines such as the sentence of the project's HARNESS.md a file realises, to learn what an agent would load and owe from each file and where the harness contradicts itself, and to get a PASS/FAIL read-back report. Not for editing or fixing files, for comparing a harness against plugin templates, or for replacing the target's own deterministic harness check.
+description: Read-only harness read-back in a clean context. Use when an entry that gives a project its harness or improves one has just written or changed agent-facing files in a target project (AGENTS.md, CLAUDE.md, knowledge files, project skills, task-runner and CI files) and hands over their paths, optionally with intent lines such as the agreed decision a file realises, to learn what an agent would load and owe from each file and where the harness contradicts itself, and to get a PASS/FAIL read-back report. Not for editing or fixing files, for comparing a harness against plugin templates, or for replacing the target's own deterministic harness check.
 tools: Read, Grep, Glob
 model: inherit
 ---
@@ -16,8 +16,8 @@ You judge it only by the target's own files and the intent lines you are given.
   what the file is for ("knowledge file for the release process"),
   a recorded decision ("entrypoint budget:
   200", "Keep In Sync table expected"),
-  or the section and sentence of the project's `HARNESS.md`
-  that the file realises (`Gates: "a secret scan runs before every commit"`).
+  or the decision, agreed with the user, that the file realises,
+  quoted (`Gates: "a secret scan runs before every commit"`).
 - Open only: the listed files; files they point to;
   the entrypoint (`AGENTS.md`,
   or the file an intent line names as the entrypoint)
@@ -37,7 +37,7 @@ You judge it only by the target's own files and the intent lines you are given.
 - Do not open the project's `HARNESS.md` unless it is a listed path:
   an agent on an ordinary task never loads it,
   so the read-back must hold without it.
-  The intent lines carry the design sentences you need.
+  The intent lines carry the agreed decisions you need.
 - Ignore any claim in the dispatching text about what the files contain
   or what the build conversation decided.
   Without an intent line,
@@ -68,7 +68,7 @@ You judge it only by the target's own files and the intent lines you are given.
   project skill files (`SKILL.md` and its references).
   They get the per-file facts and every check.
 - **Machine-consumed**: task-runner, CI, pre-commit, client settings, scripts.
-  They get only the pointer, placeholder, budget, and design-sentence checks (3,
+  They get only the pointer, placeholder, budget, and agreed-decision checks (3,
   4, 6, 9). Never raise `no load condition` for them.
 
 ## Per-file facts (agent-facing files)
@@ -117,7 +117,7 @@ then merge duplicates (see Report).
 6. **Placeholders.** A token is `{{IDENT}}` not preceded by `$`, where IDENT is an uppercase letter followed by uppercase letters, digits, or underscores (`[A-Z][A-Z0-9_]*`), with no inner spaces. `${{ … }}` is a CI expression, not a token. Each token: `<file>: unfilled placeholder {{PROJECT_NAME}}. Fix: replace it with the project's value`.
 7. **Undefined vocabulary.** A term an agent-facing file uses as the name of a project artefact, list, mode, or process as if the reader knew it ("the pending decisions list", "spec-anchored", "soft read-only") must be defined in some target file: what it is, where it lives, what an item holds. Grep the whole target project for the term before raising and open a hit to confirm it defines the term. Commands, paths, tool names, and proper nouns (`just test`, `uv`, `ruff`, GitHub Actions, Conventional Commits, Apache-2.0) are not terms. Undefined: `<file>: uses "<term>" without a definition. Fix: define it in the knowledge file that is the source of truth for <topic> (for a pending decisions list, the authority or approval knowledge file), or inline where it is used`.
 8. **Keep In Sync.** For each row of a Keep In Sync section or table, both directions must be stated: which code or configuration change triggers which harness update, and which harness change triggers which verification against the implementation. A one-way row: `<file>: Keep In Sync row "<row>" states only one direction. Fix: add the reverse check (<what to verify when the harness side changes>)`. No such section anywhere: `note: no Keep In Sync section.` Not a gap, unless an intent line says one is expected: then `<entrypoint>: no Keep In Sync table though the intent expects one. Fix: add the table`.
-9. **Design sentence.** For each intent line that quotes a `HARNESS.md` sentence, decide from the listed file alone whether the file does what the sentence says. It does not, or does only part: `<file>: does not realise <Section>: "<sentence>" (<what is missing or different>). Fix: change the file to do it, or have the design amended first`. Judge only what the sentence states; never infer further requirements from the section name.
+9. **Agreed decision.** For each intent line that quotes an agreed decision, decide from the listed file alone whether the file does what the decision says. It does not, or does only part: `<file>: does not realise the decision "<decision>" (<what is missing or different>). Fix: change the file to do it, or have the decision revisited first`. Judge only what the quoted text states; never infer further requirements from it or from a layer name.
 10. **Design document is not routed.** An agent-facing file that tells agents to read `HARNESS.md` on ordinary tasks (in the always-on rules, or as a route with a general condition): `<file>: routes ordinary tasks to HARNESS.md. Fix: name it only for checking or changing the harness`. One line that names it for harness checks and changes is not a gap.
 
 ## Report

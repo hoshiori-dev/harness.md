@@ -52,7 +52,9 @@ A rule a machine can enforce does not belong in prose.
   a line in the root entrypoint that names its trigger;
   a hook or a sync skill only when the project has many such rules.
 - The design of the harness itself (why a layer is the way it is):
-  the project's `HARNESS.md`, which no ordinary task loads.
+  the project's anchor `HARNESS.md` where it adopted one,
+  which no ordinary task loads;
+  otherwise the reason stays beside the rule it explains.
 - An entrypoint or a draft of one: apply the lines above to each block,
   then report the resulting line count against the budget (about 100 lines;
   about 200 when it is the whole harness of a small project).
@@ -72,24 +74,13 @@ A project may rely on those modes only when the team uses one client confirmed
 to support them; mixed or undecided teams use them for local,
 supplementary information only.
 
-Recorded behaviour as of November 2026;
-check each client's current documentation before relying on it:
-
-- Claude Code loads `CLAUDE.md` from the working directory and its ancestors
-  at start-up, reads `AGENTS.md` natively when no `CLAUDE.md` exists
-  (since v2.1.277), loads a subdirectory's file
-  when the agent reads or writes under it,
-  and supports path-matched rules under `.claude/rules/`.
-- Codex loads `AGENTS.md` from the repository root down to the working directory
-  and concatenates them; it does not load files below the working directory.
-- Gemini CLI loads a directory's `GEMINI.md` and its ancestors
-  when a tool touches that directory.
-- Cursor applies a nested `AGENTS.md` when working in that directory or below,
-  merged with parents, the more specific winning.
-- GitHub Copilot documents only "nearest `AGENTS.md` wins",
-  with no statement about parents.
-- The `agents.md` convention itself fixes only "nearest to the edited file wins"
-  and defines no loading moment.
+Clients differ here, and they change:
+some load an instruction file only from the root or the working directory,
+some also from ancestors, some from a subdirectory once the agent works in it,
+and some support rules matched by path.
+Check the current documentation of each client in use before relying on any.
+The `agents.md` convention itself fixes only "nearest to the edited file wins"
+and defines no loading moment.
 
 When the repository does not show which clients the team uses,
 ask before recommending location or action loading.

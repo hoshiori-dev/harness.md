@@ -4,7 +4,7 @@ Read when writing or changing a GitLab CI pipeline for the project's checks.
 
 ## Which asset, where
 
-| The section gates on | Deliver | Target path |
+| The agreed check set | Deliver | Target path |
 |---|---|---|
 | formatter and secret scan only | [assets/gitlab/ci-secret.yml](../assets/gitlab/ci-secret.yml), plus a root file holding only `stages: [check]` and the `include:` | `.gitlab/ci/secret.yml`, `.gitlab-ci.yml` |
 | lint, typecheck, tests, no summary gate | [assets/gitlab/ci-checks.yml](../assets/gitlab/ci-checks.yml) without `boundaries`, `gate`, and the `gate` stage, plus the secret file | `.gitlab-ci.yml`, `.gitlab/ci/secret.yml` |
@@ -14,7 +14,8 @@ An existing `.gitlab-ci.yml` keeps its other jobs and stages;
 merge the check jobs into it and list the merged file in the hand back.
 Keep the commented `# harness:` slot:
 the harness self-check job is added there later,
-and into the gate's `needs` and `GATE_JOBS` when a gate exists.
+and into the gate's `needs` and `GATE_JOBS`
+when a gate exists and the agreed decisions make it depend on the job.
 
 ## Rules every pipeline keeps
 
@@ -25,6 +26,8 @@ and into the gate's `needs` and `GATE_JOBS` when a gate exists.
   (`image: python:3.12-slim@sha256:<digest>`);
   the knowledge file says who updates it.
 - **No hidden failures.** No `allow_failure: true` on a check, no `|| true`.
+  The one exception is a job outside the gate
+  that the agreed decisions name as advisory, with a comment saying so.
 - **Recipes, not inline logic**:
   each job runs the recipe that also runs locally.
 
