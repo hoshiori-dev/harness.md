@@ -54,14 +54,14 @@ Content earns a file when all three hold:
    path, topic, first line, which entrypoint line reaches it.
 2. **Classify** each: current, invisible, duplicated, contradicting the code,
    stale, restating the code.
-3. **Decide per file in the section**:
+3. **Decide per file**, each as a decision returned in decide mode:
    route an invisible file that earns its place
    (a routing row and a "Read this when" first line);
    merge a duplicate into the current copy;
    drop content that contradicts the code, session notes with no durable fact,
    and restatements of what code shows.
    Never route every unreached file silently.
-   A removal needs the section to name the file and the user's go-ahead
+   A removal needs an agreed decision that names the file and the user's go-ahead
    when the build reaches it.
 4. **Converge in place**: move content into the chosen folder,
    converting it to the rules above as it moves,

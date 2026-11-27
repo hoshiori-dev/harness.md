@@ -4,8 +4,11 @@ schema: spec-driven
 context: |
   This repository is harness.md: the HARNESS.md format specification, the
   official hub of ready-to-use HARNESS.md designs, the website, and
-  harness-md, an Agent Plugins v1.0.0 plugin that designs, builds, extracts,
-  and audits agent harnesses around a HARNESS.md file.
+  harness-md, an Agent Plugins v1.0.0 plugin with which a developer and a
+  coding agent work out and build an agent harness together (entries:
+  harness-create, harness-improve, harness-distill, harness-adopt); a
+  HARNESS.md is its portable design document, not something a project must
+  keep.
   Long-lived specs are organised by domain under openspec/specs/:
   - format/document, format/frontmatter, format/sections: the structured
     statement of the HARNESS.md format. spec/spec.md (English, with the

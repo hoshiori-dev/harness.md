@@ -1,6 +1,6 @@
 # Reversibility
 
-Read when classifying an action the section does not name,
+Read when classifying an action no agreed decision names,
 when the user disputes a classification,
 or when the user asks why a local commit and a push are not the same class.
 
@@ -19,10 +19,10 @@ an MCP tool that only reads is internal.
 
 ## Pre-authorisation has two sources
 
-- **Standing**: the Authority section names the outward actions agents take
+- **Standing**: the agreed standing list names the outward actions agents take
   on every task without asking
   (for example "push the task branch and open its draft request").
-  The deposited policy repeats that list.
+  The deposited policy holds that list.
 - **Per task**: the approved plan
   or the task's specification names an outward action for that task only.
 
@@ -30,15 +30,15 @@ Nothing else pre-authorises.
 An action that was approved once in a conversation is not standing;
 a habit visible in history is not standing.
 
-Defaults for the standing list, by Context:
+Recommended standing list, by the project's conditions:
 
-| Context | Standing pre-authorisation |
+| Conditions | Standing pre-authorisation |
 |---|---|
 | A human reviews between tasks; a wrong change is cheap to undo; the repository is private | push the task branch; open and update that branch's draft request |
 | The repository is public, or a wrong publication is costly | none; a draft request on a public repository is public the moment it opens, so each task's plan names its outward actions |
 | Agents run unattended on a queue of issues | push the task branch; open and update its draft request; nothing that touches another person's thread |
 
-Never standing, in any Context: marking a request ready, merging, pushing a tag,
+Never standing, under any conditions: marking a request ready, merging, pushing a tag,
 releasing or publishing, changing a remote setting,
 deleting anything the agent did not create in the current task,
 and force pushing.
@@ -58,16 +58,16 @@ when it is "only to my branch".
 The same key sorts tool permissions: read-only tools are allowed;
 tools with an outward effect are classified one by one;
 a whole server or tool family is never put under ask or allowed as a block.
-Which tools exist and what each can reach is the Environment section's subject;
+Which tools exist and what each can reach belongs to the layer that owns Environment;
 this layer only sorts the actions.
 
-## What the section and the policy state
+## What the decision and the policy state
 
-The Authority section carries the table above with the project's own commands
+The action-classes decision carries the table above with the project's own commands
 and platform operations in place of the generic examples, the standing list,
 and the rule for each class,
 so a reader with that text alone can sort a new action.
 When a wrong change is costly or agents run unattended,
 it also carries the explicit list of this project's irreversible actions,
 named as its platform's operations (`gh pr ready`, `gh release create`,
-the project's publish recipe). The deposited policy repeats both.
+the project's publish recipe). The deposited policy holds both.

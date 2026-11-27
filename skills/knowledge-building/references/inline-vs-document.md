@@ -25,7 +25,7 @@ Choose the cheapest durable carrier, in this order:
 A request to document "this function
 must never receive an empty list" gets a non-empty type
 or a signature-level constraint and no knowledge entry.
-In the section, write such a candidate as "carried by the code"
+In decide mode, return such a candidate as "carried by the code"
 with the carrier named;
 the change to the code itself is a suggestion in the hand back,
 never an edit this layer makes.

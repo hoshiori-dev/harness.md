@@ -9,8 +9,8 @@ Tier 1 (always on): every link in the harness documents, and every backticked
 path whose top directory exists, resolves; every backticked task-runner mention (`just test`) names a recipe the
 runner has; every knowledge file is referenced from the entrypoint; every
 mirror pair agrees on the sections that must match; every path the harness
-design requires exists; the design document, when the project keeps one,
-exists and passes the project's own format validator.
+needs to exist does; the anchor document (the harness design document),
+when the project keeps one, exists and passes the project's own format validator.
 Tier 2 (TIER2 below): skill frontmatter and the entrypoint line budget.
 
 Usage:
@@ -66,9 +66,9 @@ TIER2 = False
 ENTRYPOINT_BUDGET = 120
 # CONFIGURE: directories holding project skills as <dir>/<name>/SKILL.md, checked by tier 2.
 SKILL_DIRS: list[str] = []
-# CONFIGURE: paths the harness design requires to exist, e.g. ".agents/knowledge/", "justfile"; a trailing slash requires a directory; [] when the design requires no layout.
+# CONFIGURE: paths the harness needs to exist, e.g. ".agents/knowledge/", "justfile"; a trailing slash requires a directory; [] when it needs none.
 REQUIRED_PATHS: list[str] = []
-# CONFIGURE: the harness design document the project keeps, "HARNESS.md"; None when the project keeps none (never written, or deleted after the harness was built).
+# CONFIGURE: the anchor document (the harness design document) the project keeps, "HARNESS.md"; None when the project keeps no anchor document.
 DESIGN_DOC: str | None = None
 # CONFIGURE: the command that validates the format of DESIGN_DOC, as an argument list run from the repository root with the document's path appended, e.g. ["python3", "scripts/lint_harness_md.py"]; None to skip. It must be a validator this repository holds, never a script inside a skill directory.
 DESIGN_VALIDATOR: list[str] | None = None
@@ -465,8 +465,8 @@ def check_required_paths(root: Path, s: Settings, findings: list[Finding]) -> No
                 rel,
                 None,
                 "required-path",
-                f"is a {kind} the harness design requires, and it does not exist.",
-                "create it; or, when the design changed, amend the design first and then REQUIRED_PATHS in the same change.",
+                f"is a {kind} the harness needs to exist, and it does not exist.",
+                "create it, or remove it from REQUIRED_PATHS; where the project keeps an anchor document (DESIGN_DOC), amend that document first.",
             )
         )
 

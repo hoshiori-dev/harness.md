@@ -1,7 +1,7 @@
 # Branching Model and Releases
 
-Read when the Context names a hosted remote and the section's branching model
-or release rule is being written,
+Read when the project is hosted on GitHub or GitLab and its branching model
+or release rule is being decided, described, or built,
 when the probe shows branches other than the default (`develop`, `release/*`,
 `staging`, `production`), or when the user asks how releases are cut.
 
@@ -16,11 +16,11 @@ when the probe shows branches other than the default (`develop`, `release/*`,
 
 Never propose git-flow for a project that does not already use it.
 With GitHub Flow as the default,
-name the two GitLab Flow variants in one sentence each as the alternatives
-in the hand-back, with the evidence the default relied on (branch names,
+name the two GitLab Flow variants in one sentence each as the other options
+of the decision, with the evidence the default relied on (branch names,
 environments, tags).
 
-## What the section and the knowledge file state
+## What the decision and the knowledge file state
 
 - The model in one line and the branch name pattern
   (`<n>-<slug>` is what `gh issue develop` produces;
@@ -46,12 +46,12 @@ and a second tool to configure.
 A project that publishes nothing gets no release rule beyond "no releases",
 and no release automation. If the user picks the bot,
 challenge the choice once with the reason above;
-if they keep it, the section records it as their decision
-and names the bot's configuration file.
+if they keep it, it is recorded as their decision with their reason,
+together with the bot's configuration file.
 
-With tags chosen, the section names one workflow (GitHub:
+With tags chosen, the decision names one workflow (GitHub:
 `on: push: tags: ["v*"]`, `permissions: contents: write`,
 publishing with `gh release create "$GITHUB_REF_NAME" --generate-notes`)
 or one GitLab job (`rules: - if: $CI_COMMIT_TAG`,
 publishing through the `release:` keyword), pinned by digest.
-Who may push tags goes into the section and the knowledge file's release rule.
+Who may push tags goes into the decision and the knowledge file's release rule.

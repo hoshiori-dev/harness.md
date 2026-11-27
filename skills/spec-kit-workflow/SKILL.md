@@ -34,8 +34,8 @@ When the contract settles a point differently (another lock,
 another completion rule),
 apply the contract's rule and say that the skill's default was not used.
 The contract is the working copy of these rules;
-a `HARNESS.md` the project keeps holds the design behind it and is not opened
-for a feature.
+where the project adopted a `HARNESS.md` as its anchor document,
+that file holds the design behind it and is not opened for a feature.
 
 **Observe, then ask.**
 Settle a fact from the repository when it can be observed there (tools in use,
@@ -55,21 +55,20 @@ deleting work, and widening what agents may do on their own are each a separate,
 explicit decision by the user, taken when that step is reached.
 
 <!-- shared:pending-decisions -->
-When a step is blocked on a decision only the user can make, continue with
-every step that does not depend on it and add the blocked item to a pending
-decisions list. Each item states: what is blocked and why; the options; the
-recommended option and its reason; which finished work each option would
-change. Present the list once, at the end or when nothing else can proceed,
+When blocked on a user decision, continue all independent steps
+and add the item to a pending decisions list
+(what is blocked and why, options, recommended option and reason,
+what finished work each changes).
+Present the list once at the end or when nothing else can proceed,
 never one question at a time.
 <!-- /shared:pending-decisions -->
 
 <!-- shared:management-code-ownership -->
-A script, hook, check, CI step, or task-runner recipe written into the target
-project is the project's own management code: written for its role in the
-language the project agreed to, readable first, failing with a message that
-names what to fix, with no fallback that hides an unexpected error, and never
-calling a script inside a skill directory. Tell the user that later fixes to
-this plugin do not reach the delivered copy.
+Any script, hook, check, CI step, or task-runner recipe written into the target project
+is its own management code: written in its agreed language, readable first,
+failing with what to fix, with no fallback hiding unexpected errors,
+and never calling a script in a skill directory.
+Tell the user that later fixes to this plugin do not reach the delivered copy.
 <!-- /shared:management-code-ownership -->
 
 Never tick a task whose named verification has not run and passed:

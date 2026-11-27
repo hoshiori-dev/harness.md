@@ -1,7 +1,7 @@
 # GitLab
 
 Read when the target's platform is GitLab (GitLab.com or self-managed):
-before writing the platform half of a section, before writing the files,
+before settling or describing the platform decisions, before writing the files,
 before any remote write, and before auditing a remote setting.
 
 ## What the tier allows
@@ -18,7 +18,7 @@ ask when the probe reports it unknown.
 | Required approvals, approval rules, Code Owner approval, push rules, scoped `::` labels | Premium and Ultimate |
 | Project access tokens (the label sync job's token) | every self-managed tier; Premium and Ultimate on GitLab.com |
 
-Where the tier lacks a rule the section states (required approvals on Free,
+Where the tier lacks a rule the agreed decisions state (required approvals on Free,
 for example), record it in the settings register as a convention with its owner
 and the trigger "tier upgrade".
 The minimal labels use a single colon (`type:bug`),
@@ -34,7 +34,7 @@ an asset whose condition is not met is not delivered.
 | [issue-template-bug.md](../assets/gitlab/issue-template-bug.md), [issue-template-feature.md](../assets/gitlab/issue-template-feature.md), [issue-template-task.md](../assets/gitlab/issue-template-task.md) | `.gitlab/issue_templates/Bug.md`, `Feature.md`, `Task.md` |
 | [merge-request-template.md](../assets/gitlab/merge-request-template.md) | `.gitlab/merge_request_templates/Default.md` |
 | [labels.json](../assets/gitlab/labels.json) | `.gitlab/labels.json` |
-| [ci-labels-sync.yml](../assets/gitlab/ci-labels-sync.yml) | the `labels-sync` job added to `.gitlab-ci.yml`, only when the section has CI run the sync and a project access token is available |
+| [ci-labels-sync.yml](../assets/gitlab/ci-labels-sync.yml) | the `labels-sync` job added to `.gitlab-ci.yml`, only when the agreed decisions have CI run the sync and a project access token is available |
 | [knowledge-gitlab-workflow.md](../assets/gitlab/knowledge-gitlab-workflow.md) | `gitlab-workflow.md` in the knowledge directory |
 | [platform-settings.md](../assets/gitlab/platform-settings.md) | `platform-settings.md` in the knowledge directory: the settings register |
 | [project-skill.md](../assets/gitlab/project-skill.md) | `gitlab-project-workflow/SKILL.md` in the project skills directory |

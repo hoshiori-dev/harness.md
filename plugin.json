@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "harness-md",
   "version": "0.1.0",
-  "description": "Designs, builds, extracts, and audits a project's agent harness around one HARNESS.md file: the design is written once, then built layer by layer — environment, knowledge, feedback, gates, authority, completion, entropy — with spec-driven development skills for daily work.",
+  "description": "Helps a developer and their coding agent work out and build a project's agent harness together: create one, improve one, write a design down as HARNESS.md files, or adopt the design of another project. Decisions are settled in rounds, layer by layer — environment, knowledge, feedback, gates, authority, completion, entropy — with spec-driven development skills for daily work.",
   "author": {
     "name": "hoshiori-dev",
     "url": "https://github.com/hoshiori-dev"
@@ -26,7 +26,7 @@
     "com.openai": {
       "interface": {
         "displayName": "HARNESS.md",
-        "shortDescription": "Designs, builds, extracts, and audits a project's agent harness around one HARNESS.md file: the design is written once, then built layer by layer — environment, knowledge, feedback, gates, authority, completion, entropy — with spec-driven development skills for daily work.",
+        "shortDescription": "Helps a developer and their coding agent work out and build a project's agent harness together: create one, improve one, write a design down as HARNESS.md files, or adopt the design of another project. Decisions are settled in rounds, layer by layer — environment, knowledge, feedback, gates, authority, completion, entropy — with spec-driven development skills for daily work.",
         "developerName": "hoshiori-dev",
         "category": "Productivity",
         "websiteURL": "https://hoshiori-dev.github.io/harness.md/"

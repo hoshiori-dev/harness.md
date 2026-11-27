@@ -1,7 +1,7 @@
 # Necessity: the Minimal Set and the Deletion Test
 
-Read when the Context names a hosted remote and the section's platform entities
-are being written, when the user asks for any entity beyond the minimal set,
+Read when the project is hosted on GitHub or GitLab and its platform entities
+are being decided or described, when the user asks for any entity beyond the minimal set,
 or when the probe finds labels, milestones, or boards the set does not contain.
 
 ## The minimal set
@@ -12,11 +12,11 @@ The default is this and nothing more:
 |---|---|
 | `type:bug`, `type:feature`, `type:task` labels | agents and reviewers filter by kind of work; one per issue |
 | `area:<name>` labels, one per real module or ownership boundary | review routing and filtering by where the change lands |
-| `spec:` namespace, reserved | the Completion section decides what its labels mean; their rows are appended to the same label file |
+| `spec:` namespace, reserved | the layer that owns Completion decides what its labels mean; their rows are appended to the same label file |
 | bug, feature, and task issue forms (GitHub) or templates (GitLab) | an agent or human files work with the fields acceptance needs |
 | one pull or merge request template | the reviewer finds the outcome, the linked issue, and the validation in the same place |
 
-Deliberately not created, and named as such in the section:
+Deliberately not created, and named as such in the decision:
 Projects, boards, Milestones, iterations, epics, `priority:` and `status:`
 labels, Discussions, wiki. A filtered issue list shows current work;
 a board over it is a second view to keep in step.
@@ -28,9 +28,11 @@ A one-module project gets no `area:` labels.
 
 ## The deletion test
 
-Before adding anything outside the minimal set to a section,
-ask the user one question and write the answer beside the entity in the section
-and the knowledge file:
+Before anything outside the minimal set is added,
+the user answers one question, and the answer is written beside the entity
+in the decision and the knowledge file.
+Handed over by an entry, return the entity as an open decision
+that carries the question; run directly by a user, ask it:
 
 > Without <entity>, what management ability is lost: what could nobody
 > find, decide, or coordinate any more?
@@ -72,7 +74,7 @@ When the probe finds labels, milestones, or a board outside the set:
      as a second view of it.
 2. List each object with its use count and the deletion test answered
    from the evidence.
-3. Propose removal as its own decision, separate from the design's approval.
+3. Propose removal as its own decision, separate from the plan's approval.
    A deleted label disappears from every issue and request that carried it;
    a closed milestone keeps its issues, a deleted one unlinks them.
 4. Delete only the objects the user said yes to, through the dry-run, approval,

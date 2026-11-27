@@ -44,19 +44,14 @@ A host may read fields the specification does not define.
 Another host ignores them silently, and the linter warns on unknown fields.
 When one is written, the body names the host it targets, and the user is told:
 
-- `disable-model-invocation: true`: honoured by Claude Code.
-  Hides the description from the agent,
-  so the skill is reachable only by the human typing its name.
-  Other hosts ignore the field.
-- Codex keeps its switch in a file beside `SKILL.md`, not in the frontmatter:
-  `agents/openai.yaml` holding `policy:`
-  with `allow_implicit_invocation: false`.
-  Codex then loads the skill only on an explicit `$skill-name`.
-  The linter warns about the `agents/` entry in the skill root;
+- A switch that keeps a skill from loading on its description,
+  so that it is reachable only by a person typing its name.
+  Hosts place it differently: a frontmatter field on some,
+  a file beside `SKILL.md` on others, nowhere on the rest.
+  Write the switch each host in use documents, one per host.
+  The linter warns about an entry it does not know in the skill root;
   the stated reason is the host.
-- A skill that must be user-only on both hosts carries both switches.
-  On a host with neither (Antigravity,
-  when this was written) the skill still loads by description;
+- On a host with no such switch the skill still loads by description;
   a skill that must be user-only everywhere stays out of the shared skill
   directories instead.
 - Skill-to-skill invocation

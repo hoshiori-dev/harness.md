@@ -67,6 +67,7 @@ scoped test command is in every default.
 
 ## How to use this file
 
-Evidence supports a default; it does not replace the project's Context.
+Evidence supports a recommendation;
+it does not replace the project's conditions.
 A team with a measured reason to deviate deviates,
-and the layer's section in `HARNESS.md` records the reason.
+and the reason is recorded with the decision.

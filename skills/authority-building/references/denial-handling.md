@@ -1,6 +1,7 @@
 # Denial Handling
 
-Read when writing the refusal rule of a section or a policy,
+Read when settling or describing the refusal decision,
+writing the refusal rule of a policy,
 or when a user or an existing policy proposes another response
 to a refused action.
 
@@ -42,5 +43,5 @@ this request is declined, not recorded as a deviation.
 
 A failing test, linter, or secret scan is not a refusal under this rule;
 it is a finding to fix.
-The section and the policy say so in one sentence
+The decision and the policy say so in one sentence
 so that agents do not file defects as pending decisions.

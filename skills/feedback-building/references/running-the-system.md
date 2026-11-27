@@ -1,7 +1,7 @@
 # Starting, Driving, and Observing the System
 
 Read when the project is anything other than a library:
-the section or the build needs a way to start the system,
+a decision, a description, or the build needs a way to start the system,
 act on it as a user would, and see what it did.
 
 A passing unit test shows that a function returns what the test expects.
@@ -39,7 +39,7 @@ The start command is one recipe an agent can run without a person:
 - **Has a twin that stops it**, leaving no process and no port in use.
 
 The address and port are stated, never discovered by trial.
-When the Context says several agents work at the same time,
+When the project's conditions say several agents work at the same time,
 each working copy gets its own port and its own data
 (a port taken from an environment variable,
 a database name derived from the directory),
@@ -96,4 +96,4 @@ native dialogs and permission prompts, layout on real devices,
 animation and timing, anything behind a login the agent has no test account for,
 email and payment flows that end outside the system,
 behaviour under production data or load.
-Each goes into the section's human verification list with the manual steps.
+Each goes into the human verification list with the manual steps.

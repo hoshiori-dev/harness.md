@@ -1,28 +1,44 @@
 # Sources of Truth
 
 Read when a fact is recorded in more than one place,
-when the design and the code disagree,
+when a design document and an artifact disagree,
 when the user asks whether a copy is safe,
 or when a harness deliberately keeps two copies.
 
-## Design and code
+## Design intent and facts
 
-A project that keeps `HARNESS.md` has two sources,
-and they answer different questions.
+**Facts always come from the code.** What a command does,
+whether a path exists, what a check actually runs.
+A document that names a fact the code has moved past is corrected to match.
 
-- **Design intent comes from `HARNESS.md`.** What the harness should be and why.
+Where design intent lives depends on one thing:
+whether the project adopted a `HARNESS.md` as its anchor document,
+which it has when the file is in its root and its entrypoint names it.
+
+- **Adopted anchor document.** Intent comes from the file:
+  what the harness should be and why.
   When an artifact (an entrypoint, a permission file, a hook,
   a check) disagrees with it, fix the artifact,
-  or change `HARNESS.md` first and then the artifact. Never leave the two apart.
-- **Facts come from the code.** What a command does, whether a path exists,
-  what a check actually runs.
-  When `HARNESS.md` names a fact the code has moved past,
-  the file is corrected to match.
+  or change the document first and then the artifact.
+  Never leave the two apart.
+- **No anchor document.** Intent lives in the harness artifacts
+  and the decisions behind them: what the entrypoint, the written policy,
+  and the checks state, and what the user says was decided.
+  The rules below apply among the artifacts.
+  The harness is not incomplete for lacking the file;
+  a `HARNESS.md` is worth writing only when the user wants a record
+  to keep or to share.
+- **A `HARNESS.md` from elsewhere** (downloaded, given as a reference,
+  lying in the project without the entrypoint naming it)
+  has no authority over the project.
+  Where it differs from an artifact, neither is wrong:
+  the difference is a design choice to weigh
+  against this project's conditions.
+- **In the root, but no entrypoint names it, or named but absent:**
+  ask the user whether the project keeps it as its anchor document.
 
-`HARNESS.md` is not an entrypoint and is not loaded for ordinary tasks.
-It is opened to build the harness, to check it for drift, and to change it.
-A project may also delete it once the harness is built;
-then the artifacts are the only record and the rules below apply among them.
+A `HARNESS.md` is never an entrypoint and is not loaded for ordinary tasks.
+It is opened to design a harness, to check one for drift, and to change it.
 
 ## Which place is the source of a fact
 

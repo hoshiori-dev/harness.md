@@ -15,7 +15,7 @@ wins and the document is corrected. <!-- # CONFIGURE: the document part, the ent
 
 ## When the subject changes
 
-<!-- # CONFIGURE: the forward triggers the section names, one per concrete change. -->
+<!-- # CONFIGURE: the agreed forward triggers, one per concrete change. -->
 
 1. A recipe is added → add one line naming it and when to run it.
 2. A recipe is renamed or removed → change or delete every mention in
@@ -29,7 +29,7 @@ Apply the update in the same change, never as a follow-up.
 Check first, and fix or report every mismatch found,
 not only the one that prompted the edit:
 
-- `just --summary` lists every recipe the section names. <!-- # CONFIGURE: the runner's recipe-listing command and the reverse checks the section names. -->
+- `just --summary` lists every recipe the section names. <!-- # CONFIGURE: the runner's recipe-listing command and the agreed reverse checks. -->
 - Each named recipe runs and does what its line says.
 - No line spells out flags the recipe already holds.
 

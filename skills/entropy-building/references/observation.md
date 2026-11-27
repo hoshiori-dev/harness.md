@@ -16,7 +16,7 @@ Treat them as secrets:
   presented with what would leave the machine and who could read it,
   and never configured silently.
 
-For friction tracking, write a local analysis into the section:
+For friction tracking, return a local analysis as the decision:
 count the tool calls that fail or retry most often in the local logs,
 then fix the script or add the missing sentence they point to.
 The secret-handling rule goes where the harness keeps observation guidance
@@ -32,7 +32,7 @@ that made agents worse.
 
 - Offer it only to large projects whose harness is heavy,
   and only when they opt in;
-  never to a project whose Entropy section is the one drift sentence.
+  never to a project whose whole Entropy layer is the one drift sentence.
 - Never wire it into CI: CI has no credentials to run agent tasks,
   and repeated runs cost too much. When asked for CI wiring,
   decline with these two reasons and offer the manual list the team triggers

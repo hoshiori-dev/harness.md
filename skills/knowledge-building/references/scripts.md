@@ -30,7 +30,7 @@ is reported to the layer that owns Gates.
 
 ## Language
 
-Write in the management-script language the design names.
+Write in the management-script language the agreed decisions name.
 When it names none, use the scripting practice of the project's own language
 community, report the choice as an assumption,
 and never pick a language the repository shows no sign the user reads.
