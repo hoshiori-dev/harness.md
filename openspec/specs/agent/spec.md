@@ -11,8 +11,9 @@ Antigravity loads plugin agents only from the plugin root, which this plugin
 keeps for portable files; both are recorded limitations
 (`.agents/knowledge/compatibility-watch.md`), not worked around through
 workspace configuration, so those clients get no agent files. The portable
-product is the skills; the agent is a clean-context verifier the workflows
-dispatch where the client supports it. Each agent has its own spec at
+product is the skills; the agents are a clean-context verifier and a
+read-only reader of outside material, which the entries dispatch where the
+client supports it. Each agent has its own spec at
 `openspec/specs/agent/<name>/spec.md`.
 
 ## Requirements
