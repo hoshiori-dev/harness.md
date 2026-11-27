@@ -91,10 +91,6 @@ a named path only by the user's decision on that file.
 - **WHEN** the user named `docs/HARNESS.md` as the path, left the remaining decisions to the agent, and no file exists there
 - **THEN** the agent lists the file by path as new and writes it only after the user's go-ahead
 
-#### Scenario: Named path resolves into the project
-- **WHEN** the user names a path outside the project whose parent directory is a symbolic link into the project
-- **THEN** the agent treats the path as inside the project and writes only after the user's go-ahead
-
 #### Scenario: File already at the named path
 - **WHEN** the user named `docs/HARNESS.md` as the path and a file already exists there
 - **THEN** the agent shows how the draft differs and asks whether to replace it, write beside it, or stop, and the existing file is unchanged until the user answers

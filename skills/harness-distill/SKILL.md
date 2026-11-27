@@ -279,8 +279,7 @@ for the closing message.
 A file whose destination is a temporary file is already there.
 For every other file that is not an anchor document:
 
-1. When any path, as it resolves with symbolic links followed,
-   is inside the project, list those files,
+1. When any path is inside the project, list those files,
    each by path and as new or replacing an existing file,
    and wait for the go-ahead. One go-ahead covers the list.
    Having left the rest to you does not give it.
