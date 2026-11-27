@@ -68,6 +68,7 @@ site/  DESIGN.md               <- the website (Astro, Pagefind; own pnpm package
 | Branching, committing, squashing, pushing, tags | `.agents/knowledge/git-workflow.md` |
 | Before any issue, push, comment, label, release; an action was refused | `.agents/knowledge/agent-authority.md` |
 | Before reading or changing a remote setting | `.agents/knowledge/github/platform-settings.md` |
+| Reviewing a change, briefing a reviewer, triaging findings | `.agents/knowledge/review.md` |
 | Editing this file, a knowledge file, or a check; adding a client; every tenth merged pull request | `.agents/knowledge/maintenance.md` |
 
 ## Development Environment
@@ -96,11 +97,10 @@ person's own login. Never store a credential in the repository.
 
 ## Workflow
 
-Issue → `gh issue develop` branch → draft pull request (carrying the
-OpenSpec change when one is needed) → maintainer adds `spec:approved` →
-task commits with `just check` green → behavioural tests for a skill change
-→ self-review, ready → maintainer reviews → archive on the branch →
-maintainer squash-merges → version bump and `v*` tag release.
+Issue → `gh issue develop` branch → draft pull request (with its OpenSpec change,
+if any) → maintainer adds `spec:approved` → task commits with `just check` green →
+behavioural tests for a skill change → self-review, ready → maintainer reviews →
+archive on the branch → maintainer squash-merges → version bump, `v*` tag release.
 
 ## Keep In Sync
 
