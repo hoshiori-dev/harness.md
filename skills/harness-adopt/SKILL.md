@@ -202,10 +202,10 @@ or the failure was reported and nothing was written.
    When writing later needs a detail the report lacks,
    dispatch again with the question's layer; do not open the file yourself.
 3. Run the read-only git commands that
-   [references/outside-targets.md](references/outside-targets.md) lists, when the copy is a git repository:
+   [references/outside-targets.md](references/outside-targets.md) lists, when the copy is the root of a git repository:
    the commit read, the remote's address,
    and the conventions the last commits show.
-   A copy that is not a git repository has no commit: record that.
+   Any other copy has no commit: record that.
 4. Note the source project's licence: the one the report names.
    When the report names none, dispatch again for the licence alone;
    after that, record the name of a licence file that `git ls-files` shows

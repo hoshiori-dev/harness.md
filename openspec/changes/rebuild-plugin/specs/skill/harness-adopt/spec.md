@@ -62,13 +62,9 @@ submodules, and the user told where the copy is.
 - **WHEN** a configuration file in the target contains a token
 - **THEN** the result says a credential is present in that file and does not copy its value
 
-#### Scenario: Cloned target holds a symbolic link out of itself
-- **WHEN** a file of a cloned target is a symbolic link to a file outside it
-- **THEN** the link is checked out as a plain file holding its target, and the file outside is not read
-
-#### Scenario: Cloned target routes skills through a link inside itself
-- **WHEN** a cloned target keeps `.claude/skills/<name>` as a symbolic link to a directory under `.agents/skills/`
-- **THEN** the inventory lists the link with its target as a loading route, and the skill is read from the target
+#### Scenario: Local target inside another repository
+- **WHEN** the target is a local directory that is not the root of a git repository but lies inside one
+- **THEN** no commit, address, or convention is taken from the surrounding repository, and the result says the path is not a repository root
 
 #### Scenario: Target cannot be fetched
 - **WHEN** the address cannot be cloned

@@ -130,6 +130,10 @@ verified layer without pushing.
 - **WHEN** the user asked for an anchor document in the first round
 - **THEN** every builder's handover from the decide step on says so, and the Entropy builder's decisions and planned files cover keeping the document in step
 
+#### Scenario: Pending file is not a required path
+- **WHEN** a planned file is left pending because the step it depends on got no go-ahead
+- **THEN** the required paths handed to the Entropy builder leave that file out, and the self-check does not report it missing
+
 #### Scenario: Empty project
 - **WHEN** the project has no code
 - **THEN** the build creates what the planned commands need in order to run (a manifest, tool configuration, the smallest passing test) and no product feature

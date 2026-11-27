@@ -154,6 +154,10 @@ commands and results, and one pending decisions list.
 - **WHEN** a fix made in the final review makes a check fail that passed before the work
 - **THEN** the fix is not committed until that check passes again
 
+#### Scenario: Pending file is not a required path
+- **WHEN** a planned file is left pending because the step it depends on got no go-ahead
+- **THEN** the required paths handed to the Entropy builder leave that file out, and the self-check does not report it missing
+
 #### Scenario: Deletion in the plan
 - **WHEN** the approved plan deletes an old client-specific entrypoint
 - **THEN** the deletion still asks for its own go-ahead when reached, or is queued as a pending decision while the rest proceeds

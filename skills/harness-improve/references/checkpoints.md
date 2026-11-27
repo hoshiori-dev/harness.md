@@ -1,6 +1,6 @@
 # Checkpoints
 
-Read before the first change of step 7, after each layer,
+Read before the first change of step 7, before and after each layer,
 and before committing the review's fixes in step 8.
 
 ## Before the first change
@@ -9,6 +9,12 @@ Run the project's existing checks and record each failure,
 so that a later failure is known to be new.
 When a recipe stops at its first failure,
 run the checks behind it one by one, here and after each layer.
+
+## Before handing Entropy over
+
+Take out of its required paths every file left pending:
+a file that was not written is not required,
+and the self-check would report it missing.
 
 ## After each layer
 

@@ -328,8 +328,8 @@ For each layer:
    with step 5's handover, the plan's files for the layer,
    and each go-ahead given for its deletions, wider permissions,
    and remote changes; for Entropy also, as required paths,
-   the harness files and directories the plan creates or keeps
-   across all layers; for Completion also the Feedback, Gates,
+   the harness files and directories built or kept
+   across all layers, none left pending; for Completion also the Feedback, Gates,
    and Authority decisions on check commands and who merges.
    Take back the files written, the result of verifying them,
    and any deviation a fact in the code forced.
