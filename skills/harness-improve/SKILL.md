@@ -78,7 +78,8 @@ Apply this skill's recommendation for any uncovered point and report it as an as
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
 A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
-then read design intent from it and write agreed intent changes back in the same work.
+then read design intent from it; agreed intent changes are written back in the same work,
+by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
 <!-- /shared:agreement-is-the-source -->
 
@@ -313,8 +314,14 @@ every layer appears with a thickness, changed and confirmed or unchanged.
 ### 6. Plan and approval
 
 Hand each touched layer to its builder in **build** mode asking for
-the plan only, with the agreed decisions, and take back the files
-it would create, change, or delete.
+the plan only, with the goal and non-goals, the conditions,
+every layer's thickness, the layer's agreed decisions,
+and its findings with their dispositions;
+for Entropy also, as required paths, the harness files and directories
+the plan creates or keeps across all layers;
+for Completion also the Feedback, Gates, and Authority decisions
+on check commands and who merges.
+Take back the files it would create, change, or delete.
 Rework [assets/improvement-plan.md](assets/improvement-plan.md) into one plan, shown in the conversation:
 every file to add, change, or delete with the finding it resolves;
 drift items first, every later item on the same files depending on them;
@@ -339,9 +346,9 @@ publication, or remote setting change it entails.
 Show a dry run where the tool has one. Put unapproved actions and dependent
 edits on the pending decisions list and leave them out of the handover.
 
-Hand over to the builder in **build** mode: the goal and non-goals,
-the conditions, every layer's thickness, the layer's agreed decisions,
-its findings with their dispositions, and the plan's files for it.
+Hand over to the builder in **build** mode: the handover of step 6,
+the plan's files for the layer, and each go-ahead given
+for its deletions, wider permissions, and remote changes.
 A file the builder wants beyond the plan is a plan amendment
 the user approves first.
 

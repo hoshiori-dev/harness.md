@@ -39,10 +39,10 @@ Where the agent runs and what it can reach.
 
 | Thickness | What it means here | Conditions that select it |
 | --- | --- | --- |
-| omitted | nothing built: agents run where the session already runs, with what it already holds | every session watched, a wrong change costs a revert, no exposure, and the user wants no statement |
-| light | the host or existing environment as it is; each token and its scopes named in one entrypoint sentence; non-interactive variables exported by the task runner | watched sessions, one maintainer, no credential worth protecting within reach |
-| medium | a declared dev container (the same file for people and agents), an environment knowledge file, hard read-only files kept by convention, and the network open | agents checked between tasks; several people need the same tools; a person reviews each result while the agent holds credentials or mistakes are costly to undo; a container is already in use |
-| thick | a restricted container or VM, a deny-by-default network allowlist, hard read-only files on read-only mounts, and a token that cannot write to the default branch | agents unattended for hours, or started by content anyone can write; a wrong change reaches production, customer data, or money |
+| omitted | nothing built: agents run where the session already runs, with what it already holds | a short-lived project with nothing sensitive in reach where, in addition, no exposure was observed |
+| light | the host or existing environment as it is; each token and its scopes named in one entrypoint sentence; non-interactive variables exported by the task runner | a short-lived project with nothing sensitive in reach |
+| medium | a declared dev container (the same file for people and agents), an environment knowledge file, hard read-only files kept by convention, and the network open | a person reviews each result while the agent holds credentials or mistakes are costly to undo; a container is already in use |
+| thick | a restricted container or VM, a deny-by-default network allowlist, hard read-only files on read-only mounts, and a token that cannot write to the default branch | no person reviews each result (agents unattended, or started by content anyone can write); a wrong change reaches production, customer data, or money |
 
 ### Knowledge
 
@@ -50,10 +50,10 @@ The entrypoint, the knowledge files read on demand, and the routes between them.
 
 | Thickness | What it means here | Conditions that select it |
 | --- | --- | --- |
-| omitted | no entrypoint and no knowledge files; agents work from the code and human docs | almost never; every other layer needs a place for its one sentence, so recommend light at least |
+| omitted | no entrypoint and no knowledge files; agents work from the code and human docs | only when nothing needs stating that an agent cannot infer and every other layer is omitted; any other layer needs a place for its one sentence, so recommend light at least |
 | light | a single-file harness: one root `AGENTS.md` alone, up to about 200 lines, no knowledge folder; any client-specific file only imports it | one maintainer, a short horizon, watched sessions, little non-standard practice |
 | medium | a root `AGENTS.md` of about 100 lines, never over 120, with a routing table, knowledge files loaded on demand, and a skills folder | maintained for a year or more; several people; procedures an agent cannot infer from the code |
-| thick | the same, with a check that fails when a route's path is missing, a knowledge file is unrouted, a named recipe does not exist, or the entrypoint is over budget; requires Entropy and Gates not to be omitted | maintained for years; many people or outside contributors; unattended agents; a weak model |
+| thick | the same, with a check that fails when a route's path is missing, a knowledge file is unrouted, a named recipe does not exist, or the entrypoint is over budget; requires Entropy and Gates not to be omitted | maintained for years; many people or outside contributors; unattended agents; a costly wrong change |
 
 ### Feedback
 
@@ -62,9 +62,9 @@ What an agent can run and observe to verify its own work.
 | Thickness | What it means here | Conditions that select it |
 | --- | --- | --- |
 | omitted | nothing built; the closing report says nothing can be run and lists what a human verifies | a repository with nothing executable |
-| light | the fast and full checks as two task-runner entries over existing commands, named in the entrypoint, with one sentence on what a human verifies; no knowledge file | watched sessions; discarded within weeks; a wrong change costs a revert |
-| medium | the fast and full checks, a scoped test returning in seconds, recipes that start, check, stop, and smoke-test the system, and a verification knowledge file routed from the entrypoint | agents checked between tasks; maintained beyond a release |
-| thick | medium, plus a browser- or device-driving tool with screenshots for an interface (or queryable logs and smoke requests for a service), a read-only clean-context reviewer whose tools the client restricts, a session-start check where agents run unattended, and evidence in the pull or merge request text; still nothing that blocks | agents unattended; a wrong change costs real work to undo; an interface users see; a weak model |
+| light | the fast and full checks as two task-runner entries over existing commands, named in the entrypoint, with one sentence on what a human verifies; no knowledge file | discarded within weeks |
+| medium | the fast and full checks, a scoped test returning in seconds, recipes that start, check, stop, and smoke-test the system, and a verification knowledge file routed from the entrypoint | everything else: kept beyond weeks, a wrong change cheap to undo, and agents attended |
+| thick | medium, plus a browser- or device-driving tool with screenshots for an interface (or queryable logs and smoke requests for a service), a read-only clean-context reviewer whose tools the client restricts, a session-start check where agents run unattended, and evidence in the pull or merge request text; still nothing that blocks | kept beyond weeks, and agents unattended or a wrong change costs real work to undo |
 
 ### Gates
 
@@ -85,8 +85,8 @@ What an agent may do without asking, and the platform lifecycle
 | Thickness | What it means here | Conditions that select it |
 | --- | --- | --- |
 | omitted | nothing built; agents act under each client's own defaults | only when no agent can write to the repository or its remote |
-| light | the core sentences in the entrypoint's always-on rules (reversibility classes, standing pre-authorisations, refusals, commit convention and attribution), nothing else | throwaway project; every session watched; no remote, or a remote only the maintainer pushes to |
-| medium | light, plus a written policy file with checkpoint and commit rules; on a hosted remote also the platform knowledge file, label file, forms, request template, project skill, and a settings register whose protections are conventions with named owners | agents checked between tasks; a small team; a hosted remote where platform enforcement is unavailable or not warranted |
+| light | the core sentences in the entrypoint's always-on rules (reversibility classes, standing pre-authorisations, refusals, commit convention and attribution), nothing else | a throwaway project |
+| medium | light, plus a written policy file with checkpoint and commit rules; on a hosted remote also the platform knowledge file, label file, forms, request template, project skill, and a settings register whose protections are conventions with named owners | a kept repository where nothing can enforce the rules: no client in use has a permission file this layer generates, and the platform plan cannot enforce branch rules |
 | thick | medium, plus what a machine refuses: per-client permission files (allow and deny entries, no "ask" entries), refusing checkpoint recipes, and on a hosted remote the merge-method setting, default-branch protection, required check, and label sync job | a repository that is kept and agents commit to; unattended agents; many people or outside contributors; a costly wrong change |
 
 A strongly isolated environment allows a wider allow list at any thickness.
@@ -99,8 +99,8 @@ How a change is agreed before work and how done is decided.
 | --- | --- | --- |
 | omitted | nothing; plan mode aligns the goal and the Feedback and Gates checks define done | watched sessions, cheap wrong changes, and discarded within a quarter |
 | light | one entrypoint entry: behaviour-changing work is agreed in plan mode with the four answers stated in the conversation, and the full check ends every task; no contract file or tool | one maintainer present in every conversation, no change outlasts one session, and no specification tool in use |
-| medium | a specification contract in the knowledge base and a specification tool or per-change `SPEC.md`/`PLAN.md` with checkable scenarios, both approvals given in conversation and kept by convention | maintained past one release; one or a pair reviewing in conversation; a specification tool already in use |
-| thick | the same contract, with approval recorded on the pull or merge request (a label a person adds), machine validation of the carrier, and a check blocking the merge until the record is frozen | several committers; outside contributors; agents unattended; a costly wrong change |
+| medium | a specification contract in the knowledge base and a specification tool or per-change `SPEC.md`/`PLAN.md` with checkable scenarios, both approvals given in conversation and kept by convention | everything else: maintained past one release; a costly wrong change; a specification tool already in use |
+| thick | the same contract, with approval recorded on the pull or merge request (a label a person adds), machine validation of the carrier, and a check blocking the merge until the record is frozen | several committers; outside contributors; agents working with no one in the conversation |
 
 ### Entropy
 

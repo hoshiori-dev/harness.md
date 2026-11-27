@@ -86,4 +86,6 @@ before it is recorded as passed.
       was applied, without the user's go-ahead at that step.
 - [ ] Every repository setting the decisions call for
       (branch protection, required checks, secret scanning)
-      is in the report with the exact setting, and none was applied.
+      was applied one at a time after its own go-ahead at that step,
+      shown first as the exact value or a dry run,
+      or is left to a person and listed in the report with the exact value.

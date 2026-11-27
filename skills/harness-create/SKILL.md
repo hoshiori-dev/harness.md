@@ -104,7 +104,8 @@ Apply this skill's recommendation for any uncovered point and report it as an as
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
 A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
-then read design intent from it and write agreed intent changes back in the same work.
+then read design intent from it; agreed intent changes are written back in the same work,
+by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
 <!-- /shared:agreement-is-the-source -->
 
@@ -312,12 +313,20 @@ Environment, Knowledge, Feedback, Gates, Authority, Completion, Entropy.
 For each layer:
 
 1. Ask for separate go-ahead for each deletion, widening of agent autonomy,
-   or outward action at the step where it would occur. Show a dry run
-   when available. Repository settings go to the closing report with
-   exact values for the user to apply. Leave any unapproved operation
-   and dependent edits out of the build handover and record them as pending.
+   or outward action when the build reaches it,
+   showing the exact value or dry run first.
+   A remote setting is applied one at a time, each after its own go-ahead;
+   one without is left to a person
+   and listed in the closing report with its exact value.
+   Record any other item without one as pending,
+   and leave it and dependent edits out of the handover.
 2. Hand it to its builder in **build** mode
-   with the same handover as in step 5 plus the plan's files for the layer.
+   with step 5's handover, the plan's files for the layer,
+   and each go-ahead given for its deletions, wider permissions,
+   and remote changes; for Entropy also, as required paths,
+   the harness files and directories the plan creates or keeps
+   across all layers; for Completion also the Feedback, Gates,
+   and Authority decisions on check commands and who merges.
    Take back the files written, the result of verifying them,
    and any deviation a fact in the code forced.
 3. Only planned files are written, at the planned paths.

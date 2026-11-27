@@ -33,7 +33,8 @@ inferred intent marked; write nothing.
 "plan only" stops after step 1 returning files to create, change, or delete.
 **audit**: report findings; write nothing.
 Never re-ask what a handover carries
-(goal, non-goals, conditions, all thicknesses, agreed decisions, planned files).
+(goal, non-goals, conditions, all thicknesses, agreed decisions, planned files,
+go-aheads given for this layer's deletions, wider permissions, remote changes).
 Run directly, show what evidence settles,
 ask the rest through the client's question tool when it has one,
 and write only after user acceptance.
@@ -64,7 +65,8 @@ Apply this skill's recommendation for any uncovered point and report it as an as
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
 A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
-then read design intent from it and write agreed intent changes back in the same work.
+then read design intent from it; agreed intent changes are written back in the same work,
+by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
 <!-- /shared:agreement-is-the-source -->
 
@@ -276,8 +278,9 @@ for that operation. When run directly, ask for it here.
    what it must not touch, what a refusal means,
    which tools exist and which are absent on purpose.
    Reasons and history stay out of it:
-   they go to the anchor document when the project adopted one,
-   and to the hand back otherwise.
+   they go to the anchor document when the project adopted one
+   and this skill runs directly, and to the hand back otherwise
+   (under an entry, as the sentence to reconcile there).
 2. The task-runner lines
    from [assets/justfile-env-snippet.just](assets/justfile-env-snippet.just)
    when non-interactive defaults were agreed,

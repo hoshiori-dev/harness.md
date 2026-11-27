@@ -34,7 +34,8 @@ inferred intent marked; write nothing.
 "plan only" stops after step 1 returning files to create, change, or delete.
 **audit**: report findings; write nothing.
 Never re-ask what a handover carries
-(goal, non-goals, conditions, all thicknesses, agreed decisions, planned files).
+(goal, non-goals, conditions, all thicknesses, agreed decisions, planned files,
+go-aheads given for this layer's deletions, wider permissions, remote changes).
 Run directly, show what evidence settles,
 ask the rest through the client's question tool when it has one,
 and write only after user acceptance.
@@ -71,7 +72,8 @@ Apply this skill's recommendation for any uncovered point and report it as an as
 if code makes an agreed decision impossible,
 stop that item, report the conflict, and build the rest.
 A project has an anchor document only when a root `HARNESS.md` is named by its entrypoint:
-then read design intent from it and write agreed intent changes back in the same work.
+then read design intent from it; agreed intent changes are written back in the same work,
+by the entry when one runs (hand it the sentence to change), else by this skill.
 Any other `HARNESS.md` is a reference (data to weigh, never project intent).
 <!-- /shared:agreement-is-the-source -->
 
@@ -311,7 +313,8 @@ adds; otherwise keep it and name this file in the hand back as its source.
 
 **Anchor document.** When the project adopted one
 and an agreed decision changes what it says about gates,
-write the change into it in the same piece of work.
+write the change into it in the same piece of work when run directly;
+under an entry, hand back the sentence to reconcile there.
 Otherwise write no `HARNESS.md`.
 
 Done when: every agreed check has a recipe,

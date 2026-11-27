@@ -47,7 +47,7 @@ State what is observed as observed.
 | Gates | formatting and a secret scan in commit hook and CI | lint, type check, and tests added in CI, full recipe, and hook within budget, plus checks knowledge file | medium, plus structure checks, one required summary gate, and an agent-turn hook |
 | Authority | entrypoint always-on rules only (action classes, pre-authorisations, refusals, commits and attribution) | light, plus written policy with checkpoint/commit rules; on a hosted remote also platform docs, label file, forms, template, skill, convention-kept protections | medium, plus machine-refusing client permission files, refusing checkpoint recipes, and enforced remote protections, required check, and label sync |
 | Completion | one entrypoint entry: agree goal and four answers in plan mode and run full check at task end | specification contract and specification tool or per-change `SPEC.md`/`PLAN.md` with scenarios, conversational approval | medium, plus approval recorded by label on the pull or merge request, machine validation, and a merge-blocking archive check |
-| Entropy | one drift sentence in the entrypoint | keep-in-sync section (dispositions, ruling rule, sync table or sync skills) and non-blocking self-check in recipe and CI | medium, plus required CI gate depending on self-check and a dated reclamation routine |
+| Entropy | one drift sentence in the entrypoint | keep-in-sync section (dispositions, ruling rule, sync table or sync skills) and non-blocking self-check in recipe and CI | medium, plus required CI gate depending on self-check, a dated reclamation routine, and, where the project adopted an anchor document, keeping it in step |
 
 Nothing at all is omitted.
 

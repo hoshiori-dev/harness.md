@@ -12,7 +12,7 @@ Recommend one thickness, with the conditions that selected it:
 | omitted | nothing: stale harness text costs less than the machinery against it | thrown away within about a quarter, and nobody but its author relies on its conventions |
 | light | one drift sentence in the entrypoint; no table, self-check, or routine | one person, no release in sight, yet kept longer than a quarter |
 | medium | a keep-in-sync section (three dispositions, the ruling rule, a sync table or sync skills) and a self-check that reports from a recipe, the aggregate check, and CI without blocking a merge; no reclamation | maintained past one release, or anyone besides the author relies on its conventions, while a wrong change is cheap to undo |
-| thick | the same, with the required CI gate depending on the self-check, and a dated reclamation routine | maintained for years or a heavy harness; a wrong change is costly, or agents work unattended |
+| thick | the same, with the required CI gate depending on the self-check, a dated reclamation routine, and, where the project adopted an anchor document, keeping it in step | maintained for years or a heavy harness; a wrong change is costly, or agents work unattended |
 
 Thicker: a longer life, more people relying on the conventions,
 a costlier wrong change, more unattended agents,

@@ -99,7 +99,7 @@
   under `openspec/changes/rebuild-plugin/specs/`, on the least capable model tier
   available, and record pass/fail per scenario in the pull request.
   Verify: every trigger, near-miss, and outcome scenario is recorded.
-- [ ] 7.4 Commit per verified task (no AI attribution), run `just publish-check`,
+- [x] 7.4 Commit per verified task (no AI attribution), run `just publish-check`,
   push, self-review the diff, mark the pull request ready, and post the handoff comment.
   Verify: `just check-fast` passes in CI and the pull request is ready for review.
 
