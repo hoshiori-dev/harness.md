@@ -60,7 +60,8 @@ site/  DESIGN.md               <- the website (Astro, Pagefind; own pnpm package
 | Changing the format, the prose specification, a validator, or a fixture | `.agents/knowledge/format-changes.md` |
 | Adding or reviewing a hub entry | `.agents/knowledge/hub.md` |
 | Editing `site/` or its workflow | `.agents/knowledge/site.md`; `DESIGN.md` before anything visual |
-| A client does not load something; a wiring or generated file; a client or OpenSpec upgrade; a workaround | `.agents/knowledge/client-matrix.md`, `.agents/knowledge/compatibility-watch.md` |
+| A client does not load something; touching a wiring or generated file | `.agents/knowledge/client-matrix.md` |
+| A client or OpenSpec was upgraded; removing a workaround | `.agents/knowledge/compatibility-watch.md` |
 | Proposing, implementing, or archiving an OpenSpec change | `.agents/knowledge/spec-workflow.md`, then the `openspec-*` skills |
 | Taking an issue, opening or finishing a pull request, any `gh` write | the `github-project-workflow` skill, `.agents/knowledge/github-workflow.md` |
 | A check is red; adding or renaming a recipe or CI job | `.agents/knowledge/github/checks.md` |
@@ -96,11 +97,10 @@ person's own login. Never store a credential in the repository.
 
 ## Workflow
 
-Issue → `gh issue develop` branch → draft pull request (carrying the
-OpenSpec change when one is needed) → maintainer adds `spec:approved` →
-task commits with `just check` green → behavioural tests for a skill change
-→ self-review, ready → maintainer reviews → archive on the branch →
-maintainer squash-merges → version bump and `v*` tag release.
+Issue → `gh issue develop` branch → draft pull request (with its OpenSpec change,
+if any) → maintainer adds `spec:approved` → task commits with `just check` green →
+behavioural tests for a skill change → self-review, ready → maintainer reviews →
+archive on the branch → maintainer squash-merges → version bump, `v*` tag release.
 
 ## Keep In Sync
 
