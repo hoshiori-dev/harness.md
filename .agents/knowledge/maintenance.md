@@ -5,9 +5,10 @@ when `AGENTS.md` passes 120 lines; when the harness contradicts the repository;
 at the reclamation anchor; and before adding or dropping a client,
 changing how strict a check is, or upgrading OpenSpec.
 
-`HARNESS.md` is the design of this harness and stays in the repository
-as its anchor document. Design intent comes from it, facts from the code.
-A harness change that alters intent changes `HARNESS.md` first,
+`.agents/knowledge/project-harness/SKILL.md` is the design of this harness
+and stays in the repository as its anchor document.
+Design intent comes from it, facts from the code.
+A harness change that alters intent changes that document first,
 in the same pull request;
 a harness file that only caught up with the code does not.
 
@@ -48,9 +49,9 @@ Walk every harness component and hunt:
   a shared block one skill uses, a knowledge file no task reads,
   a rule written for a problem long fixed.
   Thinning is as much reclamation as fixing;
-- `HARNESS.md` against the harness, section by section:
+- the design document against the harness, section by section:
   where they disagree about intent,
-  fix the artifact or change `HARNESS.md` first.
+  fix the artifact or change the design document first.
 
 Walk every row of `.agents/knowledge/compatibility-watch.md`:
 run its "Re-check how" column, and when "Resolved when" holds,
@@ -89,7 +90,7 @@ a client is supported because it is registered, never because a file exists.
 3. Update `.agents/knowledge/client-matrix.md` (table and verification log),
    `openspec/specs/agent/spec.md`, both READMEs, the site's plugin pages,
    the `clients-validate` recipe, the dev container features,
-   and the Context section of `HARNESS.md`.
+   and the Context section of the design document.
 4. `just gen`, `just check`, then verify in the client and log it.
 
 ### Thicken or thin a check
@@ -104,7 +105,7 @@ a client is supported because it is registered, never because a file exists.
   keep the whole run under ten seconds so nobody bypasses it.
   Secret scanning stays.
 - Authority: `.agents/knowledge/agent-authority.md`
-  and the Authority section of `HARNESS.md`,
+  and the Authority section of the design document,
   with the maintainer's decision and date.
 - Spec strictness: the rules in `openspec/config.yaml`
   and the `--strict` flag of `just spec-check`.

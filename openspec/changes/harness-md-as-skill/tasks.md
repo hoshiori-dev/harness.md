@@ -2,7 +2,7 @@
 
 ## 1. The format in place
 
-- [ ] 1.1 Convert the format in one step, because a half-converted tree
+- [x] 1.1 Convert the format in one step, because a half-converted tree
   fails the repository's checks:
   both validators validate a directory by the findings table of the design
   and lose `--fixtures`; each test suite builds its cases in a temporary
@@ -106,6 +106,20 @@
   if a client lists them, stop for the maintainer's decision.
 
 ## Workflow follow-up
+
+- Package edits to make in one go, because each one resets the approval:
+  state in `cli/lint` and in the design that links are not read from
+  indented code blocks, HTML comments, or raw HTML; that a Markdown file
+  ends in `.md` or `.markdown`, in any case; that a dot-named file is not
+  read for links; that a link to a directory inside the document is not
+  followed; that a non-string `allowed-tools` is `key-type` alone;
+  that an unclosed frontmatter is the only finding of its directory.
+- Known differences between the two validators, none on a scenario of
+  `cli/lint`: YAML 1.1 scalars that the two YAML libraries resolve
+  differently (`y`, `n`, `1e3`, `=`, `<<`), an alias to a string, the
+  line of `frontmatter-invalid` for unparseable YAML, a link definition
+  inside a block quote, a link inside an HTML block, and `--` as an
+  argument.
 
 - Edit the Purpose of each modified spec under `openspec/specs/`
   when the change is archived.

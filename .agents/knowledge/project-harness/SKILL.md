@@ -1,15 +1,17 @@
 ---
-name: harness-md
+name: project-harness
 description: >-
-  The agent harness of the harness.md repository itself: a public,
+  [HARNESS.md] The agent harness of the harness.md repository itself: a public,
   long-lived, single-maintainer repository that holds a format
   specification, a hub of reusable designs, a cross-client agent plugin of
   Markdown skills with Python scripts, TypeScript management code, and a
   static website. Suits a documentation-and-tooling repository where agents
   work task by task under review and outside contributors arrive with
   their own agents.
-version: 1.0.0
 license: Apache-2.0
+metadata:
+  type: harness-design
+  version: "1.0.0"
 ---
 
 # The harness of harness.md
@@ -91,9 +93,10 @@ before these rules existed. The rules below apply to every change after it.
    A change to the format is an OpenSpec change
    that updates `openspec/specs/format/*` and, in the same change,
    the prose `spec/spec.md` and its mirror, both validator implementations,
-   the fixtures, and the copy of the specification inside the format skill.
-   Enforced by `just fixtures-check` and `just skills-check`
-   for the mechanical parts; the reviewer for the prose.
+   and the copy of the specification inside the format skill.
+   Enforced by `just test` and `just skills-check`
+   for the mechanical parts; the reviewer for the prose
+   and for the agreement of the two validators.
 3. **A shipped skill or agent changes only through an approved specification.**
    The change starts as an OpenSpec change and waits
    for the `spec:approved` label. Harness files, scripts, CI, documentation,
@@ -106,7 +109,7 @@ before these rules existed. The rules below apply to every change after it.
    (regenerate with `openspec init --tools agents --force`).
    Enforced by `just gen --check`.
 5. **A check is never weakened to let a change through.**
-   Not a hook, a workflow, a permission entry, a fixture expectation,
+   Not a hook, a workflow, a permission entry,
    or this file. A check that is wrong is changed in its own pull request,
    with the reason. Enforced by review.
 6. **Nothing secret or private enters the repository, an issue,
@@ -142,13 +145,14 @@ it prints findings as `path:line: message` lines that say what to fix, exits 0,
 Shared logic lives in `scripts/lib/`. The only runtime dependency is `yaml`;
 adding one needs a reason in the pull request.
 
-Anything delivered to other machines (scripts inside `skills/`)
+A script shipped under `skills/`
 is Python with PEP 723 inline metadata, run with `uv`,
 standard library preferred, with a `*_test.py` beside it.
 The validator exists twice on purpose:
 the Python script users get
 and the TypeScript implementation this repository runs.
-The shared fixtures in `spec/fixtures/` are what keeps the two equal.
+Both implement the same specification: each has its own unit tests,
+and review keeps the two equal.
 
 Every command an agent or CI runs is a recipe in the `justfile`;
 nothing documents a raw command when a recipe exists.
@@ -163,12 +167,10 @@ a `SKILL.md` under about 500 lines with detail in `references/`.
 ## File Structure
 
 ```text
-HARNESS.md                     this design; opened only to check or change the harness
 AGENTS.md                      the agent entrypoint (at most 120 lines)
 README.md  README.zh.md        for people; Chinese mirrors English
 spec/spec.md  spec/spec.zh.md  the format specification, prose; English is authoritative
-spec/fixtures/                 validator conformance cases and expected.json
-hub/<name>/HARNESS.md          hub entries; hub/README.md and its mirror hold the entry rules
+hub/<name>/SKILL.md            hub entries; hub/README.md and its mirror hold the entry rules
 plugin.json                    the portable plugin manifest (Agent Plugins 1.0.0)
 skills/<name>/                 shipped skills: SKILL.md, references/, assets/, scripts/
 com.anthropic.claude-code/     Claude Code's hand-written files: agents/*.md
@@ -181,6 +183,7 @@ scripts/  scripts/lib/         management code (TypeScript) and its tests
 site/                          the website (Astro, Pagefind); its own package
 DESIGN.md                      the website's visual design: tokens and guidance (DESIGN.md format)
 .agents/knowledge/             knowledge files the entrypoint routes to
+.agents/knowledge/project-harness/SKILL.md  this design; opened only to check or change the harness
 .agents/skills/                project skills; .claude/skills/ holds a symlink to each
 .github/                       workflows, issue forms, pull request template, labels
 .devcontainer/                 the development environment
@@ -250,7 +253,7 @@ each opening with the situation in which to read it:
 | `plugin-architecture.md` | adding, removing, or re-scoping a skill or an agent; touching how the entry skills hand work to layer builders |
 | `skill-quality.md` | writing or editing anything under `skills/` |
 | `shared-blocks.md` | editing a `<!-- shared:… -->` block in a skill |
-| `format-changes.md` | changing the format, the prose specification, a validator, or a fixture |
+| `format-changes.md` | changing the format, the prose specification, or a validator |
 | `hub.md` | adding or reviewing a hub entry |
 | `site.md` | editing `site/` or its workflow; it sends visual changes to `DESIGN.md` first |
 | `client-matrix.md`, `compatibility-watch.md` | a client does not load something; a client or OpenSpec was upgraded |
@@ -279,7 +282,7 @@ An agent verifies its own work with recipes, in this order of cost:
 
 | Recipe | Covers | Budget |
 |---|---|---|
-| the single recipe for what it touched (`just lint`, `just test`, `just skills-check`, `just harness-md-lint`, `just fixtures-check`, `just hub-check`, `just harness-check`, `just validate`, `just spec-check`) | one concern | seconds |
+| the single recipe for what it touched (`just lint`, `just test`, `just skills-check`, `just harness-md-lint`, `just hub-check`, `just harness-check`, `just validate`, `just spec-check`) | one concern | seconds |
 | `just check-fast` | everything that needs no network beyond the package caches | about a minute |
 | `just check` | everything CI runs, including the site build and the secret scan | a few minutes |
 
@@ -336,7 +339,6 @@ What the gates enforce, by concern:
 - formatting, lint, and types of the management code (Biome, `tsc`),
   and of shipped Python (Ruff);
 - unit tests of the scripts and of shipped Python;
-- the two validators agree with the fixtures (`just fixtures-check`);
 - the repository's own `HARNESS.md` and every hub entry conform
   (`just harness-md-lint`, `just hub-check`);
 - skills meet the mechanical rules: names, description budgets, layer ownership,

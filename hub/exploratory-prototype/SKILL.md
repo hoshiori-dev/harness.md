@@ -1,25 +1,19 @@
 ---
 name: exploratory-prototype
 description: >-
-  A deliberately thin agent harness for an exploratory prototype, proof of
-  concept, demo, spike, or research experiment: one person, a coding agent
-  supervised turn by turn, code that is thrown away or redesigned within a
-  quarter, and nothing a wrong change can damage. Keeps only what still
-  matters when everything else is disposable: isolation from host
-  credentials, a secret scan, one command that runs the thing, a smoke
-  check, and checkpoint commits. States the triggers for moving to a
-  heavier design.
-version: 1.0.0
+  [HARNESS.md] A deliberately thin agent harness for an exploratory prototype,
+  proof of concept, demo, spike, or research experiment: one person, a coding
+  agent supervised turn by turn, code that is thrown away or redesigned within
+  a quarter, and nothing a wrong change can damage. Keeps only what still
+  matters when everything else is disposable: isolation from host credentials,
+  a secret scan, one command that runs the thing, a smoke check, and
+  checkpoint commits. States the triggers for moving to a heavier design.
 license: Apache-2.0
 metadata:
-  tags:
-    - prototype
-    - exploration
-    - solo
-    - short-lived
-    - thin-harness
-  based-on:
-    - https://github.com/hoshiori-dev/harness-builder
+  type: harness-design
+  version: "1.0.0"
+  tags: prototype, exploration, solo, short-lived, thin-harness
+  based-on: https://github.com/hoshiori-dev/harness-builder
 ---
 
 # Exploratory Prototype Harness

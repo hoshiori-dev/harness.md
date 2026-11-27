@@ -1,6 +1,6 @@
 ---
 // What a reader can do with a document as a whole (a page's Markdown version,
-// or a hub entry's HARNESS.md). A split control: the main button copies the
+// or a hub entry's SKILL.md). A split control: the main button copies the
 // text, the toggle opens a menu with the same action plus the file in a new
 // tab and, where there are any, a download and a link to the source on
 // GitHub.
@@ -16,11 +16,11 @@ interface Props {
   markdownHref: string;
   /** A file to save (hub entries). */
   download?: { href: string; filename: string };
-  /** The page's source on GitHub. `entry` is a hub file, `source` a file the page is rendered from. */
+  /** The page's source on GitHub. `entry` is a hub entry's directory, `source` a file the page is rendered from. */
   github?: { href: string; kind: "entry" | "source" };
   /** Message shown when copying fails; defaults to pointing at the Markdown version. */
   copyFailed?: string;
-  /** Labels that name the file instead of "Markdown" (a hub entry's HARNESS.md). */
+  /** Labels that name the file instead of "Markdown" (a hub entry's SKILL.md). */
   labels?: { copy: string; copyAs: string; viewAs: string; more: string; menu: string };
   /** `start` when the control sits at the start of a row beside other buttons. */
   align?: "start" | "end";

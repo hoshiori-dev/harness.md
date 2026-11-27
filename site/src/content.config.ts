@@ -17,14 +17,15 @@ const spec = defineCollection({
 const hub = defineCollection({
   loader: glob({
     base: "../hub",
-    pattern: "*/HARNESS.md",
+    pattern: "*/SKILL.md",
     generateId: ({ entry }) => entry.split("/")[0] ?? entry,
   }),
   schema: z.object({
     name: z.string(),
     description: z.string(),
-    version: z.string().optional(),
     license: z.string().optional(),
+    // `just hub-check` owns the rule that every value is a string; the site
+    // reads the keys it shows and ignores a value of another type.
     metadata: z.record(z.string(), z.unknown()).optional(),
   }),
 });

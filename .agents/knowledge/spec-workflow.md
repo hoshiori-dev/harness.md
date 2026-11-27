@@ -16,7 +16,7 @@ on 2026-11-11 with `openspec init --tools agents`.
 | Artifact | Path | Owns |
 |---|---|---|
 | Format specs | `openspec/specs/format/document/spec.md`, `openspec/specs/format/frontmatter/spec.md`, `openspec/specs/format/sections/spec.md` | the structured statement of the `HARNESS.md` format |
-| Validator specs | `openspec/specs/cli/spec.md` (rules for every tool), `openspec/specs/cli/lint/spec.md` | what the validator reports; its conformance cases are `spec/fixtures/` |
+| Validator specs | `openspec/specs/cli/spec.md` (rules for every tool), `openspec/specs/cli/lint/spec.md` | what the validator reports; each implementation's unit tests hold a case for every finding code |
 | Catalog rules | `openspec/specs/skill/spec.md`, `openspec/specs/agent/spec.md` | rules every shipped skill or agent follows |
 | Entry spec | `openspec/specs/<catalog>/<name>/spec.md` for `skill` and `agent` | observable behaviour of one shipped entry, the clients it ships to, and its behavioural test cases (scenarios) |
 | Hub rules | `openspec/specs/hub/spec.md` | what a hub entry must satisfy |
@@ -28,14 +28,15 @@ on 2026-11-11 with `openspec init --tools agents`.
 Source of truth per fact: behaviour → the spec;
 the format as outside readers see it → `spec/spec.md`,
 written from the three format specs; package metadata → `plugin.json`;
-conventions → this knowledge base; the harness design → `HARNESS.md`.
+conventions → this knowledge base; the harness design →
+`.agents/knowledge/project-harness/SKILL.md`.
 Nothing restates a spec; `AGENTS.md` and the skills point to it.
 
 ## Scope
 
 | Change touches | Carrier |
 |---|---|
-| the format, the prose specification's meaning, a validator finding, a fixture expectation | OpenSpec change with delta specs under `format/` or `cli/` (`.agents/knowledge/format-changes.md`) |
+| the format, the prose specification's meaning, a validator finding | OpenSpec change with delta specs under `format/` or `cli/` (`.agents/knowledge/format-changes.md`) |
 | a shipped skill or the agent | OpenSpec change with a delta spec under `skill/<name>` or `agent/<name>`; `just validate` enforces one spec per entry and one entry per spec |
 | the hub's entry rules, the site's behaviour | OpenSpec change with a delta under `hub/` or `site/` |
 | harness, scripts, CI, documentation, a hub entry, site styling or copy, generated files, a reworded sentence that changes no rule | spec-less: straight to a pull request, labelled `spec:skipped` by the `pr-labels` workflow |
@@ -108,7 +109,8 @@ They run by hand before gate 2 and are not CI jobs:
 CI has no agent credentials and the runs are costly.
 When no subagent is available,
 say so in the pull request and run the prompts in a fresh session instead.
-The validator's scenarios are proven by `just fixtures-check`.
+The validator's scenarios are proven by the unit tests of both
+implementations (`just test`).
 
 ## First implementation (2026-11-11)
 

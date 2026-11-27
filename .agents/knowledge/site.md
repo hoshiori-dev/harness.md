@@ -12,7 +12,7 @@ Its contract is `openspec/specs/site/spec.md`.
 - `site/` is its own pnpm workspace package with its own Biome configuration;
   the root Biome configuration ignores it. Install with `just site-install`.
 - The specification pages render `spec/spec.md` and `spec/spec.zh.md`,
-  and the hub pages render every `hub/<name>/HARNESS.md`, at build time.
+  and the hub pages render every `hub/<name>/SKILL.md`, at build time.
   The site holds no copy of either: to change that text, edit the source.
 - `DESIGN.md` at the repository root is the site's visual design
   (DESIGN.md format: tokens in the frontmatter, guidance in prose).
@@ -23,7 +23,7 @@ Its contract is `openspec/specs/site/spec.md`.
   No new colour, shadow, or card without changing `DESIGN.md` first.
 - Every document page has a Markdown version generated at build time:
   the specification at `/spec.md`, a plugin docs page at `/plugin/<page>.md`,
-  a hub entry at its raw `HARNESS.md`.
+  a hub entry at its raw `SKILL.md`.
   It is reached from the page-actions menu and from a `rel="alternate"` link.
   The home page and the hub index are navigation and have none;
   `/llms.txt` (`llmsText()` in `site/src/lib/pagemd.ts`)

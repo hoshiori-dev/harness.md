@@ -83,7 +83,6 @@ jobs:
           openspec: "false"
           betterleaks: "false"
       - run: just harness-md-lint
-      - run: just fixtures-check
       - run: just hub-check
   spec:
     name: checks / spec

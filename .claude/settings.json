@@ -22,7 +22,6 @@
       "Bash(just harness-check)",
       "Bash(just harness-md-lint)",
       "Bash(just harness-md-lint *)",
-      "Bash(just fixtures-check)",
       "Bash(just hub-check)",
       "Bash(just spec-check)",
       "Bash(just spec-archived)",

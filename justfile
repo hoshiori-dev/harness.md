@@ -58,14 +58,9 @@ skills-check:
 harness-check:
     node scripts/check_harness.ts
 
-# Validate HARNESS.md files against the format specification (no path: ./HARNESS.md and every hub/*/HARNESS.md).
+# Validate HARNESS.md directories against the format specification (no path: .agents/knowledge/project-harness and every hub/*/).
 harness-md-lint *paths:
     node scripts/lint_harness_md.ts "$@"
-
-# Run both validators (this repository's TypeScript one and the Python one the format skill ships) over the conformance fixtures.
-fixtures-check:
-    node scripts/lint_harness_md.ts --fixtures spec/fixtures
-    uv run skills/harness-md/scripts/lint_harness_md.py --fixtures spec/fixtures
 
 # Hub entries against the hub's own entry rules.
 hub-check:
@@ -127,7 +122,7 @@ site-check:
     pnpm --filter ./site run check
 
 # The checks that need neither openspec, the website build, nor betterleaks; the push workflow runs them on every branch but main.
-check-fast: (gen "--check") lint validate skills-check harness-check harness-md-lint fixtures-check hub-check test
+check-fast: (gen "--check") lint validate skills-check harness-check harness-md-lint hub-check test
 
 # Everything CI runs.
 check: check-fast spec-check site-check site-build secrets

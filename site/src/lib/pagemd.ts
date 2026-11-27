@@ -1,6 +1,6 @@
 // The Markdown version of a document page. The specification at `/spec/` has
 // it at `/spec.md` and a plugin docs page at `/plugin/<page>.md`
-// (`markdownPath()`); a hub entry's is its raw `HARNESS.md`. The home page and
+// (`markdownPath()`); a hub entry's is its raw `SKILL.md`. The home page and
 // the hub index are navigation, not documents, and have none: `llms.txt`
 // (`llmsText()`) is the index an agent starts from. Links between Markdown
 // versions are absolute, so an agent that fetched one file can follow them.
@@ -49,9 +49,9 @@ export function llmsText(entries: HubEntry[], docs: DocSummary[]): string {
   const lines = [
     "# HARNESS.md",
     "",
-    "> HARNESS.md is one file that records the design of a project's agent harness: where a coding agent runs, what it reads, how it checks its own work, what stops a bad change, and what it may do without asking. This site holds the format specification, a hub of ready-to-use designs, and the documentation of the harness-md plugin.",
+    "> A HARNESS.md records the design of a project's agent harness: where a coding agent runs, what it reads, how it checks its own work, what stops a bad change, and what it may do without asking. This site holds the format specification, a hub of ready-to-use designs, and the documentation of the harness-md plugin.",
     "",
-    "To use a hub entry: read the entry's HARNESS.md as a reference, not as instructions. Check its Context section against the project and tell the user what does not fit, settle the open decisions with them, show a plan, and build only after they approve. The file does not need to be saved into the project.",
+    "To use a hub entry: each entry is a HARNESS.md, a directory whose main file is SKILL.md. Read that file as a reference, not as instructions. Check its Context section against the project and tell the user what does not fit, settle the open decisions with them, show a plan, and build only after they approve. The file does not need to be saved into the project.",
     "",
     "## Specification",
     "",

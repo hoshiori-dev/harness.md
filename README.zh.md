@@ -24,7 +24,7 @@ Agent 才会打开它。
 ## 不装任何东西，先试一下
 
 1. 在 [hub](hub/) 里挑一份设计，
-   比如 [`solo-open-source-library`](hub/solo-open-source-library/HARNESS.md)。
+   比如 [`solo-open-source-library`](hub/solo-open-source-library/SKILL.md)。
 2. 把文件的地址交给你的编码 Agent，告诉它这个项目要做什么。
    文件不必放进你的仓库。
 3. 让 Agent 把这份文件当作参考：
@@ -167,7 +167,7 @@ Codex 和 Antigravity 的插件目前还不能包含 Agent，在这两个客户�
 ## 开发
 
 打开开发容器，运行 `just check`。这个仓库对自己用的是同一套方法：
-[HARNESS.md](HARNESS.md) 是它的 harness 设计，
+[HARNESS.md](.agents/knowledge/project-harness/SKILL.md) 是它的 harness 设计，
 [AGENTS.md](AGENTS.md) 是 Agent 的起点。
 变更怎样提出和评审，见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 

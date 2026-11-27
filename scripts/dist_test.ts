@@ -22,7 +22,7 @@ test("dist archives the portable plugin with every client's generated files", ()
     ...fixturePlugin(),
     LICENSE: "license\n",
     "spec/spec.md": "# not shipped\n",
-    "hub/demo/HARNESS.md": "# not shipped\n",
+    "hub/demo/SKILL.md": "# not shipped\n",
   });
   assert.equal(runScript("gen.ts", [], root).code, 0);
   git(root, "init", "-q");
