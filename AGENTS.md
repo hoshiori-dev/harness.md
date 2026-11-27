@@ -60,14 +60,14 @@ site/  DESIGN.md               <- the website (Astro, Pagefind; own pnpm package
 | Changing the format, the prose specification, a validator, or a fixture | `.agents/knowledge/format-changes.md` |
 | Adding or reviewing a hub entry | `.agents/knowledge/hub.md` |
 | Editing `site/` or its workflow | `.agents/knowledge/site.md`; `DESIGN.md` before anything visual |
-| A client does not load something; touching a wiring or generated file | `.agents/knowledge/client-matrix.md` |
-| A client or OpenSpec was upgraded; removing a workaround | `.agents/knowledge/compatibility-watch.md` |
+| A client does not load something; a wiring or generated file; a client or OpenSpec upgrade; a workaround | `.agents/knowledge/client-matrix.md`, `.agents/knowledge/compatibility-watch.md` |
 | Proposing, implementing, or archiving an OpenSpec change | `.agents/knowledge/spec-workflow.md`, then the `openspec-*` skills |
 | Taking an issue, opening or finishing a pull request, any `gh` write | the `github-project-workflow` skill, `.agents/knowledge/github-workflow.md` |
 | A check is red; adding or renaming a recipe or CI job | `.agents/knowledge/github/checks.md` |
 | Branching, committing, squashing, pushing, tags | `.agents/knowledge/git-workflow.md` |
 | Before any issue, push, comment, label, release; an action was refused | `.agents/knowledge/agent-authority.md` |
 | Before reading or changing a remote setting | `.agents/knowledge/github/platform-settings.md` |
+| Reviewing a change, briefing a reviewer, triaging findings | `.agents/knowledge/review.md` |
 | Editing this file, a knowledge file, or a check; adding a client; every tenth merged pull request | `.agents/knowledge/maintenance.md` |
 
 ## Development Environment
