@@ -62,6 +62,13 @@ before these rules existed. The rules below apply to every change after it.
 - **How unattended agents are:** checkpointed.
   An agent works a task through on its own and the maintainer reviews
   between tasks. No agent runs on a trigger without a person starting it.
+- **How the parts are used:** each part meets different people and inputs.
+  The plugin's skills are read by an agent on a person's own machine,
+  for that person's own project, at their request.
+  The assets a skill deposits run in projects this repository cannot see.
+  The format, the validators, and the hub entries are copied by others.
+  The workflows take pull requests and issues from anyone.
+  The website is a static build of text held here.
 - **Hosting:** GitHub, public repository `hoshiori-dev/harness.md`;
   the website is served by GitHub Pages from the same repository.
 - **Clients and models:** Claude Code, Codex, and Antigravity.
@@ -250,6 +257,7 @@ each opening with the situation in which to read it:
 | `spec-workflow.md` | proposing, implementing, or archiving an OpenSpec change |
 | `git-workflow.md`, `github-workflow.md`, `github/checks.md` | branching, committing, pushing; taking an issue, opening or finishing a pull request; a red check |
 | `agent-authority.md`, `github/platform-settings.md` | before any push, comment, label, release, or remote setting; when an action was refused |
+| `review.md` | reviewing a change, briefing a reviewer, deciding which findings to act on |
 | `maintenance.md` | editing the entrypoint or a knowledge file; the periodic reclamation |
 
 Project skills live in `.agents/skills/`:
@@ -483,6 +491,21 @@ A pull request is ready when the agent has re-read its own diff
 as a reviewer would and found nothing to fix;
 it is mergeable when the OpenSpec change, if any,
 has been archived on the branch after review.
+
+A review, by an agent or a person, judges a change in the scenario
+its component is used in, never fragment by fragment.
+`.agents/knowledge/review.md` holds, per component, the typical use,
+who can supply input, and the question a security review
+and an implementation review must answer.
+A security finding names who, through which channel, causes which harm;
+an implementation finding names which passages an agent or the CI
+would mishandle, and into what.
+A finding that cannot is outside the model and is not fixed,
+and a review loop stops when a round returns nothing else.
+Assets a skill deposits are held to the strict standard,
+because the project they land in is unknown.
+Without this basis a reviewing agent widens the model by itself,
+and each fix makes the text longer and the next round no shorter.
 
 An agent that cannot finish says what is done, what is not, and why,
 and leaves the pending decisions list.
