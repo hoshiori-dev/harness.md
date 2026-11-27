@@ -2,10 +2,11 @@
 
 ## 1. Base
 
-- [ ] 1.1 Rebase this branch on `main` once the change
-  `harness-md-as-skill` (issue #31) is merged.
-  Verify: `git log main..HEAD` holds only this change's commits
-  and `just check` passes before any edit.
+- [ ] 1.1 Merge the branch of `harness-md-as-skill` (issue #31)
+  into this one once its tasks 4 and 5 (skills, agents, documentation)
+  are committed there, and again whenever it moves.
+  Verify: `git log` shows the base's task commits and `just check`
+  passes before any edit.
 
 ## 2. Catalog and checks
 

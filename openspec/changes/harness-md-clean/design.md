@@ -165,8 +165,10 @@ the fifth copy of the file the entries carry.
 come from `just gen`.
 No file is added under `com.anthropic.claude-code/`: the tool needs no agent.
 The Purpose of the catalog spec gains the class when the change is archived.
-The implementation starts after `harness-md-as-skill` is merged
-and this branch is rebased on it.
+This branch is stacked on the branch of `harness-md-as-skill`
+(issue #31): the implementation starts when that change's skills,
+checks, and documents are committed there, and base updates arrive
+by merge, never by a rewritten history.
 
 ## Risks / Trade-offs
 

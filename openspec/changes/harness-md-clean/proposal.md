@@ -2,7 +2,8 @@
 
 Issue: [#33](https://github.com/hoshiori-dev/harness.md/issues/33).
 Depends on issue #31 (a `HARNESS.md` as a kind of Agent Skill),
-which defines the type marker this change relies on.
+which defines the type marker this change relies on;
+this change is stacked on that one's branch.
 
 ## Why
 
