@@ -356,14 +356,21 @@ Where the project has an anchor document, write realised changes of intent
 back to it in the same checkpoint as the layer they concern,
 as anchor-document.md states. Deferred changes stay in the pending decisions list.
 
-After each layer: run the project's checks; when they pass,
-commit that layer's files in the project's commit convention,
+After each layer: run the project's checks.
+Commit that layer's files when no check fails that passed before
+the first change, in the project's commit convention,
 with no attribution to an AI or a tool. Push nothing.
+A check that already failed before the first change does not hold
+a checkpoint back: name it in the commit message
+with the plan item that repairs it,
+or keep it in the pending decisions list when no item does.
+When a layer's checks can pass only together with a later layer's change,
+build both and commit them as one checkpoint.
 When a hook rejects the commit, fix what it flagged and retry;
 never bypass the hook.
 
 Done when: every plan item is done or in the pending decisions list,
-each touched layer has one checkpoint commit made with passing checks,
+each touched layer is in a checkpoint commit made with no new failing check,
 and nothing was pushed.
 
 ### 8. Read back, review, and close

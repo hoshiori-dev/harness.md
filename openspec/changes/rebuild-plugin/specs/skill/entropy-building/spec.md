@@ -56,6 +56,14 @@ In build mode the agent SHALL fill the entrypoint's one keep-in-sync section, SH
 - **WHEN** the agreed decisions keep the gate independent of the self-check and the project's GitLab pipelines must succeed before a merge
 - **THEN** the self-check job is absent from the gate's job list and is allowed to fail with a comment naming it the agreed advisory job, and the hand back says a failing self-check stays visible and blocks no merge
 
+#### Scenario: Advisory self-check and a required aggregate job
+- **WHEN** the agreed decisions keep the gate independent of the self-check and a required CI job runs the aggregate check recipe
+- **THEN** the self-check is left out of the aggregate recipe, verification does not report that as a failure, and the hand back reports it as a deviation with the fact behind it
+
+#### Scenario: Anchor document written after the layer
+- **WHEN** the handover lists a new anchor `HARNESS.md` among the required paths and says the entry writes it after this layer
+- **THEN** the first self-check output is handed back verbatim with the missing anchor named as expected, and no setting is changed to hide it
+
 #### Scenario: Project scripts in another language
 - **WHEN** the agreed decisions name TypeScript as the project's management language
 - **THEN** the deposited check is a port with the same settings, rule ids, messages, JSON shape, and exit codes

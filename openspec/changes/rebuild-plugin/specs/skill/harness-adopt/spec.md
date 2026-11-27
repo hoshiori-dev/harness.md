@@ -119,6 +119,16 @@ report the full path. Each file SHALL be validated.
 - **WHEN** the user asks to save the result as `HARNESS.md` in the current project's root
 - **THEN** the agent explains that the file describes another project and is a reference, offers another path, and writes to the root only if the user insists after that
 
+### Requirement: A write inside the current project waits for a go-ahead
+The agent SHALL write a file inside the current project only after the
+user's go-ahead on the files listed by path, including when the remaining
+decisions were left to the agent, and SHALL replace an existing file at
+a named path only by the user's decision on that file.
+
+#### Scenario: Named path inside the current project
+- **WHEN** the user named `docs/reference-harness.md` in the current project as the path, left the remaining decisions to the agent, and a file already exists there
+- **THEN** the agent asks whether to replace it, write beside it, or use a temporary file, and the existing file is unchanged until the user answers
+
 ### Requirement: Hand-over to building
 The agent SHALL change nothing in the current project. It SHALL close by
 showing what the design decides per layer, what is inferred, and which

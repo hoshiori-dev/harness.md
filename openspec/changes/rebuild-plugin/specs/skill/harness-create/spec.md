@@ -122,6 +122,10 @@ verified layer without pushing.
 - **WHEN** the secret scan rejects a layer's commit
 - **THEN** the agent fixes what was flagged and commits again, and never bypasses the hook
 
+#### Scenario: New anchor required by the self-check
+- **WHEN** the plan creates a root `HARNESS.md` as the anchor document and an Entropy self-check that requires that file
+- **THEN** Entropy is built last, the anchor and its entrypoint route are written before Entropy is committed, the self-check passes on a rerun, and the three are committed together
+
 #### Scenario: Empty project
 - **WHEN** the project has no code
 - **THEN** the build creates what the planned commands need in order to run (a manifest, tool configuration, the smallest passing test) and no product feature

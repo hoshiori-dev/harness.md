@@ -100,6 +100,9 @@ That rule holds for every file this skill writes, wherever it is written.
   in the client's own temporary location when the client offers one,
   in the system's otherwise, never inside the project.
   Report the full path of every file written.
+  A path inside the project is written only after the user's go-ahead
+  on the list of files; a file already at a named path, inside the project
+  or not, is replaced only by the user's decision on that file.
 - **The project root is written only for an anchor document.**
   A project has an anchor document
   when a `HARNESS.md` is in its root and its entrypoint names that file.
@@ -271,8 +274,19 @@ for the closing message.
 
 ### 7. Present, write, and close
 
-Write each file that is not an anchor document to its destination;
-a file whose destination is a temporary file is already there.
+A file whose destination is a temporary file is already there.
+For every other file that is not an anchor document:
+
+1. When any path is inside the project, list those files,
+   each by path and as new or replacing an existing file,
+   and wait for the go-ahead. One go-ahead covers the list.
+   Having left the rest to you does not give it.
+2. When a file already exists at a named path, inside the project or not,
+   show how the draft differs from it,
+   and ask whether to replace it, write the draft beside it
+   under a name the user gives, or stop.
+   Stopping leaves the draft in its temporary file.
+3. Write each file to its path and validate the file on disk.
 
 For an anchor document:
 

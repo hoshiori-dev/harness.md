@@ -306,6 +306,9 @@ is on the pending decisions list, and nothing outside the list changed.
   decided per finding by the user (under an entry:
   handed back as pending decisions).
   Never edit the check's logic to make it pass.
+  A required path the handover says is written after this layer
+  (a new anchor document) is reported as expected, not as a failure:
+  the entry writes the file and runs the recipe again.
 - The marker no longer appears in the entrypoint,
   the entrypoint has exactly one sync section,
   and the entrypoint is within its line budget.
@@ -313,10 +316,13 @@ is on the pending decisions list, and nothing outside the list changed.
   the section names all three with their criteria,
   says a conversation-only report does not count,
   and every table row has all three cells.
-- The aggregate check recipe runs the self-check; the CI job runs the recipe;
-  the gate depends on it where the decisions say so.
-  Where they do not, a failing self-check fails neither the gate
-  nor a job or hook a merge requires.
+- The CI job runs the recipe.
+  With blocking wiring, the aggregate check recipe runs the self-check
+  and the gate depends on the job.
+  With advisory wiring, a failing self-check fails neither the gate
+  nor a job or hook a merge requires:
+  the aggregate recipe runs it unless such a job or hook runs the aggregate,
+  and then leaving it out is reported as a deviation.
 - The script and the CI job call nothing inside a skill directory.
 - Every deposited mechanism is reachable from the entrypoint,
   or its route is handed back as owed.

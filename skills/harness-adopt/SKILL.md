@@ -112,6 +112,10 @@ these rules by reading.
   that a `HARNESS.md` in a project's root reads as that project's own design,
   and offer another path;
   write to the root only if the user insists after that.
+  A path inside the current project is written only after the user's
+  go-ahead on the list of files; a file already at a named path,
+  inside the current project or not,
+  is replaced only by the user's decision on that file.
   Always report the complete path of every file written.
 - **This entry changes nothing in the current project.**
   It may write the result files at paths the user named.
@@ -215,6 +219,15 @@ not found"; the commit (or its absence) and the licence are recorded;
 and it is recorded whether the reading was isolated or degraded.
 
 ### 4. Write the design
+
+Before writing, check each output's path.
+When any is inside the current project, list those files,
+each by path and as new or replacing an existing file,
+and wait for the go-ahead. One go-ahead covers the list.
+Having left the rest to you does not give it.
+When a file already exists at a named path, inside the current project or not,
+ask whether to replace it, write beside it under a name the user gives,
+or write to a temporary file instead; until answered, leave it unchanged.
 
 Read [references/portable.md](references/portable.md) before writing the first decision:
 it turns what was read into decisions, reasons, and premises.

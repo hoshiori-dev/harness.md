@@ -81,6 +81,20 @@ user's decision on that file.
 - **WHEN** the root already holds a `HARNESS.md` and the user asked for an anchor document
 - **THEN** the agent shows how the new draft differs and asks whether to replace it, write beside it, or stop
 
+### Requirement: A write inside the project waits for a go-ahead
+The agent SHALL write a file inside the project only after the user's
+go-ahead on the files listed by path, including when the remaining
+decisions were left to the agent, and SHALL replace an existing file at
+a named path only by the user's decision on that file.
+
+#### Scenario: Named path inside the project
+- **WHEN** the user named `docs/HARNESS.md` as the path, left the remaining decisions to the agent, and no file exists there
+- **THEN** the agent lists the file by path as new and writes it only after the user's go-ahead
+
+#### Scenario: File already at the named path
+- **WHEN** the user named `docs/HARNESS.md` as the path and a file already exists there
+- **THEN** the agent shows how the draft differs and asks whether to replace it, write beside it, or stop, and the existing file is unchanged until the user answers
+
 ### Requirement: The description states what exists
 The agent SHALL describe the harness as it is, including its defects,
 SHALL NOT repair or improve anything in the description, and SHALL obtain

@@ -350,6 +350,12 @@ Write a new anchor only if its planned route fits the entrypoint's budget.
 Otherwise record both as pending. Use the format skill to write or update
 and validate the anchor, recording only realised, authorised decisions.
 Checkpoint a new anchor and its route together.
+
+When the Entropy self-check requires a new anchor: build Entropy last,
+tell its builder the anchor follows, and hold its checkpoint;
+write the anchor and route, rerun the self-check, and once it passes
+checkpoint all three together.
+If the anchor cannot be written, have the builder drop it from the self-check.
 Done when: every planned layer is built and committed,
 or blocked with an item in the pending decisions list,
 and nothing was pushed without a go-ahead at that step.

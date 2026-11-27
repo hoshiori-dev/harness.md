@@ -142,6 +142,10 @@ the changed files read back in a clean context, and close with each
 change and its finding, the thickness before and after, the verification
 commands and results, and one pending decisions list.
 
+#### Scenario: A check already failed before the work
+- **WHEN** the project's lint fails before the first change, the plan repairs it in the Gates layer, and the Knowledge layer comes first
+- **THEN** the Knowledge layer is committed with no new failing check, the commit names the known lint failure and the plan item that repairs it, and no check is weakened to make it pass
+
 #### Scenario: Deletion in the plan
 - **WHEN** the approved plan deletes an old client-specific entrypoint
 - **THEN** the deletion still asks for its own go-ahead when reached, or is queued as a pending decision while the rest proceeds
