@@ -3,21 +3,23 @@
 //
 //   node scripts/check_hub.ts [<hub directory>]
 //
-// The format validator ignores `metadata`; the hub does not, because the hub
-// defines what it keeps there (`tags`, `based-on`). Exit codes: 0 clean,
-// 1 findings, 2 bad arguments.
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+// An entry is a directory hub/<name>/ that is a HARNESS.md. The format
+// validator checks the directory (main file, markers, name, links inside it)
+// and leaves the contents of `metadata` alone beyond `type`; the hub does
+// not, because the hub defines what it keeps there (`tags`, `based-on`).
+// Exit codes: 0 clean, 1 findings, 2 bad arguments.
+import { existsSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { format, parseBytes } from "./lib/harness_md.ts";
+import { formatDirectory, MAIN_FILE, readDirectory } from "./lib/harness_md.ts";
 
 const TAG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-const ENTRY_FILE = "HARNESS.md";
 /** Files that may sit in hub/ beside the entry directories. */
 const HUB_FILES = new Set(["README.md", "README.zh.md"]);
+/** Keys under `metadata`: the two the format reads, the two the hub defines. */
+const METADATA_KEYS = new Set(["type", "version", "tags", "based-on"]);
 
-function isUrl(value: unknown): boolean {
-  if (typeof value !== "string") return false;
+function isUrl(value: string): boolean {
   try {
     const url = new URL(value);
     return url.protocol === "https:" || url.protocol === "http:";
@@ -26,52 +28,81 @@ function isUrl(value: unknown): boolean {
   }
 }
 
+/** A comma-separated metadata value as its items: split at commas, each trimmed. */
+export function items(value: string): string[] {
+  return value.split(",").map((item) => item.trim());
+}
+
 /** Findings for one entry directory, as printable lines. */
 export function checkEntry(hub: string, entry: string): string[] {
   const dir = join(hub, entry);
-  const file = join(dir, ENTRY_FILE);
-  if (!existsSync(file)) return [`${dir}: an entry directory must contain ${ENTRY_FILE}`];
-  const parsed = parseBytes(readFileSync(file));
+  const file = join(dir, MAIN_FILE);
+  const result = readDirectory(dir);
   // An entry has to be clean: warnings count too.
-  const problems = format(file, parsed.findings);
-  const frontmatter = parsed.frontmatter;
+  const problems = formatDirectory(dir, result.findings);
+  for (const link of result.links) {
+    if (link.kind !== "outside") continue;
+    problems.push(
+      `${join(dir, link.file)}:${link.line}: the link to \`${link.url}\` leaves the entry directory; an entry is used from its own files alone, so link to a file inside \`${dir}\` or give a full URL`,
+    );
+  }
+  const frontmatter = result.main?.frontmatter;
   if (!frontmatter) return problems;
 
   const say = (message: string) => problems.push(`${file}: ${message}`);
-  if (frontmatter.strings.name !== undefined && frontmatter.strings.name !== entry) {
-    say(
-      `\`name: ${frontmatter.strings.name}\` must equal the directory name \`${entry}\`; rename one of them`,
-    );
-  }
   if (!frontmatter.strings.license) {
     say("a hub entry states its licence; add `license:` (the hub's own entries use Apache-2.0)");
   }
   const metadata = frontmatter.data.metadata;
-  const record =
-    metadata && typeof metadata === "object" && !Array.isArray(metadata)
-      ? (metadata as Record<string, unknown>)
-      : undefined;
-  const tags = record?.tags;
-  if (!Array.isArray(tags) || tags.length === 0) {
-    say("`metadata.tags` must be a non-empty list; the hub's search and filters are built from it");
-  } else {
-    for (const tag of tags) {
-      if (typeof tag !== "string" || !TAG.test(tag)) {
-        say(
-          `the tag \`${String(tag)}\` must be lowercase letters and digits joined by single hyphens`,
-        );
-      }
-    }
-    if (new Set(tags).size !== tags.length) say("`metadata.tags` lists a tag twice");
+  // A `metadata` that is not a mapping, or a value in it that is not a string,
+  // is the format validator's finding (`metadata-value`); nothing is added here.
+  if (metadata !== undefined && (metadata === null || typeof metadata !== "object")) {
+    return problems;
   }
-  const basedOn = record?.["based-on"];
-  if (basedOn !== undefined) {
-    if (!Array.isArray(basedOn) || basedOn.length === 0) {
-      say("`metadata.based-on`, when present, must be a non-empty list of URLs");
-    } else {
-      for (const url of basedOn) {
-        if (!isUrl(url))
-          say(`\`metadata.based-on\` entry \`${String(url)}\` is not an http(s) URL`);
+  if (Array.isArray(metadata)) return problems;
+  const record = (metadata ?? {}) as Record<string, unknown>;
+  for (const key of Object.keys(record)) {
+    if (METADATA_KEYS.has(key)) continue;
+    say(
+      `\`metadata.${key}\` is not a key the format or the hub defines; an entry keeps only ${[...METADATA_KEYS].map((k) => `\`${k}\``).join(", ")} under \`metadata\``,
+    );
+  }
+  /** The items of a comma-separated key, or undefined when an item is empty. */
+  const split = (key: string, value: string): string[] | undefined => {
+    const list = items(value);
+    if (list.every((item) => item !== "")) return list;
+    say(
+      `\`metadata.${key}\` has an empty item; write the items separated by single commas, with no comma at the start or the end`,
+    );
+    return undefined;
+  };
+  const tags = record.tags;
+  if (tags === undefined) {
+    say(
+      "`metadata.tags` is missing; the hub's search and filters are built from it, so add one string of tags separated by commas",
+    );
+  } else if (typeof tags === "string") {
+    const list = split("tags", tags) ?? [];
+    const seen = new Set<string>();
+    const repeated = new Set<string>();
+    for (const tag of list) {
+      if (!TAG.test(tag)) {
+        say(`the tag \`${tag}\` must be lowercase letters and digits joined by single hyphens`);
+      }
+      if (seen.has(tag)) repeated.add(tag);
+      seen.add(tag);
+    }
+    for (const tag of repeated) {
+      say(`\`metadata.tags\` lists the tag \`${tag}\` more than once; keep one`);
+    }
+  }
+  const basedOn = record["based-on"];
+  if (typeof basedOn === "string") {
+    for (const url of split("based-on", basedOn) ?? []) {
+      if (!isUrl(url)) {
+        say(
+          `\`metadata.based-on\` item \`${url}\` is not an http(s) URL; items are split at commas, so a URL here contains none`,
+        );
       }
     }
   }
@@ -95,7 +126,7 @@ export function checkHub(hub: string): string[] {
 function main(argv: string[]): number {
   if (argv.includes("--help") || argv.includes("-h")) {
     console.log(
-      "usage: node scripts/check_hub.ts [<hub directory>]\n\nChecks every hub/<name>/HARNESS.md against the hub entry rules.\n\nexample: node scripts/check_hub.ts hub",
+      "usage: node scripts/check_hub.ts [<hub directory>]\n\nChecks every hub/<name>/ directory (main file SKILL.md) against the hub entry rules.\n\nexample: node scripts/check_hub.ts hub",
     );
     return 0;
   }

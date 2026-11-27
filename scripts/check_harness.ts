@@ -16,12 +16,16 @@ import {
   readText,
   run,
 } from "./lib/findings.ts";
+import { MAIN_FILE, MARKER_PREFIX, MARKER_TYPE, parse } from "./lib/harness_md.ts";
 import { frontmatter, SKILL_NAME_RE } from "./lib/plugin.ts";
 
 const root = process.cwd();
 const AGENTS_MD_LIMIT = 120;
 const README = "README.md";
 const README_MIRROR = "README.zh.md";
+const KNOWLEDGE = ".agents/knowledge/";
+/** This repository's own harness design: a HARNESS.md inside the knowledge folder. */
+const DESIGN = `${KNOWLEDGE}project-harness/${MAIN_FILE}`;
 const SPEC = "spec/spec.md";
 const SPEC_MIRROR = "spec/spec.zh.md";
 const LINK_RE = /\[[^\]]*\]\(([^)\s]+)\)/g;
@@ -36,16 +40,30 @@ const docs = tracked.filter(
   (p) =>
     p === "AGENTS.md" ||
     p === "CLAUDE.md" ||
-    p === "HARNESS.md" ||
     p === README ||
     p === README_MIRROR ||
     p === "CONTRIBUTING.md" ||
-    (p.startsWith(".agents/knowledge/") && p.endsWith(".md")) ||
+    (p.startsWith(KNOWLEDGE) && p.endsWith(".md")) ||
     (p.startsWith(".agents/skills/") && p.endsWith(".md")) ||
     (p.startsWith("com.") && p.endsWith(".md")),
 );
+// A directory under the knowledge folder whose SKILL.md carries the type
+// marker (`metadata.type: harness-design`) is a HARNESS.md and counts as one
+// unit: the entrypoint names its SKILL.md, and the files inside it are not
+// knowledge files. Its inside belongs to the format validator
+// (`just harness-md-lint`).
+const units = tracked
+  .filter((p) => p.startsWith(KNOWLEDGE) && p.endsWith(`/${MAIN_FILE}`))
+  .filter((p) => markers(p).type)
+  .map((p) => `${dirname(p)}/`)
+  // A marked SKILL.md directly in the knowledge folder is no unit: it would
+  // take every knowledge file out of the checks.
+  .filter((unit) => unit !== KNOWLEDGE);
+const unitOf = (path: string) => units.find((unit) => path.startsWith(unit));
 // The files an agent is routed through: a path they name must exist.
-const routed = docs.filter((p) => p === "AGENTS.md" || p.startsWith(".agents/knowledge/"));
+const routed = docs.filter(
+  (p) => p === "AGENTS.md" || (p.startsWith(KNOWLEDGE) && unitOf(p) === undefined),
+);
 
 checkEntrypoint();
 checkDesign();
@@ -94,14 +112,55 @@ function checkEntrypoint() {
   }
 }
 
+/** Which of the two marker halves of a HARNESS.md the file carries. */
+function markers(path: string): { prefix: boolean; type: boolean } {
+  const parsed = parse(readText(join(root, path))).frontmatter;
+  const metadata = parsed?.data.metadata;
+  const type =
+    metadata !== null && typeof metadata === "object"
+      ? (metadata as Record<string, unknown>).type
+      : undefined;
+  return {
+    prefix: parsed?.strings.description?.startsWith(MARKER_PREFIX) ?? false,
+    type: type === MARKER_TYPE,
+  };
+}
+
 function checkDesign() {
-  if (exists(join(root, "HARNESS.md"))) return;
-  findings.add({
-    file: "HARNESS.md",
-    rule: "design",
-    problem: "file is missing.",
-    fix: "restore this repository's harness design; the harness is built from it and `just harness-md-lint` validates it.",
-  });
+  if (!exists(join(root, DESIGN))) {
+    findings.add({
+      file: DESIGN,
+      rule: "design",
+      problem: "file is missing.",
+      fix: "restore this repository's harness design; the harness is built from it and `just harness-md-lint` validates it.",
+    });
+    return;
+  }
+  const found = markers(DESIGN);
+  if (!found.prefix) {
+    findings.add({
+      file: DESIGN,
+      rule: "design-marker",
+      problem: `the description does not start with \`${MARKER_PREFIX}\`.`,
+      fix: "start the frontmatter description with the marker, in a block scalar; an agent recognises the document by it.",
+    });
+  }
+  if (!found.type) {
+    findings.add({
+      file: DESIGN,
+      rule: "design-marker",
+      problem: `the frontmatter lacks \`metadata.type: ${MARKER_TYPE}\`.`,
+      fix: "add the type marker; without it the directory is checked as ordinary knowledge files.",
+    });
+  }
+  if (exists(join(root, "AGENTS.md")) && !readText(join(root, "AGENTS.md")).includes(DESIGN)) {
+    findings.add({
+      file: DESIGN,
+      rule: "design-named",
+      problem: "not named in AGENTS.md.",
+      fix: `name \`${DESIGN}\` in AGENTS.md as this repository's design; the entrypoint is how an agent finds it.`,
+    });
+  }
 }
 
 function checkLinks() {
@@ -220,9 +279,12 @@ function checkRecipes() {
 function checkKnowledgeReachable() {
   if (!exists(join(root, "AGENTS.md"))) return;
   const agentsMd = readText(join(root, "AGENTS.md"));
-  for (const file of tracked.filter(
-    (p) => p.startsWith(".agents/knowledge/") && p.endsWith(".md"),
-  )) {
+  for (const file of tracked.filter((p) => p.startsWith(KNOWLEDGE) && p.endsWith(".md"))) {
+    // The design document is checkDesign's; of a marked directory only the
+    // main file has to be named.
+    if (file === DESIGN) continue;
+    const unit = unitOf(file);
+    if (unit !== undefined && file !== `${unit}${MAIN_FILE}`) continue;
     if (!agentsMd.includes(file)) {
       findings.add({
         file,

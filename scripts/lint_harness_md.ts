@@ -1,144 +1,131 @@
-// Validate HARNESS.md files against spec/spec.md section 7.
+// Validate HARNESS.md documents against openspec/specs/cli/lint
+// (spec/spec.md section 7). A document is a directory whose main file is
+// SKILL.md, and the directory is what is validated.
 //
 //   node scripts/lint_harness_md.ts [--json] [--strict] [<path>...]
-//   node scripts/lint_harness_md.ts --fixtures <dir>
 //
-// With no path it checks ./HARNESS.md and every hub/*/HARNESS.md. Exit codes:
-// 0 no errors (and, with --strict, no warnings), 1 findings, 2 bad arguments.
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
-import { type Finding, format, lintBytes } from "./lib/harness_md.ts";
+// A path is a document directory or the path of its SKILL.md. With no path it
+// checks .agents/knowledge/project-harness and every directory directly under
+// hub/. Exit codes: 0 no errors (and, with --strict, no warnings), 1 findings,
+// 2 bad arguments.
+import { existsSync, readdirSync, statSync } from "node:fs";
+import { basename, dirname, join } from "node:path";
+import {
+  type DirectoryFinding,
+  formatDirectory,
+  lintDirectory,
+  MAIN_FILE,
+} from "./lib/harness_md.ts";
+
+const OWN_DOCUMENT = ".agents/knowledge/project-harness";
+const HUB = "hub";
 
 const USAGE = `usage: node scripts/lint_harness_md.ts [--json] [--strict] [<path>...]
-       node scripts/lint_harness_md.ts --fixtures <dir>
 
-Validates HARNESS.md files against the format specification (spec/spec.md).
-With no <path>, checks ./HARNESS.md and every hub/*/HARNESS.md.
+Validates HARNESS.md documents against the format specification (spec/spec.md).
+A <path> is a document directory or the path of its ${MAIN_FILE}.
+With no <path>, checks ${OWN_DOCUMENT} and every directory directly under ${HUB}/.
 
-  --json      print findings as JSON on stdout
+  --json      print findings as JSON on stdout, one object for each directory,
+              each finding with its file relative to that directory
   --strict    exit 1 on warnings as well as errors
-  --fixtures  run every *.md under <dir> and compare the finding codes with
-              <dir>/expected.json
 
-example: node scripts/lint_harness_md.ts HARNESS.md`;
+example: node scripts/lint_harness_md.ts ${HUB}/solo-open-source-library`;
 
-function defaultPaths(): string[] {
-  const paths: string[] = [];
-  if (existsSync("HARNESS.md")) paths.push("HARNESS.md");
-  if (existsSync("hub")) {
-    for (const entry of readdirSync("hub").sort()) {
-      const file = join("hub", entry, "HARNESS.md");
-      if (existsSync(file)) paths.push(file);
-    }
-  }
-  return paths;
+function isDirectory(path: string): boolean {
+  return existsSync(path) && statSync(path).isDirectory();
 }
 
-function markdownFiles(dir: string): string[] {
-  const files: string[] = [];
-  for (const entry of readdirSync(dir).sort()) {
-    const path = join(dir, entry);
-    if (statSync(path).isDirectory()) files.push(...markdownFiles(path));
-    else if (entry.endsWith(".md")) files.push(path);
+function defaultDirectories(): string[] {
+  const directories: string[] = [];
+  if (isDirectory(OWN_DOCUMENT)) directories.push(OWN_DOCUMENT);
+  if (isDirectory(HUB)) {
+    for (const entry of readdirSync(HUB).sort()) {
+      const path = join(HUB, entry);
+      if (!entry.startsWith(".") && isDirectory(path)) directories.push(path);
+    }
   }
-  return files;
+  return directories;
 }
 
-/** Compare each fixture's finding codes with expected.json; returns the mismatches. */
-export function runFixtures(dir: string): string[] {
-  const expected = JSON.parse(readFileSync(join(dir, "expected.json"), "utf8")) as Record<
-    string,
-    string[]
-  >;
-  const problems: string[] = [];
-  const seen = new Set<string>();
-  for (const file of markdownFiles(dir)) {
-    const key = relative(dir, file).split("\\").join("/");
-    seen.add(key);
-    const want = expected[key];
-    if (!want) {
-      problems.push(`${key}: no entry in expected.json`);
-      continue;
-    }
-    const got = lintBytes(readFileSync(file))
-      .map((f) => f.code)
-      .sort();
-    const wanted = [...want].sort();
-    if (got.join(",") !== wanted.join(",")) {
-      problems.push(`${key}: expected [${wanted.join(", ")}], got [${got.join(", ")}]`);
-    }
-  }
-  for (const key of Object.keys(expected)) {
-    if (!seen.has(key)) problems.push(`${key}: listed in expected.json but the file is missing`);
-  }
-  return problems;
+/** The directory an argument stands for, or what is wrong with the argument. */
+function directoryOf(path: string): { directory: string } | { problem: string } {
+  if (!existsSync(path)) return { problem: `${path}: no such file or directory` };
+  if (statSync(path).isDirectory()) return { directory: path };
+  if (basename(path) === MAIN_FILE) return { directory: dirname(path) };
+  return {
+    problem: `${path}: not a directory and not a ${MAIN_FILE}; pass a document directory or the path of its ${MAIN_FILE}`,
+  };
 }
 
 function main(argv: string[]): number {
   let json = false;
   let strict = false;
-  let fixtures: string | undefined;
   const paths: string[] = [];
-  for (let index = 0; index < argv.length; index++) {
-    const arg = argv[index] as string;
+  for (const arg of argv) {
     if (arg === "--help" || arg === "-h") {
       console.log(USAGE);
       return 0;
     }
     if (arg === "--json") json = true;
     else if (arg === "--strict") strict = true;
-    else if (arg === "--fixtures") {
-      fixtures = argv[++index];
-      if (!fixtures) {
-        console.error(`--fixtures needs a directory\n\n${USAGE}`);
-        return 2;
-      }
-    } else if (arg.startsWith("--")) {
+    else if (arg.startsWith("--")) {
       console.error(`unknown option ${arg}\n\n${USAGE}`);
       return 2;
     } else paths.push(arg);
   }
 
-  if (fixtures) {
-    if (!existsSync(join(fixtures, "expected.json"))) {
-      console.error(`${fixtures}/expected.json not found`);
+  // Every argument is settled before anything is validated.
+  const directories: string[] = [];
+  if (paths.length === 0) {
+    directories.push(...defaultDirectories());
+    if (directories.length === 0) {
+      console.error(
+        `nothing to check: no ${OWN_DOCUMENT} here and no directory under ${HUB}/; pass a document directory`,
+      );
       return 2;
     }
-    const problems = runFixtures(fixtures);
-    for (const problem of problems) console.log(problem);
-    console.error(
-      problems.length === 0
-        ? "fixtures: every case matches"
-        : `fixtures: ${problems.length} mismatch(es)`,
-    );
-    return problems.length === 0 ? 0 : 1;
+  } else {
+    const problems: string[] = [];
+    for (const path of paths) {
+      const settled = directoryOf(path);
+      if ("problem" in settled) problems.push(settled.problem);
+      else directories.push(settled.directory);
+    }
+    if (problems.length > 0) {
+      for (const problem of problems) console.error(problem);
+      return 2;
+    }
   }
 
-  const targets = paths.length > 0 ? paths : defaultPaths();
-  if (targets.length === 0) {
-    console.error("nothing to check: no HARNESS.md here and no hub/*/HARNESS.md");
-    return 2;
-  }
-  const results: { path: string; findings: Finding[] }[] = [];
-  for (const path of targets) {
-    if (!existsSync(path) || statSync(path).isDirectory()) {
-      console.error(`${path}: not a file`);
-      return 2;
-    }
-    results.push({ path, findings: lintBytes(readFileSync(path)) });
-  }
+  const results: { path: string; findings: DirectoryFinding[] }[] = directories.map((path) => ({
+    path,
+    findings: lintDirectory(path),
+  }));
   const count = (severity: string) =>
     results.reduce((sum, r) => sum + r.findings.filter((f) => f.severity === severity).length, 0);
   const errors = count("error");
   const warnings = count("warning");
   if (json) {
-    console.log(JSON.stringify({ files: results, errors, warnings }, null, 2));
+    const files = results.map((r) => ({
+      path: r.path,
+      findings: r.findings.map((f) => ({
+        file: f.file,
+        line: f.line,
+        severity: f.severity,
+        code: f.code,
+        message: f.message,
+      })),
+    }));
+    console.log(JSON.stringify({ files, errors, warnings }, null, 2));
   } else {
     for (const result of results) {
-      for (const line of format(result.path, result.findings)) console.log(line);
+      for (const line of formatDirectory(result.path, result.findings)) console.log(line);
     }
   }
-  console.error(`${results.length} file(s): ${errors} error(s), ${warnings} warning(s)`);
+  console.error(
+    `${results.length} director${results.length === 1 ? "y" : "ies"}: ${errors} error(s), ${warnings} warning(s)`,
+  );
   return errors > 0 || (strict && warnings > 0) ? 1 : 0;
 }
 

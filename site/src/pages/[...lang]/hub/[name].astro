@@ -25,7 +25,7 @@ interface Props {
 
 const { lang, entry } = Astro.props;
 const t = ui(lang);
-// The entry's Markdown version is the repository file itself.
+// The entry's Markdown version is its `SKILL.md`, the repository file itself.
 const rawUrl = hubFile(entry.id);
 const sections = entry.headings.filter((heading) => heading.depth === 2);
 // The body may open with its own first-level heading; the page keeps one.
@@ -111,8 +111,8 @@ const NameTag = hasTopHeading(entry.html) ? "p" : "h1";
           align="start"
           markdown={entry.raw}
           markdownHref={rawUrl}
-          download={{ href: rawUrl, filename: "HARNESS.md" }}
-          github={{ href: `${REPO_URL}/blob/main/hub/${entry.id}/HARNESS.md`, kind: "entry" }}
+          download={{ href: rawUrl, filename: "SKILL.md" }}
+          github={{ href: `${REPO_URL}/tree/main/hub/${entry.id}`, kind: "entry" }}
           copyFailed={t.hub.copyFailed}
           labels={t.hub.file}
         />

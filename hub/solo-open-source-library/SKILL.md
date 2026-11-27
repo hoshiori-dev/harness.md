@@ -1,28 +1,20 @@
 ---
 name: solo-open-source-library
 description: >-
-  A medium-weight agent harness for a public open-source library with one
-  maintainer who accepts outside contributions: a long-lived package whose
-  public API other projects depend on, hosted on GitHub or GitLab, where
+  [HARNESS.md] A medium-weight agent harness for a public open-source library
+  with one maintainer who accepts outside contributions: a long-lived package
+  whose public API other projects depend on, hosted on GitHub or GitLab, where
   issues and pull requests bring in text and code anyone can write. Lets a
-  contributor's coding agent succeed without the maintainer, protects
-  against prompt injection from public content, gates the public API with
-  a snapshot, semantic versioning, and a changelog, asks for a short
-  proposal only when the API changes, and keeps ceremony low everywhere
-  else.
-version: 1.0.0
+  contributor's coding agent succeed without the maintainer, protects against
+  prompt injection from public content, gates the public API with a snapshot,
+  semantic versioning, and a changelog, asks for a short proposal only when
+  the API changes, and keeps ceremony low everywhere else.
 license: Apache-2.0
 metadata:
-  tags:
-    - open-source
-    - library
-    - solo-maintainer
-    - public-api
-    - outside-contributions
-    - long-lived
-    - github
-  based-on:
-    - https://github.com/hoshiori-dev/harness-builder
+  type: harness-design
+  version: "1.0.0"
+  tags: open-source, library, solo-maintainer, public-api, outside-contributions, long-lived, github
+  based-on: https://github.com/hoshiori-dev/harness-builder
 ---
 
 # Solo Open-Source Library Harness
@@ -192,7 +184,7 @@ under another runner the same entries exist in its own syntax.
 
 ```text
 AGENTS.md                      the entrypoint for every agent, the maintainer's and contributors'; about 80 lines
-HARNESS.md                     optional: the project's own design document, when the maintainer decides to keep one (see Entropy)
+<design directory>/SKILL.md    optional: the project's own design document, when the maintainer decides to keep one (see Entropy)
 CONTRIBUTING.md                for people: how to contribute; names the same commands as AGENTS.md
 SECURITY.md                    for people: the private channel for vulnerability reports
 CHANGELOG.md                   user-visible changes, newest first, with an Unreleased section

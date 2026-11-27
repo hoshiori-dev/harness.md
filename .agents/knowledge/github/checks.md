@@ -10,7 +10,7 @@ the recipe is the source of truth and this table is the map.
 | `checks / lint` | `checks`: pull requests, push to `main` | `just pre-commit` | every hook `Passed`, including `just gen --check` and betterleaks on the whole tree |
 | `checks / test` | `checks` | `just test` | the Node tests of the management scripts and pytest of the skills' Python pass |
 | `checks / plugin` | `checks` | `just gen --check`, `just validate`, `just skills-check`, `just harness-check` | each ends with `...: ok` |
-| `checks / format` | `checks` | `just harness-md-lint`, `just fixtures-check`, `just hub-check` | `0 error(s), 0 warning(s)` for the root `HARNESS.md` and the hub; `fixtures: every case matches` from both validators; `0 problem(s)` for the hub |
+| `checks / format` | `checks` | `just harness-md-lint`, `just hub-check` | `0 error(s), 0 warning(s)` for `.agents/knowledge/project-harness` and every hub entry; `0 problem(s)` for the hub |
 | `checks / spec` | `checks` | `just spec-check` | `openspec validate --all --strict` lists every spec and change as passed |
 | `checks / site` | `checks` | `just site-check`, `just site-build` | the Astro and Biome checks pass and the static build with its Pagefind index completes |
 | `checks / gate` | `checks` | none (aggregator) | success when every `checks /` job above succeeded; required by the ruleset |

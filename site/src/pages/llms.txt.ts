@@ -4,7 +4,7 @@ import { hubEntries } from "../lib/hub";
 import { llmsText } from "../lib/pagemd";
 
 // `/llms.txt`: the index an agent starts from. It links every Markdown
-// document on the site: the specification, each hub entry's HARNESS.md, and
+// document on the site: the specification, each hub entry's SKILL.md, and
 // the plugin docs. The home page and the hub index have no Markdown version;
 // this file is what stands in for them.
 export const GET: APIRoute = async () => {

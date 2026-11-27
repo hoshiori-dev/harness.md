@@ -1,11 +1,12 @@
 # harness.md
 
-Home of the `HARNESS.md` format (one file that records a project's agent
-harness design), the official hub of ready-to-use designs, the website, and
+Home of the `HARNESS.md` format (an Agent Skill directory that records
+a project's agent harness design), the official hub of ready-to-use designs, the website, and
 `harness-md`, an Agent Plugins v1.0.0 plugin that creates, improves,
 distills, and adopts harness designs with the user. The repository root is the plugin.
-This repository's own design is `HARNESS.md`: open it only when the harness
-itself is checked or changed, never for an ordinary task.
+This repository's own design is `.agents/knowledge/project-harness/SKILL.md`:
+open it only when the harness itself is checked or changed,
+never for an ordinary task.
 
 ## Always
 
@@ -19,8 +20,8 @@ itself is checked or changed, never for an ordinary task.
 - Never hand-edit generated files: `.claude-plugin/*`,
   `.agents/plugins/marketplace.json` (`just gen`), and
   `.agents/skills/openspec-*/` (`openspec init --tools agents --force`).
-- Never weaken a check, hook, workflow, permission, or fixture expectation
-  to make a change pass; propose that change in its own pull request.
+- Never weaken a check, hook, workflow, or permission to make a change pass;
+  propose that change in its own pull request.
 - Commits: Conventional Commits, lowercase imperative subject of at most 50
   characters, no AI or tool attribution. One commit per verified task;
   drafts are squashed before a push and never reach the remote.
@@ -39,15 +40,15 @@ itself is checked or changed, never for an ordinary task.
 ## Project Map
 
 ```text
-spec/spec.md  spec/spec.zh.md  <- the format, prose; spec/fixtures/ = validator cases
-hub/<name>/HARNESS.md          <- hub entries; hub/README.md holds the entry rules
+spec/spec.md  spec/spec.zh.md  <- the format, prose
+hub/<name>/SKILL.md            <- hub entries; hub/README.md holds the entry rules
 plugin.json  skills/<name>/    <- the plugin and its skills (scripts: Python + uv)
 com.anthropic.claude-code/     <- Claude Code's hand-written agent files
 .claude-plugin/  .agents/plugins/  <- generated client manifests
 openspec/specs/<domain>/       <- long-lived specs: format, cli, skill, agent, hub, site
 scripts/  scripts/lib/         <- management code (TypeScript on Node) and tests
 site/  DESIGN.md               <- the website (Astro, Pagefind; own pnpm package) and its visual design
-.agents/knowledge/  .agents/skills/  <- knowledge files; project skills (.claude/skills links)
+.agents/knowledge/  .agents/skills/  <- knowledge files, project-harness/; project skills (.claude/skills links)
 ```
 
 ## When To Read What
@@ -57,7 +58,7 @@ site/  DESIGN.md               <- the website (Astro, Pagefind; own pnpm package
 | Adding, changing, or removing a shipped skill or an agent | the `plugin-development` skill, then `.agents/knowledge/plugin-architecture.md` |
 | Writing or editing any file under `skills/`; a skill misbehaves | `.agents/knowledge/skill-quality.md` |
 | Editing a `<!-- shared:… -->` block in a skill | `.agents/knowledge/shared-blocks.md` |
-| Changing the format, the prose specification, a validator, or a fixture | `.agents/knowledge/format-changes.md` |
+| Changing the format, the prose specification, or a validator | `.agents/knowledge/format-changes.md` |
 | Adding or reviewing a hub entry | `.agents/knowledge/hub.md` |
 | Editing `site/` or its workflow | `.agents/knowledge/site.md`; `DESIGN.md` before anything visual |
 | A client does not load something; touching a wiring or generated file | `.agents/knowledge/client-matrix.md` |
@@ -88,8 +89,7 @@ person's own login. Never store a credential in the repository.
 | Plugin layout, wiring, one spec per shipped entry | `just validate` |
 | Skill rules: budgets, layers, steps, shared blocks, links, spec copy | `just skills-check` |
 | Harness links, recipes, budget, symlinks, mirrors | `just harness-check` |
-| `HARNESS.md` and hub entries conform; hub entry rules | `just harness-md-lint`; `just hub-check` |
-| Both validators agree with `spec/fixtures/` | `just fixtures-check` |
+| `project-harness` and every hub entry conform; hub entry rules | `just harness-md-lint`; `just hub-check` |
 | Specs strict; no unarchived change (merge gate) | `just spec-check`; `just spec-archived` |
 | Site checks and static build | `just site-check`; `just site-build` |
 | Plugin loads in the real clients (local only) | `just clients-validate` |
@@ -111,9 +111,9 @@ archive on the branch → maintainer squash-merges → version bump, `v*` tag re
 | A skill or an agent is added, renamed, or removed | its spec under `openspec/specs/`, both README skill tables, the site's plugin pages, `just gen` |
 | A shared block's canon | every skill using that id, same change |
 | `spec/spec.md` | `spec/spec.zh.md`, `skills/harness-md/references/specification.md`, the format specs |
-| A validator rule | the other validator, `spec/fixtures/`, `openspec/specs/cli/lint/spec.md` |
+| A validator rule | the other validator, the unit tests of both, `openspec/specs/cli/lint/spec.md` |
 | A `justfile` recipe or CI job | the Validation table above, `.agents/knowledge/github/checks.md` |
 | `README.md`, `hub/README.md` | their `.zh.md` mirrors, same change |
 | The site's colours, type, spacing, or components | `DESIGN.md`, same change |
 | A client's loading behaviour | `.agents/knowledge/client-matrix.md` and the watch list |
-| Harness intent (a rule here, a check, a permission) | `HARNESS.md` first, same pull request |
+| Harness intent (a rule here, a check, a permission) | `.agents/knowledge/project-harness/SKILL.md` first, same pull request |

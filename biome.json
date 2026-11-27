@@ -13,7 +13,6 @@
       "!scripts/schemas",
       "!site",
       "!hub",
-      "!spec/fixtures",
       "!.claude-plugin",
       "!.agents/plugins"
     ]

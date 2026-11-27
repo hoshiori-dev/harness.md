@@ -1,29 +1,22 @@
 ---
 name: production-engineering
 description: >-
-  A full agent harness for a production codebase maintained by a team for
-  years, where a wrong change can reach users, data, or money, and coding
-  agents work task by task with review in between or partly unattended.
-  Hosted on GitHub or GitLab. Covers all seven layers: an isolated
-  environment with scoped credentials and a tool inventory, a short
-  entrypoint with routed knowledge files, fast and full verification an
-  agent can run itself, pre-commit and CI gates behind one summary check,
-  a written permission policy with a protected default branch and squash
-  merges, specification-driven completion with recorded approval, and
-  drift control with a harness self-check.
-version: 1.0.0
+  [HARNESS.md] A full agent harness for a production codebase maintained by a
+  team for years, where a wrong change can reach users, data, or money, and
+  coding agents work task by task with review in between or partly unattended.
+  Hosted on GitHub or GitLab. Covers all seven layers: an isolated environment
+  with scoped credentials and a tool inventory, a short entrypoint with routed
+  knowledge files, fast and full verification an agent can run itself,
+  pre-commit and CI gates behind one summary check, a written permission
+  policy with a protected default branch and squash merges,
+  specification-driven completion with recorded approval, and drift control
+  with a harness self-check.
 license: Apache-2.0
 metadata:
-  tags:
-    - production
-    - team
-    - long-lived
-    - github
-    - gitlab
-    - spec-driven
-    - full-harness
-  based-on:
-    - https://github.com/hoshiori-dev/harness-builder
+  type: harness-design
+  version: "1.0.0"
+  tags: production, team, long-lived, github, gitlab, spec-driven, full-harness
+  based-on: https://github.com/hoshiori-dev/harness-builder
 ---
 
 # Production Engineering Harness
@@ -195,7 +188,7 @@ The path marked optional is created only when the project takes that decision.
 
 ```text
 AGENTS.md                         the entrypoint: loaded on every task, about 100 lines, at most 120
-HARNESS.md                        (optional) the project's own design document, when it keeps one (Entropy)
+<design directory>/SKILL.md       (optional) the project's own design document, when it keeps one (Entropy)
 .agents/
   knowledge/                      one concern per file; each opens with "Read this when …"
     architecture.md               modules, boundaries, dependency direction, the reasons behind them
@@ -1031,8 +1024,8 @@ By default the record is the harness documents themselves:
 the entrypoint and the knowledge files state each rule with its reason,
 and the change starts there before hooks, checks, or permission files follow.
 A project may decide to keep a design document of its own as well,
-for example a `HARNESS.md` in its root
-that states the project's real context and decisions.
+for example a `HARNESS.md`:
+a directory whose `SKILL.md` states the project's real context and decisions.
 A codebase maintained for years has a reason to:
 the sweep then has one statement of intent to compare the artifacts against.
 A project that takes this decision reads design intent from that document
