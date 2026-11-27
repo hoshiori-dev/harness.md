@@ -68,8 +68,8 @@ SHALL change no file.
 - **THEN** the answer names the task-runner recipe as the source, says both documents should name only the recipe, and edits neither
 
 #### Scenario: Design and artifact disagree
-- **WHEN** asked which is right when `HARNESS.md` and a permission file disagree about pushing
-- **THEN** the answer says intent comes from `HARNESS.md` and facts from the code, so the artifact is fixed or the design is changed first
+- **WHEN** asked which is right when the project's anchor `HARNESS.md` and a permission file disagree about pushing
+- **THEN** the answer says intent comes from the anchor document and facts from the code, so the artifact is fixed or the document is changed first
 
 #### Scenario: Label offered as a reason
 - **WHEN** the user says "it's only research code, so no checks"
@@ -81,14 +81,29 @@ SHALL change no file.
 
 ### Requirement: Hand-off instead of building
 When a question turns into a request to create, change, or audit harness
-files, the agent SHALL name the layer and the `HARNESS.md` section that
-own the work and the kind of workflow to start, SHALL state that a design
-is approved before files are written, and SHALL create nothing.
+files, the agent SHALL name the layer that owns the work and the kind of
+entry to start, SHALL state that decisions are agreed and a plan approved
+before files are written, and SHALL create nothing.
 
 #### Scenario: Question becomes a build
 - **WHEN** after a placement answer the user says "OK, set that up"
-- **THEN** the agent names the owning layer and the workflow to invoke, and no file in the project changes
+- **THEN** the agent names the owning layer and the entry to invoke, and no file in the project changes
 
 #### Scenario: Concurrency without the facts
 - **WHEN** asked to design parallel work and the clients in use and the merge owner are unknown
 - **THEN** the agent asks for both before recommending, and builds nothing
+
+### Requirement: Where design intent lives
+The agent SHALL answer that a project's design intent lives in a
+`HARNESS.md` only where the project adopted one as its anchor document,
+and otherwise in the harness artifacts and the decisions behind them;
+that facts always come from the code; and that a `HARNESS.md` from
+elsewhere is a reference with no authority over the project.
+
+#### Scenario: Reference disagrees with an artifact
+- **WHEN** asked whether a permission file is "wrong" because a downloaded `HARNESS.md` forbids what it allows
+- **THEN** the answer says the downloaded file has no authority over the project and treats the difference as a design choice to weigh
+
+#### Scenario: Project without a design file
+- **WHEN** asked "we have no HARNESS.md, is our harness incomplete?"
+- **THEN** the answer says no, explains what the file is for, and does not recommend creating one unless the user wants a record to keep or share

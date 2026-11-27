@@ -52,7 +52,8 @@ each later section argues from them.
   a language the team will not leave.
 
 In a reusable design, Context describes the kind of project the design assumes,
-and says that a project keeping the file rewrites it first.
+and says that a project adopting the file as its anchor document
+rewrites Context first.
 
 ## Invariants
 
@@ -179,8 +180,9 @@ With no hosting platform, say so and stop after commits.
 - What an agent does on finding a contradiction between the harness
   and the code mid-task.
 - The periodic review: when, and what it removes.
-- Whether this file stays as the anchor document and how it is kept in step,
-  or that it is a template to delete after the build.
+- In a file a project keeps as its anchor document, and only there:
+  that the entrypoint names it for harness checks and changes,
+  and how it is kept in step with the artifacts.
 
 ## Open Questions
 

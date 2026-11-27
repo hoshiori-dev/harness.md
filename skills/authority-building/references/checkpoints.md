@@ -1,12 +1,13 @@
 # Checkpoints
 
-Read when writing the checkpoint rules of a section or a policy,
+Read when settling or describing the checkpoint and commit decisions,
+writing the checkpoint rules of a policy,
 writing or translating the checkpoint recipes,
 or when a user or an existing rule proposes stashes, hunk-level staging,
 or pushing drafts for remote CI,
 or asks why hard reset is denied when agents are expected to roll back.
 
-## Rules the section and the deposited files carry
+## Rules the decisions and the deposited files carry
 
 - **Checkpoints are commits.** Commit after every verified sub-step.
   Never a stash: it is addressed by stack position, may conflict on pop,
@@ -45,7 +46,7 @@ or asks why hard reset is denied when agents are expected to roll back.
 - **No AI attribution** in commit messages:
   no co-author trailers, tool names, or model names,
   unless the project requires disclosure;
-  then the section records the exact trailer and nothing else is added.
+  then the decision records the exact trailer and nothing else is added.
   Where a client adds attribution by itself,
   its settings turn it off (`framework-rules.md`).
 
@@ -54,7 +55,7 @@ or asks why hard reset is denied when agents are expected to roll back.
 `assets/checkpoint-recipes.just` is the reference implementation;
 it is reworked into the project's task runner and convention, never copied:
 the draft prefix, the base branch, the commit-subject regex,
-and the remote name each set from the section, and the header comment kept,
+and the remote name each set from the agreed decisions, and the header comment kept,
 since it carries the checkpoint and attribution rules into a project
 that has no policy file.
 
@@ -77,13 +78,13 @@ lowercase imperative, no trailing period,
 subject at most 72 characters)
 because the type makes the squash message mechanical;
 the alternative is plain 50/72 titles without a prefix.
-Write the chosen rule into the section, the policy, and the `squash-task` check;
+Write the chosen rule into the decision, the policy, and the `squash-task` check;
 for plain 50/72 the subject regex is `^[A-Z]$|^[A-Z].{0,48}[^.]$`
 (at most 50 characters, no trailing period).
 
 ## Translating to another task runner
 
-Translate only into the task runner the design names.
+Translate only into the task runner the agreed decisions name.
 Keep the refusal conditions and the messages that name what to fix;
 `make` targets take arguments through variables
 (`make squash-task START=<sha> MSG="..."`),

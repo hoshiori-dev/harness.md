@@ -29,9 +29,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # CONFIGURE: the design's setup step; a non-actions/* action, this one included, needs the user's approval
+      # CONFIGURE: the agreed setup step; a non-actions/* action, this one included, needs the user's approval
       - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
-      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the design's task runner
+      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the agreed task runner
       - run: uv sync --locked && echo "$PWD/.venv/bin" >> "$GITHUB_PATH" # CONFIGURE: install the project's checked tools (ruff, pyright, pytest) at its pinned versions
       - run: just fmt-check
   lint:
@@ -43,9 +43,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # CONFIGURE: the design's setup step; a non-actions/* action, this one included, needs the user's approval
+      # CONFIGURE: the agreed setup step; a non-actions/* action, this one included, needs the user's approval
       - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
-      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the design's task runner
+      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the agreed task runner
       - run: uv sync --locked && echo "$PWD/.venv/bin" >> "$GITHUB_PATH" # CONFIGURE: install the project's checked tools (ruff, pyright, pytest) at its pinned versions
       - run: just lint
   typecheck:
@@ -57,9 +57,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # CONFIGURE: the design's setup step; a non-actions/* action, this one included, needs the user's approval
+      # CONFIGURE: the agreed setup step; a non-actions/* action, this one included, needs the user's approval
       - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
-      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the design's task runner
+      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the agreed task runner
       - run: uv sync --locked && echo "$PWD/.venv/bin" >> "$GITHUB_PATH" # CONFIGURE: install the project's checked tools (ruff, pyright, pytest) at its pinned versions
       - run: just typecheck
   test:
@@ -71,9 +71,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # CONFIGURE: the design's setup step; a non-actions/* action, this one included, needs the user's approval
+      # CONFIGURE: the agreed setup step; a non-actions/* action, this one included, needs the user's approval
       - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
-      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the design's task runner
+      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the agreed task runner
       - run: uv sync --locked && echo "$PWD/.venv/bin" >> "$GITHUB_PATH" # CONFIGURE: install the project's checked tools (ruff, pyright, pytest) at its pinned versions
       - run: just test
   boundaries:
@@ -85,14 +85,15 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # CONFIGURE: the design's setup step; a non-actions/* action, this one included, needs the user's approval
+      # CONFIGURE: the agreed setup step; a non-actions/* action, this one included, needs the user's approval
       - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
-      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the design's task runner
+      - run: uv tool install rust-just==1.59.0 # CONFIGURE: install the agreed task runner
       - run: uv sync --locked && echo "$PWD/.venv/bin" >> "$GITHUB_PATH" # CONFIGURE: install the project's checked tools (ruff, pyright, pytest) at its pinned versions
       - run: just boundaries
   # harness:
   #   The harness self-check job, when the project has one.
-  #   Add it to the gate's needs when it lands.
+  #   Add it to the gate's needs when it lands,
+  #   unless the project agreed to keep it advisory.
   secrets:
     name: checks / secrets
     runs-on: ubuntu-latest

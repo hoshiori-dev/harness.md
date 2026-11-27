@@ -28,12 +28,12 @@ or the second spec), and what each says. Then the three options:
 Which side is right is the user's call:
 never apply any option, the defect reading included, without the user's answer.
 Put all contradictions in one round, one recommendation each:
-in design mode among the questions handed back,
+in decide mode as open decisions,
 in audit mode as findings that state both readings.
 
 ## Applying and deferring
 
-- A decision the section records:
+- A decision the user agreed:
   apply it in build mode before the layer is handed back.
 - A decision left open:
   add one pending item per contradiction with all three options
@@ -47,5 +47,5 @@ Recommend specs only for behaviour future changes touch;
 existing code no change touches is described by the codebase map (an as-built,
 non-normative description).
 A back-filled spec nothing keeps honest is the next drift.
-Record the user's final choice in the section,
+Hand the user's final choice back as a settled decision,
 with their reason when they keep the back-fill.

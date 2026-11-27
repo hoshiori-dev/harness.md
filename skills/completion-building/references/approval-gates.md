@@ -1,6 +1,6 @@
 # Approval Gates
 
-Read when writing the approval decisions of the section,
+Read when stating the approval decisions (who approves, and how it is recorded),
 when the user asks for a job that approves or archives,
 when writing the approval part of the contract,
 and when filling or refreshing a spec-workflow marker block.
@@ -31,7 +31,7 @@ once on what will be built, once on what was built.
 
 ## How approval is recorded
 
-| Context | Default | Why |
+| Conditions | Recommendation | Why |
 |---|---|---|
 | One committer, or a pair, reviewing in the conversation; agents never work alone | In the conversation | Everyone who needs the decision is present |
 | Several committers, outside contributors, or agents working with no one in the conversation | Recorded on the pull or merge request | Someone not present must see which version was approved |
@@ -54,17 +54,18 @@ the label is then taken again.
 A required check fails a ready request that still holds an unfrozen record,
 so the merge stays blocked until the freeze.
 The skill for the chosen tool installs the label, the fingerprint,
-and the check; the section and the contract record them as facts of the project.
+and the check; the agreed decisions and the contract record them
+as facts of the project.
 
 ## A job that archives or approves
 
-Advise against it and do not put it in the section.
+Advise against it and never recommend it in a decision.
 A CI job's own token cannot push to a contributor's fork,
 so such a job cannot serve an outside contribution;
 on a branch it could reach,
 it would be the only automation needing write access to repository contents,
 to save one step the implementer already runs.
-The section names the implementer
+The decision on who freezes the record names the implementer
 (or a maintainer on a fork's branch) as the executor.
 When the user insists, add it to the pending decisions list with this reason
 and the recommendation to keep the person as executor.

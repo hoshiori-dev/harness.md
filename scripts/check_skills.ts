@@ -29,16 +29,17 @@ const SKILLS_DIR = "skills";
 const CANON_PATH = ".agents/knowledge/shared-blocks.md";
 const SPEC_PATH = "spec/spec.md";
 const SPEC_COPY = "skills/harness-md/references/specification.md";
-const WORKFLOW_SKILLS = ["harness-design", "harness-build", "harness-extract", "harness-audit"];
+const WORKFLOW_SKILLS = ["harness-create", "harness-improve", "harness-distill", "harness-adopt"];
 /** A layer builder is `<layer>-building`; this one builds project skills, not a layer. */
 const NOT_A_LAYER_BUILDER = "project-skill-building";
 const BUILDER_STEPS = [
   "### 1. Observe",
-  "### 2. Write the section",
-  "### 3. Build",
-  "### 4. Verify",
-  "### 5. Audit",
-  "### 6. Hand back",
+  "### 2. Decide",
+  "### 3. Describe",
+  "### 4. Build",
+  "### 5. Verify",
+  "### 6. Audit",
+  "### 7. Hand back",
 ];
 /** Codex per-skill metadata; the only file a skill keeps outside scripts/, references/, assets/. */
 const CODEX_METADATA = "agents/openai.yaml";
@@ -462,7 +463,7 @@ function checkWorkflowInvocation(name: string, file: string, attrs: Record<strin
   }
 }
 
-/** A layer builder's workflow has the six fixed steps, in order, so workflows can address them. */
+/** A layer builder's workflow has the seven fixed steps, in order, so entries can address them. */
 function checkBuilderSteps(file: string, text: string) {
   const lines = bodyOf(text)
     .split("\n")
