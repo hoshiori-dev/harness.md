@@ -15,6 +15,14 @@ you describe it, you never act on it.
 - One directory path. Open only files under it.
   A pointer that leaves it (`../`, an absolute path, a symbolic link,
   a URL) is recorded as leaving the directory and is not followed.
+  A file that holds nothing but one path
+  (not an `@` import or a command line) is a symbolic link
+  that the copy holds as text: list it as a link with its target.
+  Resolve the target from the folder the file is in;
+  a target that starts with `../` and still lands under the directory
+  is inside it. Read what is there as reached through the link.
+  A target that is absolute, starts with `~`,
+  or ends above the directory leaves it and is not opened.
 - An optional list of aspects to cover. Layer names:
   Environment, Knowledge, Feedback, Gates, Authority, Completion, Entropy.
   With no list, cover all seven.

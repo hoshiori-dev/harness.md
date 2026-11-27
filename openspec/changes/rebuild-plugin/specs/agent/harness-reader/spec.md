@@ -32,6 +32,10 @@ contains.
 - **WHEN** the dispatch names the knowledge and gates aspects only
 - **THEN** the report covers those two and says the others were not read
 
+#### Scenario: Link held as text
+- **WHEN** a file under the directory holds nothing but a path to another place under the directory
+- **THEN** the inventory lists it as a symbolic link with that target, and the report describes what the target holds
+
 #### Scenario: Path does not exist
 - **WHEN** the directory is missing or empty
 - **THEN** the report says so in its first line and contains no description

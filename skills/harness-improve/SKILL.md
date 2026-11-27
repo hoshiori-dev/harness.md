@@ -358,7 +358,7 @@ in the layer's own checkpoint, as anchor-document.md states.
 Deferred changes stay in the pending decisions list.
 
 Done when: every plan item is done or in the pending decisions list,
-each touched layer is committed with no new failing check,
+each touched layer is committed under the checkpoint rules,
 and nothing was pushed.
 
 ### 8. Read back, review, and close
@@ -373,7 +373,7 @@ undefined terms, contradictions between files.
 With no subagents, re-read every changed file as a new agent would
 and record the read-back as degraded.
 Quote the result. Fix every gap or add it to the pending decisions list,
-and re-read what was fixed.
+and re-read each fix.
 
 Read [references/final-review.md](references/final-review.md) when the read-back is done, and walk it item by item.
 Commit what the read-back and the review changed as one more checkpoint,

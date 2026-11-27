@@ -141,7 +141,8 @@ What the invocation states is decided: show it, do not ask it again.
 - **Anchor document.** Whether the result is to be the project's
   anchor document (recommended: no).
   When the user names the root's `HARNESS.md` as the path
-  without saying so, ask.
+  without saying so, ask; on no, ask for another path
+  or use a temporary file.
   When the user wants a partial or a portable file as the anchor document,
   say once that the project's intent for what the file leaves out
   will then be written nowhere, and follow the answer.

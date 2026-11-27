@@ -66,6 +66,10 @@ submodules, and the user told where the copy is.
 - **WHEN** a file of a cloned target is a symbolic link to a file outside it
 - **THEN** the link is checked out as a plain file holding its target, and the file outside is not read
 
+#### Scenario: Cloned target routes skills through a link inside itself
+- **WHEN** a cloned target keeps `.claude/skills/<name>` as a symbolic link to a directory under `.agents/skills/`
+- **THEN** the inventory lists the link with its target as a loading route, and the skill is read from the target
+
 #### Scenario: Target cannot be fetched
 - **WHEN** the address cannot be cloned
 - **THEN** the agent reports the failure with the command's message, writes no file, and does not describe the target from memory

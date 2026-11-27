@@ -23,6 +23,9 @@ A check that already failed before the first change does not hold
 a checkpoint back: name it in the commit message
 with the plan item that repairs it,
 or keep it in the pending decisions list when no item does.
+A check this work added that fails only on code the work did not touch
+does not hold a checkpoint back either: it is the builder's finding,
+named in the commit message and kept in the pending decisions list.
 Never weaken a check to make a checkpoint pass.
 
 When a layer's checks can pass only together with a later layer's change,
@@ -39,3 +42,7 @@ and every check this work added passes.
 
 When a hook rejects the commit, fix what it flagged and retry;
 never bypass the hook.
+When it rejects only for code the work did not touch,
+leave that code alone and the layer uncommitted,
+and put it on the pending decisions list:
+the user repairs the code, or agrees where the check runs.

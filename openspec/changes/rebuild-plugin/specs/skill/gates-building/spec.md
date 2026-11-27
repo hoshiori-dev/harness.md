@@ -93,6 +93,10 @@ In audit mode the agent SHALL compare the project with the anchor document's tex
 - **WHEN** a GitLab job outside the gate's job list is allowed to fail and the anchor document names it as the advisory harness self-check
 - **THEN** no finding reports it as a check that cannot fail
 
+#### Scenario: Advisory comment the anchor document overrules
+- **WHEN** a GitLab job is allowed to fail under a comment naming it advisory and the anchor document requires that check in the gate
+- **THEN** a finding reports the job as a check that cannot fail, with the anchor document as the source of truth
+
 #### Scenario: Check outside the section
 - **WHEN** the project adopted an anchor document and CI runs a typecheck job that the document's text for the layer does not mention
 - **THEN** a finding names the job, cites the workflow line, and proposes amending the document as its disposition
